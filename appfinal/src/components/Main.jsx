@@ -3,11 +3,9 @@ import styled from "styled-components";
 
 const MainContainer = styled.main`
   display: grid;
-  /* grid-template-columns: 1fr 8fr 1fr; */
   gap: 40px;
   justify-items: center;
   padding: 20px;
-  background-color: white;
 `;
 
 const SlideContainer = styled.div`
@@ -16,14 +14,6 @@ const SlideContainer = styled.div`
   gap: 40px;
   width: 100%;
   justify-items: center;
-`;
-
-const LeftBlank = styled.div`
-  background-color: white;
-`;
-
-const RightBlank = styled.div`
-  background-color: white;
 `;
 
 const SlideSection = styled.div`

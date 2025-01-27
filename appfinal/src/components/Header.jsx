@@ -6,34 +6,28 @@ const HeaderContainer = styled.header`
   display: grid;
   grid-template-columns: 2fr 10fr 1fr;
   align-items: center;
+  height: 80px;
   padding: 20px;
-  background-color: #fff;
+  background-color: #fafafa;
   border-bottom: 1px solid #ccc;
   position: sticky;
   top: 0px;
 `;
 
 const Logo = styled.div`
-  font-size: 24px;
-  font-weight: bold;
-  text-align: left;
-  color: black;
-
-  a {
+  img {
     text-decoration: none;
     color: black;
-
-    &:hover {
-      color: lightblue;
-    }
+    width: 150px;
+    height: 80px;
   }
 `;
 
 const NavMenu = styled.nav`
   display: grid;
-  grid-template-columns: repeat(4, auto);
+  grid-template-columns: repeat(4, 1fr);
   justify-self: end;
-  gap: 30px;
+  gap: 40px;
 `;
 
 const StyledLink = styled(Link)`
@@ -41,7 +35,7 @@ const StyledLink = styled(Link)`
   color: black;
   font-weight: 500;
 
-  &:hover {
+  &:active {
     text-decoration: line-through;
     text-decoration-color: lightblue;
   }
@@ -49,8 +43,7 @@ const StyledLink = styled(Link)`
 
 const Login = styled(Link)`
   text-align: right;
-  color: lightblue;
-  font-weight: 500;
+  color: #049dd9;
   text-decoration: none;
 `;
 
@@ -59,7 +52,7 @@ const Header = () => {
     <HeaderContainer>
       <Logo>
         <Link to="/" style={{ textDecoration: "none" }}>
-          work stay
+          <img src="./img/logo.png" />
         </Link>
       </Logo>
       <NavMenu>

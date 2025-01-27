@@ -11,9 +11,8 @@ const LayoutContainer = styled.div`
 
 const Content = styled.main`
   flex: 1;
-  padding: 10px;
-  background-color: #f9f9f9;
-  min-height: 972px;
+  min-height: 990px;
+  background-color: #fafafa;
 `;
 
 const MainDiv = styled.div`
@@ -22,11 +21,11 @@ const MainDiv = styled.div`
   grid-template-rows: 1fr;
 `;
 const LeftBlank = styled.div`
-  background: white;
+  background-color: #fafafa;
 `;
 
 const RightBlank = styled.div`
-  background: white;
+  background-color: #fafafa;
 `;
 
 const Layout = ({ children }) => {
