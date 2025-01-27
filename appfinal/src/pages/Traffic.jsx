@@ -20,7 +20,7 @@ const NavBar = styled.nav`
     color: gray;
 
     &.active {
-      color: blue;
+      color: #049dd9;
       font-weight: bold;
     }
   }

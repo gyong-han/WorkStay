@@ -8,6 +8,8 @@ import FindSpace from "./pages/FindSpace";
 import Traffic from "./pages/Traffic";
 import Slog from "./pages/Slog";
 import Login from "./pages/Login";
+import { Provider } from "react-redux";
+import Store from "./redux/store";
 
 function App() {
   return (
@@ -22,6 +24,7 @@ function App() {
               </Layout>
             }
           />
+
           <Route
             path="/findstay"
             element={
