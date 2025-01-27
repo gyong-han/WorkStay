@@ -10,6 +10,7 @@ import Slog from "./pages/Slog";
 import Login from "./pages/Login";
 import { Provider } from "react-redux";
 import Store from "./redux/store";
+import FirstEnrollStay from "./pages/FirstEnrollStay";
 
 function App() {
   return (
@@ -68,6 +69,14 @@ function App() {
           <Route
             path="/*"
             element={<h1>잘못된 경로입니다, 404 NOT FOUND</h1>}
+          />
+          <Route
+            path="/enroll"
+            element={
+              <Layout>
+                <FirstEnrollStay />
+              </Layout>
+            }
           />
         </Routes>
       </BrowserRouter>
