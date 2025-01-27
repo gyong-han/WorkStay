@@ -1,49 +1,97 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { FaFacebookF } from "react-icons/fa";
+import { FaInstagram } from "react-icons/fa";
+import { SiNaver } from "react-icons/si";
+import { FaYoutube } from "react-icons/fa";
 
-const FooterContainer = styled.footer`
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  padding: 20px;
-  background-color: #f1f1f1;
-  border-top: 1px solid #ccc;
+const FooterWrapper = styled.footer`
+  background-color: #d9d9d9;
+  box-sizing: border-box;
+  padding: 50px 30px;
+  width: 100%;
 `;
 
-const Text = styled.div`
-  font-size: 14px;
-  color: black;
-  line-height: 2;
+const FooterContent = styled.div`
+  max-width: 1500px;
+  width: 100%;
+  margin: 0 auto;
+  display: grid;
+`;
+
+const FooterServiceContainer = styled.div`
+  display: block;
+`;
+
+const FooterMainContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 35px;
+`;
+
+const FooterInfoContainer = styled.div`
+  display: grid;
+  justify-content: space-between;
+`;
+
+const MText = styled.span`
+  font-family: "Pretendard-Medium";
+`;
+
+const LText = styled.span`
+  font-family: "Pretendard-Light";
+`;
+
+const DetailText = styled.span`
+  font-family: "Pretendard-Light";
+  font-size: 0.7rem;
 `;
 
 const Logos = styled.div`
   display: grid;
   grid-template-columns: repeat(3, auto);
   gap: 10px;
-
-  img {
-    width: 24px;
-    height: 24px;
-  }
 `;
 
 const Footer = () => {
   return (
-    <FooterContainer>
-      <Text>
-        고객센터: 10:00 ~ 18:00 / 주말 및 공휴일 제외
-        <br />
-        서울특별시 강남구 테헤란로 100 | 사업자 등록번호: 123-45-67890
-        <br />
-        COPYRIGHT © WORK STAY ALL RIGHTS RESERVED.
-      </Text>
-      <Logos>
-        🏚 🧳 ❤
-        {/* <img src="logo1.jpg" alt="로고1" />
-        <img src="logo2.jpg" alt="로고2" />
-        <img src="logo3.jpg" alt="로고3" /> */}
-      </Logos>
-    </FooterContainer>
+    <FooterWrapper>
+      <FooterContent>
+        <FooterServiceContainer>
+          <MText>고객센터 </MText>
+          <LText>10:00 - 18:00 / 주말 및 공휴일 제외</LText>
+          <Link></Link>
+        </FooterServiceContainer>
+        <FooterMainContainer>
+          <FooterInfoContainer>
+            <DetailText>
+              상호명 : (주) 워크스테이 | 대표자 : 홍석일 | 주소 : 서울특별시
+              테헤란로 130, 6F 362호 | 사업자등록번호 : 181-20-01010 |
+              통신판매업신고 : 제2025-서울종로-0307호 |
+            </DetailText>
+            <DetailText>
+              관광사업자등록 : 일반여행업 2025-000003호(강남구청) | 전화 :
+              0813-0321 | 전자우편 : help@workstay.com
+            </DetailText>
+            <br />
+            <DetailText>
+              (주) 워크스테이는 통신판매 중개사로서 통신판매의 당사자가 아니며
+              상품의 예약, 이용 및 환불 등과 관련한 의무와 책임은 각 판매사에게
+              있습니다.
+            </DetailText>
+            <DetailText>CopyrightⓒWORKSTAY</DetailText>
+          </FooterInfoContainer>
+          <Logos>
+            <FaFacebookF size={15} />
+            <FaInstagram />
+            <SiNaver />
+            <FaYoutube />
+          </Logos>
+        </FooterMainContainer>
+      </FooterContent>
+    </FooterWrapper>
   );
 };
 
