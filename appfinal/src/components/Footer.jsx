@@ -8,8 +8,6 @@ const FooterContainer = styled.footer`
   padding: 20px;
   background-color: #f1f1f1;
   border-top: 1px solid #ccc;
-  /* position: absolute; */
-  width: 100%;
 `;
 
 const Text = styled.div`

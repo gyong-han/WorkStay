@@ -37,7 +37,7 @@ function App() {
           }
         />
         <Route
-          path="/traffic"
+          path="/traffic/*"
           element={
             <Layout>
               <Traffic />

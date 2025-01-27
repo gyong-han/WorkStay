@@ -9,6 +9,8 @@ const HeaderContainer = styled.header`
   padding: 20px;
   background-color: #fff;
   border-bottom: 1px solid #ccc;
+  position: sticky;
+  top: 0px;
 `;
 
 const Logo = styled.div`
