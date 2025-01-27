@@ -80,6 +80,38 @@ const CounterDiv = styled.div`
   align-items: center;
   justify-content: center;
 `;
+const FooterDiv = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  & > div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    justify-items: center;
+    align-items: center;
+    width: 400px;
+    height: 80px;
+  }
+  & > div > button:nth-child(1) {
+    width: 60px;
+    height: 60px;
+    border: none;
+    background-color: white;
+    font-size: 40px;
+  }
+  & > div > button:nth-child(2) {
+    width: 145px;
+    height: 45px;
+    border: none;
+    background-color: #049dd9;
+    color: white;
+    border-radius: 5px;
+  }
+`;
 
 const People = ({ isOpen, onClose }) => {
   const adult = useSelector((state) => state.adult.adultCnt);
@@ -167,9 +199,12 @@ const People = ({ isOpen, onClose }) => {
             </CounterDiv>
           </TitleDiv>
         </InnerDiv>
-        <div>
-          <button onClick={onClose}>모달 닫기</button>
-        </div>
+        <FooterDiv>
+          <div>
+            <button>⟳</button>
+            <button>Search</button>
+          </div>
+        </FooterDiv>
       </Modal>
     </Overlay>
   );

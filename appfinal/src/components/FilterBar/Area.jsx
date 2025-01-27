@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const Overlay = styled.div`
@@ -31,8 +31,10 @@ const Modal = styled.div`
     font-weight: 700;
   }
   & > div:nth-child(1) {
+    display: flex;
+    justify-content: start;
+    align-items: center;
     height: 80%;
-    margin-top: 0px;
     border-bottom: 1px solid #d9d9d9;
   }
 `;
@@ -85,6 +87,10 @@ const SelectDiv = styled.div`
     color: white;
     background-color: #04b2d9;
   }
+  & > div > label > input[value="서울"] {
+    color: black;
+    background-color: whilte;
+  }
 `;
 const FooterDiv = styled.div`
   width: 100%;
@@ -94,16 +100,50 @@ const FooterDiv = styled.div`
   align-items: center;
 
   & > div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    justify-items: center;
+    align-items: center;
+    width: 400px;
+    height: 80px;
+  }
+  & > div > button:nth-child(1) {
+    width: 60px;
+    height: 60px;
+    border: none;
+    background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTk-eoAWRZdo8KMKu65ebE8CvWkCFmsx9HqeQ&s);
+    background-size: cover;
+  }
+  & > div > button:nth-child(2) {
+    width: 145px;
+    height: 45px;
+    border: none;
+    background-color: #049dd9;
+    color: white;
+    border-radius: 5px;
   }
 `;
 
 const Area = ({ isOpen, onClose }) => {
+  const [areaState, setAreaState] = useState();
+  const [color, setColor] = useState({
+    color: "black",
+    backgroundColor: "white",
+  });
+  useEffect(() => {}, [areaState]);
   if (!isOpen) return null;
   function ClickHandler(e) {
-    console.log(e.target.value);
-    onClose();
+    const x = document.querySelector("input[value='서울']");
+    console.log(x);
+
+    setAreaState(e.target.value);
   }
 
+  const submitBtn = () => {
+    //패치 보낼곳
+    console.log(areaState);
+  };
   return (
     <Overlay>
       <Modal>
@@ -217,7 +257,8 @@ const Area = ({ isOpen, onClose }) => {
         </SelectDivOuter>
         <FooterDiv>
           <div>
-            <button onClick={onClose}>모달 닫기</button>
+            <button></button>
+            <button onClick={submitBtn}>Search</button>
           </div>
         </FooterDiv>
       </Modal>
