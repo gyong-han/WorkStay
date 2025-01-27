@@ -1,9 +1,10 @@
 import React from "react";
+import Display from "../components/FilterBar/Display";
 
 const FindStay = () => {
   return (
     <>
-      <h1>zz</h1>
+      <Display></Display>
     </>
   );
 };
