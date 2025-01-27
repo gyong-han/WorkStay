@@ -5,7 +5,6 @@ const Container = styled.div`
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
-  background-color: #fff;
   border-radius: 8px;
   text-align: center;
 `;
@@ -32,7 +31,7 @@ const FormRow = styled.div`
   .swap {
     font-size: 20px;
     cursor: pointer;
-    color: #007bff;
+    color: #049dd9;
   }
 `;
 
@@ -74,15 +73,11 @@ const SubmitButton = styled.button`
   width: 100%;
   padding: 12px;
   font-size: 16px;
-  color: #fff;
-  background-color: lightblue;
+  color: #ffffff;
+  background-color: #049dd9;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-
-  &:hover {
-    background-color: blue;
-  }
 `;
 
 const TrafficForm = () => {
@@ -97,6 +92,8 @@ const TrafficForm = () => {
           <span>선택</span>
         </div>
       </FormRow>
+
+      <FormRow></FormRow>
 
       <InfoSection>
         <div className="info-row">

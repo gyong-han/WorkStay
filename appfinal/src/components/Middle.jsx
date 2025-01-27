@@ -5,13 +5,12 @@ const MiddleContainer = styled.section`
   display: grid;
   justify-items: center;
   align-items: center;
-  background-color: #e0e0e0;
+  background-color: lightgray;
   height: 20vh;
 `;
 
 const Text = styled.h2`
   font-size: 24px;
-  color: #333;
 `;
 
 const Middle = () => {
