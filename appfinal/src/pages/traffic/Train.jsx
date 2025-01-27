@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import TrainCalendar from "../components/TrainCalendar";
+import TrainCalendar from "../../components/TrainCalendar";
 
 const Container = styled.div`
   max-width: 600px;

@@ -4,13 +4,13 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import FindStay from "./pages/stay/FindStay";
-import FindSpace from "./pages/FindSpace";
+import FindSpace from "./pages/space/FindSpace";
 import Traffic from "./pages/traffic/Traffic";
-import Slog from "./pages/Slog";
-import Login from "./pages/Login";
+import Slog from "./pages/slog/Slog";
+import Login from "./pages/guest/Login";
 import { Provider } from "react-redux";
 import Store from "./redux/store";
-import FirstEnrollStay from "./pages/FirstEnrollStay";
+import FirstEnrollStay from "./pages/host/FirstEnrollStay";
 
 function App() {
   return (

@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink, Routes, Route } from "react-router-dom";
 import styled from "styled-components";
-import TrainPage from "../Train";
+import TrainPage from "../traffic/Train";
 import BusPage from "./Bus";
 
 const Container = styled.div`

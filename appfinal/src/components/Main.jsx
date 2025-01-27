@@ -1,6 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 
+const MainWrapper = styled.main`
+  display: grid;
+`;
+
 const MainContainer = styled.main`
   display: grid;
   gap: 40px;
@@ -25,7 +29,7 @@ const SlideSection = styled.div`
 const SectionTitle = styled.div`
   font-size: 18px;
   font-weight: bold;
-  color: black;
+  /* color: #202020; */
   text-align: left;
 `;
 
@@ -38,7 +42,7 @@ const CardList = styled.div`
 
 const Arrow = styled.div`
   font-size: 24px;
-  color: black;
+  /* color: #202020; */
   cursor: pointer;
   user-select: none;
 `;
@@ -51,25 +55,32 @@ const Cards = styled.div`
   height: 380px;
 `;
 
-const Card = styled.div`
-  border: 1px solid #ccc;
-  border-radius: 8px;
+const ImgCard = styled.div`
   width: 380px;
   padding: 10px;
-  background-color: white;
   text-align: start;
 
   img {
     width: 100%;
     height: 270px;
     object-fit: cover;
-    border-radius: 4px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
   }
+`;
+
+const TextCard = styled.div`
+  width: 380px;
+  height: 130px;
+  border-bottom: 1px solid #d9d9d9;
+  border-left: 1px solid #d9d9d9;
+  border-right: 1px solid #d9d9d9;
+
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 
   .info {
     margin-top: 10px;
-    font-size: 14px;
-    color: black;
   }
 
   .subinfo {
@@ -79,9 +90,7 @@ const Card = styled.div`
 
   .price {
     font-size: 16px;
-    color: black;
     margin-top: 5px;
-    font-weight: bold;
   }
 `;
 
@@ -204,12 +213,15 @@ const Main = () => {
               <Arrow>{"<"}</Arrow>
               <Cards>
                 {season.cards.map((card, idx) => (
-                  <Card key={idx}>
-                    <img src={card.image} alt={card.title} />
-                    <div className="info">{card.title}</div>
-                    <div className="subinfo">{card.subtitle}</div>
-                    <div className="price">{card.price}</div>
-                  </Card>
+                  <ImgCard></ImgCard>
+                  // <ImgCard key={idx}>
+                  //   <img src={card.image} alt={card.title} />
+                  // </ImgCard>
+                  // <TextCard>
+                  //   <div className="info">{card.title}</div>
+                  //   <div className="subinfo">{card.subtitle}</div>
+                  //   <div className="price">{card.price}</div>
+                  // </TextCard>
                 ))}
               </Cards>
               <Arrow>{">"}</Arrow>
