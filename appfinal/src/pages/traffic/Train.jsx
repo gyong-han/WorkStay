@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import TrainCalendar from "../../components/TrainCalendar";
+import TrainCalendar from "./TrainCalendar";
+import TrafficPeople from "./TrafficPeople";
+import StartStationList from "./StartStationList";
+import ArrivalStationList from "./ArrivalStationList";
+import { useDispatch, useSelector } from "react-redux";
+import { selectEndStation, selectStartStation } from "../../redux/stationSlice";
 
 const Container = styled.div`
   max-width: 600px;
@@ -18,7 +23,7 @@ const FormRow = styled.div`
   gap: 20px;
   margin-bottom: 30px;
 
-  .station {
+  .startstation {
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -81,21 +86,23 @@ const SubmitButton = styled.button`
   width: 100%;
   padding: 12px;
   font-size: 16px;
-  color: #ffffff;
+  color: #fafafa;
   background-color: #049dd9;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 `;
 
-const TrafficForm = () => {
-  const [a, setA] = useState("서울");
-  const [b, setB] = useState("선택");
+const Train = () => {
+  const dispatch = useDispatch();
+  const selectedStartStation = useSelector(
+    (state) => state.station.startStation
+  );
+  const selectedEndStation = useSelector((state) => state.station.endStation);
 
   const SwapStation = () => {
-    const temp = a;
-    setA(b);
-    setB(temp);
+    dispatch(selectStartStation(selectedEndStation));
+    dispatch(selectEndStation(selectedStartStation));
   };
 
   return (
@@ -104,14 +111,14 @@ const TrafficForm = () => {
         <div>출발역</div>
         <div></div>
         <div>도착역</div>
-        <div className="station">
-          <span>{a}</span>
+        <div className="startstation">
+          <StartStationList />
         </div>
         <div className="swap" onClick={SwapStation}>
           ↔
         </div>
-        <div className="station">
-          <span>{b}</span>
+        <div className="arrivestation">
+          <ArrivalStationList />
         </div>
         <hr />
         <hr />
@@ -133,7 +140,9 @@ const TrafficForm = () => {
 
         <div className="info-row">
           <label>인원</label>
-          <div className="main-text">성인 1명</div>
+          <div className="main-text">
+            <TrafficPeople />
+          </div>
         </div>
       </InfoSection>
 
@@ -142,4 +151,4 @@ const TrafficForm = () => {
   );
 };
 
-export default TrafficForm;
+export default Train;
