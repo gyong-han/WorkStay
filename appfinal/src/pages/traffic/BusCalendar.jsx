@@ -5,42 +5,43 @@ import "react-datepicker/dist/react-datepicker.css";
 import Form from "react-bootstrap/Form";
 import { format } from "date-fns";
 
-const TrainCalendar = () => {
-  const [dateRange, setDateRange] = useState([null, null]);
-  const [startDate, endDate] = dateRange;
+const BusCalendar = () => {
+  const [selectedDate, setSelectedDate] = useState(null);
+
   useEffect(() => {
-    if (dateRange[0] !== null && dateRange[1] !== null) {
-      const dateDate = dateRange.map((date) => format(date, "yyyyMMdd"));
-      console.log(dateDate);
+    if (selectedDate !== null) {
+      const formattedDate = format(selectedDate, "yyyyMMdd");
+      console.log(formattedDate);
     }
-  }, [dateRange]);
+  }, [selectedDate]);
+
   return (
     <DatePicker
       locale={ko}
-      selectsRange={false}
-      startDate={startDate}
+      selected={selectedDate}
       minDate={new Date()}
-      endDate={endDate}
-      onChange={(update) => {
-        setDateRange(update);
-      }}
+      onChange={(date) => setSelectedDate(date)}
       monthsShown={2}
       withPortal
       customInput={
         <Form.Control
           as="button"
           style={{
+            fontFamily: "Pretendard-Regular",
             width: "166px",
             height: "50px",
             border: "none",
-            backgroundColor: "white",
+            backgroundColor: "#FAFAFA",
+            cursor: "pointer",
           }}
         >
-          날짜를 선택해주세요
+          {selectedDate
+            ? format(selectedDate, "yyyy년 MM월 dd일")
+            : "날짜를 선택해주세요"}
         </Form.Control>
       }
     />
   );
 };
 
-export default TrainCalendar;
+export default BusCalendar;
