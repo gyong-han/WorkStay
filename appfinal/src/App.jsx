@@ -10,7 +10,8 @@ import Slog from "./pages/slog/Slog";
 import Login from "./pages/guest/Login";
 import { Provider } from "react-redux";
 import Store from "./redux/store";
-import FirstEnrollStay from "./pages/host/FirstEnrollStay";
+import EnrollStay from "./pages/host/stayComponents/EnrollStay";
+import EnrollSpace from "./pages/host/spaceComponents/EnrollSpace";
 
 function App() {
   return (
@@ -71,10 +72,18 @@ function App() {
             element={<h1>잘못된 경로입니다, 404 NOT FOUND</h1>}
           />
           <Route
-            path="/enroll"
+            path="/enroll/stay/*"
             element={
               <Layout>
-                <FirstEnrollStay />
+                <EnrollStay />
+              </Layout>
+            }
+          />
+          <Route
+            path="/enroll/space/*"
+            element={
+              <Layout>
+                <EnrollSpace />
               </Layout>
             }
           />
