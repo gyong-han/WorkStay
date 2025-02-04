@@ -31,11 +31,21 @@ const Modal = styled.div`
     font-weight: 700;
   }
   & > div:nth-child(1) {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
     justify-content: start;
     align-items: center;
     height: 80%;
     border-bottom: 1px solid #d9d9d9;
+  }
+  & > div:nth-child(1)>button {
+    width: 40px;
+    height: 40px;
+    margin-left: auto;
+    margin-bottom: auto;
+    background-color: white;
+    border: none;
   }
 `;
 const SelectDivOuter = styled.div`
@@ -74,7 +84,13 @@ const SelectDiv = styled.div`
     opacity: 0;
     pointer-events: none;
   }
+  & > div > label:has(input[type="radio"]:checked) {
+  background-color: #04b2d9; /* 선택된 라벨 스타일 */
+  color:white;
+}
+  
 
+ 
   & > div > label {
     border-radius: 50px;
     display: flex;
@@ -87,10 +103,8 @@ const SelectDiv = styled.div`
     color: white;
     background-color: #04b2d9;
   }
-  & > div > label > input[value="서울"] {
-    color: black;
-    background-color: whilte;
-  }
+
+ 
 `;
 const FooterDiv = styled.div`
   width: 100%;
@@ -127,41 +141,43 @@ const FooterDiv = styled.div`
 
 const Area = ({ isOpen, onClose }) => {
   const [areaState, setAreaState] = useState();
-  const [color, setColor] = useState({
-    color: "black",
-    backgroundColor: "white",
-  });
+ 
   useEffect(() => {}, [areaState]);
   if (!isOpen) return null;
   function ClickHandler(e) {
-    const x = document.querySelector("input[value='서울']");
-    console.log(x);
-
     setAreaState(e.target.value);
   }
+ 
+
+  function uncheckAllRadios() {
+    document.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.checked = false;
+    });
+}
 
   const submitBtn = () => {
-    //패치 보낼곳
+    // 패치 보낼곳
     console.log(areaState);
+    onClose()
   };
   return (
     <Overlay>
       <Modal>
         <div>
-          <span>장소를 선택해주세요.</span>
+          <span>장소를 선택해주세요.</span> <button onClick={()=>{onClose();}}>X</button>
         </div>
         <SelectDivOuter>
           <SelectDiv>
             <div>
-              <label>
-                서울
+              <label>서울
                 <input
                   type="radio"
                   name="area"
                   value={"서울"}
                   onClick={ClickHandler}
                 />
-              </label>
+                </label>
+              
             </div>
             <div>
               <label>
@@ -257,7 +273,7 @@ const Area = ({ isOpen, onClose }) => {
         </SelectDivOuter>
         <FooterDiv>
           <div>
-            <button></button>
+            <button onClick={uncheckAllRadios}></button>
             <button onClick={submitBtn}>Search</button>
           </div>
         </FooterDiv>
