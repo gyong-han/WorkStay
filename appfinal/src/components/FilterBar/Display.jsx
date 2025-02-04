@@ -5,6 +5,8 @@ import Area from "./Area";
 import People from "./People";
 
 const LayoutDiv = styled.div`
+
+
   width: 100%;
   height: 60px;
   display: grid;
@@ -33,6 +35,7 @@ const BtnDiv = styled.div`
   color: #202020;
   background-color: white;
 
+
   & > div {
     width: 100%;
     height: 100%;
@@ -50,6 +53,7 @@ const BtnDiv = styled.div`
     align-items: center;
   }
   & > div:nth-child(2) {
+    display: flex;
     border-left: 1px solid #049dd9;
     border-right: 1px solid #049dd9;
   }
@@ -80,7 +84,7 @@ const Display = () => {
             <button onClick={openModal1}><img src="https://png.pngtree.com/png-vector/20190507/ourmid/pngtree-vector-location-icon-png-image_1024759.jpg"alt="" />장소</button>
             <Area isOpen={isModal1Open} onClose={closeModal1} />
           </div>
-          <div>
+          <div >
             <Calendar></Calendar>
           </div>
           
