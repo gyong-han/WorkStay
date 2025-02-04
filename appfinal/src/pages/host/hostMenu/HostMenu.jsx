@@ -1,12 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import StayReservMgmt from "./StayReservMgmt";
-import SpaceReservMgmt from "./SpaceReservMgmt";
-import StayApprovalMgmt from "./StayApprovalMgmt";
-import SpaceApprovalMgmt from "./SpaceApprovalMgmt";
-import MyStayMgmt from "./MyStayMgmt";
-import MySpaceMgmt from "./MySpaceMgmt";
-import HostLayout from "../hostComponents/HostLayout";
+import HostMainLayout from "../hostComponents/HostMainLayout";
+import HostMgmtMenu from "./hostMgmt/HostMgmtMenu";
 
 const HostMenu = () => {
   return (
@@ -15,51 +10,52 @@ const HostMenu = () => {
         <Route
           path=""
           element={
-            <HostLayout>
-              <StayReservMgmt />
-            </HostLayout>
+            <HostMainLayout>
+              <h1>숙소 예약 정보 태그</h1>
+            </HostMainLayout>
           }
         />
         <Route
-          path="/spaceReservMgmt/*"
+          path="/spaceReserv/*"
           element={
-            <HostLayout>
-              <SpaceReservMgmt />
-            </HostLayout>
+            <HostMainLayout>
+              <h1>공간 예약 정보 태그</h1>
+            </HostMainLayout>
           }
         />
         <Route
-          path="/stayApprovalMgmt/*"
+          path="/editHost/*"
           element={
-            <HostLayout>
-              <StayApprovalMgmt />
-            </HostLayout>
+            <HostMainLayout>
+              <h1>회원 정보 수정 태그</h1>
+            </HostMainLayout>
           }
         />
         <Route
-          path="/spaceApprovalMgmt/*"
+          path="/slogMgmt/*"
           element={
-            <HostLayout>
-              <SpaceApprovalMgmt />
-            </HostLayout>
+            <HostMainLayout>
+              <h1>slog관리 태그</h1>
+            </HostMainLayout>
           }
         />
         <Route
-          path="/myStayMgmt/*"
+          path="/bookmark/*"
           element={
-            <HostLayout>
-              <MyStayMgmt />
-            </HostLayout>
+            <HostMainLayout>
+              <h1>북마크 태그</h1>
+            </HostMainLayout>
           }
         />
         <Route
-          path="/mySpaceMgmt/*"
+          path="/message/*"
           element={
-            <HostLayout>
-              <MySpaceMgmt />
-            </HostLayout>
+            <HostMainLayout>
+              <h1>메세지 태그</h1>
+            </HostMainLayout>
           }
         />
+        <Route path="/hostMgmtMenu/*" element={<HostMgmtMenu />} />
       </Routes>
     </>
   );

@@ -56,13 +56,12 @@ const MenuDiv = styled.div`
   }
 `;
 
-const HostLayout = ({ children }) => {
+const HostMainLayout = ({ children }) => {
   const navigate = useNavigate();
 
   function movePath(e) {
-    navigate(`/hostMenu/hostMgmtMenu/${e.target.id}`);
+    navigate(`/hostMenu/${e.target.id}`);
   }
-
   return (
     <>
       <HomeDiv>
@@ -84,25 +83,25 @@ const HostLayout = ({ children }) => {
         <MainDiv>
           <MenuAreaDiv>
             <MenuDiv name="" onClick={movePath}>
-              숙소 예약 관리
+              숙소 예약 정보
             </MenuDiv>
-            <MenuDiv id="spaceReservMgmt" onClick={movePath}>
-              공간 예약 관리
+            <MenuDiv id="spaceReserv" onClick={movePath}>
+              공간 예약 정보
             </MenuDiv>
-            <MenuDiv id="stayApprovalMgmt" onClick={movePath}>
-              숙소 승인 관리
+            <MenuDiv id="editHost" onClick={movePath}>
+              회원 정보 수정
             </MenuDiv>
-            <MenuDiv id="spaceApprovalMgmt" onClick={movePath}>
-              공간 승인 관리
+            <MenuDiv id="slogMgmt" onClick={movePath}>
+              S-Log 관리
             </MenuDiv>
-            <MenuDiv id="myStayMgmt" onClick={movePath}>
-              내 숙소 관리
+            <MenuDiv id="bookmark" onClick={movePath}>
+              북마크
             </MenuDiv>
-            <MenuDiv id="mySpaceMgmt" onClick={movePath}>
-              내 공간 관리
-            </MenuDiv>
-            <MenuDiv id="" onClick={movePath}>
+            <MenuDiv id="message" onClick={movePath}>
               메세지
+            </MenuDiv>
+            <MenuDiv id="hostMgmtMenu" onClick={movePath}>
+              호스트 관리
             </MenuDiv>
           </MenuAreaDiv>
           <div>{children}</div>
@@ -112,4 +111,4 @@ const HostLayout = ({ children }) => {
   );
 };
 
-export default HostLayout;
+export default HostMainLayout;
