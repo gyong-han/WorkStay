@@ -12,6 +12,7 @@ const HeaderContainer = styled.header`
   border-bottom: 1px solid #ccc;
   position: sticky;
   top: 0px;
+  z-index: 1000;
 `;
 
 const Logo = styled.div`

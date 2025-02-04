@@ -5,33 +5,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import Form from "react-bootstrap/Form";
 import { format } from "date-fns";
 import "./styles/datepicker.css";
-import styled from "styled-components";
-
-
-const LayoutDiv = styled.div`
-  width:337px;
-  height: 46px;
-  font-size: 25px;
-  margin-left: 40px;
-  display: flex;
-  justify-content: start;
-  border-bottom: 1px solid #D9D9D9;
-  color: #049DD9;
-  background-color: white;
-`;
-
-const CustomHeader = ({ date, changeMonth }) => {
-  return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <LayoutDiv>날짜를 선택해주세요</LayoutDiv>
-      <button onClick={() => changeMonth(date.getMonth() - 1)}>{"<"}</button>
-      <span style={{ margin: "0 10px" }}>
-        {format(date, "yyyy년 MM월", { locale: ko })}
-      </span>
-      <button onClick={() => changeMonth(date.getMonth() + 1)}>{">"}</button>
-    </div>
-  );
-};
 
 
 const Calendar = () => {
@@ -46,7 +19,6 @@ const Calendar = () => {
   return (
     <DatePicker
       showIcon
-      
       locale ={ko}
       selectsRange={true}
       startDate={startDate}
