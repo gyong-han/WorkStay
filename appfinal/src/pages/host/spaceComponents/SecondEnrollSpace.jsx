@@ -144,11 +144,20 @@ const SecondEnrollSpace = () => {
     });
   };
 
-  const changeValue = (e) => {
+  const changeValue1 = (e) => {
     let inputValue = e.target.value;
 
     // 숫자만 입력 허용 & 10자리 제한 적용
     inputValue = inputValue.replace(/\D/g, "").slice(0, 10);
+    setValue(inputValue);
+    handleChange(e);
+  };
+
+  const changeValue2 = (e) => {
+    let inputValue = e.target.value;
+
+    // 숫자만 입력 허용 & 10자리 제한 적용
+    inputValue = inputValue.replace(/\D/g, "").slice(0, 11);
     setValue(inputValue);
     handleChange(e);
   };
@@ -227,7 +236,7 @@ const SecondEnrollSpace = () => {
                 name="phone"
                 placeholder="스페이스 전화번호를 입력해주세요."
                 top="40px"
-                onChange={handleChange}
+                onChange={changeValue2}
               />
               <DataTitle top="40px">스페이스 SNS *</DataTitle>
               <DataInput
@@ -256,7 +265,7 @@ const SecondEnrollSpace = () => {
                 placeholder="사업자 등록번호 10글자를 입력해주세요."
                 top="40px"
                 value={value}
-                onChange={changeValue}
+                onChange={changeValue1}
               />
               <DataTitle top="40px">스페이스 소개 *</DataTitle>
               <TextArea
@@ -318,6 +327,7 @@ const SecondEnrollSpace = () => {
               <HostBtn
                 width="400px"
                 height="50px"
+                font="25px"
                 backColor="#2B8C44"
                 str="제출하기"
                 f={f01}

@@ -3,6 +3,8 @@ import { styled } from "styled-components";
 import { FiFileText, FiChevronRight } from "react-icons/fi";
 import { BiSearch } from "react-icons/bi";
 import { CiPen } from "react-icons/ci";
+import HostBtn from "../hostComponents/HostBtn";
+import { useNavigate } from "react-router-dom";
 
 const HeaderDiv = styled.div`
   text-align: center;
@@ -29,8 +31,8 @@ const TagDiv = styled.div`
 
 const Hr = styled.hr`
   width: 75%;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 50px;
+  margin-bottom: 50px;
 `;
 
 const MainHeader = styled.div`
@@ -96,7 +98,20 @@ const FooterFoot = styled.div`
   font-weight: 400;
 `;
 
+const BtnArea = styled.div`
+  margin-top: 80px;
+  margin-bottom: 80px;
+  display: grid;
+  place-items: center;
+`;
+
 const FirstEnrollStay = () => {
+  const navigate = useNavigate();
+
+  function changePath() {
+    navigate("/enroll/stay/second");
+  }
+
   return (
     <>
       <HeaderDiv size="50px" color="black" margin="20px" weight="600">
@@ -118,7 +133,7 @@ const FirstEnrollStay = () => {
           생각합니다.
         </p>
         <p>
-          하나의 영감을 주는 제안은 하드, 전 세계 곳곳의 숨겨진 워케이션에
+          하나의 영감을 주는 제안은 하듯, 전 세계 곳곳의 숨겨진 워케이션에
           적합했던 소수의 공간을 소개하고 연결하며, <br />그 안에 담긴 이야기와
           가능성을 탐험자들에게 전달합니다.
         </p>
@@ -216,6 +231,15 @@ const FirstEnrollStay = () => {
         ※ 입점 신청을 위해 보내주신 정보는 검토 완료 후 3개월 간 보관하며 이후
         파기합니다.
       </FooterFoot>
+      <BtnArea>
+        <HostBtn
+          width="400px"
+          height="50px"
+          backColor="#2B8C44"
+          str="가입하기"
+          f={changePath}
+        />
+      </BtnArea>
     </>
   );
 };
