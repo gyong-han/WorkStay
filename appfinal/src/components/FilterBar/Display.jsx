@@ -7,6 +7,8 @@ import { CiLocationOn } from "react-icons/ci";
 import { FaRegUser } from "react-icons/fa";
 
 const LayoutDiv = styled.div`
+
+
   width: 100%;
   height: 60px;
   display: grid;
@@ -35,6 +37,7 @@ const BtnDiv = styled.div`
   color: #202020;
   background-color: white;
 
+
   & > div {
     width: 100%;
     height: 100%;
@@ -52,6 +55,7 @@ const BtnDiv = styled.div`
     align-items: center;
   }
   & > div:nth-child(2) {
+    display: flex;
     border-left: 1px solid #049dd9;
     border-right: 1px solid #049dd9;
   }
@@ -84,7 +88,7 @@ const Display = () => {
             </button>
             <Area isOpen={isModal1Open} onClose={closeModal1} />
           </div>
-          <div>
+          <div >
             <Calendar></Calendar>
           </div>
 

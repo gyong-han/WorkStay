@@ -111,6 +111,9 @@ const CounterDiv = styled.div`
   &>.Counter{
     font-size: 30px;
   }
+  & >.minusBtn{
+    margin-bottom: 8px;
+}
   
 `;
 const FooterDiv = styled.div`
@@ -144,6 +147,7 @@ const FooterDiv = styled.div`
     color: white;
     border-radius: 5px;
   }
+ 
 `;
 
 const People = ({ isOpen, onClose }) => {
@@ -186,7 +190,7 @@ const People = ({ isOpen, onClose }) => {
           </TitleDiv>
           <TitleDiv>
             <CounterDiv>
-              <div><ModalBtn
+              <div class="minusBtn"><ModalBtn
                 str="-"
                 f={() => {
                   dispatch(DECREMENT_ADULT());
@@ -204,7 +208,7 @@ const People = ({ isOpen, onClose }) => {
               
             </CounterDiv>
             <CounterDiv>
-              <div><ModalBtn
+              <div class="minusBtn"><ModalBtn
                 str="-"
                 f={() => {
                   dispatch(DECREMENT_CHILD());
@@ -219,7 +223,7 @@ const People = ({ isOpen, onClose }) => {
               ></ModalBtn></div>
             </CounterDiv>
             <CounterDiv>
-              <div>
+              <div class="minusBtn"> 
               <ModalBtn
                 str="-"
                 f={() => {

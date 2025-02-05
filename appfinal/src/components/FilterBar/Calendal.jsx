@@ -40,6 +40,7 @@ const CustomHeader = ({ date, changeMonth }) => {
   );
 };
 
+
 const Calendar = () => {
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
@@ -53,6 +54,8 @@ const Calendar = () => {
     <DatePicker
       // showIcon
       locale={ko}
+      showIcon
+      locale ={ko}
       selectsRange={true}
       startDate={startDate}
       minDate={new Date()}
