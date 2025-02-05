@@ -37,7 +37,8 @@ const ArrowButton = styled.button`
   z-index: 1;
 `;
 
-const PictureSlide = ({w,h,img1,img2,img3,img4}) => {
+const PictureSlide = ({w,h,img1,img2,img3,img4,main}) => {
+  const[isPlaying,setIsPlaying] = useState(false);
   
 
 
@@ -63,13 +64,23 @@ const slideImages = [
     
   };
   
+  
   useEffect(() => {
-    const interval = setInterval(() => {
-      setSlideIdx((prev) => (prev + 1) % slideImages.length);
-      //5초마다 
-    }, 5000);
-    return () => clearInterval(interval);
+    
+    if(!main){
+      return;
+    }
+    if(main){
+      const interval = setInterval(() => {
+        setSlideIdx((prev) => (prev + 1) % slideImages.length);
+        //5초마다 
+      }, 5000);
+      return () => clearInterval(interval);
+    }
+    
+    
   }, []);
+
 
 
 
