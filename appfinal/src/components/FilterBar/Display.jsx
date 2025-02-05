@@ -77,7 +77,7 @@ const Display = () => {
 
   return (
     <>
-      <div>123</div>
+      
       <LayoutDiv>
         <div></div>
         <BtnDiv>
