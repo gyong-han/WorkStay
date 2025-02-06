@@ -6,6 +6,10 @@
   font-style: normal;
 }
 
+:root {
+  --main-color: #049dd9;
+}
+
 body {
   font-family: "Pretendard-Regular";
   background-color: #fafafa;

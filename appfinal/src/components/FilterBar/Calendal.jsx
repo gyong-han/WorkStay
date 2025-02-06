@@ -7,7 +7,6 @@ import { format } from "date-fns";
 import "./styles/datepicker.css";
 import styled from "styled-components";
 import { CiCalendar } from "react-icons/ci";
-import { FaRegUser } from "react-icons/fa";
 
 const LayoutDiv = styled.div`
   width: 337px;
@@ -40,7 +39,6 @@ const CustomHeader = ({ date, changeMonth }) => {
   );
 };
 
-
 const Calendar = () => {
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
@@ -54,8 +52,6 @@ const Calendar = () => {
     <DatePicker
       // showIcon
       locale={ko}
-      showIcon
-      locale ={ko}
       selectsRange={true}
       startDate={startDate}
       minDate={new Date()}
