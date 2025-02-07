@@ -13,6 +13,7 @@ import Store from "./redux/store";
 import EnrollStay from "./pages/host/stayComponents/EnrollStay";
 import EnrollSpace from "./pages/host/spaceComponents/EnrollSpace";
 import AdminMenu from "./pages/admin/adminMenu/AdminMenu";
+import HostMenu from "./pages/host/hostMenu/HostMenu";
 
 function App() {
   return (
@@ -93,6 +94,14 @@ function App() {
             element={
               <Layout>
                 <AdminMenu />
+              </Layout>
+            }
+          />
+          <Route
+            path="/hostMenu/*"
+            element={
+              <Layout>
+                <HostMenu />
               </Layout>
             }
           />
