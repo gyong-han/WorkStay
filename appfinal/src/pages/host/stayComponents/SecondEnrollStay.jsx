@@ -101,6 +101,7 @@ const TextArea = styled.textarea`
   height: 150px;
   margin-top: 35px;
   border-radius: 5px;
+  resize: none;
 `;
 
 const BtnArea = styled.div`
@@ -136,7 +137,9 @@ const SecondEnrollStay = () => {
   //fetch함수
   const f01 = () => {
     console.log("formData : ", formData);
+    //fetch로 공간 정보 보내고 return값으로 공간 기본키 받아오고 third/ 뒤에 넣기
     navigate("/enroll/stay/third/1");
+    // window.scrollTo(0, 0);
   };
 
   return (
