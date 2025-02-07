@@ -1,13 +1,13 @@
-package com.kh.team03;
+package com.kh.springfinal;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Team03Application {
+public class SpringfinalApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Team03Application.class, args);
+		SpringApplication.run(SpringfinalApplication.class, args);
 	}
 
 }
