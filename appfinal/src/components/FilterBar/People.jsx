@@ -2,6 +2,14 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import ModalBtn from "./ModalBtn";
+import {
+  DECREMENT_ADULT,
+  DECREMENT_BABY,
+  DECREMENT_CHILD,
+  INCREMENT_ADULT,
+  INCREMENT_BABY,
+  INCREMENT_CHILD,
+} from "../../redux/counterSlice";
 
 const Overlay = styled.div`
   position: fixed;
@@ -80,11 +88,41 @@ const CounterDiv = styled.div`
   align-items: center;
   justify-content: center;
 `;
+const FooterDiv = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  & > div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    justify-items: center;
+    align-items: center;
+    width: 400px;
+    height: 80px;
+  }
+  & > div > button:nth-child(1) {
+    width: 60px;
+    height: 60px;
+    border: none;
+    background-color: white;
+    font-size: 40px;
+  }
+  & > div > button:nth-child(2) {
+    width: 145px;
+    height: 45px;
+    border: none;
+    background-color: #049dd9;
+    color: white;
+    border-radius: 5px;
+  }
+`;
 
 const People = ({ isOpen, onClose }) => {
-  const adult = useSelector((state) => state.adult.adultCnt);
-  const child = useSelector((state) => state.child.childCnt);
-  const baby = useSelector((state) => state.baby.cnt);
+  const { adult, child, baby } = useSelector((state) => state.counter);
   const dispatch = useDispatch();
   if (!isOpen) return null;
   function ClickHandler(e) {
@@ -124,14 +162,14 @@ const People = ({ isOpen, onClose }) => {
               <ModalBtn
                 str="+"
                 f={() => {
-                  dispatch({ type: "INCREMENT_ADULT" });
+                  dispatch(INCREMENT_ADULT());
                 }}
               ></ModalBtn>
               {adult}
               <ModalBtn
                 str="-"
                 f={() => {
-                  dispatch({ type: "DECREMENT_ADULT" });
+                  dispatch(DECREMENT_ADULT());
                 }}
               ></ModalBtn>
             </CounterDiv>
@@ -139,14 +177,14 @@ const People = ({ isOpen, onClose }) => {
               <ModalBtn
                 str="+"
                 f={() => {
-                  dispatch({ type: "INCREMENT_CHILD" });
+                  dispatch(INCREMENT_CHILD());
                 }}
               ></ModalBtn>
               {child}
               <ModalBtn
                 str="-"
                 f={() => {
-                  dispatch({ type: "DECREMENT_CHILD" });
+                  dispatch(DECREMENT_CHILD());
                 }}
               ></ModalBtn>
             </CounterDiv>
@@ -154,22 +192,25 @@ const People = ({ isOpen, onClose }) => {
               <ModalBtn
                 str="+"
                 f={() => {
-                  dispatch({ type: "INCREMENT_BABY" });
+                  dispatch(INCREMENT_BABY());
                 }}
               ></ModalBtn>
               {baby}
               <ModalBtn
                 str="-"
                 f={() => {
-                  dispatch({ type: "DECREMENT_BABY" });
+                  dispatch(DECREMENT_BABY());
                 }}
               ></ModalBtn>
             </CounterDiv>
           </TitleDiv>
         </InnerDiv>
-        <div>
-          <button onClick={onClose}>모달 닫기</button>
-        </div>
+        <FooterDiv>
+          <div>
+            <button>⟳</button>
+            <button onClick={ClickHandler}>Search</button>
+          </div>
+        </FooterDiv>
       </Modal>
     </Overlay>
   );

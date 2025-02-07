@@ -1,5 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import BusCalendar from "./BusCalendar";
+import TrafficPeople from "./TrafficPeople";
+import StartTerminalList from "./StartTerminalList";
 
 const Container = styled.div`
   max-width: 600px;
@@ -12,6 +15,7 @@ const Container = styled.div`
 const FormRow = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
   align-items: center;
   gap: 20px;
   margin-bottom: 30px;
@@ -32,6 +36,12 @@ const FormRow = styled.div`
     font-size: 20px;
     cursor: pointer;
     color: #049dd9;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 20px 0;
   }
 `;
 
@@ -81,24 +91,41 @@ const SubmitButton = styled.button`
 `;
 
 const TrafficForm = () => {
+  const [a, setA] = useState("서울");
+  const [b, setB] = useState("선택");
+
+  const SwapStation = () => {
+    const temp = a;
+    setA(b);
+    setB(temp);
+  };
+
   return (
     <Container>
       <FormRow>
+        <div>출발역</div>
+        <div></div>
+        <div>도착역</div>
         <div className="station">
-          <span>서울</span>
+          <StartTerminalList />
         </div>
-        <div className="swap">↔</div>
+        <div className="swap" onClick={SwapStation}>
+          ↔
+        </div>
         <div className="station">
-          <span>선택</span>
+          <span>{b}</span>
         </div>
+        <hr />
+        <hr />
+        <hr />
       </FormRow>
-
-      <FormRow></FormRow>
 
       <InfoSection>
         <div className="info-row">
           <label>가는날</label>
-          <div className="main-text">날짜를 선택해주세요</div>
+          <div className="main-text">
+            <BusCalendar />
+          </div>
           <div className="sub-text">
             승차권은 출발 시간 전까지 조회가 가능합니다.
           </div>
@@ -108,7 +135,9 @@ const TrafficForm = () => {
 
         <div className="info-row">
           <label>인원</label>
-          <div className="main-text">성인 1명</div>
+          <div className="main-text">
+            <TrafficPeople />
+          </div>
         </div>
       </InfoSection>
 
