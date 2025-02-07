@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PictureSlide from './PictureSlide';
 import styled from 'styled-components';
 
@@ -60,27 +60,35 @@ const ReservationDiv = styled.div`
 `;
 
 
-const ListCard = () => {
+const ListCard = ({morning,night,key}) => {
 
-
+  const navigate = useNavigate();
   const clickHandler = (e)=>{
-    console.log("ㅋㅋㅋㅋ");
+    console.log(e);
+    // PARAM 변수 받아주는곳
+    navigate("/findspace/detail/1");
+    
   }
-
   
 
+
+
+  
+  const morningPrice= morning.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const nightPrice = night.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  
   return (
     <Layout>
-      <InerDiv onClick={clickHandler}>
+      <InerDiv  onClick={clickHandler}>
         <TitleDiv>인더플럼</TitleDiv>
         <div></div>
         <AreaDiv>제주/제주시</AreaDiv>
         <PeopleDiv>기준 6명 (최대 12명)</PeopleDiv>
-        <MorningPackagePriceDiv>낮패키지₩120000</MorningPackagePriceDiv>
-        <NightPackagePriceDiv>밤패키지₩150000</NightPackagePriceDiv>
+        <MorningPackagePriceDiv>낮패키지₩{morningPrice}</MorningPackagePriceDiv>
+        <NightPackagePriceDiv>밤패키지₩{nightPrice}</NightPackagePriceDiv>
         <ReservationDiv>예약하기</ReservationDiv>
       </InerDiv>
-      <PictureSlide w={''} h={'235' } 
+      <PictureSlide w={''} h={'235'} 
       img1={'https://image.utoimage.com/preview/cp872722/2022/12/202212008462_500.jpg'}
       img2={'https://helpx.adobe.com/content/dam/help/en/photoshop/using/quick-actions/remove-background-before-qa1.png'}
       img3={'https://altools.co.kr/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fimg_feature_alsee_1.60428533.png&w=3840&q=75'}

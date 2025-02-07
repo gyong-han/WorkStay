@@ -5,21 +5,24 @@ import styled from 'styled-components';
 
 const SlideContainer = styled.div`
   position: relative;
-  width: ${(props)=>{return props.w || "400"}}px;
-  height: ${(props)=>{return props.h || "230"}}px;
+  width: ${(props) => props.w || "400"}px;
+  height: ${(props) => props.h || "230"}px;
   overflow: hidden;
-  
 `;
 
 const Slide = styled.div`
   width: 100%;
   height: 100%;
+  display: flex;
+  transition: transform 0.3s ease-in-out;  /* 슬라이드 전환 애니메이션 추가 */
+  transform: translateX(${(props) => -props.index * 100}%);  /* 인덱스에 따라 이동 */
 `;
 
 const SlideImage = styled.img`
-  width: 100%;
-  height: 100%;
+  width: ${(props) => props.w || "400"}px;
+  height: ${(props) => props.h || "230"}px;
   object-fit: cover;
+  
   
 `;
 
@@ -37,8 +40,12 @@ const ArrowButton = styled.button`
   z-index: 1;
 `;
 
+const Xdiv = styled.div`
+  width: 100%;
+  height: 100%;
+`;
+
 const PictureSlide = ({w,h,img1,img2,img3,img4,main}) => {
-  const[isPlaying,setIsPlaying] = useState(false);
   
 
 
@@ -66,28 +73,27 @@ const slideImages = [
   
   
   useEffect(() => {
-    
-    if(!main){
-      return;
+    if (!main) {
+        return;
     }
-    if(main){
-      const interval = setInterval(() => {
+    
+    const interval = setInterval(() => {
         setSlideIdx((prev) => (prev + 1) % slideImages.length);
-        //5초마다 
-      }, 5000);
-      return () => clearInterval(interval);
-    }
-    
-    
-  }, []);
+    }, 5000);
+
+    return () => clearInterval(interval);
+}, [main, slideImages.length]); // 누락된 의존성 추가
+
 
 
 
 
   return (
     <SlideContainer w={w} h={h}>
-      <Slide>
-        <SlideImage src={slideImages[slideIdx]} alt={`Slide ${slideIdx + 1}`} />
+      <Slide index={slideIdx}>
+        {slideImages.map((src, idx) => (
+          <Xdiv><SlideImage key={idx} src={src} alt={`Slide ${idx + 1}`} w={w} h={h} /></Xdiv>
+        ))}
       </Slide>
       <ArrowButton left onClick={goToPreviousSlide} >
         ❮
