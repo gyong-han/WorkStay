@@ -3,8 +3,12 @@ import styled from "styled-components";
 import Calendar from "./Calendal";
 import Area from "./Area";
 import People from "./People";
+import { CiLocationOn } from "react-icons/ci";
+import { FaRegUser } from "react-icons/fa";
 
 const LayoutDiv = styled.div`
+
+
   width: 100%;
   height: 60px;
   display: grid;
@@ -33,6 +37,7 @@ const BtnDiv = styled.div`
   color: #202020;
   background-color: white;
 
+
   & > div {
     width: 100%;
     height: 100%;
@@ -45,10 +50,18 @@ const BtnDiv = styled.div`
     height: 100%;
     background-color: white;
     border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   & > div:nth-child(2) {
+    display: flex;
     border-left: 1px solid #049dd9;
     border-right: 1px solid #049dd9;
+  }
+  & > div > button > img {
+    width: 25px;
+    height: 25px;
   }
 `;
 
@@ -64,19 +77,26 @@ const Display = () => {
 
   return (
     <>
-      <div>123</div>
+      
       <LayoutDiv>
         <div></div>
         <BtnDiv>
           <div>
-            <Calendar></Calendar>
-          </div>
-          <div>
-            <button onClick={openModal1}>일정</button>
+            <button onClick={openModal1}>
+              <CiLocationOn size={20} />
+              장소
+            </button>
             <Area isOpen={isModal1Open} onClose={closeModal1} />
           </div>
+          <div >
+            <Calendar></Calendar>
+          </div>
+
           <div>
-            <button onClick={openModal2}>인원</button>
+            <button onClick={openModal2}>
+              <FaRegUser size={15} />
+              인원
+            </button>
             <People isOpen={isModal2Open} onClose={closeModal2} />
           </div>
         </BtnDiv>

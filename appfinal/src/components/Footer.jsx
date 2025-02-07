@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { FaFacebookF } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
@@ -55,7 +55,26 @@ const Logos = styled.div`
   gap: 10px;
 `;
 
+const EnrollSpan = styled.span`
+  margin-right: 10px;
+  cursor: pointer;
+
+  &:hover {
+    color: #2b8c44;
+  }
+`;
+
 const Footer = () => {
+  const navigate = useNavigate();
+
+  function enrollStay() {
+    navigate("/enroll/stay");
+  }
+
+  function enrollSpace() {
+    navigate("/enroll/space");
+  }
+
   return (
     <FooterWrapper>
       <FooterContent>
@@ -66,6 +85,12 @@ const Footer = () => {
         </FooterServiceContainer>
         <FooterMainContainer>
           <FooterInfoContainer>
+            <div>
+              <EnrollSpan onClick={enrollStay}>숙소입점 </EnrollSpan>
+              <EnrollSpan> | </EnrollSpan>
+              <EnrollSpan onClick={enrollSpace}> 공간입점</EnrollSpan>
+            </div>
+            <br />
             <DetailText>
               상호명 : (주) 워크스테이 | 대표자 : 홍석일 | 주소 : 서울특별시
               테헤란로 130, 6F 362호 | 사업자등록번호 : 181-20-01010 |
