@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const MainDiv = styled.div`
@@ -7,12 +8,19 @@ const MainDiv = styled.div`
 `;
 
 const StatusSpan = styled.span`
-  font-size: 20px;
+  font-size: 25px;
   margin-left: ${(props) => {
     return props.left;
   }};
 `;
+
 const StayReservMgmt = () => {
+  const navigate = useNavigate();
+
+  const resrvDetail = () => {
+    navigate("/hostMenu/hostMgmtMenu/detail/1");
+  };
+
   return (
     <>
       <MainDiv>
@@ -22,6 +30,7 @@ const StayReservMgmt = () => {
           <StatusSpan left="20px">예약 취소</StatusSpan>
         </div>
         <div>StayReservMgmt</div>
+        <button onClick={resrvDetail}>상세조회</button>
       </MainDiv>
     </>
   );

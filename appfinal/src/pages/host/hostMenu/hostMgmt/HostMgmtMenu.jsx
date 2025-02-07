@@ -7,6 +7,7 @@ import StayApprovalMgmt from "./StayApprovalMgmt";
 import SpaceApprovalMgmt from "./SpaceApprovalMgmt";
 import MyStayMgmt from "./MyStayMgmt";
 import MySpaceMgmt from "./MySpaceMgmt";
+import StayResrvMgmtDetail from "./StayResrvMgmtDetail";
 
 const HostMgmtMenu = () => {
   return (
@@ -57,6 +58,14 @@ const HostMgmtMenu = () => {
           element={
             <HostLayout>
               <MySpaceMgmt />
+            </HostLayout>
+          }
+        />
+        <Route
+          path="/detail/:stayReservNum"
+          element={
+            <HostLayout>
+              <StayResrvMgmtDetail />
             </HostLayout>
           }
         />

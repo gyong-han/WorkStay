@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -36,6 +36,7 @@ const Hr = styled.hr`
   margin-top: 40px;
   background-color: #202020;
   width: 85%;
+  height: 2px;
 `;
 
 const MenuAreaDiv = styled.div`
@@ -46,20 +47,22 @@ const MenuAreaDiv = styled.div`
 `;
 
 const MenuDiv = styled.div`
-  color: black;
+  color: ${(props) => (props.selected ? "#2B8C44" : "black")};
   font-size: 20px;
   font-weight: 400;
   cursor: pointer;
   &:hover {
     color: #2b8c44;
-    font-weight: 600;
   }
 `;
 
 const HostLayout = ({ children }) => {
   const navigate = useNavigate();
+  const [selectedMenu, setSelectedMenu] = useState("");
 
   function movePath(e) {
+    setSelectedMenu(e.target.id);
+
     navigate(`/hostMenu/hostMgmtMenu/${e.target.id}`);
   }
 
@@ -83,25 +86,49 @@ const HostLayout = ({ children }) => {
         </div>
         <MainDiv>
           <MenuAreaDiv>
-            <MenuDiv name="" onClick={movePath}>
+            <MenuDiv id="" onClick={movePath} selected={selectedMenu === ""}>
               숙소 예약 관리
             </MenuDiv>
-            <MenuDiv id="spaceReservMgmt" onClick={movePath}>
+            <MenuDiv
+              id="spaceReservMgmt"
+              onClick={movePath}
+              selected={selectedMenu === "spaceReservMgmt"}
+            >
               공간 예약 관리
             </MenuDiv>
-            <MenuDiv id="stayApprovalMgmt" onClick={movePath}>
+            <MenuDiv
+              id="stayApprovalMgmt"
+              onClick={movePath}
+              selected={selectedMenu === "stayApprovalMgmt"}
+            >
               숙소 승인 관리
             </MenuDiv>
-            <MenuDiv id="spaceApprovalMgmt" onClick={movePath}>
+            <MenuDiv
+              id="spaceApprovalMgmt"
+              onClick={movePath}
+              selected={selectedMenu === "spaceApprovalMgmt"}
+            >
               공간 승인 관리
             </MenuDiv>
-            <MenuDiv id="myStayMgmt" onClick={movePath}>
+            <MenuDiv
+              id="myStayMgmt"
+              onClick={movePath}
+              selected={selectedMenu === "myStayMgmt"}
+            >
               내 숙소 관리
             </MenuDiv>
-            <MenuDiv id="mySpaceMgmt" onClick={movePath}>
+            <MenuDiv
+              id="mySpaceMgmt"
+              onClick={movePath}
+              selected={selectedMenu === "mySpaceMgmt"}
+            >
               내 공간 관리
             </MenuDiv>
-            <MenuDiv id="" onClick={movePath}>
+            <MenuDiv
+              id="msgggg"
+              onClick={movePath}
+              selected={selectedMenu === "msgggg"}
+            >
               메세지
             </MenuDiv>
           </MenuAreaDiv>

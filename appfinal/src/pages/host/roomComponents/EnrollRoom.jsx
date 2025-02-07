@@ -75,6 +75,15 @@ const TextArea = styled.textarea`
   height: 150px;
   margin-top: 35px;
   border-radius: 5px;
+  resize: none;
+`;
+
+const DataTitle2 = styled.div`
+  color: red;
+  font-size: 15px;
+  font-weight: 300;
+  margin-top: 10px;
+  margin-left: 60px;
 `;
 
 const EnrollRoom = ({ no, formDataArr, setFormDataArr }) => {
@@ -165,8 +174,11 @@ const EnrollRoom = ({ no, formDataArr, setFormDataArr }) => {
         <DataInput2 type="file" name="space_floor_plan" top="40px" />
         <DataTitle top="40px">스페이스 대표사진 *</DataTitle>
         <DataInput2 type="file" name="thumbnail" top="40px" />
-        <DataTitle top="40px">스페이스 사진 첨부파일 *</DataTitle>
-        <DataInput2 type="file" name="f" top="40px" />
+        <div>
+          <DataTitle top="40px">스페이스 사진 첨부파일 *</DataTitle>
+          <DataTitle2>*최소 3장 이상</DataTitle2>
+        </div>
+        <DataInput2 type="file" name="attachment" top="40px" />
       </RoomDiv>
     </>
   );

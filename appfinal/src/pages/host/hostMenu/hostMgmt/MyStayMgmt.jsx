@@ -7,7 +7,7 @@ const MainDiv = styled.div`
 `;
 
 const StatusSpan = styled.span`
-  font-size: 20px;
+  font-size: 25px;
   margin-left: ${(props) => {
     return props.left;
   }};
