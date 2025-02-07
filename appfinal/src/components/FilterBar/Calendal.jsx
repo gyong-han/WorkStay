@@ -7,10 +7,7 @@ import { format } from "date-fns";
 import "./styles/datepicker.css";
 
 
-
-
-
-const Calendar = ({children,type}) => {
+const Calendar = () => {
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
   useEffect(() => {
@@ -21,10 +18,8 @@ const Calendar = ({children,type}) => {
   }, [dateRange]);
   return (
     <DatePicker
-      // showIcon
-      locale={ko}
-     
-     
+      showIcon
+      locale ={ko}
       selectsRange={true}
       startDate={startDate}
       minDate={new Date()}
@@ -36,19 +31,19 @@ const Calendar = ({children,type}) => {
       withPortal
       customInput={
         <Form.Control
-          as={type}
+          as="button"
           style={{
             width: "166px",
             height: "50px",
             border: "none",
-            backgroundColor: "#FAFAFA",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
+            backgroundColor: "white",
+            display:"flex",
+            justifyContent:"center",
+            alignItems:"center"
           }}
           inline
         >
-          {children}
+          일정
         </Form.Control>
       }
     />
