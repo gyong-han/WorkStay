@@ -1,0 +1,230 @@
+import React, { useState } from "react";
+import styled from "styled-components";
+import { FaCheck } from "react-icons/fa";
+
+const MainDiv = styled.div`
+  display: grid;
+  grid-template-rows: 2fr 1fr 2fr 2fr 1.5fr 1fr 1fr 1.5fr 1fr;
+`;
+
+const StyleMain = styled.div`
+  color: #202020;
+  font-size: 3em;
+  font-weight: 700;
+  display: flex;
+  grid-row: 2;
+  justify-content: center;
+  align-items: center;
+  letter-spacing: 8px;
+`;
+
+const StyleInput = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  grid-row: ${(props) => props.row || "auto"};
+`;
+
+const StyledInput = styled.input`
+  border: 0;
+  border-bottom: solid 1px #202020;
+  background-color: #fafafa;
+  color: #202020;
+  width: 500px;
+  height: 30px;
+  outline: none;
+  font-size: 1em;
+
+  &::placeholder {
+    color: #bbbbbb;
+  }
+`;
+
+const ErrorMessage = styled.div`
+  color: #f20530;
+  font-size: 0.8em;
+  margin-top: 5px;
+  align-self: center;
+  width: 500px;
+`;
+
+const BtnTag = styled.button`
+  display: grid;
+  justify-self: center;
+  align-items: center;
+  border: 1px solid #fafafa;
+  border-radius: 5px;
+  background-color: #049dd9;
+  color: #fafafa;
+  font-size: 1.2em;
+  font-weight: 600;
+  width: 500px;
+  height: 60px;
+  grid-row: 7;
+`;
+
+const CheckInput = styled.div`
+  display: flex;
+  justify-content: space-around;
+  letter-spacing: 2px;
+`;
+
+const Checkbox = styled.input`
+  width: 13px;
+  height: 13px;
+`;
+
+const CheckPTag = styled.span`
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #f20530;
+`;
+
+const CheckSpan = styled.span`
+  font-weight: 300;
+  font-size: 0.8rem;
+  color: #202020;
+`;
+
+const PasswordCheckInput = styled.div`
+  display: flex;
+  justify-content: space-around;
+  letter-spacing: 3px;
+  font-size: 0.8em;
+  font-weight: 600;
+  gap: 20px;
+`;
+
+const PasswordCheck = styled.span`
+  color: ${(props) => (props.valid ? "#049DD9" : "#202020")};
+`;
+
+const IoMdCheckmarkStyled = styled(FaCheck)`
+  color: ${(props) => (props.valid ? "#049DD9" : "#202020")};
+  width: 12px;
+  height: 12px;
+`;
+
+const Join = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [nameError, setNameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [password, setPassword] = useState("");
+
+  // 비밀번호 조건 검사 함수
+  const checkPasswordConditions = (password) => {
+    return {
+      hasEnglish: /[a-zA-Z]/.test(password),
+      hasNumber: /[0-9]/.test(password),
+      hasSpecialChar: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+      validLength: password.length >= 8 && password.length <= 20,
+    };
+  };
+
+  const passwordConditions = checkPasswordConditions(password);
+
+  const validateEmail = (value) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (value && !emailRegex.test(value))
+      return "이메일 형식이 올바르지 않습니다.";
+    return "";
+  };
+
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
+    setEmail(value);
+    setEmailError(validateEmail(value));
+  };
+
+  const validateName = (value) => {
+    const nameRegex = /^[가-힣]{2,10}$/;
+    if (value && !nameRegex.test(value))
+      return "이름 형식이 올바르지 않습니다.";
+    return "";
+  };
+
+  const handleNameChange = (e) => {
+    const value = e.target.value;
+    setName(value);
+    setNameError(validateName(value));
+  };
+
+  return (
+    <>
+      <form>
+        <MainDiv>
+          <StyleMain>JOIN</StyleMain>
+
+          <StyleInput row={3}>
+            <StyledInput
+              type="text"
+              placeholder="이메일을 입력해주세요."
+              value={email}
+              onChange={handleEmailChange}
+            />
+            {emailError && <ErrorMessage>{emailError}</ErrorMessage>}
+          </StyleInput>
+
+          <StyleInput row={4}>
+            <StyledInput
+              type="password"
+              placeholder="비밀번호를 입력 해주세요."
+              value={password}
+              maxLength={20}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <div style={{ marginTop: "10px" }}>
+              <PasswordCheckInput>
+                <PasswordCheck valid={passwordConditions.hasEnglish}>
+                  <IoMdCheckmarkStyled valid={passwordConditions.hasEnglish} />
+                  영문
+                </PasswordCheck>
+
+                <PasswordCheck valid={passwordConditions.hasNumber}>
+                  <IoMdCheckmarkStyled valid={passwordConditions.hasNumber} />
+                  숫자
+                </PasswordCheck>
+
+                <PasswordCheck valid={passwordConditions.hasSpecialChar}>
+                  <IoMdCheckmarkStyled
+                    valid={passwordConditions.hasSpecialChar}
+                  />
+                  특수문자
+                </PasswordCheck>
+
+                <PasswordCheck valid={passwordConditions.validLength}>
+                  <IoMdCheckmarkStyled valid={passwordConditions.validLength} />
+                  8자 이상 20자 이하
+                </PasswordCheck>
+              </PasswordCheckInput>
+            </div>
+          </StyleInput>
+
+          <StyleInput row={5}>
+            <StyledInput
+              type="text"
+              placeholder="이름을 입력해주세요."
+              value={name}
+              onChange={handleNameChange}
+            />
+            {nameError && <ErrorMessage>{nameError}</ErrorMessage>}
+          </StyleInput>
+
+          <StyleInput row={6}>
+            <CheckInput>
+              <Checkbox type="checkbox" />
+              <CheckPTag>[필수]</CheckPTag>
+              <CheckSpan>이용약관 및 개인정보 처리방침에 동의합니다.</CheckSpan>
+            </CheckInput>
+          </StyleInput>
+
+          <BtnTag type="submit">가입하기</BtnTag>
+        </MainDiv>
+      </form>
+    </>
+  );
+};
+
+export default Join;
