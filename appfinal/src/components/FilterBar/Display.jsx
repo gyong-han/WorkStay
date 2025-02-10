@@ -7,6 +7,7 @@ import { CiLocationOn } from "react-icons/ci";
 import { FaRegUser } from "react-icons/fa";
 import { CiCalendar } from "react-icons/ci";
 import CalendarTime from "./CalendalTime";
+import Calendar from "./Calendal";
 
 const LayoutDiv = styled.div`
 
@@ -66,7 +67,7 @@ const BtnDiv = styled.div`
   }
 `;
 
-const Display = () => {
+const Display = ({isTimeMode}) => {
   const [isModal1Open, setIsModal1Open] = useState(false);
   const [isModal2Open, setIsModal2Open] = useState(false);
 
@@ -89,10 +90,17 @@ const Display = () => {
             </button>
             <Area isOpen={isModal1Open} onClose={closeModal1} />
           </div>
-          <div >
-            <CalendarTime type={"button"}><CiCalendar size={20} />
-                      일정</CalendarTime>
-          </div>
+          <div>
+            {isTimeMode ? (
+              <CalendarTime type="button">
+                <CiCalendar size={20} /> 일정
+              </CalendarTime>
+            ) : (
+              <Calendar type="button">
+                <CiCalendar size={20} /> 일정
+              </Calendar>
+            )}
+            </div>
 
           <div>
             <button onClick={openModal2}>

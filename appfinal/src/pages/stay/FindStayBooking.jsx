@@ -79,7 +79,7 @@ const IconLayoutDiv = styled.div`
   align-items: center;
 `;
 
-const FindSpaceBooking = () => {
+const FindStayBooking = () => {
 
   const{x} = useParams();
   console.log("x ::::",x);
@@ -92,10 +92,10 @@ const FindSpaceBooking = () => {
         <div>
           <div>인더플럼</div>
           <CalendarLayout><CalendarTime type={"text"}>날짜를 선택해주세요<MdOutlineKeyboardArrowDown /></CalendarTime></CalendarLayout>
-          <div><Link to={"/findspace/booking/1"}><Btn w={150} h={35} bg={"#049DD9"} size={"20px"} >예약하기</Btn></Link></div>
+          <div><Link to={"/findstay/booking/1"}><Btn w={150} h={35} bg={"#049DD9"} size={"20px"} >예약하기</Btn></Link></div>
         </div> 
         </DateDiv>
-      <ThirdDiv><PackageDetailCard information={"SPACE INFORMATION"} title={"낮 패키지"}></PackageDetailCard></ThirdDiv>
+      <ThirdDiv><PackageDetailCard title={`Room A${x}`} information={"ROOM INFORMATION"}></PackageDetailCard></ThirdDiv>
       <ContentLayout>
         <TitleDiv>FEATURES</TitleDiv>
         <IconLayoutDiv>
@@ -131,4 +131,4 @@ const FindSpaceBooking = () => {
   );
 };
 
-export default FindSpaceBooking;
+export default FindStayBooking;

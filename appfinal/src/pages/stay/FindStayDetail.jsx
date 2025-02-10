@@ -141,7 +141,7 @@ const PackageDiv = styled.div`
 
 
 
-const FindSpaceDetail = () => {
+const FindStayDetail = () => {
   const [bookMark,setBookMark] = useState()
 
   const {x} = useParams();
@@ -202,15 +202,15 @@ const FindSpaceDetail = () => {
         <div></div>
       </div>
       <PackageDiv>
-        <div>PACKAGE</div>
+        <div>ROOM</div>
         <div>
-          <PackageDisplay img={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAwcf09BODgX7VbhRf07dq9mBKXiQwQxzG-Q&s"}
-            title={"낮 패키지"} standard={"6"} max={"12"} price={"120000"} navigatorHandler={navi} url={"/findspace/spacebooking/1"} ></PackageDisplay>
+          <PackageDisplay img={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiwna3CDoRLFRenf20hQXtKMU59zeuOksm1Q&s"}
+            title={"Room A1"} standard={"6"} max={"12"} price={"120000"} navigatorHandler={navi} url={"/findstay/staybooking/1"} ></PackageDisplay>
         </div>
         <div></div>
         <div>
-          <PackageDisplay img={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPVr3w8Pov0BQ0sJlrmKaS-P8Nz8ONNF-VUQ&s"}
-            title={"밤 패키지"} standard={"4"} max={"8"} price={"150000"} navigatorHandler={navi} url={"/findspace/spacebooking/1"} ></PackageDisplay>
+          <PackageDisplay img={"https://www.agoda.com/wp-content/uploads/2019/04/Where-to-stay-in-Seoul-South-Korea-Shilla-Stay-Seocho.jpg"}
+            title={"Room A2"} standard={"4"} max={"8"} price={"150000"} navigatorHandler={navi} url={"/findstay/staybooking/2"} ></PackageDisplay>
        </div>
         <div></div>
       </PackageDiv>
@@ -228,11 +228,11 @@ const FindSpaceDetail = () => {
         </div>
         <div></div>
       </div>
-      <div><Map adress={adress} name={name}>space</Map></div>
+      <div><Map adress={adress} name={name}> stay</Map></div>
       <div></div>
       <Infomation morning={150000} night={820000} standard={10} max={20}></Infomation>
     </Layout>
   );
 };
 
-export default FindSpaceDetail;
+export default FindStayDetail;

@@ -76,21 +76,19 @@ const FilterTextMD = styled.span`
   text-align: end;
 `;
 
-const FindSpaceList = () => {
+const FindStayList = () => {
 
   // const navi=()=>{
   //   console.log("hello");
     
   // }
-
   const navigate = useNavigate();
   const clickHandler = (e)=>{
     console.log(e);
     // PARAM 변수 받아주는곳
-    navigate("/findspace/detail/1");
+    navigate("/findstay/detail/1");
     
   }
-
 
   const [formData, setFormData] = useState({});
 
@@ -105,7 +103,7 @@ const FindSpaceList = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch("localhost:8080/findspace", {
+    fetch("localhost:8080/findstay", {
       method: "GET",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(formData),
@@ -144,8 +142,8 @@ const FindSpaceList = () => {
   
   return(<> 
 <Layout>
-  <h1>FIND SPACE</h1>
-  <Display isTimeMode={true}></Display>
+  <h1>FIND STAY</h1>
+  <Display isTimeMode={false}></Display>
 
    <SearchWrapper>
           <form onSubmit={handleSubmit}>
@@ -192,4 +190,4 @@ const FindSpaceList = () => {
   </>);
 };
 
-export default FindSpaceList;
+export default FindStayList;
