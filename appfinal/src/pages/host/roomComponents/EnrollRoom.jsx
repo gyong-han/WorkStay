@@ -86,6 +86,57 @@ const DataTitle2 = styled.div`
   margin-left: 60px;
 `;
 
+const CheckBoxArea = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: 1fr 1fr;
+  margin-top: 40px;
+`;
+
+const CheckDiv = styled.div`
+  display: flex; /* 수정: 수평 정렬을 위해 flexbox 추가 */
+  align-items: center; /* 수정: 체크박스와 텍스트를 세로로 정렬 */
+
+  & > input {
+    visibility: hidden;
+  }
+
+  & > label {
+    position: relative;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    margin-right: 10px;
+    background: #fcfff4;
+    background: linear-gradient(to top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+    border-radius: 4px;
+    box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0, 0, 0, 0.5);
+
+    &:after {
+      content: "";
+      width: 9px;
+      height: 5px;
+      position: absolute;
+      top: 6px; /* 수정: 체크 아이콘 위치 조정 */
+      left: 4px;
+      border: 3px solid #333;
+      border-top: none;
+      border-right: none;
+      background: transparent;
+      opacity: 0;
+      transform: rotate(-45deg);
+    }
+
+    &:hover:after {
+      opacity: 0.5;
+    }
+  }
+
+  & > input:checked + label:after {
+    opacity: 1;
+  }
+`;
+
 const EnrollRoom = ({ no, formDataArr, setFormDataArr }) => {
   return (
     <>
@@ -151,12 +202,58 @@ const EnrollRoom = ({ no, formDataArr, setFormDataArr }) => {
           }}
         />
         <DataTitle top="40px">독채 편의시설 *</DataTitle>
-        <DataInput2
-          type="number"
-          name="features_no"
-          top="40px"
-          placeholder="라디오 버튼"
-        />
+        <CheckBoxArea>
+          <CheckDiv>
+            <input type="checkbox" value="None" id="squaredFour" name="check" />
+            <label for="squaredFour" />
+            <span>사과</span>
+          </CheckDiv>
+          <CheckDiv>
+            <input type="checkbox" value="None" id="squaredFour" name="check" />
+            <label for="squaredFour" />
+            <span>사과</span>
+          </CheckDiv>
+          <CheckDiv>
+            <input type="checkbox" value="None" id="squaredFour" name="check" />
+            <label for="squaredFour" />
+            <span>사과</span>
+          </CheckDiv>
+          <CheckDiv>
+            <input type="checkbox" value="None" id="squaredFour" name="check" />
+            <label for="squaredFour" />
+            <span>사과</span>
+          </CheckDiv>
+          <CheckDiv>
+            <input type="checkbox" value="None" id="squaredFour" name="check" />
+            <label for="squaredFour" />
+            <span>사과</span>
+          </CheckDiv>
+          <CheckDiv>
+            <input type="checkbox" value="None" id="squaredFour" name="check" />
+            <label for="squaredFour" />
+            <span>사과</span>
+          </CheckDiv>
+          <CheckDiv>
+            <input type="checkbox" value="None" id="squaredFour" name="check" />
+            <label for="squaredFour" />
+            <span>사과</span>
+          </CheckDiv>
+          <CheckDiv>
+            <input type="checkbox" value="None" id="squaredFour" name="check" />
+            <label for="squaredFour" />
+            <span>사과</span>
+          </CheckDiv>
+          <CheckDiv>
+            <input type="checkbox" value="None" id="squaredFour" name="check" />
+            <label for="squaredFour" />
+            <span>사과</span>
+          </CheckDiv>
+          <CheckDiv>
+            <input type="checkbox" value="None" id="squaredFour" name="check" />
+            <label for="squaredFour" />
+            <span>사과</span>
+          </CheckDiv>
+        </CheckBoxArea>
 
         <DataTitle top="40px">독채 소개 *</DataTitle>
         <TextArea

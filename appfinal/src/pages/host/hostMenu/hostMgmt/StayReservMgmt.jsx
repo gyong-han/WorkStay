@@ -18,7 +18,7 @@ const StayReservMgmt = () => {
   const navigate = useNavigate();
 
   const resrvDetail = () => {
-    navigate("/hostMenu/hostMgmtMenu/detail/1");
+    navigate("/hostMenu/hostMgmtMenu/stayReserv/detail/1");
   };
 
   return (

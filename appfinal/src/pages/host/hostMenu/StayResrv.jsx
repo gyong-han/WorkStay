@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import ReservationCard from "../../../components/reservationInfo/ReservationCard";
-import ReservaionList from "../../../components/reservationInfo/ReservaionList";
+import ReservaionList from "../../../components/reservationInfo/ReservationList";
 
 const MainDiv = styled.div`
   display: grid;

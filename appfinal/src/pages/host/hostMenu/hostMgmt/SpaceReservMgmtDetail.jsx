@@ -89,9 +89,9 @@ const AmountDiv = styled.div`
   width: 100%;
 `;
 
-const StayResrvMgmtDetail = () => {
+const SpaceResrvMgmtDetail = () => {
   //import하기
-  const { stayReservNum } = useParams();
+  const { spaceReservNum } = useParams();
 
   const stayName = "온숲";
 
@@ -288,4 +288,4 @@ const StayResrvMgmtDetail = () => {
   );
 };
 
-export default StayResrvMgmtDetail;
+export default SpaceResrvMgmtDetail;

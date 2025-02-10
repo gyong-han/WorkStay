@@ -1,6 +1,6 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import ReservationCard from "../../../components/reservationInfo/ReservationCard";
 
 const MainDiv = styled.div`
   display: grid;
@@ -14,12 +14,12 @@ const StatusSpan = styled.span`
   }};
 `;
 
-const SpaceReservMgmt = () => {
-  const navigate = useNavigate();
+const BlankDiv = styled.div`
+  height: 200px;
+`;
 
-  const resrvDetail = () => {
-    navigate("/hostMenu/hostMgmtMenu/spaceReserv/detail/1");
-  };
+//예약 확정/취소 List로 보내는 값 변경경
+const SpaceResrv = () => {
   return (
     <>
       <MainDiv>
@@ -28,11 +28,16 @@ const SpaceReservMgmt = () => {
           <StatusSpan left="20px"> | </StatusSpan>
           <StatusSpan left="20px">예약 취소</StatusSpan>
         </div>
-        <div>SpaceReservMgmt</div>
-        <button onClick={resrvDetail}>상세조회</button>
+        <div>
+          {/* map으로 반복 돌리기 / vo 보내기*/}
+          <ReservationCard />
+          <ReservationCard />
+          <ReservationCard />
+        </div>
       </MainDiv>
+      <BlankDiv />
     </>
   );
 };
 
-export default SpaceReservMgmt;
+export default SpaceResrv;

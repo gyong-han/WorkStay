@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import HostApprovalCard from "../../hostComponents/HostApprovalCard";
 
 const MainDiv = styled.div`
   display: grid;
@@ -20,7 +21,8 @@ const MyStayMgmt = () => {
         <div>
           <StatusSpan left="330px">내 숙소 목록</StatusSpan>
         </div>
-        <div>MyStayMgmt</div>
+        <HostApprovalCard />
+        <HostApprovalCard />
       </MainDiv>
     </>
   );
