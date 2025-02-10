@@ -51,6 +51,7 @@ const MenuDiv = styled.div`
   font-size: 20px;
   font-weight: 400;
   cursor: pointer;
+
   &:hover {
     color: #2b8c44;
   }
