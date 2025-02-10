@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Layout = styled.div`
@@ -7,6 +8,10 @@ height: 100%;
 display: grid;
 grid-template-columns: 1fr;
 grid-template-rows: 300px 150px;
+
+&>a{
+  text-decoration: none;
+}
 `;
 
 const BackImgDiv = styled.div`
@@ -73,17 +78,19 @@ const PackageDisplay = ({img,title,standard,max,price,navigatorHandler}) => {
   
   const priceWon = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   
+
+
   return (
     <BackImgDiv img={img}>
       <Layout>
         <div></div>
-        <PackageContentDiv>
+        <Link to={"/findspace/spacebooking/1"}><PackageContentDiv>
           <div>{title}</div>
           <div>기준 {standard}명/최대{max}명</div>
           <div>₩{priceWon}</div>
           <div><span onClick={navigatorHandler}>예약하기</span></div>
-
         </PackageContentDiv>
+        </Link>
       </Layout>
     </BackImgDiv>
     

@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Calendar from "./Calendal";
+// import Calendar from "./Calendal";
 import Area from "./Area";
 import People from "./People";
 import { CiLocationOn } from "react-icons/ci";
 import { FaRegUser } from "react-icons/fa";
+import { CiCalendar } from "react-icons/ci";
+import CalendarTime from "./CalendalTime";
 
 const LayoutDiv = styled.div`
 
@@ -21,7 +23,6 @@ const LayoutDiv = styled.div`
     width: 166px;
     height: 60px;
     border: none;
-    background-color: white;
   }
 `;
 const BtnDiv = styled.div`
@@ -35,7 +36,7 @@ const BtnDiv = styled.div`
   border: 1px solid #049dd9;
   border-radius: 10px;
   color: #202020;
-  background-color: white;
+  background-color: #F9F9F9;
 
 
   & > div {
@@ -48,11 +49,11 @@ const BtnDiv = styled.div`
   & > div > button {
     width: 85%;
     height: 100%;
-    background-color: white;
     border: none;
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #F9F9F9;
   }
   & > div:nth-child(2) {
     display: flex;
@@ -89,7 +90,8 @@ const Display = () => {
             <Area isOpen={isModal1Open} onClose={closeModal1} />
           </div>
           <div >
-            <Calendar></Calendar>
+            <CalendarTime type={"button"}><CiCalendar size={20} />
+                      일정</CalendarTime>
           </div>
 
           <div>
