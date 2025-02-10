@@ -10,28 +10,27 @@ import "./styles/datepicker.css";
 
 
 
-const Calendar = ({children,type}) => {
-  const [dateRange, setDateRange] = useState([null, null]);
-  const [startDate, endDate] = dateRange;
+const CalendarTime = ({children,type}) => {
+  const [dateRange, setDateRange] = useState("");
+
   useEffect(() => {
-    if (dateRange[0] !== null && dateRange[1] !== null) {
-      const dateDate = dateRange.map((date) => format(date, "yyyyMMdd"));
-      console.log(dateDate);
-    }
+    console.log(dateRange);
   }, [dateRange]);
+
+  
   return (
     <DatePicker
       // showIcon
       locale={ko}
-     
-     
-      selectsRange={true}
-      startDate={startDate}
+      selectsRange={false}
       minDate={new Date()}
-      endDate={endDate}
       onChange={(update) => {
-        setDateRange(update);
+        
+        const selectDate = format(update, "yyyyMMdd");
+        setDateRange(selectDate);
       }}
+
+
       monthsShown={2}
       withPortal
       customInput={
@@ -55,4 +54,4 @@ const Calendar = ({children,type}) => {
   );
 };
 
-export default Calendar;
+export default CalendarTime;

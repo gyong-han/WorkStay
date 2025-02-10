@@ -4,13 +4,13 @@ import { RxShare2 } from "react-icons/rx";
 import { IoBookmarkOutline } from "react-icons/io5";
 import { IoBookmark } from "react-icons/io5";
 import PictureSlide from '../../components/listcomponents/PictureSlide';
-import Calendar from '../../components/FilterBar/Calendal';
 import { MdOutlineKeyboardArrowDown } from "react-icons/md"
 import PackageDisplay from '../../components/package/PackageDisplay';
 import Map from '../../components/map/Map';
 import Infomation from '../../components/Infomation';
 import { useParams } from 'react-router-dom';
 import { useState } from 'react';
+import CalendarTime from '../../components/FilterBar/CalendalTime';
 
 const Layout =styled.div`
 width: 100%;
@@ -114,7 +114,8 @@ const DateDiv = styled.div`
     height: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: end;
+    border-bottom: 2px solid #D9D9D9;
 `;
 
 const PackageDiv = styled.div`
@@ -197,7 +198,7 @@ const FindSpaceDetail = () => {
       </PictureSlide></div>
       <div>
         <div></div>
-        <DateDiv><Calendar type={"text"}>날짜를 선택해주세요<MdOutlineKeyboardArrowDown /></Calendar></DateDiv>
+        <DateDiv><CalendarTime type={"text"}>날짜를 선택해주세요<MdOutlineKeyboardArrowDown /></CalendarTime></DateDiv>
         <div></div>
       </div>
       <PackageDiv>
