@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import ReservaionList from "../../../components/reservationInfo/ReservationList";
+import ReservationCard from "../../../components/reservationInfo/ReservationCard";
 
 const MainDiv = styled.div`
   display: grid;
@@ -24,7 +24,8 @@ const StayResrv = () => {
           <StatusSpan left="20px">예약 취소</StatusSpan>
         </div>
         <div>
-          <ReservaionList />
+          <ReservationCard />
+          <ReservationCard />
         </div>
       </MainDiv>
     </>

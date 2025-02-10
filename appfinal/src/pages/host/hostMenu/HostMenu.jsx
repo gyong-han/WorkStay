@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import HostMainLayout from "../hostComponents/HostMainLayout";
 import HostMgmtMenu from "./hostMgmt/HostMgmtMenu";
 import StayResrv from "./StayResrv";
+import SpaceResrv from "./SpaceResrv";
 
 const HostMenu = () => {
   return (
@@ -20,7 +21,7 @@ const HostMenu = () => {
           path="/spaceReserv/*"
           element={
             <HostMainLayout>
-              <h1>공간 예약 정보 태그</h1>
+              <SpaceResrv />
             </HostMainLayout>
           }
         />
