@@ -32,6 +32,7 @@ const StyledBtn = styled.button`
   margin-left: 15px;
   background-color: #6bbf5e;
   margin-top: 40px;
+  cursor: pointer;
 `;
 
 const Address = ({ w1, w2, t1, t2, setFormData }) => {

@@ -12,6 +12,7 @@ import { Provider } from "react-redux";
 import Store from "./redux/store";
 import EnrollStay from "./pages/host/stayComponents/EnrollStay";
 import EnrollSpace from "./pages/host/spaceComponents/EnrollSpace";
+import AdminMenu from "./pages/admin/adminMenu/AdminMenu";
 import HostMenu from "./pages/host/hostMenu/HostMenu";
 
 function App() {
@@ -37,7 +38,7 @@ function App() {
             }
           />
           <Route
-            path="/findspace"
+            path="/findspace/*"
             element={
               <Layout>
                 <FindSpace />
@@ -85,6 +86,14 @@ function App() {
             element={
               <Layout>
                 <EnrollSpace />
+              </Layout>
+            }
+          />
+          <Route
+            path="/adminMenu/*"
+            element={
+              <Layout>
+                <AdminMenu />
               </Layout>
             }
           />

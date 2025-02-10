@@ -6,7 +6,7 @@ import Footer from "./Footer";
 const LayoutContainer = styled.div`
   display: flex;
   flex-direction: column;
-  min-width: 1920px;
+  min-width: 100%;
 `;
 
 const Content = styled.main`

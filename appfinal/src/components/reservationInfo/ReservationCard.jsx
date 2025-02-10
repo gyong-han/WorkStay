@@ -48,7 +48,6 @@ const PriceDiv = styled.div`
   }
 `;
 
-//vo 받아와서 값 넣기
 const ReservationCard = () => {
   return (
     <>

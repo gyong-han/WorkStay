@@ -2,7 +2,16 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import ModalBtn from "./ModalBtn";
-import { DECREMENT_ADULT, DECREMENT_BABY, DECREMENT_CHILD, INCREMENT_ADULT, INCREMENT_BABY, INCREMENT_CHILD, RESET } from "../../redux/counterSlice";
+import {
+  DECREMENT_ADULT,
+  DECREMENT_BABY,
+  DECREMENT_CHILD,
+  INCREMENT_ADULT,
+  INCREMENT_BABY,
+  INCREMENT_CHILD,
+  RESET,
+} from "../../redux/counterSlice";
+import { RiResetRightFill } from "react-icons/ri";
 
 const Overlay = styled.div`
   position: fixed;
@@ -43,7 +52,7 @@ const Modal = styled.div`
     height: 65px;
     border-bottom: 1px solid #d9d9d9;
   }
-  & > div:nth-child(1)>button {
+  & > div:nth-child(1) > button {
     width: 40px;
     height: 40px;
     margin-left: auto;
@@ -79,14 +88,13 @@ const TitleDiv = styled.div`
     justify-content: center;
     align-items: center;
   }
-  & > div >span {
+  & > div > span {
     display: flex;
     justify-content: center;
     align-items: end;
     width: 100%;
     height: 100%;
   }
- 
 `;
 const CounterDiv = styled.div`
   width: 100%;
@@ -95,26 +103,24 @@ const CounterDiv = styled.div`
   grid-template-columns: 3fr 1fr 3fr;
   grid-template-rows: 1fr;
 
-  &>div>button{
+  & > div > button {
     width: 100px;
     height: 30px;
     background-color: white;
     border: none;
     font-size: 30px;
-
   }
-  &>div{
+  & > div {
     display: flex;
     justify-content: center;
     align-items: center;
   }
-  &>.Counter{
+  & > .Counter {
     font-size: 30px;
   }
-  & >.minusBtn{
+  & > .minusBtn {
     margin-bottom: 8px;
-}
-  
+  }
 `;
 const FooterDiv = styled.div`
   width: 100%;
@@ -132,12 +138,12 @@ const FooterDiv = styled.div`
     width: 400px;
     height: 80px;
   }
-   & > div > button:nth-child(1) {
+  & > div > button:nth-child(1) {
     width: 60px;
     height: 60px;
     border: none;
-    background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTk-eoAWRZdo8KMKu65ebE8CvWkCFmsx9HqeQ&s);
-    background-size: cover;
+    background-color: white;
+    cursor: pointer;
   }
   & > div > button:nth-child(2) {
     width: 145px;
@@ -147,7 +153,6 @@ const FooterDiv = styled.div`
     color: white;
     border-radius: 5px;
   }
- 
 `;
 
 const People = ({ isOpen, onClose }) => {
@@ -155,9 +160,9 @@ const People = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
   if (!isOpen) return null;
   function ClickHandler() {
-    console.log("성인 : ",adult);
-    console.log("아동 : ",child);
-    console.log("영아 : ",baby);
+    console.log("성인 : ", adult);
+    console.log("아동 : ", child);
+    console.log("영아 : ", baby);
     onClose();
   }
 
@@ -165,7 +170,14 @@ const People = ({ isOpen, onClose }) => {
     <Overlay>
       <Modal>
         <div>
-          <span>인원을 선택해주세요.</span> <button onClick={()=>{onClose();}}>X</button>
+          <span>인원을 선택해주세요.</span>{" "}
+          <button
+            onClick={() => {
+              onClose();
+            }}
+          >
+            X
+          </button>
         </div>
         <InnerDiv>
           <TitleDiv>
@@ -190,64 +202,73 @@ const People = ({ isOpen, onClose }) => {
           </TitleDiv>
           <TitleDiv>
             <CounterDiv>
-              <div class="minusBtn"><ModalBtn
-                str="-"
-                f={() => {
-                  dispatch(DECREMENT_ADULT());
-                }}
-              /></div>
+              <div class="minusBtn">
+                <ModalBtn
+                  str="-"
+                  f={() => {
+                    dispatch(DECREMENT_ADULT());
+                  }}
+                />
+              </div>
               <div class="Counter">{adult}</div>
-              <div><ModalBtn
-                str="+"
-                f={() => {
-                  dispatch(INCREMENT_ADULT());
-                }}
-              /></div>
-            
-              
-              
-            </CounterDiv>
-            <CounterDiv>
-              <div class="minusBtn"><ModalBtn
-                str="-"
-                f={() => {
-                  dispatch(DECREMENT_CHILD());
-                }}
-              ></ModalBtn></div>
-              <div class="Counter">{child}</div>
-              <div><ModalBtn
-                str="+"
-                f={() => {
-                  dispatch(INCREMENT_CHILD());
-                }}
-              ></ModalBtn></div>
-            </CounterDiv>
-            <CounterDiv>
-              <div class="minusBtn"> 
-              <ModalBtn
-                str="-"
-                f={() => {
-                  dispatch(DECREMENT_BABY());
-                }}
-              ></ModalBtn>
-              </div>
-              <div class="Counter">
-                {baby}
-              </div>
               <div>
-              <ModalBtn
-                str="+"
-                f={() => {
-                  dispatch(INCREMENT_BABY());
-                }}
-              ></ModalBtn>
+                <ModalBtn
+                  str="+"
+                  f={() => {
+                    dispatch(INCREMENT_ADULT());
+                  }}
+                />
+              </div>
+            </CounterDiv>
+            <CounterDiv>
+              <div class="minusBtn">
+                <ModalBtn
+                  str="-"
+                  f={() => {
+                    dispatch(DECREMENT_CHILD());
+                  }}
+                ></ModalBtn>
+              </div>
+              <div class="Counter">{child}</div>
+              <div>
+                <ModalBtn
+                  str="+"
+                  f={() => {
+                    dispatch(INCREMENT_CHILD());
+                  }}
+                ></ModalBtn>
+              </div>
+            </CounterDiv>
+            <CounterDiv>
+              <div class="minusBtn">
+                <ModalBtn
+                  str="-"
+                  f={() => {
+                    dispatch(DECREMENT_BABY());
+                  }}
+                ></ModalBtn>
+              </div>
+              <div class="Counter">{baby}</div>
+              <div>
+                <ModalBtn
+                  str="+"
+                  f={() => {
+                    dispatch(INCREMENT_BABY());
+                  }}
+                ></ModalBtn>
               </div>
             </CounterDiv>
           </TitleDiv>
         </InnerDiv>
         <FooterDiv>
           <div>
-            <button onClick={()=>{dispatch(RESET());}}></button>
+            <button
+              onClick={() => {
+                dispatch(RESET());
+              }}
+            >
+              <RiResetRightFill size={30} />
+            </button>
             <button onClick={ClickHandler}>Search</button>
           </div>
         </FooterDiv>
