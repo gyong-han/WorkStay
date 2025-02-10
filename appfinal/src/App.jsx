@@ -30,7 +30,7 @@ function App() {
           />
 
           <Route
-            path="/findstay"
+            path="/findstay/*"
             element={
               <Layout>
                 <FindStay />

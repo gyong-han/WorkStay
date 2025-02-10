@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 
-const Map = ({spaceAdress,spaceName}) => {
+const Map = ({adress,name}) => {
   useEffect(() => {
     
     const KAKAO_MAP_API_KEY = 'e6fb0b3e3e788fbc7f697bdcbede0f13&autoload=false';
@@ -31,7 +31,7 @@ const Map = ({spaceAdress,spaceName}) => {
     return () => {
       document.getElementById(scriptId)?.remove();
     };
-  }, []);
+  },[]);
 
   const loadMap = () => {
     if (!window.kakao || !window.kakao.maps) return;
@@ -47,7 +47,7 @@ const Map = ({spaceAdress,spaceName}) => {
     const map = new window.kakao.maps.Map(container, options);
 
     const geocoder = new window.kakao.maps.services.Geocoder();
-    geocoder.addressSearch(`${spaceAdress}`, function (result, status) {
+    geocoder.addressSearch(`${adress}`, function (result, status) {
       if (status === window.kakao.maps.services.Status.OK) {
         const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
         const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
@@ -59,7 +59,7 @@ const Map = ({spaceAdress,spaceName}) => {
         });
 
         const infowindow = new window.kakao.maps.InfoWindow({
-          content: `<div style="width:150px;text-align:center;padding:6px;">${spaceName}</div>`,
+          content: `<div style="width:150px;text-align:center;padding:6px;">${name}</div>`,
         });
         infowindow.open(map, marker);
 

@@ -74,7 +74,7 @@ const PackageContentDiv = styled.div`
     text-decoration: underline solid #FAFAFA;
   }
 `;
-const PackageDisplay = ({img,title,standard,max,price,navigatorHandler}) => {
+const PackageDisplay = ({img,title,standard,max,price,navigatorHandler,url}) => {
   
   const priceWon = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   
@@ -84,7 +84,7 @@ const PackageDisplay = ({img,title,standard,max,price,navigatorHandler}) => {
     <BackImgDiv img={img}>
       <Layout>
         <div></div>
-        <Link to={"/findspace/spacebooking/1"}><PackageContentDiv>
+        <Link to={url}><PackageContentDiv>
           <div>{title}</div>
           <div>기준 {standard}명/최대{max}명</div>
           <div>₩{priceWon}</div>

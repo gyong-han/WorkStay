@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import PictureSlide from './PictureSlide';
 import styled from 'styled-components';
 
@@ -60,26 +59,21 @@ const ReservationDiv = styled.div`
 `;
 
 
-const ListCard = ({morning,night,key}) => {
+const ListCard = (props) => {
 
-  const navigate = useNavigate();
-  const clickHandler = (e)=>{
-    console.log(e);
-    // PARAM 변수 받아주는곳
-    navigate("/findspace/detail/1");
-    
-  }
+ 
+
   
 
 
 
   
-  const morningPrice= morning.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  const nightPrice = night.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const morningPrice= props.morning.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const nightPrice = props.night.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   
   return (
     <Layout>
-      <InerDiv  onClick={clickHandler}>
+      <InerDiv  onClick={props.clickHandler}>
         <TitleDiv>인더플럼</TitleDiv>
         <div></div>
         <AreaDiv>제주/제주시</AreaDiv>
@@ -89,10 +83,10 @@ const ListCard = ({morning,night,key}) => {
         <ReservationDiv>예약하기</ReservationDiv>
       </InerDiv>
       <PictureSlide w={''} h={'235'} 
-      img1={'https://image.utoimage.com/preview/cp872722/2022/12/202212008462_500.jpg'}
-      img2={'https://helpx.adobe.com/content/dam/help/en/photoshop/using/quick-actions/remove-background-before-qa1.png'}
-      img3={'https://altools.co.kr/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fimg_feature_alsee_1.60428533.png&w=3840&q=75'}
-      img4={'https://t1.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/14Fa/image/joib7vCDm4iIP7rNJR2ojev0A20.jpg'}
+      img1={props.img1}
+      img2={props.img2}
+      img3={props.img3}
+      img4={props.img4}
       main={false}
       >
       </PictureSlide>

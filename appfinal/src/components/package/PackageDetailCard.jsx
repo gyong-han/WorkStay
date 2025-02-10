@@ -36,14 +36,14 @@ const ContentDiv = styled.div`
 
 `;
 
-const PackageDetailCard = () => {
+const PackageDetailCard = (props) => {
   return (
     <Layout>
       <div></div>
       <div></div>
       <TextAreaDiv>
-        <div>SPACE INFORMATION</div>
-        <div>낮 패키지</div>
+        <div>{props.information}</div>
+        <div>{props.title}</div>
         <div>₩120,000</div>
         <ContentDiv>넉넉한 개인 책상, 하이엔드 사무의자, 전좌석 모니터와 회의실까지 ‘Work’의
           본질을 놓치지 않으면서 오션뷰 마운틴뷰를 모두 가지고 있는 최고, 최대 규모의
