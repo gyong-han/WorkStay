@@ -4,6 +4,9 @@ import HostMainLayout from "../hostComponents/HostMainLayout";
 import HostMgmtMenu from "./hostMgmt/HostMgmtMenu";
 import StayResrv from "./StayResrv";
 import SpaceResrv from "./SpaceResrv";
+import GuestEdit from "../../guest/guestMenu/GuestEdit";
+import SlogMgmt from "../../guest/guestMenu/SlogMgmt";
+import Bookmark from "../../guest/guestMenu/Bookmark";
 
 const HostMenu = () => {
   return (
@@ -29,7 +32,7 @@ const HostMenu = () => {
           path="/editHost/*"
           element={
             <HostMainLayout>
-              <h1>회원 정보 수정 태그</h1>
+              <GuestEdit />
             </HostMainLayout>
           }
         />
@@ -37,7 +40,7 @@ const HostMenu = () => {
           path="/slogMgmt/*"
           element={
             <HostMainLayout>
-              <h1>slog관리 태그</h1>
+              <SlogMgmt />
             </HostMainLayout>
           }
         />
@@ -45,7 +48,7 @@ const HostMenu = () => {
           path="/bookmark/*"
           element={
             <HostMainLayout>
-              <h1>북마크 태그</h1>
+              <Bookmark />
             </HostMainLayout>
           }
         />

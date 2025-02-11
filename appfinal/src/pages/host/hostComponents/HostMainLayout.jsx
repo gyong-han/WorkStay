@@ -47,13 +47,13 @@ const MenuAreaDiv = styled.div`
 `;
 
 const MenuDiv = styled.div`
-  color: ${(props) => (props.selected ? "#2B8C44" : "black")};
+  color: ${(props) => (props.selected ? "#049dd9" : "black")};
   font-size: 20px;
   font-weight: 400;
   cursor: pointer;
 
   &:hover {
-    color: #2b8c44;
+    color: #049dd9;
   }
 `;
 
@@ -69,8 +69,8 @@ const HostMainLayout = ({ children }) => {
     <>
       <HomeDiv>
         <div>
-          <HeaderDiv size="40px" color="#2B8C44" margin="70px" weight="400">
-            HOST
+          <HeaderDiv size="40px" color="#049dd9" margin="70px" weight="400">
+            Guest
           </HeaderDiv>
           <HeaderDiv
             size="50px"
