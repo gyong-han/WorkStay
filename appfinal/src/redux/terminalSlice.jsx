@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  startTerminal: "null",
-  endTerminal: "null",
+  startTerminal: "",
+  endTerminal: "",
 };
 
 const terminalSlice = createSlice({
