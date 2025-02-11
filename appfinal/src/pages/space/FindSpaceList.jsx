@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Display from "../../components/FilterBar/Display";
 import ListCard from "../../components/listcomponents/ListCard";
 import styled from "styled-components";
@@ -78,10 +78,7 @@ const FilterTextMD = styled.span`
 
 const FindSpaceList = () => {
 
-  // const navi=()=>{
-  //   console.log("hello");
-    
-  // }
+
 
   const navigate = useNavigate();
   const clickHandler = (e)=>{
@@ -93,6 +90,9 @@ const FindSpaceList = () => {
 
 
   const [formData, setFormData] = useState({});
+  const [spaceVoList,setSpaceVoList] = useState([]);
+  const [attachmentVoList,setAttachmentVoList]= useState([]);
+  const [attachment,setAttachment] = useState([]);
 
   const handleChange = (e) => {
     setFormData((prev) => {
@@ -116,30 +116,33 @@ const FindSpaceList = () => {
       });
   };
 
- 
 
-
-
-
-  const items = [];
-  for (let i = 0; i < 15; i++) {
-    items.push(
-        <>
-          <div></div>
-         <div key={i}>
-          <ListCard morning={120000} night={150000}
-           img1={"https://picsum.photos/300/200"} 
-           img2={"https://picsum.photos/300/200"} 
-           img3={"https://picsum.photos/300/200"} 
-           img4={"https://picsum.photos/300/200"} 
-           clickHandler={clickHandler}
-           ></ListCard>
-          </div>
-         </>
-         
+  useEffect(()=>{
+    fetch("http://127.0.0.1:8080/space/list",{
+      method:'GET'
+    })
+    .then((resp)=>resp.json())
+    .then((data)=>{
+      setSpaceVoList(data);
       
-    );
-  }
+    })
+  },[]);
+
+  useEffect(()=>{
+    fetch("http://127.0.0.1:8080/space/attachmentlist",{
+      method:'GET'
+    })
+    .then((resp)=>resp.json())
+    .then((data)=>{
+      console.log(data);
+      setAttachmentVoList(data);
+      
+    })
+  },[]);
+  
+
+
+  
 
   
   return(<> 
@@ -184,7 +187,40 @@ const FindSpaceList = () => {
         </FilterWrapper>
         
   <InnerLayoutDiv>
-    {items}
+
+  
+
+    {spaceVoList.map((vo)=>{
+
+   
+      const matchingAttachments = attachmentVoList.filter((att) => att.spaceNo === vo.no);
+
+      
+      const img2 = matchingAttachments.length > 0 ? matchingAttachments[0].filePath : "https://default-image.com/img2.jpg"; 
+      const img3 = matchingAttachments.length > 1 ? matchingAttachments[1].filePath : "https://default-image.com/img3.jpg";
+      const img4 = matchingAttachments.length > 2 ? matchingAttachments[2].filePath : "https://default-image.com/img4.jpg"; 
+
+      
+      
+      return(
+      <>
+          <div></div>
+         <div key={vo.no}>
+          <ListCard morning={vo.daytimePrice} night={vo.nightPrice} 
+           img1={vo.filePath} 
+           img2={img2} 
+           img3={img3} 
+           img4={img4} 
+           clickHandler={clickHandler}
+           title={vo.name}
+           min={vo.standardGuest}
+           max={vo.maxGuest}
+           address={vo.address}
+           ></ListCard>
+          </div>
+         </>
+      )
+    })}
   </InnerLayoutDiv>
    </Layout>
 

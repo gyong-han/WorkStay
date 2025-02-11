@@ -74,10 +74,10 @@ const ListCard = (props) => {
   return (
     <Layout>
       <InerDiv  onClick={props.clickHandler}>
-        <TitleDiv>인더플럼</TitleDiv>
+        <TitleDiv>{props.title}</TitleDiv>
         <div></div>
-        <AreaDiv>제주/제주시</AreaDiv>
-        <PeopleDiv>기준 6명 (최대 12명)</PeopleDiv>
+        <AreaDiv>{props.address}</AreaDiv>
+        <PeopleDiv>기준 {props.min}명 (최대 {props.max}명)</PeopleDiv>
         <MorningPackagePriceDiv>낮패키지₩{morningPrice}</MorningPackagePriceDiv>
         <NightPackagePriceDiv>밤패키지₩{nightPrice}</NightPackagePriceDiv>
         <ReservationDiv>예약하기</ReservationDiv>
