@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Btn from "../../components/Btn";
 
@@ -99,6 +99,8 @@ const ButtonWrapper = styled.div`
 `;
 
 const Reservations = () => {
+  // const [Info, setInfo] = useState({});
+
   return (
     <>
       <Wrapper>
