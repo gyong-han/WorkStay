@@ -163,7 +163,7 @@ const Bus = () => {
 
     console.log("요청 데이터:", requestData);
 
-    fetch("http://127.0.0.1:8000/api/busticket", {
+    fetch("http://127.0.0.1:8080/api/busticket", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestData),

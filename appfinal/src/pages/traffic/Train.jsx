@@ -125,7 +125,7 @@ const Train = () => {
 
     console.log(requestData);
 
-    fetch("http://127.0.0.1:8000/api/trainticket", {
+    fetch("http://127.0.0.1:8080/api/trainticket", {
       method: "POST",
       headers: {
         "content-type": "application/json",
