@@ -82,8 +82,7 @@ const slideImages = [
     }, 5000);
 
     return () => clearInterval(interval);
-}, [main, slideImages.length]); // 누락된 의존성 추가
-
+}, [main, slideImages.length]); 
 
 
 
