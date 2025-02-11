@@ -1,5 +1,6 @@
 package com.kh.springfinal.train;
 
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +20,7 @@ public class TrainApi {
     @Autowired
     private TrainMapper trainMapper;
 
-    @Scheduled(fixedDelay = 1000 * 60)
+    //    @Scheduled(fixedDelay = 1000 * 60)
     public void trainList() throws IOException {
         System.out.println("Fetching train data...");
 
@@ -42,8 +43,8 @@ public class TrainApi {
         urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
         urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("100", "UTF-8")); /*한 페이지 결과 수*/
         urlBuilder.append("&" + URLEncoder.encode("returnType","UTF-8") + "=" + URLEncoder.encode("json", "UTF-8")); /*데이터 타입(xml, json)*/
-        urlBuilder.append("&" + URLEncoder.encode("cond[run_ymd::GTE]","UTF-8") + "=" + URLEncoder.encode("20231231", "UTF-8")); /*운행일자 이후*/
-        urlBuilder.append("&" + URLEncoder.encode("cond[run_ymd::LTE]","UTF-8") + "=" + URLEncoder.encode("20231231", "UTF-8")); /*운행일자 이전*/
+        urlBuilder.append("&" + URLEncoder.encode("cond[run_ymd::GTE]","UTF-8") + "=" + URLEncoder.encode("20240601", "UTF-8")); /*운행일자 이후*/
+        urlBuilder.append("&" + URLEncoder.encode("cond[run_ymd::LTE]","UTF-8") + "=" + URLEncoder.encode("20240601", "UTF-8")); /*운행일자 이전*/
 //        urlBuilder.append("&" + URLEncoder.encode("cond[dptre_stn_cd::EQ]","UTF-8") + "=" + URLEncoder.encode("20250204", "UTF-8")); /*출발역코드*/
         urlBuilder.append("&" + URLEncoder.encode("cond[dptre_stn_nm::EQ]","UTF-8") + "=" + URLEncoder.encode(dep, "UTF-8")); /*출발역명*/
 //        urlBuilder.append("&" + URLEncoder.encode("cond[arvl_stn_cd::EQ]","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*도착역코드*/
@@ -105,7 +106,6 @@ public class TrainApi {
         return trainList;
     }
 }
-
 
 
 
