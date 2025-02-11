@@ -91,6 +91,7 @@ const BtnTagID = styled(Link)`
   font-weight: 600;
   font-size: 0.9em;
   background-color: #fafafa;
+  text-decoration-line: none;
 `;
 const BtnTagPwD = styled(Link)`
   display: grid;
@@ -102,6 +103,7 @@ const BtnTagPwD = styled(Link)`
   font-weight: 600;
   font-size: 0.9em;
   background-color: #fafafa;
+  text-decoration-line: none;
 `;
 
 const Ptag = styled.p`

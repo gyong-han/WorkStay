@@ -9,7 +9,7 @@ const MainContainer = styled.main`
   display: grid;
   gap: 40px;
   justify-items: center;
-  padding: 20px;
+  padding: 15px;
 `;
 
 const SlideContainer = styled.div`
