@@ -1,26 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import ko from "date-fns/locale/ko";
 import "react-datepicker/dist/react-datepicker.css";
 import Form from "react-bootstrap/Form";
 import { format } from "date-fns";
 
-const TrainCalendar = () => {
+const TrainCalendar = ({ onSelectDate }) => {
   const [selectedDate, setSelectedDate] = useState(null);
 
   useEffect(() => {
     if (selectedDate !== null) {
       const formattedDate = format(selectedDate, "yyyyMMdd");
-      console.log(formattedDate);
+      console.log("선택된 날짜:", formattedDate); // 날짜를 콘솔에 출력
+      if (onSelectDate) {
+        onSelectDate(formattedDate); // 부모 컴포넌트에 날짜 값을 전달
+      }
     }
-  }, [selectedDate]);
+  }, [selectedDate, onSelectDate]);
 
   return (
     <DatePicker
       locale={ko}
       selected={selectedDate}
-      minDate={new Date()}
-      onChange={(date) => setSelectedDate(date)}
+      onChange={(date) => setSelectedDate(date)} // 날짜 선택 시 상태 업데이트
       monthsShown={2}
       withPortal
       customInput={
@@ -36,7 +38,7 @@ const TrainCalendar = () => {
           }}
         >
           {selectedDate
-            ? format(selectedDate, "yyyy년 MM월 dd일")
+            ? format(selectedDate, "yyyy년 MM월 dd일") // 선택된 날짜 출력
             : "날짜를 선택해주세요"}
         </Form.Control>
       }

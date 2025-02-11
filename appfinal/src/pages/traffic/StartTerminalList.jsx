@@ -19,7 +19,7 @@ const ModalBackground = styled.div`
 const ModalContainer = styled.div`
   background: white;
   padding: 20px;
-  width: 500px;
+  width: 600px;
   height: 500px;
 `;
 
@@ -72,23 +72,7 @@ const OpenButton = styled.button`
   cursor: pointer;
 `;
 
-const terminals = [
-  "서울경부",
-  "센트럴시티",
-  "광주",
-  "부산",
-  "동서울",
-  "대전",
-  "전주",
-  "천안",
-  "동대구",
-  "성남",
-  "강릉",
-  "군산",
-  "세종",
-  "수원",
-  "안산",
-];
+const terminals = ["서울경부", "강릉", "부산", "대전복합", "동대구"];
 
 const StartTerminalList = () => {
   const [showModal, setShowModal] = useState(false);

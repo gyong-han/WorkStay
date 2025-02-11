@@ -6,6 +6,7 @@ import StartStationList from "./StartStationList";
 import ArrivalStationList from "./ArrivalStationList";
 import { useDispatch, useSelector } from "react-redux";
 import { selectEndStation, selectStartStation } from "../../redux/stationSlice";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   max-width: 600px;
@@ -95,14 +96,51 @@ const SubmitButton = styled.button`
 
 const Train = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [data, setData] = useState();
+
   const selectedStartStation = useSelector(
     (state) => state.station.startStation
   );
   const selectedEndStation = useSelector((state) => state.station.endStation);
 
+  const [selectedDate, setSelectedDate] = useState("");
+
   const SwapStation = () => {
     dispatch(selectStartStation(selectedEndStation));
     dispatch(selectEndStation(selectedStartStation));
+  };
+
+  const searchTickets = () => {
+    if (!selectedStartStation || !selectedEndStation || !selectedDate) {
+      alert("출발지, 도착지, 날짜를 선택해주세요");
+      return;
+    }
+
+    const requestData = {
+      dptreStnNm: selectedStartStation,
+      arvlStnNm: selectedEndStation,
+      runYmd: selectedDate,
+    };
+
+    console.log(requestData);
+
+    fetch("http://127.0.0.1:8000/api/trainticket", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(requestData),
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        setData(data);
+        if (data.length > 0) {
+          navigate("/traffic/train/detail", { state: { tickets: data } });
+        } else {
+          alert("해당 티켓 정보가 없습니다");
+        }
+      });
   };
 
   return (
@@ -129,7 +167,11 @@ const Train = () => {
         <div className="info-row">
           <label>가는날</label>
           <div className="main-text">
-            <TrainCalendar />
+            <TrainCalendar
+              onSelectDate={(date) => {
+                setSelectedDate(date);
+              }}
+            />
           </div>
           <div className="sub-text">
             승차권은 출발 시간 전까지 조회가 가능합니다.
@@ -146,7 +188,7 @@ const Train = () => {
         </div>
       </InfoSection>
 
-      <SubmitButton>승차권 조회</SubmitButton>
+      <SubmitButton onClick={searchTickets}>승차권 조회</SubmitButton>
     </Container>
   );
 };
