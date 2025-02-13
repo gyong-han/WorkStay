@@ -63,13 +63,11 @@ const UserWrapper = styled.div`
 
 const Title = styled.div`
   font-weight: 600;
-  font-family: "Pretendard-Medium";
   font-size: 2rem;
 `;
 
 const SubTitle = styled.div`
   font-weight: 600;
-  font-family: "Pretendard-Medium";
   font-size: 1.5rem;
 `;
 

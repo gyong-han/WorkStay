@@ -3,6 +3,9 @@ import styled from "styled-components";
 import { FaAngleDown } from "react-icons/fa6";
 import Btn from "../../components/Btn";
 import { useNavigate } from "react-router-dom";
+import Accordion from "./stayComponent/Accordion";
+import Calendar from "../../components/FilterBar/Calendal";
+import SelectPerson from "./stayComponent/SelectPerson";
 
 const Layout = styled.div`
   display: grid;
@@ -18,9 +21,17 @@ const BookingText = styled.div`
   font-weight: 700;
 `;
 
-const Date = styled.div`
-  font-size: 1.5rem;
+const DateWrapper = styled.div`
+  display: flex;
+  justify-content: center;
   margin-top: 70px;
+`;
+
+const DateSpan = styled.span`
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  gap: 5px;
 `;
 
 const LineDiv = styled.div`
@@ -79,6 +90,7 @@ const Request = styled.textarea`
   padding: 10px;
   font-family: "Pretendard-Regular";
   font-size: 1.2rem;
+  resize: none;
 `;
 
 const ChargeText = styled.div`
@@ -159,14 +171,6 @@ const Agree = styled.div`
   cursor: pointer;
 `;
 
-const Agreement = styled.div`
-  width: 100%;
-  padding: 10px;
-  /* margin-top: 20px; */
-  background-color: red;
-  border-radius: 5px;
-`;
-
 const CheckBtn = styled.input.attrs({ type: "checkbox" })`
   width: 25px;
   height: 25px;
@@ -192,26 +196,133 @@ const PaddingDiv = styled.div`
   padding: 30px;
 `;
 
-const Booking = () => {
+const UlTag = styled.ul`
+  list-style-type: decimal; /* 숫자로 표시 */
+`;
+
+const TableWrapper = styled.div`
+  width: 1000px;
+  max-width: 600px;
+  margin: 20px auto;
+  border-collapse: collapse;
+`;
+
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+`;
+
+const Th = styled.th`
+  padding: 8px;
+  border: 1px solid #d9d9d9;
+  font-weight: 600;
+  text-align: center;
+`;
+
+const Td = styled.td`
+  padding: 8px;
+  border: 1px solid #d9d9d9;
+  text-align: center;
+`;
+
+const Ptag = styled.p`
+  font-weight: 600;
+`;
+
+const BookingStay = () => {
   const termsData = [
     {
       id: 1,
       text: "(필수) 개인정보 제 3자 제공 동의",
-      details: "개인정보를 제3자에게 제공하는 내용입니다. 감자는 맛있습니다.",
+      details: (hotelName) => (
+        <div>
+          <p>
+            (주)워크스테이는 예약 시스템 제공 과정에서 예약자 동의 하에 서비스
+            이용을 위한 예약자 개인정보를 수집하며, 수집된 개인정보는 제휴
+            판매자(숙소)에게 제공됩니다. 정보 주체는 개인정보의 수집 및 이용
+            동의를 거부할 권리가 있으나, 이 경우 상품 및 서비스 예약이
+            제한됩니다.
+          </p>
+          <ul>
+            <li>제공받는자 : {hotelName}</li>
+            <li>
+              제공 목적: 제휴 판매자(숙소)와 이용자(회원)의 예약에 대한 서비스
+              제공, 계약의 이행(예약확인, 이용자 확인), 민원 처리 등 소비자 분쟁
+              해결을 위한 기록 보존
+            </li>
+            <li>
+              제공 정보: 예약번호, 아이디, 성명, 휴대전화 번호, 이메일, 인원
+              정보, 생년월일(필요한 경우), 동행 투숙객 정보(필요한 경우)
+            </li>
+            <li>보유 및 이용 기간 : 5년</li>
+          </ul>
+        </div>
+      ),
     },
     {
       id: 2,
       text: "(필수) 미성년자(청소년) 투숙 기준 동의",
-      details: "미성년자의 숙박 기준과 동의 절차에 대한 내용입니다.",
+      details: (
+        <div>
+          <Ptag>스테이 소재지 : 대한민국</Ptag>
+          <UlTag>
+            <li>
+              만 19세 미만 미성년자(청소년)의 경우 예약 및 투숙이 불가합니다.
+            </li>
+            <li>
+              만 19세 미만 미성년자(청소년)가 투숙을 원하는 경우
+              보호자(법정대리인)가 필수 동행해야 합니다.
+            </li>
+            <li>
+              이용일 당일 미성년자(청소년) 투숙 기준 위반이 확인되는 경우
+              환불없이 퇴실 조치됩니다.
+            </li>
+          </UlTag>
+        </div>
+      ),
     },
     {
       id: 3,
       text: "(필수) 환불 규정에 동의",
-      details: "환불 가능 기간과 수수료에 대한 내용을 포함합니다.",
+      details: (
+        <TableWrapper>
+          <Ptag>환불규정</Ptag>
+          <Table>
+            <thead>
+              <tr>
+                <Th>기준일</Th>
+                <Th>환불 금액</Th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <Th>체크인 10일 전까지</Th>
+                <Td>총 결제금액의 100% 환불</Td>
+              </tr>
+              <tr>
+                <Th>체크인 8~9일 전까지</Th>
+                <Td>총 결제금액의 90% 환불</Td>
+              </tr>
+              <tr>
+                <Th>체크인 5~7일 전까지</Th>
+                <Td>총 결제금액의 70% 환불</Td>
+              </tr>
+              <tr>
+                <Th>체크인 4일 전까지</Th>
+                <Td>총 결제금액의 50% 환불</Td>
+              </tr>
+              <tr>
+                <Th>체크인 3일 전까지</Th>
+                <Td>변경 / 환불 불가</Td>
+              </tr>
+            </tbody>
+          </Table>
+        </TableWrapper>
+      ),
     },
   ];
   const [checkedItems, setCheckedItems] = useState([]);
-  const [openDetails, setOpenDetails] = useState(null);
 
   // 전체 체크박스 클릭 시
   const handleAllCheck = (checked) => {
@@ -231,20 +342,24 @@ const Booking = () => {
     }
   };
 
-  // 상세보기 토글
-  const toggleDetails = (id) => {
-    setOpenDetails((prev) => (prev === id ? null : id));
-  };
-
   // const navi = useNavigate();
+
+  // 날짜 선택
+  const [dateRange, setDateRange] = useState([null, null]);
 
   return (
     <Layout>
       <BookingText>BOOKING</BookingText>
-      <Date>
-        날짜를 선택해주세요.
-        <FaAngleDown />
-      </Date>
+      <DateWrapper>
+        <Calendar type="button" setDateRange={setDateRange}>
+          <DateSpan>
+            {dateRange[0] && dateRange[1]
+              ? `${dateRange[0].toLocaleDateString()} ~ ${dateRange[1].toLocaleDateString()}`
+              : "날짜를 선택해주세요."}
+            <FaAngleDown />
+          </DateSpan>
+        </Calendar>
+      </DateWrapper>
       <LineDiv />
       <ReservationText>Reservations</ReservationText>
       <TempLine />
@@ -256,7 +371,11 @@ const Booking = () => {
         <ReservationLine />
         <ReservationDiv>
           <InfoText>예약일</InfoText>
-          <Info>2025-01-20 ~ 2025-01-23</Info>
+          <Info>
+            {dateRange[0] && dateRange[1]
+              ? `${dateRange[0].toLocaleDateString()} ~ ${dateRange[1].toLocaleDateString()}`
+              : "날짜를 선택해주세요."}
+          </Info>
         </ReservationDiv>
         <ReservationLine />
         <ReservationDiv>
@@ -276,7 +395,9 @@ const Booking = () => {
         <ReservationLine />
         <ReservationDiv>
           <InfoText>인원</InfoText>
-          <Info>온숲 / Room A1</Info>
+          <Info>
+            <SelectPerson maxAdults={4} maxChildren={4} maxInfant={4} />
+          </Info>
         </ReservationDiv>
         <ReservationLine />
         <ReservationDiv>
@@ -334,20 +455,15 @@ const Booking = () => {
           />
           <span>사용자 전체 약관 동의</span>
         </AllAgree>
-        {termsData.map((item) => (
-          <Agree key={item.id}>
-            <div>
-              <CheckBtn
-                onChange={(e) => handleSingleCheck(e.target.checked, item.id)}
-                checked={checkedItems.includes(item.id)}
-              />
-            </div>
-            <div>
-              <label onClick={() => toggleDetails(item.id)}>{item.text}</label>
-              {openDetails === item.id && <Agreement>{item.details}</Agreement>}
-            </div>
-          </Agree>
-        ))}
+        <Agree>
+          <div>
+            <Accordion
+              termsData={termsData}
+              checkedItems={checkedItems}
+              handleSingleCheck={handleSingleCheck}
+            />
+          </div>
+        </Agree>
       </UserAgreeWrapper>
       <PaddingDiv>
         <Btn w={"500px"}>결제하기</Btn>
@@ -367,4 +483,4 @@ const Booking = () => {
   );
 };
 
-export default Booking;
+export default BookingStay;
