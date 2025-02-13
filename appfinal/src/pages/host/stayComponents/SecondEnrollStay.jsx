@@ -78,7 +78,7 @@ const Hr = styled.hr`
 const StayDiv = styled.div`
   display: grid;
   grid-template-columns: 1fr 3fr;
-  grid-template-rows: (8, 1fr);
+  grid-template-rows: (9, 1fr);
 `;
 
 const DataList = styled.input`
@@ -112,7 +112,8 @@ const BtnArea = styled.div`
 `;
 
 const SecondEnrollStay = () => {
-  const [value, setValue] = useState("");
+  const [phone, setPhone] = useState("");
+  const [brn, setbrn] = useState("");
   const [formData, setFormData] = useState({});
   const navigate = useNavigate();
 
@@ -125,12 +126,21 @@ const SecondEnrollStay = () => {
     });
   };
 
-  const changeValue = (e) => {
+  const changephone = (e) => {
+    let inputValue = e.target.value;
+
+    // 숫자만 입력 허용 & 11자리 제한 적용
+    inputValue = inputValue.replace(/\D/g, "").slice(0, 11);
+    setPhone(inputValue);
+    handleChange(e);
+  };
+
+  const changebrn = (e) => {
     let inputValue = e.target.value;
 
     // 숫자만 입력 허용 & 10자리 제한 적용
     inputValue = inputValue.replace(/\D/g, "").slice(0, 10);
-    setValue(inputValue);
+    setbrn(inputValue);
     handleChange(e);
   };
 
@@ -139,7 +149,7 @@ const SecondEnrollStay = () => {
     console.log("formData : ", formData);
     //fetch로 공간 정보 보내고 return값으로 공간 기본키 받아오고 third/ 뒤에 넣기
     navigate("/enroll/stay/third/1");
-    // window.scrollTo(0, 0);
+    window.scrollTo(0, 0);
   };
 
   return (
@@ -217,7 +227,8 @@ const SecondEnrollStay = () => {
               name="phone"
               placeholder="스테이 전화번호를 입력해주세요."
               top="40px"
-              onChange={handleChange}
+              value={phone}
+              onChange={changephone}
             />
             <DataTitle top="40px">스테이 SNS *</DataTitle>
             <DataInput
@@ -245,8 +256,16 @@ const SecondEnrollStay = () => {
               name="brn"
               placeholder="사업자 등록번호 10글자를 입력해주세요."
               top="40px"
-              value={value}
-              onChange={changeValue}
+              value={brn}
+              onChange={changebrn}
+            />
+            <DataTitle top="40px">스테이 태그라인 *</DataTitle>
+            <DataInput
+              type="text"
+              name="tagline"
+              placeholder="스테이를 한줄로 소개해주세요."
+              top="40px"
+              onChange={handleChange}
             />
             <DataTitle top="40px">스테이 소개 *</DataTitle>
             <TextArea

@@ -55,10 +55,17 @@ const Hr = styled.hr`
 const ThirdEnrollStay = () => {
   const stayNum = useParams();
   const [formDataArr, setFormDataArr] = useState([]);
-
+  const [featuresArr, setFeaturesArr] = useState([]);
+  const [fileData, setFileData] = useState([]);
   const addRoom = () => {
     setFormDataArr((prev) => {
       return [...prev, { stayNo: stayNum.x }];
+    });
+    setFeaturesArr((prev) => {
+      return [...prev, []];
+    });
+    setFileData((prev) => {
+      return [...prev, {}];
     });
   };
 
@@ -66,10 +73,21 @@ const ThirdEnrollStay = () => {
     addRoom();
   }, []);
 
-  const f01 = () => {
-    // console.log(stayNum.x);
-    //fetch함수 날리기
-    console.log(formDataArr);
+  const f = async () => {
+    const url = "http://127.0.0.1:8080/test2";
+    for (let idx = 0; idx < formDataArr.length; ++idx) {
+      const fd = new FormData();
+      fd.append("features", featuresArr[idx]);
+      fd.append("thumbnail", fileData[idx].thumbnail);
+      fd.append("room_floor_plan", fileData[idx].room_floor_plan);
+      fileData[idx].attachment.map((file) => fd.append("attachment", file));
+
+      const resp = await fetch(url, {
+        method: "POST",
+        body: fd,
+      });
+      const data = await resp.text();
+    }
   };
 
   return (
@@ -101,6 +119,10 @@ const ThirdEnrollStay = () => {
                     formDataArr={formDataArr}
                     setFormDataArr={setFormDataArr}
                     no={idx}
+                    featuresArr={featuresArr}
+                    setFeaturesArr={setFeaturesArr}
+                    fileData={fileData}
+                    setFileData={setFileData}
                   />
                 </>
               );
@@ -122,8 +144,8 @@ const ThirdEnrollStay = () => {
               height="50px"
               font="25px"
               backColor="#2B8C44"
-              str="제출하기"
-              f={f01}
+              str="asynk"
+              f={f}
             />
           </BtnArea>
         </MainDiv>
