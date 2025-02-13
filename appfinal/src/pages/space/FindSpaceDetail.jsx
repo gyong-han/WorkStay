@@ -9,7 +9,7 @@ import PackageDisplay from '../../components/package/PackageDisplay';
 import Map from '../../components/map/Map';
 import Infomation from '../../components/Infomation';
 import { useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CalendarTime from '../../components/FilterBar/CalendalTime';
 
 const Layout =styled.div`
@@ -145,7 +145,22 @@ const FindSpaceDetail = () => {
   const [bookMark,setBookMark] = useState()
 
   const {x} = useParams();
-  console.log(x);
+  // console.log(x);
+
+  useEffect(()=>{
+    fetch(("http://127.0.0.1:8080/space/detail"),{
+      method:"POST",
+      headers:{
+        "content-type" : "application/json"
+      },
+      body:JSON.stringify(x),
+    })
+    .then((resp)=>resp.json())
+    .then((data)=>{
+      console.log("data ::: ",data);
+      
+    })
+  },[])
 
   
   
@@ -188,14 +203,13 @@ const FindSpaceDetail = () => {
           <div>북마크</div>
         </InconTitleDiv>
         </TitleDiv>
-      <div><PictureSlide w={'1500'} h={'500'} 
-      img1={'https://image.utoimage.com/preview/cp872722/2022/12/202212008462_500.jpg'}
-      img2={'https://helpx.adobe.com/content/dam/help/en/photoshop/using/quick-actions/remove-background-before-qa1.png'}
-      img3={'https://altools.co.kr/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fimg_feature_alsee_1.60428533.png&w=3840&q=75'}
-      img4={'https://t1.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/14Fa/image/joib7vCDm4iIP7rNJR2ojev0A20.jpg'}
+      <div>
+        {/* <PictureSlide w={'1500'} h={'500'} 
+
       main={true}
       >
-      </PictureSlide></div>
+      </PictureSlide> */}
+      </div>
       <div>
         <div></div>
         <DateDiv><CalendarTime type={"text"}>날짜를 선택해주세요<MdOutlineKeyboardArrowDown /></CalendarTime></DateDiv>

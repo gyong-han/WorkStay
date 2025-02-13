@@ -19,4 +19,12 @@ public class SpaceService {
     public List<AttachmentVo> spaceGetAttachment() {
         return mapper.spaceGetAttachment();
     }
+
+    public SpaceVo spaceGetDetailVo(Long no) {
+
+        AttachmentVo vo = mapper.spaceGetAttachmentByNo(no);
+        SpaceVo spaceVo = mapper.spaceGetDetailVo(no);
+        spaceVo.setAttachmentFilePaths(new String[] {spaceVo.getFilePath()});
+        return spaceVo;
+    }
 }

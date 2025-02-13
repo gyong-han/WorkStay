@@ -6,5 +6,6 @@ import lombok.Data;
 public class AttachmentVo {
     private Long no;
     private Long spaceNo;
+    private String originName;
     private String filePath;
 }
