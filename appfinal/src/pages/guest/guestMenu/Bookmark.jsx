@@ -11,7 +11,8 @@ const MainDiv = styled.div`
 const MainSpanDiv = styled.div`
   font-weight: 700;
   font-size: 25px;
-  color: #049dd9;
+  color: #202020;
+  margin-bottom: 10px;
 `;
 
 const MainWrapper = styled.div`

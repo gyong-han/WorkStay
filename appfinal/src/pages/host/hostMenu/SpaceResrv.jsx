@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import ReservationCard from "../../../components/reservationInfo/ReservationCard";
+import { useNavigate } from "react-router-dom";
+import GuestResrvDetail from "../../guest/guestMenu/GuestResrvDetail";
 
 const MainDiv = styled.div`
   display: grid;
@@ -12,27 +14,29 @@ const StatusSpan = styled.span`
   margin-left: ${(props) => {
     return props.left;
   }};
+
+  color: ${(props) => (props.selected ? "#049dd9" : "#202020")};
+  cursor: pointer;
 `;
 
 const BlankDiv = styled.div`
   height: 200px;
 `;
 
-//예약 확정/취소 List로 보내는 값 변경경
 const SpaceResrv = () => {
   return (
     <>
       <MainDiv>
         <div>
-          <StatusSpan left="280px">예약 확정</StatusSpan>
-          <StatusSpan left="20px"> | </StatusSpan>
-          <StatusSpan left="20px">예약 취소</StatusSpan>
+          <StatusSpan left="280px">예약 내역</StatusSpan>
+          <StatusSpan left="20px">|</StatusSpan>
+          <StatusSpan left="20px">취소 내역</StatusSpan>
         </div>
         <div>
           {/* map으로 반복 돌리기 / vo 보내기*/}
           <ReservationCard />
           <ReservationCard />
-          <ReservationCard />
+          {/* <GuestResrvDetail /> */}
         </div>
       </MainDiv>
       <BlankDiv />

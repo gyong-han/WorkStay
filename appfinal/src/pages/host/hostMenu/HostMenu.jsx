@@ -7,13 +7,16 @@ import SpaceResrv from "./SpaceResrv";
 import GuestEdit from "../../guest/guestMenu/GuestEdit";
 import SlogMgmt from "../../guest/guestMenu/SlogMgmt";
 import Bookmark from "../../guest/guestMenu/Bookmark";
+import GuestResrvDetail from "../../guest/guestMenu/GuestResrvDetail";
+import Message from "../../guest/guestMenu/Message";
+import StayCancle from "../../guest/guestMenu/StayCancle";
 
 const HostMenu = () => {
   return (
     <>
       <Routes>
         <Route
-          path=""
+          path="/*"
           element={
             <HostMainLayout>
               <StayResrv />
@@ -56,7 +59,23 @@ const HostMenu = () => {
           path="/message/*"
           element={
             <HostMainLayout>
-              <h1>메세지 태그</h1>
+              <Message />
+            </HostMainLayout>
+          }
+        />
+        <Route
+          path="GuestResrvDetail"
+          element={
+            <HostMainLayout>
+              <GuestResrvDetail />
+            </HostMainLayout>
+          }
+        />
+        <Route
+          path="staycancle"
+          element={
+            <HostMainLayout>
+              <StayCancle />
             </HostMainLayout>
           }
         />
