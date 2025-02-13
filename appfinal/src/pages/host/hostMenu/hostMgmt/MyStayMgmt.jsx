@@ -21,7 +21,7 @@ const MyStayMgmt = () => {
         <div>
           <StatusSpan left="330px">내 숙소 목록</StatusSpan>
         </div>
-        <HostApprovalCard />
+        <HostApprovalCard status="1" />
         <HostApprovalCard />
       </MainDiv>
     </>

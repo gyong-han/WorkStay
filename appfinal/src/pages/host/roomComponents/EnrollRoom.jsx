@@ -1,5 +1,6 @@
-import React from "react";
+import { React } from "react";
 import styled from "styled-components";
+import AttachmentUpload from "../hostComponents/AttachmentUpload";
 
 const RoomDiv = styled.div`
   display: grid;
@@ -108,7 +109,6 @@ const CheckDiv = styled.div`
     cursor: pointer;
     margin-right: 10px;
     background: #fcfff4;
-    background: linear-gradient(to top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
     border-radius: 4px;
     box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0, 0, 0, 0.5);
 
@@ -117,8 +117,8 @@ const CheckDiv = styled.div`
       width: 9px;
       height: 5px;
       position: absolute;
-      top: 6px; /* 수정: 체크 아이콘 위치 조정 */
-      left: 4px;
+      top: 2px; /* 수정: 체크 아이콘 위치 조정 */
+      left: 2px;
       border: 3px solid #333;
       border-top: none;
       border-right: none;
@@ -137,7 +137,27 @@ const CheckDiv = styled.div`
   }
 `;
 
-const EnrollRoom = ({ no, formDataArr, setFormDataArr }) => {
+const EnrollRoom = ({
+  no,
+  formDataArr,
+  setFormDataArr,
+  featuresArr,
+  setFeaturesArr,
+  fileData,
+  setFileData,
+}) => {
+  const handleCheckbox = (value, no) => {
+    setFeaturesArr((prev) => {
+      const updatedArray = [...prev]; // 기존 배열 복사
+      updatedArray[no] = updatedArray[no] ? [...updatedArray[no]] : []; // 기존 값 유지
+      if (updatedArray[no].includes(value)) {
+        updatedArray[no] = updatedArray[no].filter((item) => item !== value); // 체크 해제
+      } else {
+        updatedArray[no].push(value); // 체크 추가
+      }
+      return updatedArray;
+    });
+  };
   return (
     <>
       <RoomDiv>
@@ -204,54 +224,114 @@ const EnrollRoom = ({ no, formDataArr, setFormDataArr }) => {
         <DataTitle top="40px">독채 편의시설 *</DataTitle>
         <CheckBoxArea>
           <CheckDiv>
-            <input type="checkbox" value="None" id="squaredFour" name="check" />
-            <label for="squaredFour" />
-            <span>사과</span>
+            <input
+              type="checkbox"
+              value="1"
+              id={`checkbox1-${no}`}
+              onChange={() => handleCheckbox("1", no)}
+              checked={featuresArr[no]?.includes("1")}
+            />
+            <label for={`checkbox1-${no}`} />
+            <span>무료 주차</span>
           </CheckDiv>
           <CheckDiv>
-            <input type="checkbox" value="None" id="squaredFour" name="check" />
-            <label for="squaredFour" />
-            <span>사과</span>
+            <input
+              type="checkbox"
+              value="2"
+              id={`checkbox2-${no}`}
+              onChange={() => handleCheckbox("2", no)}
+              checked={featuresArr[no]?.includes("2")}
+            />
+            <label for={`checkbox2-${no}`} />
+            <span>와이파이</span>
           </CheckDiv>
           <CheckDiv>
-            <input type="checkbox" value="None" id="squaredFour" name="check" />
-            <label for="squaredFour" />
-            <span>사과</span>
+            <input
+              type="checkbox"
+              value="3"
+              id={`checkbox3-${no}`}
+              onChange={() => handleCheckbox("3", no)}
+              checked={featuresArr[no]?.includes("3")}
+            />
+            <label for={`checkbox3-${no}`} />
+            <span>회의실</span>
           </CheckDiv>
           <CheckDiv>
-            <input type="checkbox" value="None" id="squaredFour" name="check" />
-            <label for="squaredFour" />
-            <span>사과</span>
+            <input
+              type="checkbox"
+              value="4"
+              id={`checkbox4-${no}`}
+              onChange={() => handleCheckbox("4", no)}
+              checked={featuresArr[no]?.includes("4")}
+            />
+            <label for={`checkbox4-${no}`} />
+            <span>PC/모니터</span>
           </CheckDiv>
           <CheckDiv>
-            <input type="checkbox" value="None" id="squaredFour" name="check" />
-            <label for="squaredFour" />
-            <span>사과</span>
+            <input
+              type="checkbox"
+              value="5"
+              id={`checkbox5-${no}`}
+              onChange={() => handleCheckbox("5", no)}
+              checked={featuresArr[no]?.includes("5")}
+            />
+            <label for={`checkbox5-${no}`} />
+            <span>빔 프로젝터</span>
           </CheckDiv>
           <CheckDiv>
-            <input type="checkbox" value="None" id="squaredFour" name="check" />
-            <label for="squaredFour" />
-            <span>사과</span>
+            <input
+              type="checkbox"
+              value="6"
+              id={`checkbox6-${no}`}
+              onChange={() => handleCheckbox("6", no)}
+              checked={featuresArr[no]?.includes("6")}
+            />
+            <label for={`checkbox6-${no}`} />
+            <span>개별 BBQ데크</span>
           </CheckDiv>
           <CheckDiv>
-            <input type="checkbox" value="None" id="squaredFour" name="check" />
-            <label for="squaredFour" />
-            <span>사과</span>
+            <input
+              type="checkbox"
+              value="7"
+              id={`checkbox7-${no}`}
+              onChange={() => handleCheckbox("7", no)}
+              checked={featuresArr[no]?.includes("7")}
+            />
+            <label for={`checkbox7-${no}`} />
+            <span>음향/마이크</span>
           </CheckDiv>
           <CheckDiv>
-            <input type="checkbox" value="None" id="squaredFour" name="check" />
-            <label for="squaredFour" />
-            <span>사과</span>
+            <input
+              type="checkbox"
+              value="8"
+              id={`checkbox8-${no}`}
+              onChange={() => handleCheckbox("8", no)}
+              checked={featuresArr[no]?.includes("8")}
+            />
+            <label for={`checkbox8-${no}`} />
+            <span>반려동물 동반가능</span>
           </CheckDiv>
           <CheckDiv>
-            <input type="checkbox" value="None" id="squaredFour" name="check" />
-            <label for="squaredFour" />
-            <span>사과</span>
+            <input
+              type="checkbox"
+              value="9"
+              id={`checkbox9-${no}`}
+              onChange={() => handleCheckbox("9", no)}
+              checked={featuresArr[no]?.includes("9")}
+            />
+            <label for={`checkbox9-${no}`} />
+            <span>실내 스파</span>
           </CheckDiv>
           <CheckDiv>
-            <input type="checkbox" value="None" id="squaredFour" name="check" />
-            <label for="squaredFour" />
-            <span>사과</span>
+            <input
+              type="checkbox"
+              value="10"
+              id={`checkbox10-${no}`}
+              onChange={() => handleCheckbox("10", no)}
+              checked={featuresArr[no]?.includes("10")}
+            />
+            <label for={`checkbox10-${no}`} />
+            <span>야외 수영장</span>
           </CheckDiv>
         </CheckBoxArea>
 
@@ -268,14 +348,40 @@ const EnrollRoom = ({ no, formDataArr, setFormDataArr }) => {
           }}
         />
         <DataTitle top="40px">독채 평면도 *</DataTitle>
-        <DataInput2 type="file" name="space_floor_plan" top="40px" />
-        <DataTitle top="40px">스페이스 대표사진 *</DataTitle>
-        <DataInput2 type="file" name="thumbnail" top="40px" />
         <div>
-          <DataTitle top="40px">스페이스 사진 첨부파일 *</DataTitle>
+          <AttachmentUpload
+            fileData={fileData}
+            setFileData={setFileData}
+            name="room_floor_plan"
+            func="false"
+            no={no}
+          />
+        </div>
+
+        <DataTitle top="40px">독채 대표사진 *</DataTitle>
+        <div>
+          <AttachmentUpload
+            fileData={fileData}
+            setFileData={setFileData}
+            name="thumbnail"
+            func="false"
+            no={no}
+          />
+        </div>
+        <div>
+          <DataTitle top="40px">독채 사진 첨부파일 *</DataTitle>
           <DataTitle2>*최소 3장 이상</DataTitle2>
         </div>
-        <DataInput2 type="file" name="attachment" top="40px" />
+        <div>
+          <AttachmentUpload
+            fileData={fileData}
+            setFileData={setFileData}
+            name="attachment"
+            isMultiple="true"
+            func="false"
+            no={no}
+          />
+        </div>
       </RoomDiv>
     </>
   );
