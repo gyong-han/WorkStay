@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import Display from "../../components/FilterBar/Display";
 import ListCard from "../../components/listcomponents/ListCard";
 import styled from "styled-components";
@@ -6,7 +6,6 @@ import { IoMdSearch } from "react-icons/io";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
 import { CiFilter } from "react-icons/ci";
 import { RiResetRightFill } from "react-icons/ri";
-import { useNavigate } from "react-router-dom";
 
 
 
@@ -78,21 +77,11 @@ const FilterTextMD = styled.span`
 
 const FindSpaceList = () => {
 
-
-
-  const navigate = useNavigate();
-  const clickHandler = (e)=>{
-    console.log(e);
-    // PARAM 변수 받아주는곳
-    navigate("/findspace/detail/1");
-    
-  }
-
-
   const [formData, setFormData] = useState({});
   const [spaceVoList,setSpaceVoList] = useState([]);
   const [attachmentVoList,setAttachmentVoList]= useState([]);
-  const [attachment,setAttachment] = useState([]);
+  const [dataLoad,setDataLoad] = useState(1);
+  const [imgPath,setImgPath]= useState([]);
 
   const handleChange = (e) => {
     setFormData((prev) => {
@@ -112,44 +101,58 @@ const FindSpaceList = () => {
     })
       .then((resp) => resp.text())
       .then((data) => {
-        console.log("data : ", data);
+        // console.log("data : ", data);
       });
   };
-
-
+  
   useEffect(()=>{
-    fetch("http://127.0.0.1:8080/space/list",{
-      method:'GET'
-    })
-    .then((resp)=>resp.json())
-    .then((data)=>{
-      setSpaceVoList(data);
-      
-    })
-  },[]);
-
-  useEffect(()=>{
+    //스페이스 목록에있는 파일들의 첨부파일 전부다 가져오기
     fetch("http://127.0.0.1:8080/space/attachmentlist",{
       method:'GET'
     })
     .then((resp)=>resp.json())
     .then((data)=>{
-      console.log(data);
       setAttachmentVoList(data);
-      
+      setDataLoad((prev)=>prev+1);
     })
+    .then(()=>{})
   },[]);
+
+  useEffect(()=>{
+    // 스페이스 목록 데이터 가져오기
+    fetch("http://127.0.0.1:8080/space/list",{
+      method:'GET'
+    })
+    .then((resp)=>resp.json())
+    .then((data)=>{
+      if(attachmentVoList.length>0){
+      // console.log("##### voListData : " , data);
+      setSpaceVoList(data);
+      // map돌려서 필터링해서 맞춰주고 썸네일파일을 제일 앞으로보낸 배열 생성
+        const arr = data.map((vo)=>{
+          const matchingAttachments = attachmentVoList.filter((att) => att.spaceNo === vo.no);
+          const imgPaths =  matchingAttachments.length > 0 ? matchingAttachments.map((att) => att.filePath) : null;  
+          imgPaths.unshift(vo.filePath);
+          const dataObject = {
+            [vo.no] : imgPaths,
+          }
+          return dataObject;      
+          })
+          // 리턴값을 저장
+          setImgPath(arr);
+          
+      }
+    })
+  },[dataLoad]);
+
+
+
   
-
-
-  
-
   
   return(<> 
 <Layout>
   <h1>FIND SPACE</h1>
   <Display isTimeMode={true}></Display>
-
    <SearchWrapper>
           <form onSubmit={handleSubmit}>
             <SearchInput
@@ -162,8 +165,6 @@ const FindSpaceList = () => {
             </Btn>
           </form>
   </SearchWrapper>
-
-
   <FilterWrapper>
     <div>
     <Btn>
@@ -187,44 +188,29 @@ const FindSpaceList = () => {
         </FilterWrapper>
         
   <InnerLayoutDiv>
-
-  
-
-    {spaceVoList.map((vo)=>{
-
-   
-      const matchingAttachments = attachmentVoList.filter((att) => att.spaceNo === vo.no);
-
+    {spaceVoList.map((vo,idx)=>{
       
-      const img2 = matchingAttachments.length > 0 ? matchingAttachments[0].filePath : "https://default-image.com/img2.jpg"; 
-      const img3 = matchingAttachments.length > 1 ? matchingAttachments[1].filePath : "https://default-image.com/img3.jpg";
-      const img4 = matchingAttachments.length > 2 ? matchingAttachments[2].filePath : "https://default-image.com/img4.jpg"; 
-
-      
+      const voImgPaths = imgPath[idx][vo.no];
       
       return(
-      <>
+      <Fragment key={vo.no}>
           <div></div>
-         <div key={vo.no}>
-          <ListCard morning={vo.daytimePrice} night={vo.nightPrice} 
-           img1={vo.filePath} 
-           img2={img2} 
-           img3={img3} 
-           img4={img4} 
-           clickHandler={clickHandler}
+         <div>
+          <ListCard no={vo.no} morning={vo.daytimePrice} night={vo.nightPrice} 
+           imgPaths={voImgPaths}
+          //  clickHandler={clickHandler}
            title={vo.name}
            min={vo.standardGuest}
            max={vo.maxGuest}
            address={vo.address}
            ></ListCard>
           </div>
-         </>
+         </Fragment>
+      
       )
     })}
   </InnerLayoutDiv>
    </Layout>
-
-   
   </>);
 };
 

@@ -1,5 +1,6 @@
 import PictureSlide from './PictureSlide';
 import styled from 'styled-components';
+import { useNavigate } from "react-router-dom";
 
 const Layout = styled.div`
   width: 616px;
@@ -21,7 +22,7 @@ const TitleDiv = styled.div`
   display: flex;
   justify-content: start;
   align-items: center;
-  font-size: 40px;
+  font-size: 35px;
   font-weight:bold;
 `;
 const AreaDiv = styled.div`
@@ -61,19 +62,19 @@ const ReservationDiv = styled.div`
 
 const ListCard = (props) => {
 
- 
+  const navigate = useNavigate();
 
-  
-
-
-
+   const clickHandler = ()=>{
+      console.log(props.no);
+      navigate(`/findspace/detail/${props.no}`)
+    }
   
   const morningPrice= props.morning.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const nightPrice = props.night.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   
   return (
-    <Layout>
-      <InerDiv  onClick={props.clickHandler}>
+    <Layout no={props.no}>
+      <InerDiv  onClick={clickHandler}>
         <TitleDiv>{props.title}</TitleDiv>
         <div></div>
         <AreaDiv>{props.address}</AreaDiv>
@@ -83,10 +84,7 @@ const ListCard = (props) => {
         <ReservationDiv>예약하기</ReservationDiv>
       </InerDiv>
       <PictureSlide w={''} h={'235'} 
-      img1={props.img1}
-      img2={props.img2}
-      img3={props.img3}
-      img4={props.img4}
+      imgPaths = {props.imgPaths}
       main={false}
       >
       </PictureSlide>

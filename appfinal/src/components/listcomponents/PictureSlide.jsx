@@ -45,28 +45,22 @@ const Xdiv = styled.div`
   height: 100%;
 `;
 
-const PictureSlide = ({w,h,img1,img2,img3,img4,main}) => {
+const PictureSlide = ({w,h,imgPaths,main}) => {
   
 
 
-// 슬라이드 이미지 배열
-const slideImages = [
-  img1,
-  img2,
-  img3,
-  img4,
-];
+
   // 화면넘길때마다 가질 인덱스 구성
   const [slideIdx, setSlideIdx] = useState(0);
 
   // 화면 넘기면 인덱스에 1값 더해서 인덱스 1로 만든뒤 슬라이드 창으로 나눠서 마지막페이지 구하기
   const goToNextSlide = () => {
-    setSlideIdx((props) => (props + 1) % slideImages.length);
+    setSlideIdx((props) => (props + 1) % imgPaths.length);
   };
 
   const goToPreviousSlide = () => {
     setSlideIdx(
-      (props) => (props - 1 + slideImages.length) % slideImages.length
+      (props) => (props - 1 + imgPaths.length) % imgPaths.length
     );
     
   };
@@ -78,11 +72,11 @@ const slideImages = [
     }
     
     const interval = setInterval(() => {
-        setSlideIdx((prev) => (prev + 1) % slideImages.length);
+        setSlideIdx((prev) => (prev + 1) % imgPaths.length);
     }, 5000);
 
     return () => clearInterval(interval);
-}, [main, slideImages.length]); 
+}, [main, imgPaths.length]); 
 
 
 
@@ -90,8 +84,8 @@ const slideImages = [
   return (
     <SlideContainer w={w} h={h}>
       <Slide index={slideIdx}>
-        {slideImages.map((src, idx) => (
-          <Xdiv><SlideImage key={idx} src={src} alt={`Slide ${idx + 1}`} w={w} h={h} /></Xdiv>
+        {imgPaths.map((src, idx) => (
+          <Xdiv key={idx}><SlideImage src={src} alt={`Slide ${idx + 1}`} w={w} h={h} /></Xdiv>
         ))}
       </Slide>
       <ArrowButton left onClick={goToPreviousSlide} >
