@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const DataDiv = styled.div`
@@ -28,6 +29,7 @@ const TextDiv = styled.div`
   font-weight: ${(props) => {
     return props.weight;
   }};
+  cursor: pointer;
 `;
 
 const ImgTag = styled.img`
@@ -49,6 +51,14 @@ const PriceDiv = styled.div`
 `;
 
 const ReservationCard = () => {
+  const navi = useNavigate();
+  const [selectedMenu, setSelectedMenu] = useState("");
+
+  function movePath(e) {
+    setSelectedMenu(e.target.id);
+    navi(`/hostMenu/${e.target.id}`);
+  }
+
   return (
     <>
       <DataDiv>
@@ -61,7 +71,14 @@ const ReservationCard = () => {
           <TextDiv size="13px">봉전다락 / 성인 2명</TextDiv>
           <div></div>
           <PriceDiv>
-            <TextDiv size="15px">예약 상세 확인</TextDiv>
+            <TextDiv
+              id="GuestResrvDetail"
+              onClick={movePath}
+              selected={selectedMenu === "GuestResrvDetail"}
+              size="15px"
+            >
+              예약 상세 확인
+            </TextDiv>
             <TextDiv size="20px">₩300,000</TextDiv>
           </PriceDiv>
         </DataArea>
