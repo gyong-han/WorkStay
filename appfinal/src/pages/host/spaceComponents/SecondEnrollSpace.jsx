@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import HostBtn from "../hostComponents/HostBtn";
 import Address from "../../../components/address/Address";
+import AttachmentUpload from "../hostComponents/AttachmentUpload";
 
 const HomeDiv = styled.div`
   display: grid;
@@ -117,7 +118,7 @@ const Hr = styled.hr`
 const SpaceDiv = styled.div`
   display: grid;
   grid-template-columns: 1fr 3fr;
-  grid-template-rows: (14, 1fr);
+  grid-template-rows: (15, 1fr);
 `;
 
 const TextArea = styled.textarea`
@@ -140,9 +141,63 @@ const BtnArea = styled.div`
   place-items: center;
 `;
 
+const CheckBoxArea = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: 1fr 1fr;
+  margin-top: 40px;
+`;
+
+const CheckDiv = styled.div`
+  display: flex; /* 수정: 수평 정렬을 위해 flexbox 추가 */
+  align-items: center; /* 수정: 체크박스와 텍스트를 세로로 정렬 */
+  margin-top: 10px;
+
+  & > input {
+    visibility: hidden;
+  }
+
+  & > label {
+    position: relative;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    margin-right: 10px;
+    background: #fcfff4;
+    border-radius: 4px;
+    box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0, 0, 0, 0.5);
+
+    &:after {
+      content: "";
+      width: 9px;
+      height: 5px;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      border: 3px solid #333;
+      border-top: none;
+      border-right: none;
+      background: transparent;
+      opacity: 0;
+      transform: rotate(-45deg);
+    }
+
+    &:hover:after {
+      opacity: 0.5;
+    }
+  }
+
+  & > input:checked + label:after {
+    opacity: 1;
+  }
+`;
+
 const SecondEnrollSpace = () => {
-  const [value, setValue] = useState("");
+  const [phone, setPhone] = useState("");
+  const [brn, setbrn] = useState("");
   const [formData, setFormData] = useState({});
+  const [featuresArr, setFeaturesArr] = useState([]);
+  const [fileData, setFileData] = useState({});
 
   const handleChange = (e) => {
     setFormData((prev) => {
@@ -153,26 +208,63 @@ const SecondEnrollSpace = () => {
     });
   };
 
-  const changeValue1 = (e) => {
+  const handleCheckbox = (value) => {
+    setFeaturesArr((prev) => {
+      if (prev.includes(value)) {
+        return prev.filter((item) => item !== value);
+      } else {
+        return [...prev, value];
+      }
+    });
+  };
+
+  const changephone = (e) => {
+    let inputValue = e.target.value;
+
+    // 숫자만 입력 허용 & 11자리 제한 적용
+    inputValue = inputValue.replace(/\D/g, "").slice(0, 11);
+    setPhone(inputValue);
+    handleChange(e);
+  };
+
+  const changebrn = (e) => {
     let inputValue = e.target.value;
 
     // 숫자만 입력 허용 & 10자리 제한 적용
     inputValue = inputValue.replace(/\D/g, "").slice(0, 10);
-    setValue(inputValue);
-    handleChange(e);
-  };
-
-  const changeValue2 = (e) => {
-    let inputValue = e.target.value;
-
-    // 숫자만 입력 허용 & 10자리 제한 적용
-    inputValue = inputValue.replace(/\D/g, "").slice(0, 11);
-    setValue(inputValue);
+    setbrn(inputValue);
     handleChange(e);
   };
 
   const f01 = () => {
-    console.log("formData : ", formData);
+    console.log("formData ::: ", formData);
+    console.log("featuresArr :::", featuresArr);
+    console.log("fleData :::", fileData);
+
+    console.log("-----------------------------------");
+
+    const fd = new FormData();
+    // fd.append("name", formData.name);
+    // fd.append("phone", formData.phone);
+    // fd.append("sns", formData.sns);
+    fd.append("features", featuresArr);
+    fd.append("space_floor_plan", fileData.space_floor_plan);
+    fd.append("thumbnail", fileData.thumbnail);
+    fileData.attachment.map((file) => fd.append("attachment", file));
+
+    fd.forEach((value, key) => {
+      console.log("key::::", key, "// value:::", value);
+    });
+
+    fetch("http://127.0.0.1:8080/test0212", {
+      method: "POST",
+      headers: {},
+      body: fd,
+    })
+      .then((resp) => resp.text())
+      .then((data) => {
+        console.log(data);
+      });
   };
 
   return (
@@ -241,11 +333,12 @@ const SecondEnrollSpace = () => {
               </div>
               <DataTitle top="40px">스페이스 전화번호 *</DataTitle>
               <DataInput
-                type="phone"
+                type="number"
                 name="phone"
                 placeholder="스페이스 전화번호를 입력해주세요."
                 top="40px"
-                onChange={changeValue2}
+                value={phone}
+                onChange={changephone}
               />
               <DataTitle top="40px">스페이스 SNS *</DataTitle>
               <DataInput
@@ -273,8 +366,16 @@ const SecondEnrollSpace = () => {
                 name="brn"
                 placeholder="사업자 등록번호 10글자를 입력해주세요."
                 top="40px"
-                value={value}
-                onChange={changeValue1}
+                value={brn}
+                onChange={changebrn}
+              />
+              <DataTitle top="40px">스테이 태그라인 *</DataTitle>
+              <DataInput
+                type="text"
+                name="tagline"
+                placeholder="스페이스를 한줄로 소개해주세요."
+                top="40px"
+                onChange={handleChange}
               />
               <DataTitle top="40px">스페이스 소개 *</DataTitle>
               <TextArea
@@ -319,21 +420,149 @@ const SecondEnrollSpace = () => {
                 />
               </div>
               <DataTitle top="40px">스페이스 편의시설 *</DataTitle>
-              <DataInput2
-                type="number"
-                name="max_guest"
-                top="40px"
-                placeholder="라디오 버튼"
-              />
+              <CheckBoxArea>
+                <CheckDiv>
+                  <input
+                    type="checkbox"
+                    value="1"
+                    id="checkbox1"
+                    onChange={() => handleCheckbox("1")}
+                    checked={featuresArr.includes("1")}
+                  />
+                  <label for="checkbox1" />
+                  <span>무료 주차</span>
+                </CheckDiv>
+                <CheckDiv>
+                  <input
+                    type="checkbox"
+                    value="2"
+                    id="checkbox2"
+                    onChange={() => handleCheckbox("2")}
+                    checked={featuresArr.includes("2")}
+                  />
+                  <label for="checkbox2" />
+                  <span>와이파이</span>
+                </CheckDiv>
+                <CheckDiv>
+                  <input
+                    type="checkbox"
+                    value="3"
+                    id="checkbox3"
+                    onChange={() => handleCheckbox("3")}
+                    checked={featuresArr.includes("3")}
+                  />
+                  <label for="checkbox3" />
+                  <span>회의실</span>
+                </CheckDiv>
+                <CheckDiv>
+                  <input
+                    type="checkbox"
+                    value="4"
+                    id="checkbox4"
+                    onChange={() => handleCheckbox("4")}
+                    checked={featuresArr.includes("4")}
+                  />
+                  <label for="checkbox4" />
+                  <span>PC/모니터</span>
+                </CheckDiv>
+                <CheckDiv>
+                  <input
+                    type="checkbox"
+                    value="5"
+                    id="checkbox5"
+                    onChange={() => handleCheckbox("5")}
+                    checked={featuresArr.includes("5")}
+                  />
+                  <label for="checkbox5" />
+                  <span>빔 프로젝터</span>
+                </CheckDiv>
+                <CheckDiv>
+                  <input
+                    type="checkbox"
+                    value="7"
+                    id="checkbox7"
+                    onChange={() => handleCheckbox("7")}
+                    checked={featuresArr.includes("7")}
+                  />
+                  <label for="checkbox7" />
+                  <span>음향/마이크</span>
+                </CheckDiv>
+                <CheckDiv>
+                  <input
+                    type="checkbox"
+                    value="8"
+                    id="checkbox8"
+                    onChange={() => handleCheckbox("8")}
+                    checked={featuresArr.includes("8")}
+                  />
+                  <label for="checkbox8" />
+                  <span>반려동물 동반가능</span>
+                </CheckDiv>
+                <CheckDiv>
+                  <input
+                    type="checkbox"
+                    value="11"
+                    id="checkbox11"
+                    onChange={() => handleCheckbox("11")}
+                    checked={featuresArr.includes("11")}
+                  />
+                  <label for="checkbox11" />
+                  <span>주방</span>
+                </CheckDiv>
+                <CheckDiv>
+                  <input
+                    type="checkbox"
+                    value="12"
+                    id="checkbox12"
+                    onChange={() => handleCheckbox("12")}
+                    checked={featuresArr.includes("12")}
+                  />
+                  <label for="checkbox12" />
+                  <span>샤워 시설</span>
+                </CheckDiv>
+                <CheckDiv>
+                  <input
+                    type="checkbox"
+                    value="13"
+                    id="checkbox13"
+                    onChange={() => handleCheckbox("13")}
+                    checked={featuresArr.includes("13")}
+                  />
+                  <label for="checkbox13" />
+                  <span>정원</span>
+                </CheckDiv>
+              </CheckBoxArea>
               <DataTitle top="40px">스페이스 평면도 *</DataTitle>
-              <DataInput2 type="file" name="space_floor_plan" top="40px" />
+              <div>
+                <AttachmentUpload
+                  fileData={fileData}
+                  setFileData={setFileData}
+                  name="space_floor_plan"
+                  func="true"
+                />
+              </div>
               <DataTitle top="40px">스페이스 대표사진 *</DataTitle>
-              <DataInput2 type="file" name="thumbnail" top="40px" />
+              <div>
+                <AttachmentUpload
+                  fileData={fileData}
+                  setFileData={setFileData}
+                  name="thumbnail"
+                  func="true"
+                />
+              </div>
               <div>
                 <DataTitle top="40px">스페이스 사진 첨부파일 *</DataTitle>
                 <DataTitle2>*최소 3장 이상</DataTitle2>
               </div>
-              <DataInput2 type="file" name="f" top="40px" />
+              <div>
+                <AttachmentUpload
+                  fileData={fileData}
+                  setFileData={setFileData}
+                  name="attachment"
+                  isMultiple="true"
+                  func="true"
+                />
+              </div>
             </SpaceDiv>
             <BtnArea>
               <HostBtn
