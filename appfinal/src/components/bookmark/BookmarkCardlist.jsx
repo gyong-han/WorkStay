@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import { FaBookmark, FaRegBookmark } from "react-icons/fa";
+import BookmarkIcon from "./BookmarkIcon";
+import Share from "./Share";
 
 const MainCardDiv = styled.div`
   display: grid;
@@ -25,7 +26,7 @@ const Img = styled.img`
 
 const TopDiv = styled.div`
   display: grid;
-  grid-template-columns: 3fr 1fr 1fr;
+  grid-template-columns: 8fr 1fr 1fr;
   padding-left: 15px;
 `;
 const TitleDiv = styled.div`
@@ -61,18 +62,7 @@ const PriceDiv = styled.div`
   padding-left: 15px;
 `;
 
-const BookmarkBtn = styled.div`
-  border: none;
-  color: blue;
-`;
-
 const BookmarkCardlist = () => {
-  const [bookmarked, setBookmarked] = useState(false);
-
-  const toggleBookmark = () => {
-    setBookmarked(!bookmarked);
-  };
-
   return (
     <>
       <MainCardDiv>
@@ -81,9 +71,8 @@ const BookmarkCardlist = () => {
         </ImgDIv>
         <TopDiv>
           <TitleDiv>노모어</TitleDiv>
-          <BookmarkBtn onClick={toggleBookmark}>
-            {bookmarked ? <FaRegBookmark /> : <FaBookmark />}
-          </BookmarkBtn>
+          <Share />
+          <BookmarkIcon />
         </TopDiv>
         <MiddleDiv>
           <AddressDiv>서울/서대문구</AddressDiv>

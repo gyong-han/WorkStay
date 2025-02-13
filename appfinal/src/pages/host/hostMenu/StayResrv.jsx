@@ -12,6 +12,9 @@ const StatusSpan = styled.span`
   margin-left: ${(props) => {
     return props.left;
   }};
+  color: ${(props) => {
+    return props.color;
+  }};
 `;
 
 const StayResrv = () => {
@@ -19,9 +22,15 @@ const StayResrv = () => {
     <>
       <MainDiv>
         <div>
-          <StatusSpan left="280px">예약 확정</StatusSpan>
-          <StatusSpan left="20px"> | </StatusSpan>
-          <StatusSpan left="20px">예약 취소</StatusSpan>
+          <StatusSpan left="280px" color="#049DD9">
+            예약 내역
+          </StatusSpan>
+          <StatusSpan left="20px" color="#202020">
+            |
+          </StatusSpan>
+          <StatusSpan left="20px" color="#202020">
+            취소 내역
+          </StatusSpan>
         </div>
         <div>
           <ReservationCard />

@@ -14,15 +14,17 @@ const Btn = styled.button`
   margin-top: ${(props) => {
     return props.top;
   }};
-  border: none;
+  border: 1px solid #049dd9;
   border-radius: 5px;
   font-size: ${(props) => {
     return props.font;
   }};
-  color: white;
+  color: ${(props) => {
+    return props.color;
+  }};
   cursor: pointer;
 `;
-const HostBtn = ({ width, height, backColor, str, f, top, font }) => {
+const HostBtn = ({ width, height, backColor, str, f, top, font, color }) => {
   return (
     <Btn
       type="button"
@@ -32,6 +34,7 @@ const HostBtn = ({ width, height, backColor, str, f, top, font }) => {
       top={top}
       font={font}
       onClick={f}
+      color={color}
     >
       {str}
     </Btn>
