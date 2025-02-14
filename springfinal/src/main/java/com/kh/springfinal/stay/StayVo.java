@@ -5,15 +5,15 @@ import lombok.Data;
 @Data
 public class StayVo {
     private Long no;
-    private String hostNo;
-    private String statusNo;
-    private String businessTypeNo;
+    private Long hostNo;
+    private Long statusNo;
+    private Long businessTypeNo;
     private String name;
     private String phone;
     private String address;
     private String delYn;
     private String enrollDate;
-    private String modifiyDate;
+    private String modifyDate;
     private String tagline;
     private String introduction;
     private String sns;
