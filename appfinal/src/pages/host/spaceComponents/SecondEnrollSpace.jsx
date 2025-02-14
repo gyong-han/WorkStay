@@ -236,7 +236,7 @@ const SecondEnrollSpace = () => {
     handleChange(e);
   };
 
-  const f01 = () => {
+  const enrollSpace = () => {
     console.log("formData ::: ", formData);
     console.log("featuresArr :::", featuresArr);
     console.log("fleData :::", fileData);
@@ -244,9 +244,19 @@ const SecondEnrollSpace = () => {
     console.log("-----------------------------------");
 
     const fd = new FormData();
-    // fd.append("name", formData.name);
-    // fd.append("phone", formData.phone);
-    // fd.append("sns", formData.sns);
+    fd.append("hostNo", "1");
+    fd.append("name", formData.name);
+    fd.append("address", formData.address);
+    fd.append("phone", formData.phone);
+    fd.append("sns", formData.sns);
+    fd.append("businessTypeNo", formData.business_type_no);
+    fd.append("brn", formData.brn);
+    fd.append("tagline", formData.tagline);
+    fd.append("introduction", formData.introduction);
+    fd.append("standardGuest", formData.standard_guest);
+    fd.append("maxGuest", formData.max_guest);
+    fd.append("daytimePrice", formData.daytime_price);
+    fd.append("nightPrice", formData.night_price);
     fd.append("features", featuresArr);
     fd.append("space_floor_plan", fileData.space_floor_plan);
     fd.append("thumbnail", fileData.thumbnail);
@@ -256,7 +266,7 @@ const SecondEnrollSpace = () => {
       console.log("key::::", key, "// value:::", value);
     });
 
-    fetch("http://127.0.0.1:8080/test0212", {
+    fetch("http://127.0.0.1:8080/api/host/enroll/space", {
       method: "POST",
       headers: {},
       body: fd,
@@ -356,8 +366,8 @@ const SecondEnrollSpace = () => {
                   onChange={handleChange}
                 />
                 <datalist id="business_type">
-                  <option value="스페이스1" />
-                  <option value="스페이스2" />
+                  <option value="1">스페이스1</option>
+                  <option value="2">스페이스2</option>
                 </datalist>
               </div>
               <DataTitle top="40px">사업자 등록번호 *</DataTitle>
@@ -571,7 +581,8 @@ const SecondEnrollSpace = () => {
                 font="25px"
                 backColor="#2B8C44"
                 str="제출하기"
-                f={f01}
+                color="white"
+                f={enrollSpace}
               />
             </BtnArea>
           </MainDiv>
