@@ -238,6 +238,7 @@ const FirstEnrollStay = () => {
           height="50px"
           backColor="#2B8C44"
           font="25px"
+          color="white"
           str="가입하기"
           f={changePath}
         />
