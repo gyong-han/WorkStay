@@ -78,7 +78,7 @@ const Hr = styled.hr`
 const StayDiv = styled.div`
   display: grid;
   grid-template-columns: 1fr 3fr;
-  grid-template-rows: (9, 1fr);
+  grid-template-rows: (10, 1fr);
 `;
 
 const DataList = styled.input`
@@ -111,6 +111,50 @@ const BtnArea = styled.div`
   place-items: center;
 `;
 
+const RadioDiv = styled.div`
+  display: flex; /* 수정: 수평 정렬을 위해 flexbox 추가 */
+  align-items: center; /* 수정: 체크박스와 텍스트를 세로로 정렬 */
+  margin-top: 40px;
+
+  & > input {
+    visibility: hidden;
+  }
+
+  & > label {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    margin-right: 10px;
+    background: #fcfff4;
+    border-radius: 4px;
+    box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0, 0, 0, 0.5);
+
+    &:after {
+      content: "";
+      width: 14px;
+      height: 8px;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      border: 3px solid #333;
+      border-top: none;
+      border-right: none;
+      background: transparent;
+      opacity: 0;
+      transform: rotate(-45deg);
+    }
+
+    &:hover:after {
+      opacity: 0.5;
+    }
+  }
+
+  & > input:checked + label:after {
+    opacity: 1;
+  }
+`;
+
 const SecondEnrollStay = () => {
   const [phone, setPhone] = useState("");
   const [brn, setbrn] = useState("");
@@ -125,6 +169,20 @@ const SecondEnrollStay = () => {
       };
     });
   };
+
+  const handleChange2 = (e) => {
+    setFormData((prev) => {
+      return {
+        ...prev,
+        [e.target.name]: e.target.id,
+      };
+    });
+  };
+
+  const RadioArea = styled.div`
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  `;
 
   const changephone = (e) => {
     let inputValue = e.target.value;
@@ -145,11 +203,29 @@ const SecondEnrollStay = () => {
   };
 
   //fetch함수
-  const f01 = () => {
-    console.log("formData : ", formData);
-    //fetch로 공간 정보 보내고 return값으로 공간 기본키 받아오고 third/ 뒤에 넣기
-    navigate("/enroll/stay/third/1");
-    window.scrollTo(0, 0);
+  const enrollStay = () => {
+    const fd = new FormData();
+    fd.append("name", formData.name);
+    fd.append("address", formData.name);
+    fd.append("phone", formData.phone);
+    fd.append("sns", formData.sns);
+    fd.append("businessTypeNo", formData.business_type_no);
+    fd.append("brn", formData.brn);
+    fd.append("tagline", formData.tagline);
+    fd.append("season", formData.season);
+    fd.append("introduction", formData.introduction);
+    fd.append("hostNo", "1");
+
+    fetch("http://127.0.0.1:8080/api/host/enroll/stay", {
+      method: "POST",
+      body: fd,
+    })
+      .then((resp) => resp.text())
+      .then((data) => {
+        console.log("data::::", data);
+        navigate(`/enroll/stay/third/${data}`);
+        window.scrollTo(0, 0);
+      });
   };
 
   return (
@@ -246,8 +322,8 @@ const SecondEnrollStay = () => {
                 onChange={handleChange}
               />
               <datalist id="business_type">
-                <option value="스테이1" />
-                <option value="스테이2" />
+                <option value="1">숙박</option>
+                <option value="2">워케이션</option>
               </datalist>
             </div>
             <DataTitle top="40px">사업자 등록번호 *</DataTitle>
@@ -273,15 +349,63 @@ const SecondEnrollStay = () => {
               placeholder="스테이의 구조, 컨셉, 스토리 등을 자유롭게 작성해 주세요. (최소 50자)"
               onChange={handleChange}
             />
+            <DataTitle top="40px">추천 계절 *</DataTitle>
+            <RadioArea>
+              <RadioDiv>
+                <input
+                  type="radio"
+                  name="season"
+                  id="spring"
+                  onChange={handleChange2}
+                  checked={formData.season === "spring"}
+                />
+                <label for="spring" />
+                <span>봄</span>
+              </RadioDiv>
+              <RadioDiv>
+                <input
+                  type="radio"
+                  name="season"
+                  id="summer"
+                  onChange={handleChange2}
+                  checked={formData.season === "summer"}
+                />
+                <label for="summer" />
+                <span>여름</span>
+              </RadioDiv>
+              <RadioDiv>
+                <input
+                  type="radio"
+                  name="season"
+                  id="fall"
+                  onChange={handleChange2}
+                  checked={formData.season === "fall"}
+                />
+                <label for="fall" />
+                <span>가을</span>
+              </RadioDiv>
+              <RadioDiv>
+                <input
+                  type="radio"
+                  name="season"
+                  id="winter"
+                  onChange={handleChange2}
+                  checked={formData.season === "winter"}
+                />
+                <label for="winter" />
+                <span>겨울</span>
+              </RadioDiv>
+            </RadioArea>
           </StayDiv>
           <BtnArea>
             <HostBtn
               width="400px"
               height="50px"
               font="25px"
+              color="white"
               backColor="#2B8C44"
               str="다음"
-              f={f01}
+              f={enrollStay}
             />
           </BtnArea>
         </MainDiv>
