@@ -3,6 +3,7 @@ import styled from "styled-components";
 import HostBtn from "../hostComponents/HostBtn";
 import Address from "../../../components/address/Address";
 import AttachmentUpload from "../hostComponents/AttachmentUpload";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const HomeDiv = styled.div`
   display: grid;
@@ -198,6 +199,7 @@ const SecondEnrollSpace = () => {
   const [formData, setFormData] = useState({});
   const [featuresArr, setFeaturesArr] = useState([]);
   const [fileData, setFileData] = useState({});
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData((prev) => {
@@ -237,11 +239,11 @@ const SecondEnrollSpace = () => {
   };
 
   const enrollSpace = () => {
-    console.log("formData ::: ", formData);
-    console.log("featuresArr :::", featuresArr);
-    console.log("fleData :::", fileData);
+    // console.log("formData ::: ", formData);
+    // console.log("featuresArr :::", featuresArr);
+    // console.log("fleData :::", fileData);
 
-    console.log("-----------------------------------");
+    // console.log("-----------------------------------");
 
     const fd = new FormData();
     fd.append("hostNo", "1");
@@ -262,10 +264,6 @@ const SecondEnrollSpace = () => {
     fd.append("thumbnail", fileData.thumbnail);
     fileData.attachment.map((file) => fd.append("attachment", file));
 
-    fd.forEach((value, key) => {
-      console.log("key::::", key, "// value:::", value);
-    });
-
     fetch("http://127.0.0.1:8080/api/host/enroll/space", {
       method: "POST",
       headers: {},
@@ -274,6 +272,10 @@ const SecondEnrollSpace = () => {
       .then((resp) => resp.text())
       .then((data) => {
         console.log(data);
+        if (data === "1") {
+          navigate("/hostMenu/hostMgmtMenu/spaceApprovalMgmt");
+          window.scrollTo(0, 0);
+        }
       });
   };
 

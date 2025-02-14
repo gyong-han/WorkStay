@@ -1,7 +1,7 @@
 package com.kh.springfinal.host;
 
 import com.kh.springfinal.space.SpaceVo;
-import com.kh.springfinal.stay.RoomVo;
+import com.kh.springfinal.room.RoomVo;
 import com.kh.springfinal.stay.StayVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ import java.util.List;
 public class HostService {
     private final HostMapper mapper;
 
-    public void enrollSpace(SpaceVo vo, List<String> features, AttachVo thumbnailVo, AttachVo spaceFloorPlanVo, List<AttachVo> attachVoList) {
+    public int enrollSpace(SpaceVo vo, List<String> features, AttachVo thumbnailVo, AttachVo spaceFloorPlanVo, List<AttachVo> attachVoList) {
         int result1 = mapper.enrollSpace(vo);
         int result2 = 0;
         for (String feature : features) {
@@ -29,6 +29,8 @@ public class HostService {
         for (AttachVo attachVo : attachVoList) {
             result5 = mapper.enrollSpaceAttach(attachVo);
         }
+        int result = result1*result2*result3*result4*result5;
+        return result;
     }
 
     public int enrollStay(StayVo vo) {
