@@ -1,7 +1,7 @@
 package com.kh.springfinal.host;
 
 import com.kh.springfinal.space.SpaceVo;
-import com.kh.springfinal.stay.RoomVo;
+import com.kh.springfinal.room.RoomVo;
 import com.kh.springfinal.stay.StayVo;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;

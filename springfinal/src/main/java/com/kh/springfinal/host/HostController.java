@@ -1,8 +1,8 @@
 package com.kh.springfinal.host;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.kh.springfinal.room.RoomVo;
 import com.kh.springfinal.space.SpaceVo;
-import com.kh.springfinal.stay.RoomVo;
 import com.kh.springfinal.stay.StayVo;
 import com.kh.springfinal.util.FileUtil;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class HostController {
 
     //공간 등록
     @PostMapping("enroll/space")
-    public String enrollSpace(@RequestParam MultipartFile thumbnail, @RequestParam List<String> features
+    public int enrollSpace(@RequestParam MultipartFile thumbnail, @RequestParam List<String> features
             , @RequestParam("space_floor_plan") MultipartFile spaceFloorPlan, @RequestParam List<MultipartFile> attachment,SpaceVo vo) throws IOException {
 
         AttachVo thumbnailVo = new AttachVo();
@@ -48,9 +48,9 @@ public class HostController {
             attachVo.setOriginName(file.getOriginalFilename());
             attachVoList.add(attachVo);
         }
-        service.enrollSpace(vo,features,thumbnailVo,spaceFloorPlanVo,attachVoList);
+        int result = service.enrollSpace(vo,features,thumbnailVo,spaceFloorPlanVo,attachVoList);
 
-        return "Zzzz";
+        return result;
     }
 
     //공간 등록
@@ -62,8 +62,8 @@ public class HostController {
 
     //독채 등록
     @PostMapping("enroll/room")
-    public int enrollRoom(RoomVo vo,@RequestParam MultipartFile thumbnail, @RequestParam List<String> features
-            ,@RequestParam("room_floor_plan") MultipartFile roomFloorPlan,@RequestParam List<MultipartFile> attachment) throws IOException {
+    public int enrollRoom(RoomVo vo, @RequestParam MultipartFile thumbnail, @RequestParam List<String> features
+            , @RequestParam("room_floor_plan") MultipartFile roomFloorPlan, @RequestParam List<MultipartFile> attachment) throws IOException {
 
         AttachVo thumbnailVo = new AttachVo();
         thumbnailVo.setFilePath(FileUtil.uploadFileToAws(thumbnail,s3,bucket));
