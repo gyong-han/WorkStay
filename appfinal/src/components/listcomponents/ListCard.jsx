@@ -66,7 +66,7 @@ const ListCard = (props) => {
 
    const clickHandler = ()=>{
       console.log(props.no);
-      navigate(`/findspace/detail/${props.no}`)
+      navigate(`/${props.url}/detail/${props.no}`)
     }
   
   const morningPrice= props.morning.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");

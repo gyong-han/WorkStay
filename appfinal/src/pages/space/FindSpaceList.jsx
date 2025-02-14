@@ -197,6 +197,7 @@ const FindSpaceList = () => {
           <div></div>
          <div>
           <ListCard no={vo.no} morning={vo.daytimePrice} night={vo.nightPrice} 
+           url ={"findspace"}
            imgPaths={voImgPaths}
           //  clickHandler={clickHandler}
            title={vo.name}
