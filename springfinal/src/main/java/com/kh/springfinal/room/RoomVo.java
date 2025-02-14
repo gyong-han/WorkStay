@@ -1,17 +1,17 @@
-package com.kh.springfinal.stay;
+package com.kh.springfinal.room;
 
 import lombok.Data;
 
 @Data
 public class RoomVo {
     private Long no;
-    private String stayNo;
+    private Long stayNo;
     private String name;
     private String introduction;
     private String price;
     private String maxGuest;
     private String delYn;
     private String enrollDate;
-    private String modifiyDate;
+    private String modifyDate;
     private String standardGuest;
 }
