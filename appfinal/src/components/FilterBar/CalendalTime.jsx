@@ -10,7 +10,8 @@ import "./styles/datepicker.css";
 
 
 
-const CalendarTime = ({children,type}) => {
+const CalendarTime = ({children,type,setSelectDate}) => {
+  
   const [dateRange, setDateRange] = useState("");
 
   useEffect(() => {
@@ -28,6 +29,8 @@ const CalendarTime = ({children,type}) => {
         
         const selectDate = format(update, "yyyyMMdd");
         setDateRange(selectDate);
+        const selectDateShow = format(update, "yyyy-MM-dd");
+        setSelectDate(selectDateShow);
       }}
 
 

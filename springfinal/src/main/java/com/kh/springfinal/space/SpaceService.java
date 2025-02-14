@@ -21,13 +21,22 @@ public class SpaceService {
     }
 
     public SpaceVo spaceGetDetailVo(Long no) {
+        SpaceVo spaceVo = mapper.spaceGetDetailVo(no);
 
-        List<AttachmentVo> attachments  = mapper.spaceGetAttachmentByNo(no);
-        String[] filePaths = attachments.stream()
+        List<AttachmentVo> attachments = mapper.spaceGetAttachmentByNo(no);
+
+        String[] attachmentPaths = attachments.stream()
                 .map(AttachmentVo::getFilePath)
                 .toArray(String[]::new);
-        SpaceVo spaceVo = mapper.spaceGetDetailVo(no);
+
+        String[] filePaths = new String[attachmentPaths.length + 1];
+        filePaths[0] = spaceVo.getFilePath();
+
+        //        배열카피하는데 여기값의   0번쨰부터 시작해서 여기배열의  1번 즉 2번째자리부터 첫번째 데이터의 길이만큼 넣어주는것
+        System.arraycopy(attachmentPaths, 0, filePaths, 1, attachmentPaths.length);
+
         spaceVo.setAttachmentFilePaths(filePaths);
+
         return spaceVo;
     }
 }

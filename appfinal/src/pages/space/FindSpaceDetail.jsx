@@ -36,17 +36,37 @@ grid-template-rows: 120px 550px 100px 700px 450px 100px 549px 50px 650px;
   grid-template-columns: 1fr 1500px 1fr;
   grid-template-rows: 450px;
 
+
   &>div:nth-child(2){
     width: 100%;
     height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows:80px 40px 1fr ;
     background-color: #2b8c437b;
+  
     color: #FAFAFA;
+    &>div:nth-child(1),
+    &>div:nth-child(2){
+      justify-content: center;
+      align-items: center;
+      display: flex;
+    }
+    &>div:nth-child(1){
+      font-size: 30px;
+      font-weight: bold;
+    }
+    &>div:nth-child(3){
+      padding-top:50px ;
+      padding-left: 100px;
+      padding-right: 100px;
+      text-align: center;
+      font-size: 20px;
+    }
   }
 
 }
+
 
 &>div:nth-child(6){
   width: 100%;
@@ -144,8 +164,11 @@ const PackageDiv = styled.div`
 
 
 const FindSpaceDetail = () => {
+  const [selectDate,setSelectDate] = useState("");
   const [bookMark,setBookMark] = useState();
   const [detailData,setDetailData] = useState({});
+  const [address,setAddress] = useState("zzzzzz");
+  const [attachmentArr,setAttachmentArr] = useState([]);
 
   const {x} = useParams();
   // console.log(x);
@@ -161,11 +184,20 @@ const FindSpaceDetail = () => {
     .then((resp)=>resp.json())
     .then((data)=>{
       console.log("data ::: ",data);
+      console.log("배열 ::::",data.attachmentFilePaths);
+      setAttachmentArr(data.attachmentFilePaths);
+      // setAttachmentArr((prev)=>{return[
+      // ]});
+      
       setDetailData(data);
+     
+      
     })
   },[])
 
-  
+  setTimeout(()=>{
+    setAddress(detailData.address)
+  },[500])
   
 
   const park = "4";
@@ -177,11 +209,15 @@ const FindSpaceDetail = () => {
   }
 
   
-  const name=detailData.name;
-  const adress="서울특별시 강남구 테헤란로 130";
+  // const address=detailData.address;
+
+   
+
+ 
+  
 
   const navi=()=>{
-    console.log("hello");
+    console.log("good");
     
   }
 
@@ -207,45 +243,56 @@ const FindSpaceDetail = () => {
         </InconTitleDiv>
         </TitleDiv>
       <div>
-        {/* <PictureSlide w={'1500'} h={'500'} 
-
-      main={true}
+        <PictureSlide w={'1500'} h={'500'} 
+        imgPaths={attachmentArr}
+        main={true}
       >
-      </PictureSlide> */}
+      </PictureSlide>
       </div>
       <div>
         <div></div>
-        <DateDiv><CalendarTime type={"text"}>날짜를 선택해주세요<MdOutlineKeyboardArrowDown /></CalendarTime></DateDiv>
+        <DateDiv>
+        {!selectDate ? (
+          <CalendarTime type={"text"} setSelectDate={setSelectDate}>날짜를 입력해주세요.</CalendarTime>
+          ) : (
+            <CalendarTime type={"text"} setSelectDate={setSelectDate}>{selectDate}</CalendarTime>
+          )}
+        </DateDiv>
         <div></div>
       </div>
       <PackageDiv>
         <div>PACKAGE</div>
         <div>
           <PackageDisplay img={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAwcf09BODgX7VbhRf07dq9mBKXiQwQxzG-Q&s"}
-            title={"낮 패키지"} standard={"6"} max={"12"} price={"120000"} navigatorHandler={navi} url={"/findspace/spacebooking/1"} ></PackageDisplay>
+            title={"낮 패키지"} standard={"6"} max={"12"} price={"120000"} navigatorHandler={navi} url={`/findspace/spacebooking/${x}`} ></PackageDisplay>
         </div>
         <div></div>
         <div>
           <PackageDisplay img={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPVr3w8Pov0BQ0sJlrmKaS-P8Nz8ONNF-VUQ&s"}
-            title={"밤 패키지"} standard={"4"} max={"8"} price={"150000"} navigatorHandler={navi} url={"/findspace/spacebooking/1"} ></PackageDisplay>
+            title={"밤 패키지"} standard={"4"} max={"8"} price={"150000"} navigatorHandler={navi} url={`/findspace/spacebooking/${x}`} ></PackageDisplay>
        </div>
         <div></div>
       </PackageDiv>
       <div>
         <div></div>
-        <div>{detailData.Infomation}</div>
+        <div>
+          <div>{detailData.tagline}</div>
+          <div>{detailData.name}</div>
+          <div>{detailData.introduction}</div>
+          
+          </div>
         <div></div>
       </div>
       <div>
         <div></div>
         <div>
-          {name}의 위치는 [{adress}]입니다.
+          {detailData.name}의 위치는 [{detailData.address}]입니다.
           <br></br>
           {parking}
         </div>
         <div></div>
       </div>
-      <div><Map adress={adress} name={name}>space</Map></div>
+      <div><Map address={address} name={detailData.name}>space</Map></div>
       <div></div>
       <Infomation morning={150000} night={820000} standard={10} max={20}></Infomation>
     </Layout>

@@ -14,7 +14,7 @@ const InerDiv =styled.div`
   height: 100%;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 50px 50px 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 50px 25px 1fr 1fr 10px 1fr 1fr;
 `;
 const TitleDiv = styled.div`
   width: 100%;
@@ -22,13 +22,13 @@ const TitleDiv = styled.div`
   display: flex;
   justify-content: start;
   align-items: center;
-  font-size: 35px;
+  font-size: 25px;
   font-weight:bold;
 `;
 const AreaDiv = styled.div`
   width: 100%;
   height: 100%;
-  font-size: 20px;
+  font-size: 18px;
   font-weight:600;
 `;
 const PeopleDiv = styled.div`
