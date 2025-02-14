@@ -239,6 +239,7 @@ const FirstEnrollSpace = () => {
           backColor="#2B8C44"
           font="25px"
           str="가입하기"
+          color="white"
           f={changePath}
         />
       </BtnArea>
