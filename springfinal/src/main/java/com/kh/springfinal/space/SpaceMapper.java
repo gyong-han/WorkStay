@@ -53,7 +53,7 @@ public interface SpaceMapper {
 
     @Select("""
             SELECT NO,SPACE_NO,FILE_PATH FROM SPACE_ATTACHMENT
-            WHERE NO = #{no} AND THUMBNAIL='N'
+            WHERE SPACE_NO=#{no} AND THUMBNAIL='N'
             """)
-    AttachmentVo spaceGetAttachmentByNo(Long no);
+    List<AttachmentVo> spaceGetAttachmentByNo(Long no);
 }

@@ -10,7 +10,7 @@ import Map from '../../components/map/Map';
 import Infomation from '../../components/Infomation';
 import { useParams } from 'react-router-dom';
 import { useState } from 'react';
-import CalendarTime from '../../components/FilterBar/CalendalTime';
+import Calendar from '../../components/FilterBar/Calendal';
 
 const Layout =styled.div`
 width: 100%;
@@ -143,6 +143,7 @@ const PackageDiv = styled.div`
 
 const FindStayDetail = () => {
   const [bookMark,setBookMark] = useState()
+  const [result,setResult]= useState([]);
 
   const {x} = useParams();
   console.log(x);
@@ -168,6 +169,8 @@ const FindStayDetail = () => {
   }
 
 
+
+
   return (
     <Layout>
       <TitleDiv>
@@ -188,17 +191,19 @@ const FindStayDetail = () => {
           <div>북마크</div>
         </InconTitleDiv>
         </TitleDiv>
-      <div><PictureSlide w={'1500'} h={'500'} 
+      <div>
+        {/* <PictureSlide w={'1500'} h={'500'} 
       img1={'https://image.utoimage.com/preview/cp872722/2022/12/202212008462_500.jpg'}
       img2={'https://helpx.adobe.com/content/dam/help/en/photoshop/using/quick-actions/remove-background-before-qa1.png'}
       img3={'https://altools.co.kr/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fimg_feature_alsee_1.60428533.png&w=3840&q=75'}
       img4={'https://t1.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/14Fa/image/joib7vCDm4iIP7rNJR2ojev0A20.jpg'}
       main={true}
       >
-      </PictureSlide></div>
+      </PictureSlide> */}
+      </div>
       <div>
         <div></div>
-        <DateDiv><CalendarTime type={"text"}>날짜를 선택해주세요<MdOutlineKeyboardArrowDown /></CalendarTime></DateDiv>
+        <DateDiv><Calendar type={"input"} setResult={setResult}></Calendar></DateDiv>
         <div></div>
       </div>
       <PackageDiv>

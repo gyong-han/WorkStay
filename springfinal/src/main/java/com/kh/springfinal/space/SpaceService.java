@@ -22,9 +22,12 @@ public class SpaceService {
 
     public SpaceVo spaceGetDetailVo(Long no) {
 
-        AttachmentVo vo = mapper.spaceGetAttachmentByNo(no);
+        List<AttachmentVo> attachments  = mapper.spaceGetAttachmentByNo(no);
+        String[] filePaths = attachments.stream()
+                .map(AttachmentVo::getFilePath)
+                .toArray(String[]::new);
         SpaceVo spaceVo = mapper.spaceGetDetailVo(no);
-        spaceVo.setAttachmentFilePaths(new String[] {spaceVo.getFilePath()});
+        spaceVo.setAttachmentFilePaths(filePaths);
         return spaceVo;
     }
 }

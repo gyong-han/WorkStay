@@ -45,6 +45,7 @@ grid-template-rows: 120px 550px 100px 700px 450px 100px 549px 50px 650px;
     background-color: #2b8c437b;
     color: #FAFAFA;
   }
+
 }
 
 &>div:nth-child(6){
@@ -133,6 +134,8 @@ const PackageDiv = styled.div`
     margin-top: 240px;
     font-size: 40px;
     font-weight: 600;
+
+    
     
   }
 `;
@@ -140,9 +143,9 @@ const PackageDiv = styled.div`
 
 
 
-
 const FindSpaceDetail = () => {
-  const [bookMark,setBookMark] = useState()
+  const [bookMark,setBookMark] = useState();
+  const [detailData,setDetailData] = useState({});
 
   const {x} = useParams();
   // console.log(x);
@@ -158,7 +161,7 @@ const FindSpaceDetail = () => {
     .then((resp)=>resp.json())
     .then((data)=>{
       console.log("data ::: ",data);
-      
+      setDetailData(data);
     })
   },[])
 
@@ -174,7 +177,7 @@ const FindSpaceDetail = () => {
   }
 
   
-  const name="인터플럼";
+  const name=detailData.name;
   const adress="서울특별시 강남구 테헤란로 130";
 
   const navi=()=>{
@@ -187,8 +190,8 @@ const FindSpaceDetail = () => {
     <Layout>
       <TitleDiv>
         <div>
-          <h1>인더플럼</h1>
-          <span>제주 / 제주시</span>
+          <h1>{detailData.name}</h1>
+          <span>{detailData.address}</span>
         </div>
         <div></div>
         <InconTitleDiv>
@@ -230,7 +233,7 @@ const FindSpaceDetail = () => {
       </PackageDiv>
       <div>
         <div></div>
-        <div>소개글내용 ~~~~~</div>
+        <div>{detailData.Infomation}</div>
         <div></div>
       </div>
       <div>
