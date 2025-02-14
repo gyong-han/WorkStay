@@ -73,10 +73,18 @@ const ThirdEnrollStay = () => {
     addRoom();
   }, []);
 
-  const f = async () => {
-    const url = "http://127.0.0.1:8080/test2";
+  const enrollRoom = async () => {
+    console.log(stayNum);
+
+    const url = "http://127.0.0.1:8080/api/host/enroll/room";
     for (let idx = 0; idx < formDataArr.length; ++idx) {
       const fd = new FormData();
+      fd.append("stayNo", stayNum.x);
+      fd.append("name", formDataArr[idx].name);
+      fd.append("introduction", formDataArr[idx].introduction);
+      fd.append("price", formDataArr[idx].price);
+      fd.append("maxGuest", formDataArr[idx].max_guest);
+      fd.append("standardGuest", formDataArr[idx].standard_guest);
       fd.append("features", featuresArr[idx]);
       fd.append("thumbnail", fileData[idx].thumbnail);
       fd.append("room_floor_plan", fileData[idx].room_floor_plan);
@@ -134,6 +142,7 @@ const ThirdEnrollStay = () => {
               height="30px"
               font="15px"
               backColor="#2B8C44"
+              color="white"
               str="독채 추가"
               f={addRoom}
             />
@@ -144,8 +153,9 @@ const ThirdEnrollStay = () => {
               height="50px"
               font="25px"
               backColor="#2B8C44"
-              str="asynk"
-              f={f}
+              str="제출하기"
+              color="white"
+              f={enrollRoom}
             />
           </BtnArea>
         </MainDiv>
