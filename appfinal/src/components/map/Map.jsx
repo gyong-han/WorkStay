@@ -2,7 +2,9 @@
 
 import React, { useEffect } from 'react';
 
-const Map = ({adress,name}) => {
+const Map = ({address,name}) => {
+  
+  
   useEffect(() => {
     
     const KAKAO_MAP_API_KEY = 'e6fb0b3e3e788fbc7f697bdcbede0f13&autoload=false';
@@ -31,7 +33,7 @@ const Map = ({adress,name}) => {
     return () => {
       document.getElementById(scriptId)?.remove();
     };
-  },[]);
+  },[address],[name]);
 
   const loadMap = () => {
     if (!window.kakao || !window.kakao.maps) return;
@@ -47,7 +49,7 @@ const Map = ({adress,name}) => {
     const map = new window.kakao.maps.Map(container, options);
 
     const geocoder = new window.kakao.maps.services.Geocoder();
-    geocoder.addressSearch(`${adress}`, function (result, status) {
+    geocoder.addressSearch(`${address}`, function (result, status) {
       if (status === window.kakao.maps.services.Status.OK) {
         const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
         const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);

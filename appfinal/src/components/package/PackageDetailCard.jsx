@@ -57,12 +57,12 @@ const PackageDetailCard = (props) => {
         <div>모니터</div>
       </TextAreaDiv>
       <div>
-        <PictureSlide w={960}h={540} 
+        {/* <PictureSlide w={960}h={540} 
           img1={"https://picsum.photos/300/200"}
           img2={"https://picsum.photos/300/200"}
           img3={"https://picsum.photos/300/200"}
           img4={"https://picsum.photos/300/200"}
-        ></PictureSlide>
+        ></PictureSlide> */}
       </div>
     </Layout>
   );
