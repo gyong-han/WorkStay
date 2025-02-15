@@ -76,7 +76,7 @@ const BtnDiv = styled.div`
   margin-bottom: 50px;
 `;
 
-const StayCancle = () => {
+const SpaceCancle = () => {
   const [showTextarea, setShowTextarea] = useState(false);
 
   const handleRadioChange = (event) => {
@@ -109,7 +109,7 @@ const StayCancle = () => {
           value="stay"
           onChange={handleRadioChange}
         />{" "}
-        예약 정보(숙소, 일정, 결제수단 등)를 변경하고 싶어요.
+        예약 정보(공간, 일정, 결제수단 등)를 변경하고 싶어요.
       </RadioDiv>
       <RadioDiv>
         <RadioInput
@@ -161,4 +161,4 @@ const StayCancle = () => {
   );
 };
 
-export default StayCancle;
+export default SpaceCancle;

@@ -7,19 +7,39 @@ import SpaceResrv from "./SpaceResrv";
 import GuestEdit from "../../guest/guestMenu/GuestEdit";
 import SlogMgmt from "../../guest/guestMenu/SlogMgmt";
 import Bookmark from "../../guest/guestMenu/Bookmark";
-import GuestResrvDetail from "../../guest/guestMenu/GuestResrvDetail";
 import Message from "../../guest/guestMenu/Message";
 import StayCancle from "../../guest/guestMenu/StayCancle";
+import SpaceDetail from "../../guest/guestMenu/SpaceDetail";
+import StayDetail from "../../guest/guestMenu/StayDetail";
+import SpaceCancle from "../../guest/guestMenu/SpaceCancle";
+import SpaceCancleResrv from "./SpaceCancleResrv";
+import StayCancleResrv from "./StayCancleResrv";
 
 const HostMenu = () => {
   return (
     <>
       <Routes>
         <Route
-          path="/*"
+          path="*"
           element={
             <HostMainLayout>
               <StayResrv />
+            </HostMainLayout>
+          }
+        />
+        <Route
+          path="stayCancleReserv"
+          element={
+            <HostMainLayout>
+              <StayCancleResrv />
+            </HostMainLayout>
+          }
+        />
+        <Route
+          path="spaceCancleReserv"
+          element={
+            <HostMainLayout>
+              <SpaceCancleResrv />
             </HostMainLayout>
           }
         />
@@ -64,15 +84,31 @@ const HostMenu = () => {
           }
         />
         <Route
-          path="GuestResrvDetail"
+          path="/spaceReserv/spacedetail/*"
           element={
             <HostMainLayout>
-              <GuestResrvDetail />
+              <SpaceDetail />
             </HostMainLayout>
           }
         />
         <Route
-          path="staycancle"
+          path="/spaceReserv/spacedetail/spacecancle"
+          element={
+            <HostMainLayout>
+              <SpaceCancle />
+            </HostMainLayout>
+          }
+        />
+        <Route
+          path="staydetail/*"
+          element={
+            <HostMainLayout>
+              <StayDetail />
+            </HostMainLayout>
+          }
+        />
+        <Route
+          path="/staydetail/staycancle"
           element={
             <HostMainLayout>
               <StayCancle />

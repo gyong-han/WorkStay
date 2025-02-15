@@ -28,7 +28,7 @@ const BlankDiv = styled.div`
   height: 200px;
 `;
 
-const SpaceResrv = () => {
+const SpaceCancleResrv = () => {
   const navigate = useNavigate();
   const [selectedMenu, setSelectedMenu] = useState("");
 
@@ -44,8 +44,9 @@ const SpaceResrv = () => {
           <StatusSpan
             left="280px"
             id="spaceReserv"
+            onClick={movePath}
             selected={selectedMenu === "spaceReserv"}
-            color="#049dd9"
+            color="#202020"
           >
             예약 내역
           </StatusSpan>
@@ -55,15 +56,14 @@ const SpaceResrv = () => {
             id="spaceCancleReserv"
             onClick={movePath}
             selected={selectedMenu === "spaceCancleReserv"}
-            color="#202020"
+            color="#049dd9"
           >
             취소 내역
           </StatusSpan>
         </div>
         <div>
           {/* map으로 반복 돌리기 / vo 보내기*/}
-          <SpaceReservationCard hideDate={false} />
-          <SpaceReservationCard hideDate={false} />
+          <SpaceReservationCard hideDate={true} />
           {/* <GuestResrvDetail /> */}
         </div>
       </MainDiv>
@@ -72,4 +72,4 @@ const SpaceResrv = () => {
   );
 };
 
-export default SpaceResrv;
+export default SpaceCancleResrv;
