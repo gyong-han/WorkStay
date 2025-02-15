@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import ReservationCard from "../../../components/reservationInfo/ReservationCard";
 import { useNavigate } from "react-router-dom";
-import SpaceReservationCard from "../../../components/reservationInfo/SpaceReservationCard";
 
 const MainDiv = styled.div`
   display: grid;
@@ -13,7 +13,6 @@ const StatusSpan = styled.span`
   margin-left: ${(props) => {
     return props.left;
   }};
-
   color: ${(props) => {
     return props.color;
   }};
@@ -24,11 +23,7 @@ const StatusSpan = styled.span`
   }
 `;
 
-const BlankDiv = styled.div`
-  height: 200px;
-`;
-
-const SpaceResrv = () => {
+const StayCancleResrv = () => {
   const navigate = useNavigate();
   const [selectedMenu, setSelectedMenu] = useState("");
 
@@ -43,33 +38,30 @@ const SpaceResrv = () => {
         <div>
           <StatusSpan
             left="280px"
-            id="spaceReserv"
-            selected={selectedMenu === "spaceReserv"}
-            color="#049dd9"
+            id=""
+            selected={selectedMenu === ""}
+            onClick={movePath}
+            color="#202020"
           >
             예약 내역
           </StatusSpan>
           <StatusSpan left="20px">|</StatusSpan>
           <StatusSpan
             left="20px"
-            id="spaceCancleReserv"
+            id="stayCancleReserv"
             onClick={movePath}
-            selected={selectedMenu === "spaceCancleReserv"}
-            color="#202020"
+            selected={selectedMenu === "stayCancleReserv"}
+            color="#049dd9"
           >
             취소 내역
           </StatusSpan>
         </div>
         <div>
-          {/* map으로 반복 돌리기 / vo 보내기*/}
-          <SpaceReservationCard hideDate={false} />
-          <SpaceReservationCard hideDate={false} />
-          {/* <GuestResrvDetail /> */}
+          <ReservationCard hideDate={true} />
         </div>
       </MainDiv>
-      <BlankDiv />
     </>
   );
 };
 
-export default SpaceResrv;
+export default StayCancleResrv;

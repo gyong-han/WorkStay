@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const DataDiv = styled.div`
@@ -50,13 +50,23 @@ const PriceDiv = styled.div`
   }
 `;
 
-const ReservationCard = () => {
+const ReservationCard = ({ hideDate }) => {
   const navi = useNavigate();
-  const [selectedMenu, setSelectedMenu] = useState("");
+  const location = useLocation(); // 현재 경로 가져오기
 
-  function movePath(e) {
-    setSelectedMenu(e.target.id);
-    navi(`/hostMenu/${e.target.id}`);
+  function movePath() {
+    // 현재 경로가 "/hostMenu/spaceReserv"이면 공간 예약 정보로 이동
+    const isSpaceReserv = location.pathname.includes("spaceReserv");
+
+    const detailPath = isSpaceReserv ? "spacedetail" : "staydetail";
+
+    // 현재 경로의 끝에 '/'이 붙어 있다면 제거
+    const basePath = location.pathname.replace(/\/$/, "");
+
+    // 이동할 경로 생성 후 중복된 슬래시 제거
+    const finalPath = `${basePath}/${detailPath}`.replace(/([^:]\/)\/+/g, "$1");
+
+    navi(finalPath);
   }
 
   return (
@@ -71,14 +81,11 @@ const ReservationCard = () => {
           <TextDiv size="13px">봉전다락 / 성인 2명</TextDiv>
           <div></div>
           <PriceDiv>
-            <TextDiv
-              id="GuestResrvDetail"
-              onClick={movePath}
-              selected={selectedMenu === "GuestResrvDetail"}
-              size="15px"
-            >
-              예약 상세 확인
-            </TextDiv>
+            {!hideDate && (
+              <TextDiv onClick={movePath} size="15px">
+                예약 상세 확인
+              </TextDiv>
+            )}
             <TextDiv size="20px">₩300,000</TextDiv>
           </PriceDiv>
         </DataArea>
