@@ -37,15 +37,15 @@ public class StayController {
             throw new IllegalStateException("[STAY-ERROR-02]STAY ATTACHMENT-LIST FAIL");
         }
     }
-    @GetMapping("detail")
-    public StayVo getFindStayByNo(@RequestBody Long no){
-        try{
-            return stayService.getFindStayByNo(no);
-        }catch (Exception e){
-            log.warn(e.getMessage());
-            throw new IllegalStateException("[STAY-ERROR-03]STAY DETAIL FAIL");
-        }
-    }
+//    @GetMapping("detail")
+//    public StayVo getFindStayByNo(@RequestBody Long no){
+//        try{
+//            return stayService.getFindStayByNo(no);
+//        }catch (Exception e){
+//            log.warn(e.getMessage());
+//            throw new IllegalStateException("[STAY-ERROR-03]STAY DETAIL FAIL");
+//        }
+//    }
 
 
 }
