@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 @Mapper
 public interface HostMapper {
 
@@ -146,4 +148,50 @@ public interface HostMapper {
             VALUES (SEQ_ROOM_ATTACHMENT.NEXTVAL,SEQ_ROOM.CURRVAL,#{originName},#{filePath})
             """)
     int enrollRoomAttach(AttachVo attachVo);
+
+    @Select("""
+            SELECT S.NO,NAME,ADDRESS,FILE_PATH,TO_CHAR(S.ENROLL_DATE, 'YYYY.MM.DD') AS ENROLL_DATE
+            FROM SPACE S
+            JOIN SPACE_ATTACHMENT SA ON (S.NO = SA.SPACE_NO)
+            WHERE HOST_NO = #{hostNo}
+            AND STATUS_NO = #{status}
+            AND THUMBNAIL = 'Y'
+            """)
+    List<SpaceVo> getSpaceApprovalList(String status, String hostNo);
+
+
+    @Select("""
+            SELECT S.NO, S.NAME, ADDRESS,MIN(FILE_PATH) AS FILE_PATH,TO_CHAR(S.ENROLL_DATE, 'YYYY.MM.DD') AS ENROLL_DATE
+            FROM STAY S
+            JOIN ROOM R ON S.NO = R.STAY_NO
+            JOIN ROOM_ATTACHMENT RA ON R.NO = RA.ROOM_NO
+            WHERE HOST_NO = #{hostNo}
+            AND STATUS_NO = #{status}
+            AND THUMBNAIL = 'Y'
+            GROUP BY S.NO, S.NAME, ADDRESS, S.ENROLL_DATE
+            """)
+    List<StayVo> getStayApprovalList(String status, String hostNo);
+
+    @Select("""
+            SELECT S.NO,NAME,ADDRESS,FILE_PATH,TO_CHAR(S.ENROLL_DATE, 'YYYY.MM.DD') AS ENROLL_DATE
+            FROM SPACE S
+            JOIN SPACE_ATTACHMENT SA ON (S.NO = SA.SPACE_NO)
+            WHERE HOST_NO = #{hostNo}
+            AND STATUS_NO = '2'
+            AND THUMBNAIL = 'Y'
+            """)
+    List<SpaceVo> getMySpaceList(String hostNo);
+
+    @Select("""
+            SELECT S.NO, S.NAME, ADDRESS,MIN(FILE_PATH) AS FILE_PATH,TO_CHAR(S.ENROLL_DATE, 'YYYY.MM.DD') AS ENROLL_DATE
+            FROM STAY S
+            JOIN ROOM R ON S.NO = R.STAY_NO
+            JOIN ROOM_ATTACHMENT RA ON R.NO = RA.ROOM_NO
+            WHERE HOST_NO = #{hostNo}
+            AND STATUS_NO = '2'
+            AND THUMBNAIL = 'Y'
+            GROUP BY S.NO, S.NAME, ADDRESS, S.ENROLL_DATE
+            """)
+    List<StayVo> getMyStayList(String hostNo);
+
 }

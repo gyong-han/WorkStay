@@ -18,6 +18,7 @@ import Join from "./pages/login/Join";
 import FindId from "./pages/login/FindId";
 import FindPassword from "./pages/login/FindPassword";
 import NewPassword from "./pages/login/NewPassword";
+import AdminMenu from "./pages/admin/adminMenu/AdminMenu";
 
 function App() {
   return (
@@ -105,6 +106,14 @@ function App() {
             element={
               <Layout>
                 <HostMenu />
+              </Layout>
+            }
+          />
+          <Route
+            path="/adminMenu/*"
+            element={
+              <Layout>
+                <AdminMenu />
               </Layout>
             }
           />
