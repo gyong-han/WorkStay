@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -74,8 +75,9 @@ const PackageContentDiv = styled.div`
     text-decoration: underline solid #FAFAFA;
   }
 `;
-const PackageDisplay = ({img,title,standard,max,price,navigatorHandler,url}) => {
-  
+const PackageDisplay = ({img,title,standard,max,price,titleHandler,url}) => {
+
+
   const priceWon = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   
 
@@ -84,11 +86,12 @@ const PackageDisplay = ({img,title,standard,max,price,navigatorHandler,url}) => 
     <BackImgDiv img={img}>
       <Layout>
         <div></div>
-        <Link to={url}><PackageContentDiv>
+        <Link to={url}><PackageContentDiv onClick={()=>{titleHandler();
+        }}>
           <div>{title}</div>
           <div>기준 {standard}명/최대{max}명</div>
           <div>₩{priceWon}</div>
-          <div><span onClick={navigatorHandler}>예약하기</span></div>
+          <div><span>예약하기</span></div>
         </PackageContentDiv>
         </Link>
       </Layout>

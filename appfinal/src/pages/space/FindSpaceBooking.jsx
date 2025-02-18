@@ -1,5 +1,4 @@
-//findspaceBooking
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
@@ -84,25 +83,35 @@ const IconLayoutDiv = styled.div`
 const FindSpaceBooking = () => {
 
   const{x} = useParams();
-  const spaceVo = useSelector((state) => state.space);
+  console.log("x ::::",x);
+  const [selectDate,setSelectDate] = useState("");
+  const spaceVo = useSelector((state)=>state.space);
   
+ 
+
   return (
     <Layout>
       <div><h1>BOOKING</h1></div>
       <DateDiv>
         <div>
-          <div>{spaceVo.name}</div>
-          <CalendarLayout><CalendarTime type={"text"}>날짜를 선택해주세요<MdOutlineKeyboardArrowDown /></CalendarTime></CalendarLayout>
+          <div>인더플럼</div>
+          <CalendarLayout>
+          {!selectDate ? (
+          <CalendarTime type={"text"} setSelectDate={setSelectDate}>날짜를 입력해주세요.</CalendarTime>
+          ) : (
+            <CalendarTime type={"text"} setSelectDate={setSelectDate}>{selectDate}</CalendarTime>
+          )}
+          </CalendarLayout>
           <div><Link to={`/findspace/booking/${x}`}><Btn w={150} h={35} bg={"#049DD9"} size={"20px"} >예약하기</Btn></Link></div>
         </div> 
         </DateDiv>
-      <ThirdDiv><PackageDetailCard></PackageDetailCard></ThirdDiv>
+      <ThirdDiv><PackageDetailCard title={spaceVo.packageType} imgPaths ={spaceVo.attachmentFilePaths}></PackageDetailCard></ThirdDiv>
       <ContentLayout>
         <TitleDiv>FEATURES</TitleDiv>
         <IconLayoutDiv>
-          <div>와이파이</div>
-          <div>모니터</div>
-          <div>빔프로젝터</div>
+          {spaceVo.features.map((vo,idx)=>{
+            return <div key={idx}>{vo}</div>
+          })}
         </IconLayoutDiv>
       </ContentLayout>
       <ContentLayout>
