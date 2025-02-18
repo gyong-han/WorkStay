@@ -12,6 +12,7 @@ import {
   RESET,
 } from "../../redux/counterSlice";
 import { RiResetRightFill } from "react-icons/ri";
+import { setMemberCnt } from "../../redux/spaceSlice";
 
 const Overlay = styled.div`
   position: fixed;
@@ -163,6 +164,8 @@ const People = ({ isOpen, onClose }) => {
     console.log("성인 : ", adult);
     console.log("아동 : ", child);
     console.log("영아 : ", baby);
+    
+    dispatch(setMemberCnt({adult,child,baby}))
     onClose();
   }
 

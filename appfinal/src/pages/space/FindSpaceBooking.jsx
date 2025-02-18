@@ -86,6 +86,9 @@ const FindSpaceBooking = () => {
   console.log("x ::::",x);
   const [selectDate,setSelectDate] = useState("");
   const spaceVo = useSelector((state)=>state.space);
+
+  const price = spaceVo.packageType === '낮 패키지'?spaceVo.daytimePrice :spaceVo.nightPrice;
+ 
   
  
 
@@ -96,16 +99,17 @@ const FindSpaceBooking = () => {
         <div>
           <div>인더플럼</div>
           <CalendarLayout>
-          {!selectDate ? (
+          {!spaceVo.reservationDate ? (
           <CalendarTime type={"text"} setSelectDate={setSelectDate}>날짜를 입력해주세요.</CalendarTime>
           ) : (
-            <CalendarTime type={"text"} setSelectDate={setSelectDate}>{selectDate}</CalendarTime>
+            <CalendarTime type={"text"} setSelectDate={setSelectDate}>{spaceVo.reservationDate}</CalendarTime>
           )}
           </CalendarLayout>
           <div><Link to={`/findspace/booking/${x}`}><Btn w={150} h={35} bg={"#049DD9"} size={"20px"} >예약하기</Btn></Link></div>
         </div> 
         </DateDiv>
-      <ThirdDiv><PackageDetailCard title={spaceVo.packageType} imgPaths ={spaceVo.attachmentFilePaths}></PackageDetailCard></ThirdDiv>
+      <ThirdDiv><PackageDetailCard title={spaceVo.packageType} imgPaths ={spaceVo.attachmentFilePaths} price={price} max={spaceVo.maxGuest} min={spaceVo.standardGuest}>
+        </PackageDetailCard></ThirdDiv>
       <ContentLayout>
         <TitleDiv>FEATURES</TitleDiv>
         <IconLayoutDiv>
