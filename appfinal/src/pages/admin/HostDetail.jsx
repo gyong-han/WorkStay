@@ -29,7 +29,7 @@ const HostArea = styled.div`
 
 const HostTitle = styled.div`
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 600;
 `;
 
 const HostData = styled.div`
@@ -72,46 +72,71 @@ const ArrowDiv = styled.div`
 `;
 
 const HostDetail = () => {
-  // const { stayNum } = useParams();
-  //useEffect로 호스트 정보 가져오기(stayNum)
+  const { hostNo } = useParams();
 
-  const [idx, setIdx] = useState(0);
-  const [data, setData] = useState({});
+  const [stayIdx, setStayIdx] = useState(0);
+  const [stayData, setStayData] = useState({});
+  const [stayList, setStayList] = useState([]);
 
-  const ImgArr = [];
-  ImgArr.push({
-    title: "title1",
-    address: "address1",
-    phone: "phone1",
-    email: "email1",
-    img: "https://www.lotteresort.com/static/upload/images/20221219/738ac016-8071-4d0d-9f9c-ba5ecfa93e95.jpg",
-  });
-  ImgArr.push({
-    title: "title2",
-    address: "address2",
-    phone: "phone2",
-    email: "email2",
-    img: "https://www.shilla.net/images/contents/accmo/ACCMO_INDEX/R0000000ZZO4_KR.jpg",
-  });
-  ImgArr.push({
-    title: "title3",
-    address: "address3",
-    phone: "phone3",
-    email: "email3",
-    img: "https://blog.kakaocdn.net/dn/bfXTeM/btsCWJe6xzm/NcKu41KnIx0nNqrf8YAEO1/img.jpg",
-  });
+  const [spaceIdx, setSpaceIdx] = useState(0);
+  const [spaceData, setSpaceData] = useState({});
+  const [spaceList, setSpaceList] = useState([]);
 
-  const nextData = () => {
-    setIdx((prev) => (prev === ImgArr.length - 1 ? 0 : prev + 1));
+  const [hostData, setHostData] = useState({});
+
+  const nextStayData = () => {
+    setStayIdx((prev) => (prev === stayList.length - 1 ? 0 : prev + 1));
   };
 
-  const preData = () => {
-    setIdx((prev) => (prev === 0 ? ImgArr.length - 1 : prev - 1));
+  const preStayData = () => {
+    setStayIdx((prev) => (prev === 0 ? stayList.length - 1 : prev - 1));
+  };
+
+  const nextSpaceData = () => {
+    setSpaceIdx((prev) => (prev === spaceList.length - 1 ? 0 : prev + 1));
+  };
+
+  const preSpaceData = () => {
+    setSpaceIdx((prev) => (prev === 0 ? spaceList.length - 1 : prev - 1));
   };
 
   useEffect(() => {
-    setData(ImgArr[idx]);
-  }, [idx]);
+    const fd = new FormData();
+    fd.append("hostNo", hostNo);
+    fetch("http://127.0.0.1:8080/api/admin/hostDetail", {
+      method: "POST",
+      body: fd,
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        setHostData(data.hostVo);
+        setStayList(data.stayList);
+        setSpaceList(data.spaceList);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (stayList.length > 0) {
+      setStayData(stayList[stayIdx]);
+    }
+  }, [stayIdx, stayList]);
+
+  useEffect(() => {
+    if (spaceList.length > 0) {
+      setSpaceData(spaceList[spaceIdx]);
+    }
+  }, [spaceIdx, stayList]);
+
+  const formatPhoneNumber = (phone) => {
+    phone = String(phone);
+    if (phone.length > 10) {
+      return phone.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
+    } else if (phone.length > 9) {
+      return phone.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+    } else {
+      return phone.replace(/(\d{2})(\d{3})(\d{4})/, "$1-$2-$3");
+    }
+  };
 
   return (
     <>
@@ -122,56 +147,66 @@ const HostDetail = () => {
         <HostDataArea>
           <HostArea>
             <div>
-              <HostTitle>이메일</HostTitle>
-              <HostData>eeueel@naver.com</HostData>
-            </div>
-            <div>
               <HostTitle>이름</HostTitle>
-              <HostData>abcdefg123@kh.co.kr</HostData>
+              <HostData>{hostData.hostName}</HostData>
             </div>
             <div>
               <HostTitle>전화번호</HostTitle>
-              <HostData>01011112222</HostData>
+              <HostData>{formatPhoneNumber(hostData.phone)}</HostData>
+            </div>
+            <div>
+              <HostTitle>이메일</HostTitle>
+              <HostData>{hostData.email}</HostData>
             </div>
           </HostArea>
-          <DataArea top="40px">
-            <DataTitle>숙소</DataTitle>
-            <DataContent>
-              {/* 클릭시 datacard에 넣어주는 배열 바꾸기 */}
-              <ArrowDiv justify="right" onClick={preData}>
-                ❮
-              </ArrowDiv>
-              <div></div>
-              {/* fetch로 가져온 값 넣어주기 */}
-              <DataCard
-                title={data.title}
-                address={data.address}
-                phone={data.phone}
-                email={data.email}
-                img={data.img}
-              />
-              <div></div>
-              <ArrowDiv justify="left" onClick={nextData}>
-                ❯
-              </ArrowDiv>
-            </DataContent>
-          </DataArea>
-          <DataArea top="80px">
-            <DataTitle>공간</DataTitle>
-            <DataContent>
-              <ArrowDiv justify="center">❮</ArrowDiv>
-              <div></div>
-              <DataCard
-                title={data.title}
-                address={data.address}
-                phone={data.phone}
-                email={data.email}
-                img={data.img}
-              />
-              <div></div>
-              <ArrowDiv justify="left">❯</ArrowDiv>
-            </DataContent>
-          </DataArea>
+          {stayList.length > 0 ? (
+            <DataArea top="40px">
+              <DataTitle>숙소</DataTitle>
+              <DataContent>
+                <ArrowDiv justify="right" onClick={preStayData}>
+                  ❮
+                </ArrowDiv>
+                <div></div>
+                <DataCard
+                  title={stayData.name}
+                  address={stayData.address}
+                  phone={stayData.phone}
+                  sns={stayData.sns}
+                  img={stayData.filePath}
+                />
+                <div></div>
+                <ArrowDiv justify="left" onClick={nextStayData}>
+                  ❯
+                </ArrowDiv>
+              </DataContent>
+            </DataArea>
+          ) : (
+            <></>
+          )}
+          {spaceList.length > 0 ? (
+            <DataArea top="80px">
+              <DataTitle>공간</DataTitle>
+              <DataContent>
+                <ArrowDiv justify="center" onClick={preSpaceData}>
+                  ❮
+                </ArrowDiv>
+                <div></div>
+                <DataCard
+                  title={spaceData.name}
+                  address={spaceData.address}
+                  phone={spaceData.phone}
+                  sns={spaceData.sns}
+                  img={spaceData.filePath}
+                />
+                <div></div>
+                <ArrowDiv justify="left" onClick={nextSpaceData}>
+                  ❯
+                </ArrowDiv>
+              </DataContent>
+            </DataArea>
+          ) : (
+            <></>
+          )}
         </HostDataArea>
       </MainDiv>
     </>
