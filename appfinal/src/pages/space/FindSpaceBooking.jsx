@@ -1,3 +1,4 @@
+//findspaceBooking
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -6,6 +7,7 @@ import PackageDetailCard from '../../components/package/PackageDetailCard';
 import Infomation from '../../components/Infomation';
 import Btn from '../../components/Btn';
 import CalendarTime from '../../components/FilterBar/CalendalTime';
+import { useSelector } from 'react-redux';
 
 
 
@@ -82,20 +84,19 @@ const IconLayoutDiv = styled.div`
 const FindSpaceBooking = () => {
 
   const{x} = useParams();
-  console.log("x ::::",x);
+  const spaceVo = useSelector((state) => state.space);
   
-
   return (
     <Layout>
       <div><h1>BOOKING</h1></div>
       <DateDiv>
         <div>
-          <div>인더플럼</div>
+          <div>{spaceVo.name}</div>
           <CalendarLayout><CalendarTime type={"text"}>날짜를 선택해주세요<MdOutlineKeyboardArrowDown /></CalendarTime></CalendarLayout>
           <div><Link to={`/findspace/booking/${x}`}><Btn w={150} h={35} bg={"#049DD9"} size={"20px"} >예약하기</Btn></Link></div>
         </div> 
         </DateDiv>
-      <ThirdDiv><PackageDetailCard information={"SPACE INFORMATION"} title={"낮 패키지"}></PackageDetailCard></ThirdDiv>
+      <ThirdDiv><PackageDetailCard></PackageDetailCard></ThirdDiv>
       <ContentLayout>
         <TitleDiv>FEATURES</TitleDiv>
         <IconLayoutDiv>

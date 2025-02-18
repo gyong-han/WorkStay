@@ -1,6 +1,8 @@
+//PackageDetailCard
 import React from 'react';
 import styled from 'styled-components';
 import PictureSlide from '../listcomponents/PictureSlide';
+import { useSelector } from 'react-redux';
 
 const Layout = styled.div`
   width: 100%;
@@ -36,15 +38,18 @@ const ContentDiv = styled.div`
 
 `;
 
-const PackageDetailCard = (props) => {
+const PackageDetailCard = () => {
+  const spaceVo = useSelector((state)=>state.space);
+
+  const priceWon = spaceVo.daytimePrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   return (
     <Layout>
       <div></div>
       <div></div>
       <TextAreaDiv>
-        <div>{props.information}</div>
-        <div>{props.title}</div>
-        <div>₩120,000</div>
+        <div>{spaceVo.information}</div>
+        <div>{spaceVo.title}</div>
+        <div>₩{priceWon}</div>
         <ContentDiv>넉넉한 개인 책상, 하이엔드 사무의자, 전좌석 모니터와 회의실까지 ‘Work’의
           본질을 놓치지 않으면서 오션뷰 마운틴뷰를 모두 가지고 있는 최고, 최대 규모의
           프리미엄 워케이션 오피스입니다.
@@ -57,12 +62,9 @@ const PackageDetailCard = (props) => {
         <div>모니터</div>
       </TextAreaDiv>
       <div>
-        {/* <PictureSlide w={960}h={540} 
-          img1={"https://picsum.photos/300/200"}
-          img2={"https://picsum.photos/300/200"}
-          img3={"https://picsum.photos/300/200"}
-          img4={"https://picsum.photos/300/200"}
-        ></PictureSlide> */}
+        <PictureSlide w={960}h={540} 
+          imgPaths={spaceVo.attachmentFilePaths}
+        ></PictureSlide>
       </div>
     </Layout>
   );

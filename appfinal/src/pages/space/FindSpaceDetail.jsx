@@ -4,13 +4,14 @@ import { RxShare2 } from "react-icons/rx";
 import { IoBookmarkOutline } from "react-icons/io5";
 import { IoBookmark } from "react-icons/io5";
 import PictureSlide from '../../components/listcomponents/PictureSlide';
-import { MdOutlineKeyboardArrowDown } from "react-icons/md"
 import PackageDisplay from '../../components/package/PackageDisplay';
 import Map from '../../components/map/Map';
 import Infomation from '../../components/Infomation';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import CalendarTime from '../../components/FilterBar/CalendalTime';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSpaceVo } from '../../redux/spaceSlice';
 
 const Layout =styled.div`
 width: 100%;
@@ -160,17 +161,12 @@ const PackageDiv = styled.div`
   }
 `;
 
-
-
-
 const FindSpaceDetail = () => {
   const [selectDate,setSelectDate] = useState("");
   const [bookMark,setBookMark] = useState();
-  const [detailData,setDetailData] = useState({});
-  const [address,setAddress] = useState("zzzzzz");
-  const [attachmentArr,setAttachmentArr] = useState([]);
-
+  const dispatch = useDispatch();
   const {x} = useParams();
+  const spaceVo = useSelector((state) => state.space);
   // console.log(x);
 
   useEffect(()=>{
@@ -184,21 +180,13 @@ const FindSpaceDetail = () => {
     .then((resp)=>resp.json())
     .then((data)=>{
       console.log("data ::: ",data);
-      console.log("배열 ::::",data.attachmentFilePaths);
-      setAttachmentArr(data.attachmentFilePaths);
-      // setAttachmentArr((prev)=>{return[
-      // ]});
-      
-      setDetailData(data);
-     
-      
+      dispatch(setSpaceVo(data));
     })
-  },[])
+  },[x,dispatch])
+useEffect(()=>{
+  console.log("spaceVo2 ::: " ,spaceVo);
+},[spaceVo]);
 
-  setTimeout(()=>{
-    setAddress(detailData.address)
-  },[500])
-  
 
   const park = "4";
   let parking=""
@@ -207,14 +195,6 @@ const FindSpaceDetail = () => {
   }else{
     parking = "스페이스 공간 주차불가능";
   }
-
-  
-  // const address=detailData.address;
-
-   
-
- 
-  
 
   const navi=()=>{
     console.log("good");
@@ -226,8 +206,8 @@ const FindSpaceDetail = () => {
     <Layout>
       <TitleDiv>
         <div>
-          <h1>{detailData.name}</h1>
-          <span>{detailData.address}</span>
+          <h1>{spaceVo.name}</h1>
+          <span>{spaceVo.address}</span>
         </div>
         <div></div>
         <InconTitleDiv>
@@ -244,7 +224,7 @@ const FindSpaceDetail = () => {
         </TitleDiv>
       <div>
         <PictureSlide w={'1500'} h={'500'} 
-        imgPaths={attachmentArr}
+        imgPaths={spaceVo.attachmentFilePaths}
         main={true}
       >
       </PictureSlide>
@@ -276,9 +256,9 @@ const FindSpaceDetail = () => {
       <div>
         <div></div>
         <div>
-          <div>{detailData.tagline}</div>
-          <div>{detailData.name}</div>
-          <div>{detailData.introduction}</div>
+          <div>{spaceVo.tagline}</div>
+          <div>{spaceVo.name}</div>
+          <div>{spaceVo.introduction}</div>
           
           </div>
         <div></div>
@@ -286,13 +266,13 @@ const FindSpaceDetail = () => {
       <div>
         <div></div>
         <div>
-          {detailData.name}의 위치는 [{detailData.address}]입니다.
+          {spaceVo.name}의 위치는 [{spaceVo.address}]입니다.
           <br></br>
           {parking}
         </div>
         <div></div>
       </div>
-      <div><Map address={address} name={detailData.name}>space</Map></div>
+      <div><Map address={spaceVo.address} name={spaceVo.name}>space</Map></div>
       <div></div>
       <Infomation morning={150000} night={820000} standard={10} max={20}></Infomation>
     </Layout>
