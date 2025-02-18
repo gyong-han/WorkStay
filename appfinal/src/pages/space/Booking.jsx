@@ -7,6 +7,7 @@ import Calendar from "../../components/FilterBar/Calendal";
 import { Accordion } from "react-bootstrap";
 import SelectPerson from "../stay/stayComponent/SelectPerson";
 import CalendarTime from "../../components/FilterBar/CalendalTime";
+import { useSelector } from "react-redux";
 
 
 const Layout = styled.div`
@@ -348,6 +349,7 @@ const Booking = () => {
 
   // 날짜 선택
   const [selectDate,setSelectDate] = useState("");
+  const spaceVo = useSelector((state)=>state.space);
 
   return (
     <Layout>
@@ -355,10 +357,10 @@ const Booking = () => {
       <DateWrapper>
         
           <DateSpan>
-          {!selectDate ? (
+          {!spaceVo.reservationDate ? (
           <CalendarTime type={"text"} setSelectDate={setSelectDate}>날짜 선택</CalendarTime>
           ) : (
-            <CalendarTime type={"text"} setSelectDate={setSelectDate}>{selectDate}</CalendarTime>
+            <CalendarTime type={"text"} setSelectDate={setSelectDate}>{spaceVo.reservationDate}</CalendarTime>
           )}
             <FaAngleDown />
           </DateSpan>
@@ -376,9 +378,11 @@ const Booking = () => {
         <ReservationDiv>
           <InfoText>예약일</InfoText>
           <Info>
-            {/* {dateRange[0] && dateRange[1]
-              ? `${dateRange[0].toLocaleDateString()} ~ ${dateRange[1].toLocaleDateString()}`
-              : "날짜를 선택해주세요."} */}
+          {!spaceVo.reservationDate ? (
+          <CalendarTime type={"text"}>날짜를 입력해주세요.</CalendarTime>
+          ) : (
+            <CalendarTime type={"text"} position={true}>{spaceVo.reservationDate}</CalendarTime>
+          )}
           </Info>
         </ReservationDiv>
         <ReservationLine />
@@ -400,7 +404,7 @@ const Booking = () => {
         <ReservationDiv>
           <InfoText>인원</InfoText>
           <Info>
-            <SelectPerson maxAdults={4} maxChildren={4} maxInfant={4} />
+            <SelectPerson maxAdults={4} maxChildren={4} maxInfant={4} adultCnt={spaceVo.adult} childCnt={spaceVo.child} babyCnt={spaceVo.baby}/>
           </Info>
         </ReservationDiv>
         <ReservationLine />

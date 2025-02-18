@@ -21,6 +21,10 @@ const spaceSlice = createSlice({
     tagline:'',
     packageType : '',
     features :[],
+    reservationDate:'',
+    adult:0,
+    child:0,
+    baby:0,
 
   },
   reducers: {
@@ -44,11 +48,21 @@ const spaceSlice = createSlice({
     },
     setPackageType : (state,action)=>{
       state.packageType = action.payload.packageType;
-    }
+    },
+    setreservationDate : (state,action) =>{
+      state.reservationDate = action.payload;
+    },
+    setMemberCnt : (state,action) =>{
+      
+      state.adult = action.payload.adult;
+      state.child = action.payload.kids;
+      state.baby = action.payload.baby;
+    },
+
     
   },
 });
 
 
-export const { setSpaceVo,setPackageType } = spaceSlice.actions;
+export const { setSpaceVo,setPackageType,setreservationDate,setMemberCnt } = spaceSlice.actions;
 export default spaceSlice.reducer;
