@@ -9,6 +9,6 @@ public interface GuestMapper {
     @Insert("""
             INSERT INTO MEMBER(NO, EMAIL, PWD, NAME) VALUES(SEQ_MEMBER.NEXTVAL , #{email}, #{pwd} , #{name})
             """)
-    void join(GuestVo vo);
+    int join(GuestVo vo);
 
 }

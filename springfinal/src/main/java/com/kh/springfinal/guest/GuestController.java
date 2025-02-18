@@ -17,13 +17,22 @@ public class GuestController {
     @PostMapping("join")
     public void join(@RequestBody GuestVo vo){
         try{
-            service.join(vo);
+            GuestVo joinVo = service.join(vo);
+            System.out.println("joinVo = " + joinVo);
         }catch(Exception e) {
             throw new IllegalStateException("[GUEST-JOIN] JOIN FAIL ...");
         }
     }
 
     //로그인
+    @PostMapping("login")
+    public void login(@RequestBody GuestVo vo){
+        try{
+            service.login(vo);
+        }catch(Exception e) {
+            throw new IllegalStateException("[GUEST-LOGIN] EMAIL-LOGIN FAIL ...");
+        }
+    }
 
     //아이디 찾기
 

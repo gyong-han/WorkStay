@@ -1,21 +1,21 @@
 import { useState } from "react";
 
-const useFormData = (initState, f01) => {
+const useFormData = (initState, callback) => {
   const [formData, setFormData] = useState(initState);
 
   const handleInputChange = (e) => {
-    setFormData((prev) => {
-      return {
-        ...prev,
-        [e.target.name]: e.target.value,
-      };
-    });
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e, onSubmit) => {
     e.preventDefault();
-
-    f01(formData);
+    if (onSubmit) {
+      onSubmit(formData); // onSubmit 함수 실행
+    }
+    callback(formData); // 기존 API 요청 실행
   };
 
   return { formData, handleInputChange, handleSubmit };

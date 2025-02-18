@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { FaCheck } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useFormData } from "../../utils/useFormData";
+import Alert from "../../components/Alert";
 
 const MainDiv = styled.div`
   display: grid;
@@ -98,6 +99,19 @@ const PasswordCheckInput = styled.div`
   gap: 20px;
 `;
 
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
+
 const PasswordCheck = styled.span`
   color: ${(props) => (props.valid ? "#049DD9" : "#202020")};
 `;
@@ -114,6 +128,7 @@ const Join = () => {
   const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [password, setPassword] = useState("");
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
   const navi = useNavigate();
 
   const callback = (formData) => {
@@ -129,7 +144,7 @@ const Join = () => {
     fetch(url, option)
       .then((resp) => resp.text())
       .then((data) => {
-        navi("/login");
+        // navi("/login");
       });
   };
 
@@ -176,9 +191,19 @@ const Join = () => {
     setNameError(validateName(value));
   };
 
+  const onSubmit = (data) => {
+    console.log("회원가입 성공:", data);
+    setIsAlertOpen(true);
+  };
+
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
+    navi("/login"); // 확인 버튼 누르면 로그인 페이지로 이동
+  };
+
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={(e) => handleSubmit(e, onSubmit)}>
         <MainDiv>
           <StyleMain>JOIN</StyleMain>
 
@@ -260,6 +285,19 @@ const Join = () => {
           <BtnTag type="submit">가입하기</BtnTag>
         </MainDiv>
       </form>
+
+      {isAlertOpen && (
+        <Backdrop>
+          <Alert
+            title="로그인"
+            titleColor="#049dd9"
+            message="회원가입 되었습니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose}
+          />
+        </Backdrop>
+      )}
     </>
   );
 };
