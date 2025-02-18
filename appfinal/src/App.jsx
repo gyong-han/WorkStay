@@ -42,7 +42,7 @@ function App() {
             }
           />
           <Route
-            path="/findspace"
+            path="/findspace/*"
             element={
               <Layout>
                 <FindSpace />
