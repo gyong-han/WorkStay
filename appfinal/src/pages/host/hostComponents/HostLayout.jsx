@@ -59,10 +59,10 @@ const MenuDiv = styled.div`
 const HostLayout = ({ children }) => {
   const navigate = useNavigate();
   const [selectedMenu, setSelectedMenu] = useState("");
+  localStorage.setItem("selected", "");
 
   function movePath(e) {
     setSelectedMenu(e.target.id);
-
     navigate(`/hostMenu/hostMgmtMenu/${e.target.id}`);
   }
 

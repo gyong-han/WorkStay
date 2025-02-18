@@ -85,4 +85,32 @@ public class HostController {
 
         return 1;
     }
+
+    //공간 승인대기 리스트 가져오기
+    @PostMapping("spaceApprovalList")
+    public List<SpaceVo> getSpaceApprovalList(@RequestParam String status, @RequestParam String hostNo) {
+        List<SpaceVo> spaceApprovalList = service.getSpaceApprovalList(status,hostNo);
+        return spaceApprovalList;
+    }
+
+    //숙소 승인대기 리스트 가져오기
+    @PostMapping("stayApprovalList")
+    public List<StayVo> getStayApprovalList(@RequestParam String status, @RequestParam String hostNo){
+        List<StayVo> stayApporvalList = service.getStayApprovalList(status,hostNo);
+        return stayApporvalList;
+    }
+
+    //내 공간 리스트 가져오기
+    @PostMapping("mySpace")
+    public List<SpaceVo> mySpace(@RequestParam String hostNo){
+        List<SpaceVo> mySpaceList = service.getMySpaceList(hostNo);
+        return mySpaceList;
+    }
+
+    //내 숙소 리스트 가져오기
+    @PostMapping("myStay")
+    public List<StayVo> myStay(@RequestParam String hostNo){
+        List<StayVo> myStayList = service.getMyStayList(hostNo);
+        return myStayList;
+    }
 }
