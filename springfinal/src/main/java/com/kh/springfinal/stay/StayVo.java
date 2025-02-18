@@ -24,5 +24,5 @@ public class StayVo {
     private String standardGuest;
     private String maxGuest;
     private String hostPermission;
-    private String filepath;
+    private String filePath;
 }
