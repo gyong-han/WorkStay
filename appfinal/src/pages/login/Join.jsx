@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { FaCheck } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { useFormData } from "../../utils/useFormData";
 
 const MainDiv = styled.div`
   display: grid;
@@ -112,6 +114,29 @@ const Join = () => {
   const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [password, setPassword] = useState("");
+  const navi = useNavigate();
+
+  const callback = (formData) => {
+    const url = "http://127.0.0.1:8080/api/guest/join";
+    const option = {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    };
+
+    fetch(url, option)
+      .then((resp) => resp.text())
+      .then((data) => {
+        navi("/login");
+      });
+  };
+
+  const { formData, handleInputChange, handleSubmit } = useFormData(
+    {},
+    callback
+  );
 
   // 비밀번호 조건 검사 함수
   const checkPasswordConditions = (password) => {
@@ -153,7 +178,7 @@ const Join = () => {
 
   return (
     <>
-      <form>
+      <form onSubmit={handleSubmit}>
         <MainDiv>
           <StyleMain>JOIN</StyleMain>
 
@@ -162,7 +187,11 @@ const Join = () => {
               type="text"
               placeholder="이메일을 입력해주세요."
               value={email}
-              onChange={handleEmailChange}
+              name="email"
+              onChange={(event) => {
+                handleEmailChange(event);
+                handleInputChange(event);
+              }}
             />
             {emailError && <ErrorMessage>{emailError}</ErrorMessage>}
           </StyleInput>
@@ -172,8 +201,12 @@ const Join = () => {
               type="password"
               placeholder="비밀번호를 입력 해주세요."
               value={password}
+              name="pwd"
               maxLength={20}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                handleInputChange(e);
+              }}
             />
             <div style={{ marginTop: "10px" }}>
               <PasswordCheckInput>
@@ -207,7 +240,11 @@ const Join = () => {
               type="text"
               placeholder="이름을 입력해주세요."
               value={name}
-              onChange={handleNameChange}
+              name="name"
+              onChange={(event) => {
+                handleNameChange(event);
+                handleInputChange(event);
+              }}
             />
             {nameError && <ErrorMessage>{nameError}</ErrorMessage>}
           </StyleInput>
