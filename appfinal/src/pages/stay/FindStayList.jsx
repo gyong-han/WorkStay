@@ -195,6 +195,7 @@ const FindStayList = () => {
         <InnerLayoutDiv>
           {stayVoList.map((vo, idx) => {
             const voImgPaths = imgPath[idx][vo.no]; //<<<<<<<<<<<<<<객체로 담긴 배열을 풀어내는 과정입니다.
+            console.log("voIMG", voImgPaths);
 
             return (
               <Fragment key={vo.no}>
