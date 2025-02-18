@@ -19,9 +19,14 @@ public class StayService {
         return voList;
     }
 
-    public List<AttachmentVo> stayGetAttachmentList() {
+    public List<StayAttachmentVo> stayGetAttachmentList() {
         return stayMapper.stayGetAttachmentList();
     }
+
+//    public void findStayByName(String name) {
+//        return stayMapper.findStayByName(name);
+//    }
+
 
 //    public StayVo getFindStayByNo(Long no) {
 //
