@@ -2,6 +2,8 @@ package com.kh.springfinal.space;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class SpaceVo {
     private Long no;
@@ -20,10 +22,12 @@ public class SpaceVo {
     private String introduction;
     private String delYn;
     private String enrollDate;
-    private String modifiyDate;
+    private String modifyDate;
     private String brn;
     private String filePath;
     private String[] attachmentFilePaths;
+    private List<String> features;
+    private String hostName;
 
 
 

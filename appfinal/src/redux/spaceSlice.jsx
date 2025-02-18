@@ -20,6 +20,8 @@ const spaceSlice = createSlice({
     standardGuest:'',
     tagline:'',
     packageType : '',
+    features :[],
+
   },
   reducers: {
     setSpaceVo : (state,action)=>{
@@ -38,9 +40,10 @@ const spaceSlice = createSlice({
     state.sns = action.payload.sns;
     state.standardGuest= action.payload.standardGuest;
     state.tagline= action.payload.tagline;
+    state.features =action.payload.features;
     },
     setPackageType : (state,action)=>{
-      state.packageType = action.payload.packageTpye;
+      state.packageType = action.payload.packageType;
     }
     
   },

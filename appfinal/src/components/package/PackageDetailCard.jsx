@@ -1,8 +1,6 @@
-//PackageDetailCard
 import React from 'react';
 import styled from 'styled-components';
 import PictureSlide from '../listcomponents/PictureSlide';
-import { useSelector } from 'react-redux';
 
 const Layout = styled.div`
   width: 100%;
@@ -38,21 +36,18 @@ const ContentDiv = styled.div`
 
 `;
 
-const PackageDetailCard = () => {
-  const spaceVo = useSelector((state)=>state.space);
-
-  const priceWon = spaceVo.daytimePrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+const PackageDetailCard = (props) => {
   return (
     <Layout>
       <div></div>
       <div></div>
       <TextAreaDiv>
-        <div>{spaceVo.information}</div>
-        <div>{spaceVo.title}</div>
-        <div>₩{priceWon}</div>
-        <ContentDiv>넉넉한 개인 책상, 하이엔드 사무의자, 전좌석 모니터와 회의실까지 ‘Work’의
-          본질을 놓치지 않으면서 오션뷰 마운틴뷰를 모두 가지고 있는 최고, 최대 규모의
-          프리미엄 워케이션 오피스입니다.
+        <div>{props.information}</div>
+        <div>{props.title}</div>
+        <div>₩120,000</div>
+        <ContentDiv>편리한 위치와 다양한 편의 시설을 갖춘 공간을 제공합니다.<br></br>
+회의, 행사, 워크숍 등 다양한 용도로 최적화된 공간으로 고객님의 요구에 맞춰 제공합니다.
+편안하고 전문적인 환경에서 비즈니스와 이벤트를 성공적으로 개최해 보세요.
         </ContentDiv>
         <div>체크인 09:00 / 체크아웃 18:00</div>
         <div>기준 인원 6명 (최대 12 명)</div>
@@ -63,7 +58,7 @@ const PackageDetailCard = () => {
       </TextAreaDiv>
       <div>
         <PictureSlide w={960}h={540} 
-          imgPaths={spaceVo.attachmentFilePaths}
+          imgPaths={props.imgPaths}
         ></PictureSlide>
       </div>
     </Layout>

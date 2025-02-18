@@ -11,7 +11,7 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import CalendarTime from '../../components/FilterBar/CalendalTime';
 import { useDispatch, useSelector } from 'react-redux';
-import { setSpaceVo } from '../../redux/spaceSlice';
+import { setPackageType, setSpaceVo } from '../../redux/spaceSlice';
 
 const Layout =styled.div`
 width: 100%;
@@ -183,9 +183,7 @@ const FindSpaceDetail = () => {
       dispatch(setSpaceVo(data));
     })
   },[x,dispatch])
-useEffect(()=>{
-  console.log("spaceVo2 ::: " ,spaceVo);
-},[spaceVo]);
+
 
 
   const park = "4";
@@ -243,13 +241,13 @@ useEffect(()=>{
       <PackageDiv>
         <div>PACKAGE</div>
         <div>
-          <PackageDisplay img={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAwcf09BODgX7VbhRf07dq9mBKXiQwQxzG-Q&s"}
-            title={"낮 패키지"} standard={"6"} max={"12"} price={"120000"} navigatorHandler={navi} url={`/findspace/spacebooking/${x}`} ></PackageDisplay>
+          <PackageDisplay img={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAwcf09BODgX7VbhRf07dq9mBKXiQwQxzG-Q&s"} titleHandler={()=>{dispatch(setPackageType({packageType:"낮 패키지"}))}}
+            title={"낮 패키지"} standard={"6"} max={"12"} price={spaceVo.daytimePrice} navigatorHandler={navi} url={`/findspace/spacebooking/${x}`} imgPaths={spaceVo.attachmentFilePaths}></PackageDisplay>
         </div>
         <div></div>
         <div>
-          <PackageDisplay img={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPVr3w8Pov0BQ0sJlrmKaS-P8Nz8ONNF-VUQ&s"}
-            title={"밤 패키지"} standard={"4"} max={"8"} price={"150000"} navigatorHandler={navi} url={`/findspace/spacebooking/${x}`} ></PackageDisplay>
+          <PackageDisplay img={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPVr3w8Pov0BQ0sJlrmKaS-P8Nz8ONNF-VUQ&s"} titleHandler={()=>{dispatch(setPackageType({packageType :"밤 패키지"}))}}
+            title={"밤 패키지"} standard={"4"} max={"8"} price={spaceVo.nightPrice} navigatorHandler={navi} url={`/findspace/spacebooking/${x}`}  imgPaths={spaceVo.attachmentFilePaths}></PackageDisplay>
        </div>
         <div></div>
       </PackageDiv>
