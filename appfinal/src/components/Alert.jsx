@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { IoCloseSharp } from "react-icons/io5";
 import Btn from "./Btn";
@@ -47,35 +47,47 @@ const ButtonWrapper = styled.div`
   align-items: center;
 `;
 
+const BtnTag = styled.button`
+  display: grid;
+  justify-self: center;
+  align-items: center;
+  border: 1px solid #fafafa;
+  border-radius: 5px;
+  background-color: #049dd9;
+  color: #fafafa;
+  font-size: 1.2em;
+  font-weight: 600;
+  width: 500px;
+  height: 50px;
+`;
+
 const Alert = ({
   title = "알림",
   message = "내용",
   titleColor = "#049dd9",
-  buttonText = "확인",
-  buttonColor = "#049dd9",
   onClose, // 닫기 함수
 }) => {
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    setVisible(true);
+  }, []);
+
+  if (!visible) return null;
+
   return (
     <MainWrapper>
       <Header>
         <Title color={titleColor}>{title}</Title>
-        <CloseButton onClick={onClose}>
-          <IoCloseSharp />
+        <CloseButton>
+          <IoCloseSharp onClick={onClose} />
         </CloseButton>
       </Header>
 
       <Content>{message}</Content>
 
       <ButtonWrapper>
-        <Btn
-          w="315px"
-          h="38px"
-          bg={buttonColor}
-          b="none"
-          onClick={onClose}
-          children={buttonText}
-          size="15px"
-        ></Btn>
+        <BtnTag onClick={onClose}>확인</BtnTag>
       </ButtonWrapper>
     </MainWrapper>
   );

@@ -158,6 +158,7 @@ const MainLogin = () => {
             type="text"
             placeholder="이메일을 입력해주세요."
             value={email}
+            name="email"
             onChange={handleEmailChange}
           />
           {emailError && <ErrorMessage>{emailError}</ErrorMessage>}
@@ -168,6 +169,7 @@ const MainLogin = () => {
             type="password"
             placeholder="비밀번호를 입력해주세요."
             value={password}
+            name="pwd"
             onChange={handlePasswordChange}
           />
           {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
