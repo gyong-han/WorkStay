@@ -7,7 +7,7 @@ public class StayVo {
     private Long no;
     private Long hostNo;
     private Long statusNo;
-    private Long businessTypeNo;
+    private Long businessTypeCode;
     private String name;
     private String phone;
     private String address;
@@ -19,4 +19,10 @@ public class StayVo {
     private String sns;
     private String brn;
     private String season;
+
+    private String price;
+    private String standardGuest;
+    private String maxGuest;
+    private String hostPermission;
+    private String filepath;
 }
