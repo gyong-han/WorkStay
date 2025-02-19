@@ -116,7 +116,10 @@ public interface HostMapper {
                 INTRODUCTION,
                 PRICE,
                 MAX_GUEST,
-                STANDARD_GUEST
+                STANDARD_GUEST,
+                SINGLE_SIZE,
+                DOUBLE_SIZE,
+                QUEEN_SIZE
             )
             VALUES
             (
@@ -126,7 +129,10 @@ public interface HostMapper {
                 #{introduction},
                 #{price},
                 #{maxGuest},
-                #{standardGuest}
+                #{standardGuest},
+                #{singleSize},
+                #{doubleSize},
+                #{queenSize}
             )
             """)
     int enrollRoom(RoomVo vo);

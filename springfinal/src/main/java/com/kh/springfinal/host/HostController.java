@@ -66,6 +66,11 @@ public class HostController {
     public int enrollRoom(RoomVo vo, @RequestParam MultipartFile thumbnail, @RequestParam List<String> features
             , @RequestParam("room_floor_plan") MultipartFile roomFloorPlan, @RequestParam List<MultipartFile> attachment) throws IOException {
 
+
+        if ("undefined".equals(vo.getDoubleSize())) vo.setDoubleSize("0");
+        if ("undefined".equals(vo.getSingleSize())) vo.setSingleSize("0");
+        if ("undefined".equals(vo.getQueenSize())) vo.setQueenSize("0");
+
         AttachVo thumbnailVo = new AttachVo();
         thumbnailVo.setFilePath(FileUtil.uploadFileToAws(thumbnail,s3,bucket));
         thumbnailVo.setOriginName(thumbnail.getOriginalFilename());
@@ -81,6 +86,7 @@ public class HostController {
             attachVo.setOriginName(file.getOriginalFilename());
             attachVoList.add(attachVo);
         }
+
 
         int result = service.enrollRoom(vo,features,thumbnailVo,roomFloorPlanVo,attachVoList);
 

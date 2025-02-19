@@ -14,4 +14,7 @@ public class RoomVo {
     private String enrollDate;
     private String modifyDate;
     private String standardGuest;
+    private String singleSize;
+    private String doubleSize;
+    private String queenSize;
 }
