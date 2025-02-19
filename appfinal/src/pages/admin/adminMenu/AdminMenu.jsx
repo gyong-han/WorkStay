@@ -70,7 +70,7 @@ const AdminMenu = () => {
           }
         />
         <Route
-          path="/hostDetail/:stayNum"
+          path="/hostDetail/:hostNo"
           element={
             <AdminLayOut>
               <HostDetail />
