@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import { setArea } from "../../redux/spaceSlice";
 
 const Overlay = styled.div`
   position: fixed;
@@ -141,11 +143,14 @@ const FooterDiv = styled.div`
 
 const Area = ({ isOpen, onClose }) => {
   const [areaState, setAreaState] = useState();
+  const dispatch = useDispatch();
  
   useEffect(() => {}, [areaState]);
   if (!isOpen) return null;
   function ClickHandler(e) {
-    setAreaState(e.target.value);
+    console.log(e.target.value);
+    
+    dispatch(setArea(e.target.value));
   }
  
 
@@ -156,8 +161,6 @@ const Area = ({ isOpen, onClose }) => {
 }
 
   const submitBtn = () => {
-    // 패치 보낼곳
-    console.log(areaState);
     onClose()
   };
   return (

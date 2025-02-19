@@ -65,7 +65,6 @@ const ListCard = (props) => {
   const navigate = useNavigate();
 
    const clickHandler = ()=>{
-      console.log(props.no);
       navigate(`/${props.url}/detail/${props.no}`)
     }
   

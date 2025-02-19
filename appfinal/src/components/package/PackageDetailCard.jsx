@@ -37,7 +37,6 @@ const ContentDiv = styled.div`
 `;
 
 const PackageDetailCard = (props) => {
-  console.log("price :: " , props.price);
   
 
   const priceWon = (props.price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
