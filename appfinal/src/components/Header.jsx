@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
@@ -49,6 +50,9 @@ const Login = styled(Link)`
 `;
 
 const Header = () => {
+  const pageNick = useSelector((state) => {
+    return state.member.pageNick;
+  });
   return (
     <HeaderContainer>
       <Logo>
@@ -62,7 +66,7 @@ const Header = () => {
         <StyledLink to="/traffic">TRAFFIC</StyledLink>
         <StyledLink to="/slog">S-LOG</StyledLink>
       </NavMenu>
-      <Login to="/login">LOGIN</Login>
+      <Login to="/login">{pageNick}</Login>
     </HeaderContainer>
   );
 };

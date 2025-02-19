@@ -37,15 +37,16 @@ public class GuestService {
         if (!isMatch) {
             throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
         }
-        String token = jwtUtil.createJwtToken(dbVo.getNo(), dbVo.getPageNick(), dbVo.getEmail(), "user_guest");
+        String token = jwtUtil.createJwtToken(dbVo.getNo(), dbVo.getEmail(), dbVo.getPageNick(),  "user_guest");
         log.info("Generated Token in Service: {}", token);
         return token;
     }
 
-
-//    public GuestVo loginEmail(String email){
-//        return mapper.loginEmail(email);
-//    }
-
+    public GuestVo findId(GuestVo vo) {
+        System.out.println("Service - Received name: " + vo.getName());
+        System.out.println("Service - Received phone: " + vo.getPhone());
+        System.out.println("service vo = " + vo);
+        return mapper.findId(vo);
+    }
 
 }

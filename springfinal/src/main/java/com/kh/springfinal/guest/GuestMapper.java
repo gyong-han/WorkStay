@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Select;
 public interface GuestMapper {
 
     @Insert("""
-            INSERT INTO MEMBER(NO, EMAIL, PWD, NAME) VALUES(SEQ_MEMBER.NEXTVAL , #{email}, #{pwd} , #{name})
+            INSERT INTO MEMBER(NO, EMAIL, PWD, NAME , PHONE) VALUES(SEQ_MEMBER.NEXTVAL , #{email}, #{pwd} , #{name} ,#{phone})
             """)
     int join(GuestVo vo);
 
@@ -18,4 +18,15 @@ public interface GuestMapper {
             WHERE EMAIL = #{email}
             """)
     GuestVo loginEmail(GuestVo vo);
+
+
+    @Select("""
+SELECT *
+            FROM MEMBER
+            WHERE NAME = '안예지'
+            AND PHONE = '01012345678'
+                """)
+    GuestVo findId(GuestVo vo);
+
+
 }

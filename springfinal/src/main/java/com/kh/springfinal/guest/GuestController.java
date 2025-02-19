@@ -2,6 +2,7 @@ package com.kh.springfinal.guest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,18 +27,30 @@ public class GuestController {
 
     //로그인
     @PostMapping("login")
-    public void login(@RequestBody GuestVo vo){
+    public String login(@RequestBody GuestVo vo){
         try{
-
-            log.info("Login API called with email: {}", vo.getEmail());
             String token = service.login(vo);
-            log.info("Generated Token in Controller: {}", token);
+            return token;
         }catch(Exception e) {
             throw new IllegalStateException("[GUEST-LOGIN] EMAIL-LOGIN FAIL ...");
         }
     }
 
     //아이디 찾기
+    @PostMapping("findid")
+    public GuestVo findId(@RequestBody GuestVo vo){
+        try{
+            System.out.println("1. vo = " + vo);
+            GuestVo result = service.findId(vo);
+            System.out.println("controller vo = " + result);
+            return result;
+        }catch(Exception e) {
+            throw new IllegalStateException("[GUEST-JOIN] JOIN FAIL ...");
+        }
+    }
+
+
+
 
     //비밀번호 찾기
 
