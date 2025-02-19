@@ -28,6 +28,16 @@ public class SpaceVo {
     private String[] attachmentFilePaths;
     private List<String> features;
     private String hostName;
+    private String adult;
+    private String child;
+    private String baby;
+    private String request;
+    private String amount;
+    private String paymentNo;
+    private String packageNo;
+    private String useDay;
+
+
 
 
 

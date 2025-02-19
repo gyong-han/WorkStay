@@ -4,6 +4,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const spaceSlice = createSlice({
   name: 'space', // slice 이름
   initialState:{
+    no :'',
     address: '서울 강남구 태헤란로 130',
     brn : '',
     businessTypeNo:'',
@@ -29,6 +30,7 @@ const spaceSlice = createSlice({
   },
   reducers: {
     setSpaceVo : (state,action)=>{
+    state.no = action.payload.no;
     state.address = action.payload.address;
     state.brn = action.payload.brn;
     state.businessTypeNo = action.payload.businessTypeNo;
@@ -53,9 +55,8 @@ const spaceSlice = createSlice({
       state.reservationDate = action.payload;
     },
     setMemberCnt : (state,action) =>{
-      
       state.adult = action.payload.adult;
-      state.child = action.payload.kids;
+      state.child = action.payload.child;
       state.baby = action.payload.baby;
     },
 
