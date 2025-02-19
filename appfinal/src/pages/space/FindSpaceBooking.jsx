@@ -83,7 +83,6 @@ const IconLayoutDiv = styled.div`
 const FindSpaceBooking = () => {
 
   const{x} = useParams();
-  console.log("x ::::",x);
   const [selectDate,setSelectDate] = useState("");
   const spaceVo = useSelector((state)=>state.space);
 

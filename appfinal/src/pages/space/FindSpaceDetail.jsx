@@ -237,12 +237,12 @@ const FindSpaceDetail = () => {
       <PackageDiv>
         <div>PACKAGE</div>
         <div>
-          <PackageDisplay img={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAwcf09BODgX7VbhRf07dq9mBKXiQwQxzG-Q&s"} titleHandler={()=>{dispatch(setPackageType({packageType:"낮 패키지"}))}}
+          <PackageDisplay img={"https://vrthumb.clipartkorea.co.kr/2023/04/12/pc0040625240.jpg"} titleHandler={()=>{dispatch(setPackageType({packageType:"낮 패키지"}))}}
             title={"낮 패키지"} standard={"6"} max={"12"} price={spaceVo.daytimePrice}  url={`/findspace/spacebooking/${x}`} imgPaths={spaceVo.attachmentFilePaths}></PackageDisplay>
         </div>
         <div></div>
         <div>
-          <PackageDisplay img={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPVr3w8Pov0BQ0sJlrmKaS-P8Nz8ONNF-VUQ&s"} titleHandler={()=>{dispatch(setPackageType({packageType :"밤 패키지"}))}}
+          <PackageDisplay img={"https://png.pngtree.com/background/20230424/original/pngtree-meeting-inside-a-conference-room-with-business-people-picture-image_2457183.jpg"} titleHandler={()=>{dispatch(setPackageType({packageType :"밤 패키지"}))}}
             title={"밤 패키지"} standard={"4"} max={"8"} price={spaceVo.nightPrice} url={`/findspace/spacebooking/${x}`}  imgPaths={spaceVo.attachmentFilePaths}></PackageDisplay>
        </div>
         <div></div>

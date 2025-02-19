@@ -12,8 +12,8 @@ import java.util.List;
 public class SpaceService {
 
     private final SpaceMapper mapper;
-    public List<SpaceVo> spaceGetListAll() {
-        return mapper.spaceGetListAll();
+    public List<SpaceVo> spaceGetListAll(String area,String people,String date) {
+        return mapper.spaceGetListAll(area,people,date);
     }
 
     public List<AttachmentVo> spaceGetAttachment() {

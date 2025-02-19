@@ -8,14 +8,8 @@ import java.util.List;
 
 @Mapper
 public interface SpaceMapper {
-    @Select("""
-             SELECT S.NO,S.NAME,NIGHT_PRICE,DAYTIME_PRICE,MAX_GUEST,STANDARD_GUEST,ADDRESS,SA.FILE_PATH
-             FROM SPACE S
-             JOIN SPACE_ATTACHMENT SA ON (S.NO = SA.SPACE_NO)
-             WHERE STATUS_NO = '2'
-             AND SA.THUMBNAIL = 'Y'
-            """)
-    List<SpaceVo> spaceGetListAll();
+
+    List<SpaceVo> spaceGetListAll(String area,String people,String date);
 
     @Select("""
             SELECT NO,SPACE_NO,FILE_PATH FROM SPACE_ATTACHMENT
@@ -69,7 +63,8 @@ public interface SpaceMapper {
             INSERT INTO SPACE_RESERVATION(
             NO, SPACE_NO, MEMBER_NO, PAYMENT_NO, PACKAGE_NO, ADULT, CHILD, BABY, REQUEST, AMOUNT, USE_DAY
             )VALUES(
-            SEQ_SPACE_RESERVATION.NEXTVAL, #{vo.no}, #{memberNo}, #{vo.paymentNo}, #{vo.packageNo}, #{vo.adult}, #{vo.child}, #{vo.baby}, #{vo.request}, #{vo.amount}, #{vo.useDay}
+           (SELECT GET_SPACE_RESERVATION_CODE FROM DUAL),
+             #{vo.no}, #{memberNo}, #{vo.paymentNo}, #{vo.packageNo}, #{vo.adult}, #{vo.child}, #{vo.baby}, #{vo.request}, #{vo.amount}, #{vo.useDay}
             )
             """)
     int reservation(SpaceVo vo, String memberNo);

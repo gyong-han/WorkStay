@@ -6,6 +6,7 @@ import { Accordion } from "react-bootstrap";
 import CalendarTime from "../../components/FilterBar/CalendalTime";
 import { useSelector } from "react-redux";
 import SelectPeople from "./spaceComponents/SelectPeople";
+import { useNavigate } from "react-router-dom";
 
 
 const Layout = styled.div`
@@ -353,6 +354,7 @@ const Booking = () => {
   const priceData = spaceVo.packageType === '낮 패키지'?spaceVo.daytimePrice :spaceVo.nightPrice;
   const packageNo = spaceVo.packageType === '낮 패키지'?1:2;
   const price = priceData.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const navi = useNavigate();
   
 
   const fd = new FormData();
@@ -380,8 +382,36 @@ const Booking = () => {
     }).then((resp)=>resp.text())
     .then((data)=>{
       console.log(data);
+      if(data ==1){
+        navi("/findspace/successbooking");
+      }else{
+        let errorMsg = "";
+
+        // FormData의 모든 키와 값을 순회
+        for (let [key, value] of fd.entries()) {
+            if (!value) {  // 값이 없으면
+             switch(key){
+              case "no" : errorMsg = "작성자 정보가 없습니다. 다시 로그인 해주세요";break;
+              case "request" : errorMsg="요청사항을 작성해주세요"; break;
+              case "amount" : errorMsg="가격이 책정되지 않았습니다"; break;
+              case "useDay" : errorMsg="예약일 정보 오류입니다 처음부터 다시 예약 해주세요."; break;
+             }
+        }
+    
+        // 오류가 있으면 alert을 띄움
+        if (errorMsg) {
+            alert(errorMsg);
+            break;
+        }
+        if(data ==0){
+          alert("서비스의 오류가 발생했습니다 관리자에게 문의해주세요");
+          break;
+        }
+      }
       
-    })
+      
+  }})
+  
   }
     
 
