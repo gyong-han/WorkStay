@@ -53,7 +53,7 @@ public class HostController {
         return result;
     }
 
-    //공간 등록
+    //숙소 등록
     @PostMapping("enroll/stay")
     public int enrollStay(StayVo vo){
         int stayNo = service.enrollStay(vo);
