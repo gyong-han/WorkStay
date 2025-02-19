@@ -1,0 +1,101 @@
+//spaceSlice
+import { createSlice } from '@reduxjs/toolkit';
+
+const spaceSlice = createSlice({
+  name: 'space', // slice 이름
+  initialState:{
+    no :'',
+    address: '서울 강남구 태헤란로 130',
+    brn : '',
+    businessTypeNo:'',
+    attachmentFilePaths:[],
+    daytimePrice :'',
+    nightPrice :'',
+    enrollDate:'',
+    filePath:'',
+    introduction:'',
+    maxGuest:'',
+    name :'',
+    phone:'',
+    sns :'',
+    standardGuest:'',
+    tagline:'',
+    packageType : '',
+    features :[],
+    reservationDate:'',
+    adult:0,
+    child:0,
+    baby:0,
+    area:'',
+
+  },
+  reducers: {
+    setSpaceVo : (state,action)=>{
+    state.no = action.payload.no;
+    state.address = action.payload.address;
+    state.brn = action.payload.brn;
+    state.businessTypeNo = action.payload.businessTypeNo;
+    state.attachmentFilePaths= action.payload.attachmentFilePaths;
+    state.daytimePrice = action.payload.daytimePrice;
+    state.nightPrice = action.payload.nightPrice;
+    state.enrollDate= action.payload.enrollDate;
+    state.filePath= action.payload.filePath;
+    state.introduction= action.payload.introduction;
+    state.maxGuest= action.payload.maxGuest;
+    state.name = action.payload.name;
+    state.phone= action.payload.phone;
+    state.sns = action.payload.sns;
+    state.standardGuest= action.payload.standardGuest;
+    state.tagline= action.payload.tagline;
+    state.features =action.payload.features;
+    },
+    setPackageType : (state,action)=>{
+      state.packageType = action.payload.packageType;
+    },
+    setreservationDate : (state,action) =>{
+      state.reservationDate = action.payload;
+    },
+    setMemberCnt : (state,action) =>{
+      state.adult = action.payload.adult;
+      state.child = action.payload.child;
+      state.baby = action.payload.baby;
+    },
+    setArea : (state,action)=>{
+      state.area = action.payload;
+      console.log("stateArea :: ",action.payload);
+      
+    },
+    setReset : (state)=>{
+    // state.no ='';
+    // state.address= '서울 강남구 태헤란로 130',
+    // state.brn = '';
+    // state.businessTypeNo='';
+    // state.attachmentFilePaths=[];
+    // state.daytimePrice ='';
+    // state.nightPrice ='';
+    // state.enrollDate='';
+    // state.state.filePath='';
+    // state.introduction='';
+    // state.maxGuest='';
+    // state.name ='';
+    // state.phone='';
+    // state.sns ='';
+    // state.standardGuest='';
+    // state.tagline='';
+    // state.packageType = '';
+    // state.features =[];
+    state.reservationDate='';
+    state.adult=0;
+    state.child=0;
+    state.baby=0;
+    state.area='';
+
+    }
+    
+    
+  },
+});
+
+
+export const { setSpaceVo,setPackageType,setreservationDate,setMemberCnt,setArea,setReset } = spaceSlice.actions;
+export default spaceSlice.reducer;

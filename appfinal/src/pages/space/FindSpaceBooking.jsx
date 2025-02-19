@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
@@ -6,6 +6,7 @@ import PackageDetailCard from '../../components/package/PackageDetailCard';
 import Infomation from '../../components/Infomation';
 import Btn from '../../components/Btn';
 import CalendarTime from '../../components/FilterBar/CalendalTime';
+import { useSelector } from 'react-redux';
 
 
 
@@ -82,8 +83,13 @@ const IconLayoutDiv = styled.div`
 const FindSpaceBooking = () => {
 
   const{x} = useParams();
-  console.log("x ::::",x);
+  const [selectDate,setSelectDate] = useState("");
+  const spaceVo = useSelector((state)=>state.space);
+
+  const price = spaceVo.packageType === '낮 패키지'?spaceVo.daytimePrice :spaceVo.nightPrice;
+ 
   
+ 
 
   return (
     <Layout>
@@ -91,17 +97,24 @@ const FindSpaceBooking = () => {
       <DateDiv>
         <div>
           <div>인더플럼</div>
-          <CalendarLayout><CalendarTime type={"text"}>날짜를 선택해주세요<MdOutlineKeyboardArrowDown /></CalendarTime></CalendarLayout>
+          <CalendarLayout>
+          {!spaceVo.reservationDate ? (
+          <CalendarTime type={"text"} setSelectDate={setSelectDate}>날짜를 입력해주세요.</CalendarTime>
+          ) : (
+            <CalendarTime type={"text"} setSelectDate={setSelectDate}>{spaceVo.reservationDate}</CalendarTime>
+          )}
+          </CalendarLayout>
           <div><Link to={`/findspace/booking/${x}`}><Btn w={150} h={35} bg={"#049DD9"} size={"20px"} >예약하기</Btn></Link></div>
         </div> 
         </DateDiv>
-      <ThirdDiv><PackageDetailCard information={"SPACE INFORMATION"} title={"낮 패키지"}></PackageDetailCard></ThirdDiv>
+      <ThirdDiv><PackageDetailCard title={spaceVo.packageType} imgPaths ={spaceVo.attachmentFilePaths} price={price} max={spaceVo.maxGuest} min={spaceVo.standardGuest}>
+        </PackageDetailCard></ThirdDiv>
       <ContentLayout>
         <TitleDiv>FEATURES</TitleDiv>
         <IconLayoutDiv>
-          <div>와이파이</div>
-          <div>모니터</div>
-          <div>빔프로젝터</div>
+          {spaceVo.features.map((vo,idx)=>{
+            return <div key={idx}>{vo}</div>
+          })}
         </IconLayoutDiv>
       </ContentLayout>
       <ContentLayout>

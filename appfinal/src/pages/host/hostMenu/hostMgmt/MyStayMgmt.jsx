@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import HostApprovalCard from "../../hostComponents/HostApprovalCard";
 
@@ -15,14 +15,28 @@ const StatusSpan = styled.span`
 `;
 
 const MyStayMgmt = () => {
+  const [dataArr, setDataArr] = useState([]);
+  useEffect(() => {
+    const fd = new FormData();
+    fd.append("hostNo", "1");
+    fetch("http://127.0.0.1:8080/api/host/myStay", {
+      method: "POST",
+      body: fd,
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        setDataArr(data);
+      });
+  }, []);
   return (
     <>
       <MainDiv>
         <div>
           <StatusSpan left="330px">내 숙소 목록</StatusSpan>
         </div>
-        <HostApprovalCard status="1" />
-        <HostApprovalCard />
+        {dataArr.map((vo, idx) => {
+          return <HostApprovalCard key={idx} status="1" vo={vo} id={vo.no} />;
+        })}
       </MainDiv>
     </>
   );

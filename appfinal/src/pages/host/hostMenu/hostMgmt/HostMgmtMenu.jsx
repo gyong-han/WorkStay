@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import HostLayout from "../../hostComponents/HostLayout";
 import StayReservMgmt from "./StayReservMgmt";

@@ -57,4 +57,20 @@ public class HostService {
 
         return 1;
     }
+
+    public List<SpaceVo> getSpaceApprovalList(String status, String hostNo) {
+        return mapper.getSpaceApprovalList(status,hostNo);
+    }
+
+    public List<StayVo> getStayApprovalList(String status, String hostNo) {
+        return mapper.getStayApprovalList(status,hostNo);
+    }
+
+    public List<SpaceVo> getMySpaceList(String hostNo) {
+        return mapper.getMySpaceList(hostNo);
+    }
+
+    public List<StayVo> getMyStayList(String hostNo) {
+        return mapper.getMyStayList(hostNo);
+    }
 }
