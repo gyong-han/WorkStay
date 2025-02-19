@@ -191,6 +191,7 @@ const FindSpaceList = () => {
     {spaceVoList.map((vo,idx)=>{
       
       const voImgPaths = imgPath[idx][vo.no];
+      // console.log("vo IMG :: ",voImgPaths);
       
       return(
       <Fragment key={vo.no}>

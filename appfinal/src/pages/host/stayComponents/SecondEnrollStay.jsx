@@ -206,7 +206,7 @@ const SecondEnrollStay = () => {
   const enrollStay = () => {
     const fd = new FormData();
     fd.append("name", formData.name);
-    fd.append("address", formData.name);
+    fd.append("address", formData.address);
     fd.append("phone", formData.phone);
     fd.append("sns", formData.sns);
     fd.append("businessTypeNo", formData.business_type_no);

@@ -56,4 +56,11 @@ public interface SpaceMapper {
             WHERE SPACE_NO=#{no} AND THUMBNAIL='N'
             """)
     List<AttachmentVo> spaceGetAttachmentByNo(Long no);
+
+    @Select("""
+            SELECT F.NAME FROM SPACE_FEATURES S
+            JOIN FEATURES F ON(S.FEATURES_NO= F.NO)
+            WHERE SPACE_NO =#{no}
+            """)
+    List<String> getFeatures(Long no);
 }

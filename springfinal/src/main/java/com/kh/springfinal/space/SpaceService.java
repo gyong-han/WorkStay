@@ -23,6 +23,10 @@ public class SpaceService {
     public SpaceVo spaceGetDetailVo(Long no) {
         SpaceVo spaceVo = mapper.spaceGetDetailVo(no);
 
+        List<String> features = mapper.getFeatures(no);
+
+        System.out.println("features ::: " +features);
+
         List<AttachmentVo> attachments = mapper.spaceGetAttachmentByNo(no);
 
         String[] attachmentPaths = attachments.stream()
@@ -36,6 +40,7 @@ public class SpaceService {
         System.arraycopy(attachmentPaths, 0, filePaths, 1, attachmentPaths.length);
 
         spaceVo.setAttachmentFilePaths(filePaths);
+        spaceVo.setFeatures(features);
 
         return spaceVo;
     }

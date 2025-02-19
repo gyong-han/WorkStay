@@ -37,6 +37,10 @@ const ContentDiv = styled.div`
 `;
 
 const PackageDetailCard = (props) => {
+  console.log("price :: " , props.price);
+  
+
+  const priceWon = (props.price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   return (
     <Layout>
       <div></div>
@@ -44,25 +48,22 @@ const PackageDetailCard = (props) => {
       <TextAreaDiv>
         <div>{props.information}</div>
         <div>{props.title}</div>
-        <div>₩120,000</div>
-        <ContentDiv>넉넉한 개인 책상, 하이엔드 사무의자, 전좌석 모니터와 회의실까지 ‘Work’의
-          본질을 놓치지 않으면서 오션뷰 마운틴뷰를 모두 가지고 있는 최고, 최대 규모의
-          프리미엄 워케이션 오피스입니다.
+        <div>₩{priceWon}</div>
+        <ContentDiv>편리한 위치와 다양한 편의 시설을 갖춘 공간을 제공합니다.<br></br>
+          회의, 행사, 워크숍 등 다양한 용도로 최적화된 공간으로 고객님의 요구에 맞춰 제공합니다.
+          편안하고 전문적인 환경에서 비즈니스와 이벤트를 성공적으로 개최해 보세요.
         </ContentDiv>
         <div>체크인 09:00 / 체크아웃 18:00</div>
-        <div>기준 인원 6명 (최대 12 명)</div>
+        <div>기준 인원 {props.min}명 (최대 {props.max} 명)</div>
         <div>공간면적 120㎡</div>
         <div>폰 부스 3개</div>
         <div>데스크</div>
         <div>모니터</div>
       </TextAreaDiv>
       <div>
-        {/* <PictureSlide w={960}h={540} 
-          img1={"https://picsum.photos/300/200"}
-          img2={"https://picsum.photos/300/200"}
-          img3={"https://picsum.photos/300/200"}
-          img4={"https://picsum.photos/300/200"}
-        ></PictureSlide> */}
+        <PictureSlide w={960}h={540} 
+          imgPaths={props.imgPaths}
+        ></PictureSlide>
       </div>
     </Layout>
   );
