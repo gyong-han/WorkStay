@@ -28,7 +28,10 @@ public class GuestController {
     @PostMapping("login")
     public void login(@RequestBody GuestVo vo){
         try{
-            service.login(vo);
+
+            log.info("Login API called with email: {}", vo.getEmail());
+            String token = service.login(vo);
+            log.info("Generated Token in Controller: {}", token);
         }catch(Exception e) {
             throw new IllegalStateException("[GUEST-LOGIN] EMAIL-LOGIN FAIL ...");
         }
