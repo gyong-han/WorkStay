@@ -21,12 +21,20 @@ public interface GuestMapper {
 
 
     @Select("""
-SELECT *
+            SELECT *
             FROM MEMBER
-            WHERE NAME = '안예지'
-            AND PHONE = '01012345678'
-                """)
+            WHERE NAME = #{name}
+            AND PHONE = #{phone}
+            """)
     GuestVo findId(GuestVo vo);
 
+
+    @Select("""
+            SELECT *
+            FROM MEMBER
+            WHERE EMAIL = #{email}
+            AND PHONE = #{PHONE}
+            """)
+    GuestVo findPwd(GuestVo vo);
 
 }

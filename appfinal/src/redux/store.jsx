@@ -11,7 +11,7 @@ const Store = configureStore({
     station: stationReducer,
     terminal: terminalReducer,
     counter: counterReducer,
-    space : spaceReducer,
+    space: spaceReducer,
   },
 });
 

@@ -40,19 +40,25 @@ public class GuestController {
     @PostMapping("findid")
     public GuestVo findId(@RequestBody GuestVo vo){
         try{
-            System.out.println("1. vo = " + vo);
+            System.out.println("controller vo = " + vo);
             GuestVo result = service.findId(vo);
-            System.out.println("controller vo = " + result);
+            System.out.println("result = " + result);
             return result;
         }catch(Exception e) {
             throw new IllegalStateException("[GUEST-JOIN] JOIN FAIL ...");
         }
     }
 
-
-
-
     //비밀번호 찾기
+    @PostMapping("findpwd")
+    public GuestVo findPwd(@RequestBody GuestVo vo){
+        try{
+            GuestVo result = service.findPwd(vo);
+            return result;
+        }catch(Exception e) {
+            throw new IllegalStateException("[GUEST-JOIN] JOIN FAIL ...");
+        }
+    }
 
     //새로운 비밀번호 생성하기
 

@@ -74,11 +74,6 @@ const BtnTag = styled.button`
   grid-row: 7;
 `;
 
-const ButtonLink = styled(Link)`
-  color: #fafafa;
-  text-decoration-line: none;
-`;
-
 const FindPassword = () => {
   const [email, setEmail] = useState("");
   const [number, setNumber] = useState("");
@@ -135,9 +130,7 @@ const FindPassword = () => {
           />
           {numberError && <ErrorMessage>{numberError}</ErrorMessage>}
         </StyleInputPwd>
-        <BtnTag>
-          <ButtonLink to="/login/newpwd">비밀번호 찾기</ButtonLink>
-        </BtnTag>
+        <BtnTag>비밀번호 찾기</BtnTag>
       </MainDiv>
     </form>
   );

@@ -46,7 +46,12 @@ public class GuestService {
         System.out.println("Service - Received name: " + vo.getName());
         System.out.println("Service - Received phone: " + vo.getPhone());
         System.out.println("service vo = " + vo);
-        return mapper.findId(vo);
+        GuestVo dbVo = mapper.findId(vo);
+        System.out.println("dbVo = " + dbVo);
+        return dbVo;
     }
 
+    public GuestVo findPwd(GuestVo vo) {
+        return mapper.findPwd(vo);
+    }
 }

@@ -9,7 +9,7 @@ import { findId } from "../../redux/memberSlice";
 
 const MainDiv = styled.div`
   display: grid;
-  grid-template-rows: 2fr 1fr 3.5fr 0.5fr 0.5fr 0.8fr 1fr 1fr;
+  grid-template-rows: 2fr 1fr 3fr 0.5fr 0.5fr 0.5fr 1fr 1fr;
 `;
 
 const StyleMain = styled.div`
@@ -139,7 +139,6 @@ const FindId = () => {
     fetch(url, option)
       .then((resp) => resp.json())
       .then((data) => {
-        console.log("Data : ", data);
         setFoundEmail(data.email); // ✅ Redux 대신 useState 사용
         setIsAlertOpen(true);
       })
