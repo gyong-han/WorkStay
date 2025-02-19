@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/host")
@@ -112,5 +113,36 @@ public class HostController {
     public List<StayVo> myStay(@RequestParam String hostNo){
         List<StayVo> myStayList = service.getMyStayList(hostNo);
         return myStayList;
+    }
+
+    //내 공간 예약 목록조회
+    @PostMapping("space/reservList")
+    public List<TableVo> getSpaceReservList(@RequestParam String status, @RequestParam String hostNo){
+        List<TableVo> spaceResrvList = service.getSpaceReservList(status,hostNo);
+        return spaceResrvList;
+    }
+
+    //내 독채 예약 목록조회
+    @PostMapping("room/reservList")
+    public List<TableVo> getRoomReservList(@RequestParam String status, @RequestParam String hostNo){
+        List<TableVo> roomReservList = service.getRoomReservList(status,hostNo);
+       return roomReservList;
+
+    }
+
+    //내 공간 예약 상세조회
+    @PostMapping("space/reservDetail")
+    public Map<String, Object> getSpaceReservDetail(@RequestBody String spaceReservNum){
+        String spaceReservNo = spaceReservNum.replace("\"", "");
+        Map<String,Object> spaceReservDetail = service.getSpaceReservDetail(spaceReservNo);
+        return spaceReservDetail;
+    }
+
+    //내 숙소 예약 상세조회
+    @PostMapping("stay/reservDetail")
+    public Map<String, Object> getStayReservDetail(@RequestBody String stayReservNum){
+        String stayReservNo = stayReservNum.replace("\"", "");
+        Map<String,Object> stayReservDetail = service.getStayReservDetail(stayReservNo);
+        return stayReservDetail;
     }
 }
