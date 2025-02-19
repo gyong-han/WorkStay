@@ -1,5 +1,6 @@
 package com.kh.springfinal.space;
 
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -63,4 +64,13 @@ public interface SpaceMapper {
             WHERE SPACE_NO =#{no}
             """)
     List<String> getFeatures(Long no);
+
+    @Insert("""
+            INSERT INTO SPACE_RESERVATION(
+            NO, SPACE_NO, MEMBER_NO, PAYMENT_NO, PACKAGE_NO, ADULT, CHILD, BABY, REQUEST, AMOUNT, USE_DAY
+            )VALUES(
+            SEQ_SPACE_RESERVATION.NEXTVAL, #{vo.no}, #{memberNo}, #{vo.paymentNo}, #{vo.packageNo}, #{vo.adult}, #{vo.child}, #{vo.baby}, #{vo.request}, #{vo.amount}, #{vo.useDay}
+            )
+            """)
+    int reservation(SpaceVo vo, String memberNo);
 }

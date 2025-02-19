@@ -25,13 +25,32 @@ public class SpaceController {
     public List<AttachmentVo> spacegetattachment() throws InterruptedException {
 
         List<AttachmentVo> attachmentVoList = service.spaceGetAttachment();
-        System.out.println("attachmentVoList = " + attachmentVoList);
+//        System.out.println("attachmentVoList = " + attachmentVoList);
         return attachmentVoList;
     }
     @PostMapping("detail")
     public SpaceVo spaceGetDetailVo(@RequestBody Long no){
-        System.out.println(no);
+//        System.out.println(no);
         return service.spaceGetDetailVo(no);
     }
+
+    @PostMapping("reservation")
+    public String reservation(SpaceVo vo,String memberNo){
+        String date = vo.getUseDay();
+        String formattedDate = date.replaceAll("-", "");
+        vo.setUseDay(formattedDate);
+
+
+
+
+        int result = service.reservation(vo,memberNo);
+        
+        if(result ==1){
+            return "통신성공";    
+        }
+        return "통신실패";
+
+    }
+
 
 }
