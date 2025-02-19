@@ -13,7 +13,7 @@ public class GuestVo {
     private String email;
     private String phone;
     private String birthDate;
-    private String address;
+    private String pageNick;
     private String enrollDate;
     private String hostPermission;
 }
