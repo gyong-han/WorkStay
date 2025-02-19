@@ -27,6 +27,7 @@ const spaceSlice = createSlice({
     child:0,
     baby:0,
     area:'',
+    reservationDone:[],
 
   },
   reducers: {
@@ -90,6 +91,11 @@ const spaceSlice = createSlice({
     state.baby=0;
     state.area='';
 
+    },
+    setReservationDone : (state,action)=>{
+      state.reservationDone = action.payload;
+
+      
     }
     
     
@@ -97,5 +103,5 @@ const spaceSlice = createSlice({
 });
 
 
-export const { setSpaceVo,setPackageType,setreservationDate,setMemberCnt,setArea,setReset } = spaceSlice.actions;
+export const { setSpaceVo,setPackageType,setreservationDate,setMemberCnt,setArea,setReset,setReservationDone } = spaceSlice.actions;
 export default spaceSlice.reducer;

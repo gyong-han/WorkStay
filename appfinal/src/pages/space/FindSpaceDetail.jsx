@@ -11,7 +11,7 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import CalendarTime from '../../components/FilterBar/CalendalTime';
 import { useDispatch, useSelector } from 'react-redux';
-import { setPackageType, setSpaceVo } from '../../redux/spaceSlice';
+import { setPackageType, setReservationDone, setSpaceVo } from '../../redux/spaceSlice';
 
 const Layout =styled.div`
 width: 100%;
@@ -169,7 +169,7 @@ const FindSpaceDetail = () => {
   // console.log(x);
 
   useEffect(()=>{
-    fetch(("http://127.0.0.1:8080/space/detail"),{
+    fetch(("http://localhost:8080/space/detail"),{
       method:"POST",
       headers:{
         "content-type" : "application/json"
@@ -182,6 +182,17 @@ const FindSpaceDetail = () => {
       dispatch(setSpaceVo(data));
     })
   },[x,dispatch])
+
+  useEffect(()=>{
+    fetch(("http://localhost:8080/space/isAvailable"),{
+      method:"POST",
+      body:x,
+    }).then((resp)=>resp.json())
+    .then((data)=>{
+      console.log(data);
+      dispatch(setReservationDone(data));
+    })
+  },[x])
 
 
 
