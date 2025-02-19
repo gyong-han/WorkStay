@@ -76,6 +76,7 @@ const Display = ({isTimeMode}) => {
 
   const openModal2 = () => setIsModal2Open(true);
   const closeModal2 = () => setIsModal2Open(false);
+  
 
   return (
     <>
@@ -92,7 +93,7 @@ const Display = ({isTimeMode}) => {
           </div>
           <div>
             {isTimeMode ? (
-              <CalendarTime type="button">
+              <CalendarTime type="button" setSelectDate={()=>{}}>
                 <CiCalendar size={20} /> 일정
               </CalendarTime>
             ) : (

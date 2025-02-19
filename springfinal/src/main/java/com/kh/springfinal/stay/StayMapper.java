@@ -14,7 +14,7 @@ public interface StayMapper {
                 S.NO,
                 S.HOST_NO,
                 S.STATUS_NO,
-                S.BUSINESS_TYPE_CODE,
+                S.BUSINESS_TYPE_NO,
                 S.NAME,
                 S.ADDRESS,
                 R.PRICE,
@@ -52,5 +52,6 @@ public interface StayMapper {
             WHERE THUMBNAIL = 'N'
             AND DEL_YN = 'N'
             """)
-    List<AttachmentVo> stayGetAttachmentList();
+    List<StayAttachmentVo> stayGetAttachmentList();
+
 }

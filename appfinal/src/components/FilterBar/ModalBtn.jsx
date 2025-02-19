@@ -1,9 +1,9 @@
 import React from "react";
 
-const ModalBtn = ({ f, str }) => {
+const ModalBtn = ({ f, str,disabled}) => {
   return (
     <>
-      <button onClick={f}>{str}</button>
+      <button onClick={f} disabled={disabled}>{str}</button>
     </>
   );
 };

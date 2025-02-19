@@ -5,18 +5,28 @@ import "react-datepicker/dist/react-datepicker.css";
 import Form from "react-bootstrap/Form";
 import { format } from "date-fns";
 import "./styles/datepicker.css";
+import { useDispatch } from "react-redux";
+import { setreservationDate } from "../../redux/spaceSlice";
 
 
 
 
 
-const CalendarTime = ({children,type,setSelectDate}) => {
+const CalendarTime = ({children,type,position}) => {
   
-  const [dateRange, setDateRange] = useState("");
+  const [dateRange , setDateRange] = useState([]);
+  const dispatch =useDispatch();
 
-  useEffect(() => {
-    console.log(dateRange);
-  }, [dateRange]);
+  // const isBlockedDate = (date) => {
+  //   const blockedDates = [
+  //     new Date("2025-02-20"),  // 막을 날짜
+  //   ];
+  //   return blockedDates.some(blockedDate => 
+  //     date.getFullYear() === blockedDate.getFullYear() &&
+  //     date.getMonth() === blockedDate.getMonth() &&
+  //     date.getDate() === blockedDate.getDate()
+  //   );
+  // };
 
   
   return (
@@ -25,12 +35,14 @@ const CalendarTime = ({children,type,setSelectDate}) => {
       locale={ko}
       selectsRange={false}
       minDate={new Date()}
+      // filterDate={(date) => !isBlockedDate(date)}
       onChange={(update) => {
+        
         
         const selectDate = format(update, "yyyyMMdd");
         setDateRange(selectDate);
         const selectDateShow = format(update, "yyyy-MM-dd");
-        setSelectDate(selectDateShow);
+        dispatch(setreservationDate(selectDateShow));
       }}
 
 
@@ -45,7 +57,7 @@ const CalendarTime = ({children,type,setSelectDate}) => {
             border: "none",
             backgroundColor: "#F9F9F9",
             display: "flex",
-            justifyContent: "center",
+            justifyContent: position?"start":"center",
             alignItems: "center",
           }}
           inline

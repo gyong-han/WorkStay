@@ -12,8 +12,8 @@ import java.util.List;
 public class SpaceService {
 
     private final SpaceMapper mapper;
-    public List<SpaceVo> spaceGetListAll() {
-        return mapper.spaceGetListAll();
+    public List<SpaceVo> spaceGetListAll(String area,String people,String date) {
+        return mapper.spaceGetListAll(area,people,date);
     }
 
     public List<AttachmentVo> spaceGetAttachment() {
@@ -22,6 +22,10 @@ public class SpaceService {
 
     public SpaceVo spaceGetDetailVo(Long no) {
         SpaceVo spaceVo = mapper.spaceGetDetailVo(no);
+
+        List<String> features = mapper.getFeatures(no);
+
+        System.out.println("features ::: " +features);
 
         List<AttachmentVo> attachments = mapper.spaceGetAttachmentByNo(no);
 
@@ -36,7 +40,13 @@ public class SpaceService {
         System.arraycopy(attachmentPaths, 0, filePaths, 1, attachmentPaths.length);
 
         spaceVo.setAttachmentFilePaths(filePaths);
+        spaceVo.setFeatures(features);
 
         return spaceVo;
+    }
+
+    public int reservation(SpaceVo vo, String memberNo) {
+        int result = mapper.reservation(vo,memberNo);
+        return result;
     }
 }

@@ -7,7 +7,7 @@ public class StayVo {
     private Long no;
     private Long hostNo;
     private Long statusNo;
-    private Long businessTypeCode;
+    private Long businessTypeNo;
     private String name;
     private String phone;
     private String address;

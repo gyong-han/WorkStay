@@ -6,6 +6,8 @@ import { IoMdSearch } from "react-icons/io";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
 import { CiFilter } from "react-icons/ci";
 import { RiResetRightFill } from "react-icons/ri";
+import { useDispatch, useSelector } from "react-redux";
+import { setReset } from "../../redux/spaceSlice";
 
 
 
@@ -82,7 +84,15 @@ const FindSpaceList = () => {
   const [attachmentVoList,setAttachmentVoList]= useState([]);
   const [dataLoad,setDataLoad] = useState(1);
   const [imgPath,setImgPath]= useState([]);
+  const spaceVo = useSelector((state)=>state.space);
+  const dispatch = useDispatch();
 
+  const queryParams = new URLSearchParams({
+    datedata: spaceVo.reservationDate,
+    people: spaceVo.adult+spaceVo.child+spaceVo.baby,
+    // spaceVo의 다른 필드들도 동일하게 처리
+    area: spaceVo.area,  // 추가적인 필드, 예: area
+}).toString();
   const handleChange = (e) => {
     setFormData((prev) => {
       return {
@@ -108,7 +118,8 @@ const FindSpaceList = () => {
   useEffect(()=>{
     //스페이스 목록에있는 파일들의 첨부파일 전부다 가져오기
     fetch("http://127.0.0.1:8080/space/attachmentlist",{
-      method:'GET'
+      method:'GET',
+    
     })
     .then((resp)=>resp.json())
     .then((data)=>{
@@ -120,8 +131,11 @@ const FindSpaceList = () => {
 
   useEffect(()=>{
     // 스페이스 목록 데이터 가져오기
-    fetch("http://127.0.0.1:8080/space/list",{
-      method:'GET'
+    fetch(`http://127.0.0.1:8080/space/list?${queryParams}`,{
+      method:'GET',
+        headers:{
+        "content-type" : "application/json"
+      },
     })
     .then((resp)=>resp.json())
     .then((data)=>{
@@ -143,7 +157,7 @@ const FindSpaceList = () => {
           
       }
     })
-  },[dataLoad]);
+  },[dataLoad,spaceVo]);
 
 
 
@@ -182,7 +196,9 @@ const FindSpaceList = () => {
     <div>
     <Btn>
             <RiResetRightFill size={18} />
-            <FilterText>초기화</FilterText>
+            <FilterText onClick={()=>{
+              dispatch(setReset());
+            }}>초기화</FilterText>
           </Btn>
     </div>
         </FilterWrapper>
@@ -191,6 +207,7 @@ const FindSpaceList = () => {
     {spaceVoList.map((vo,idx)=>{
       
       const voImgPaths = imgPath[idx][vo.no];
+      // console.log("vo IMG :: ",voImgPaths);
       
       return(
       <Fragment key={vo.no}>

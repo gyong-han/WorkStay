@@ -1,44 +1,42 @@
-import React from 'react';
-import { Link, useParams } from 'react-router-dom';
-import styled from 'styled-components';
-import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
-import PackageDetailCard from '../../components/package/PackageDetailCard';
-import Infomation from '../../components/Infomation';
-import Btn from '../../components/Btn';
-import CalendarTime from '../../components/FilterBar/CalendalTime';
-
-
+import React from "react";
+import { Link, useParams } from "react-router-dom";
+import styled from "styled-components";
+import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import PackageDetailCard from "../../components/package/PackageDetailCard";
+import Infomation from "../../components/Infomation";
+import Btn from "../../components/Btn";
+import CalendarTime from "../../components/FilterBar/CalendalTime";
+import { useSelector } from "react-redux";
 
 const Layout = styled.div`
-  width:100%;
+  width: 100%;
   height: 100%;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 100px 60px 700px 150px 150px 150px 100px 1fr;
 
-&>div:nth-child(1){
-  display: flex;
-  justify-content: center;
-}
+  & > div:nth-child(1) {
+    display: flex;
+    justify-content: center;
+  }
 `;
 
 const DateDiv = styled.div`
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: end;
-    border-bottom: 2px solid #D9D9D9;
-   
-
-&>div:nth-child(1){
   width: 100%;
   height: 100%;
-  display: grid;
-  grid-template-columns: 170px 1fr 170px;
+  display: flex;
   justify-content: center;
-  align-items: center;
-}
+  align-items: end;
+  border-bottom: 2px solid #d9d9d9;
+
+  & > div:nth-child(1) {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 170px 1fr 170px;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 const CalendarLayout = styled.div`
@@ -46,11 +44,10 @@ const CalendarLayout = styled.div`
   height: 100%;
   display: flex;
   justify-content: center;
-
 `;
 
 const ThirdDiv = styled.div`
-  border-bottom : 2px solid #D9D9D9;
+  border-bottom: 2px solid #d9d9d9;
 `;
 
 const ContentLayout = styled.div`
@@ -60,14 +57,14 @@ const ContentLayout = styled.div`
   grid-template-columns: 250px 1fr;
   grid-template-rows: 1fr;
   align-items: center;
-  border-bottom: 2px solid #D9D9D9;
+  border-bottom: 2px solid #d9d9d9;
 `;
 const TitleDiv = styled.div`
-   width: 100%;
-   height: 100%;
-   display: flex;
-   align-items: center;
-   font-size: 24px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  font-size: 24px;
 `;
 
 const IconLayoutDiv = styled.div`
@@ -80,22 +77,41 @@ const IconLayoutDiv = styled.div`
 `;
 
 const FindStayBooking = () => {
+  const { x } = useParams();
+  console.log("x ::::", x);
 
-  const{x} = useParams();
-  console.log("x ::::",x);
-  
+  const spaceVo = useSelector((state) => state.space);
 
   return (
     <Layout>
-      <div><h1>BOOKING</h1></div>
+      <div>
+        <h1>BOOKING</h1>
+      </div>
       <DateDiv>
         <div>
           <div>인더플럼</div>
-          <CalendarLayout><CalendarTime type={"text"}>날짜를 선택해주세요<MdOutlineKeyboardArrowDown /></CalendarTime></CalendarLayout>
-          <div><Link to={"/findstay/booking/1"}><Btn w={150} h={35} bg={"#049DD9"} size={"20px"} >예약하기</Btn></Link></div>
-        </div> 
-        </DateDiv>
-      <ThirdDiv><PackageDetailCard title={`Room A${x}`} information={"ROOM INFORMATION"}></PackageDetailCard></ThirdDiv>
+          <CalendarLayout>
+            <CalendarTime type={"text"}>
+              날짜를 선택해주세요
+              <MdOutlineKeyboardArrowDown />
+            </CalendarTime>
+          </CalendarLayout>
+          <div>
+            <Link to={"/findstay/booking/1"}>
+              <Btn w={150} h={35} bg={"#049DD9"} size={"20px"}>
+                예약하기
+              </Btn>
+            </Link>
+          </div>
+        </div>
+      </DateDiv>
+      <ThirdDiv>
+        <PackageDetailCard
+          title={`Room A${x}`}
+          information={"ROOM INFORMATION"}
+          imgPaths={spaceVo.attachmentFilePaths}
+        ></PackageDetailCard>
+      </ThirdDiv>
       <ContentLayout>
         <TitleDiv>FEATURES</TitleDiv>
         <IconLayoutDiv>
@@ -126,7 +142,12 @@ const FindStayBooking = () => {
         </IconLayoutDiv>
       </ContentLayout>
       <div></div>
-      <Infomation morning={150000} night={820000} standard={10} max={20}></Infomation>
+      <Infomation
+        morning={150000}
+        night={820000}
+        standard={10}
+        max={20}
+      ></Infomation>
     </Layout>
   );
 };
