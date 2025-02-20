@@ -68,4 +68,19 @@ public interface SpaceMapper {
             )
             """)
     int reservation(SpaceVo vo, String memberNo);
+
+    @Select("""
+            SELECT DISTINCT USE_DAY
+            FROM SPACE_RESERVATION
+            WHERE SPACE_NO = #{no}
+            AND USE_DAY IN (
+                SELECT USE_DAY
+                FROM SPACE_RESERVATION
+                WHERE SPACE_NO = #{no}
+                AND PACKAGE_NO IN (1, 2)
+                GROUP BY USE_DAY
+                HAVING COUNT(DISTINCT PACKAGE_NO) = 2
+            )
+            """)
+    String[] getIsAvailable(String no);
 }

@@ -37,6 +37,7 @@ public class SpaceController {
 
     @PostMapping("reservation")
     public int reservation(SpaceVo vo,String memberNo){
+
         String date = vo.getUseDay();
         String formattedDate = date.replaceAll("-", "");
         vo.setUseDay(formattedDate);
@@ -44,6 +45,12 @@ public class SpaceController {
 
         return result;
 
+    }
+    @PostMapping("isAvailable")
+    public String[] getIsAvailable(@RequestBody String no){
+        String[] date = service.getIsAvailable(no);
+        System.out.println("date :::"+date);
+        return date;
     }
 
 
