@@ -21,9 +21,13 @@ const memberSlice = createSlice({
       state.email = null;
       state.pageNick = "LOGIN";
     },
+    findpwd: (state, action) => {
+      const token = action.payload;
+      state.email = token.email;
+    },
   },
 });
 
-export const { login, logout } = memberSlice.actions;
+export const { login, logout, findpwd } = memberSlice.actions;
 
 export default memberSlice.reducer;

@@ -20,6 +20,7 @@ public class JwtUtil {
         this.secretKey = new SecretKeySpec(bytes , "HmacSHA256");
     }
 
+
     public String createJwtToken(String no , String email, String pageNick , String role){
 
         if (secretKey == null) {
@@ -37,4 +38,21 @@ public class JwtUtil {
                 .compact()
                 ;
         }
-    }
+
+        public String createJwtPwdToken(String email){
+
+        if (secretKey == null) {
+            throw new IllegalStateException("JWT SecretKey가 null입니다!");
+        }
+
+        return Jwts.builder()
+                .claim("email" , email)
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + (1000*60*5)))
+                .signWith(secretKey)
+                .compact()
+                ;
+        }
+
+
+    }//class

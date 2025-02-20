@@ -2,7 +2,6 @@ package com.kh.springfinal.guest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -40,9 +39,8 @@ public class GuestController {
     @PostMapping("findid")
     public GuestVo findId(@RequestBody GuestVo vo){
         try{
-            System.out.println("controller vo = " + vo);
+
             GuestVo result = service.findId(vo);
-            System.out.println("result = " + result);
             return result;
         }catch(Exception e) {
             throw new IllegalStateException("[GUEST-JOIN] JOIN FAIL ...");
@@ -51,10 +49,12 @@ public class GuestController {
 
     //비밀번호 찾기
     @PostMapping("findpwd")
-    public GuestVo findPwd(@RequestBody GuestVo vo){
+    public String findPwd(@RequestBody GuestVo vo){
         try{
-            GuestVo result = service.findPwd(vo);
-            return result;
+            System.out.println("controller vo = " + vo);
+            String token = service.findPwd(vo);
+            System.out.println("token = " + token);
+            return token;
         }catch(Exception e) {
             throw new IllegalStateException("[GUEST-JOIN] JOIN FAIL ...");
         }

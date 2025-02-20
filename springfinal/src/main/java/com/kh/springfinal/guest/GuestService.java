@@ -37,21 +37,28 @@ public class GuestService {
         if (!isMatch) {
             throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
         }
-        String token = jwtUtil.createJwtToken(dbVo.getNo(), dbVo.getEmail(), dbVo.getPageNick(),  "user_guest");
-        log.info("Generated Token in Service: {}", token);
+        String role = dbVo.getPageNick();
+        String token = jwtUtil.createJwtToken(dbVo.getNo(), dbVo.getEmail(), dbVo.getPageNick(), role);
         return token;
     }
 
     public GuestVo findId(GuestVo vo) {
-        System.out.println("Service - Received name: " + vo.getName());
-        System.out.println("Service - Received phone: " + vo.getPhone());
-        System.out.println("service vo = " + vo);
         GuestVo dbVo = mapper.findId(vo);
-        System.out.println("dbVo = " + dbVo);
         return dbVo;
     }
 
-    public GuestVo findPwd(GuestVo vo) {
-        return mapper.findPwd(vo);
+    public String findPwd(GuestVo vo) {
+        System.out.println(" service email " + vo.getEmail());
+        System.out.println(" service phone " + vo.getPhone());
+        System.out.println("service vo = " + vo);
+        GuestVo dbVo = mapper.findPwd(vo);
+        System.out.println("dbVo = " + dbVo);
+        if (dbVo == null) {
+            throw new IllegalStateException("해당 이메일이 존재하지 않습니다.");
+        }
+        String token = jwtUtil.createJwtPwdToken(dbVo.getEmail());
+        return token;
     }
-}
+
+
+}//class

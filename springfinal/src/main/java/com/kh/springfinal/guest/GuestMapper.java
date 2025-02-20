@@ -12,6 +12,7 @@ public interface GuestMapper {
             """)
     int join(GuestVo vo);
 
+
     @Select("""
             SELECT NO , EMAIL, PWD , PAGE_NICK
             FROM MEMBER
@@ -33,8 +34,9 @@ public interface GuestMapper {
             SELECT *
             FROM MEMBER
             WHERE EMAIL = #{email}
-            AND PHONE = #{PHONE}
+            AND PHONE = #{phone}
             """)
     GuestVo findPwd(GuestVo vo);
+
 
 }
