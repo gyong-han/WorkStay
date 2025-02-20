@@ -3,6 +3,7 @@ package com.kh.springfinal.guest;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface GuestMapper {
@@ -38,5 +39,12 @@ public interface GuestMapper {
             """)
     GuestVo findPwd(GuestVo vo);
 
+
+    @Update("""
+            UPDATE MEMBER
+            SET PWD = #{pwd}
+            WHERE EMAIL = #{email}
+            """)
+    int newPwd(GuestVo vo);
 
 }

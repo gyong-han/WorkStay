@@ -4,8 +4,6 @@ import styled from "styled-components";
 import Alert from "../../components/Alert";
 import { useFormData } from "../../utils/useFormData";
 import { useDispatch } from "react-redux";
-import { getPayload } from "../../utils/jwtUtil";
-import { findId } from "../../redux/memberSlice";
 
 const MainDiv = styled.div`
   display: grid;
@@ -152,7 +150,7 @@ const FindId = () => {
 
   const onSubmit = (data) => {
     console.log("아이디찾기 성공:", data);
-    setFoundEmail(data); // ⬅ 이메일 값을 상태에 저장
+    setFoundEmail(data.email); // ⬅ 이메일 값을 상태에 저장
     setIsAlertOpen(true);
   };
 

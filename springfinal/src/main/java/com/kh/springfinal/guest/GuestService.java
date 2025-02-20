@@ -15,7 +15,7 @@ public class GuestService {
 
     private final GuestMapper mapper;
     private final JwtUtil jwtUtil;
-    private final BCryptPasswordEncoder encoder;
+        private final BCryptPasswordEncoder encoder;
 
     public GuestVo join(GuestVo vo) {
 
@@ -48,16 +48,32 @@ public class GuestService {
     }
 
     public String findPwd(GuestVo vo) {
-        System.out.println(" service email " + vo.getEmail());
-        System.out.println(" service phone " + vo.getPhone());
-        System.out.println("service vo = " + vo);
+        System.out.println("service email = " + vo.getEmail());
+
+        if (vo.getEmail() == null || vo.getEmail().isEmpty()) {
+            throw new IllegalArgumentException("이메일이 null 또는 비어 있습니다!");
+        }
+
         GuestVo dbVo = mapper.findPwd(vo);
-        System.out.println("dbVo = " + dbVo);
         if (dbVo == null) {
             throw new IllegalStateException("해당 이메일이 존재하지 않습니다.");
         }
+        System.out.println("dbVo email = " + dbVo.getEmail());
         String token = jwtUtil.createJwtPwdToken(dbVo.getEmail());
         return token;
+    }
+
+
+    public GuestVo newPwd(GuestVo vo) {
+        String encodedPwd = encoder.encode(vo.getPwd());
+        vo.setPwd(encodedPwd);
+        System.out.println("encodedPwd = " + encodedPwd);
+        System.out.println("service vo = " + vo);
+        int dbVo = mapper.newPwd(vo);
+        String token = jwtUtil.createJwtPwdToken(vo.getEmail());
+        System.out.println("token = " + token);
+        System.out.println("dbVo = " + dbVo);
+        return vo;
     }
 
 

@@ -33,7 +33,7 @@ public class JwtUtil {
                 .claim("pageNick" , pageNick)
                 .claim("role" , role)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + (1000*60*60*24)))
+                .expiration(new Date(System.currentTimeMillis() + (1000*60*60*24))) // 하루로 설정
                 .signWith(secretKey)
                 .compact()
                 ;
@@ -41,14 +41,18 @@ public class JwtUtil {
 
         public String createJwtPwdToken(String email){
 
-        if (secretKey == null) {
-            throw new IllegalStateException("JWT SecretKey가 null입니다!");
-        }
+            if (secretKey == null) {
+                throw new IllegalStateException("JWT SecretKey가 null입니다!");
+            }
+
+            if (email == null || email.isEmpty()) {
+                throw new IllegalArgumentException("이메일이 null 또는 비어 있습니다!");
+            }
 
         return Jwts.builder()
                 .claim("email" , email)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + (1000*60*5)))
+                .expiration(new Date(System.currentTimeMillis() + (1000*60*5))) // 5분으로 설정
                 .signWith(secretKey)
                 .compact()
                 ;
