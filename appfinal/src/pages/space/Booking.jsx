@@ -358,7 +358,7 @@ const Booking = () => {
   
 
   const fd = new FormData();
-  fd.append("no",spaceVo.no);
+  fd.append("spaceNo",spaceVo.no);
   fd.append("memberNo",1);
   fd.append("paymentNo",1);
   fd.append("packageNo",packageNo);
@@ -375,6 +375,25 @@ const Booking = () => {
 // USE_DAY
 
   const clickHandler = (e)=>{
+      let errorMsg = "";
+        for (let [key, value] of fd.entries()) {
+          if (!value) {  // 값이 없으면
+          switch(key){
+            case "no" : errorMsg = "작성자 정보가 없습니다. 다시 로그인 해주세요";break;
+            case "request" : errorMsg="요청사항을 작성해주세요"; break;
+            case "amount" : errorMsg="가격이 책정되지 않았습니다. 처음부터 다시 예약해주세요."; break;
+            case "useDay" : errorMsg="예약하실 날짜를 선택해주세요."; break;
+          }
+      }
+
+      // 오류가 있으면 alert을 띄움
+     
+    }
+    if (errorMsg) {
+      alert(errorMsg);
+      return;
+    }
+
     e.preventDefault();
     fetch("http://127.0.0.1:8080/space/reservation",{
       method : "POST",
@@ -382,35 +401,8 @@ const Booking = () => {
     }).then((resp)=>resp.text())
     .then((data)=>{
       console.log(data);
-      if(data ==1){
         navi("/findspace/successbooking");
-      }else{
-        let errorMsg = "";
-
-        // FormData의 모든 키와 값을 순회
-        for (let [key, value] of fd.entries()) {
-            if (!value) {  // 값이 없으면
-             switch(key){
-              case "no" : errorMsg = "작성자 정보가 없습니다. 다시 로그인 해주세요";break;
-              case "request" : errorMsg="요청사항을 작성해주세요"; break;
-              case "amount" : errorMsg="가격이 책정되지 않았습니다"; break;
-              case "useDay" : errorMsg="예약일 정보 오류입니다 처음부터 다시 예약 해주세요."; break;
-             }
-        }
-    
-        // 오류가 있으면 alert을 띄움
-        if (errorMsg) {
-            alert(errorMsg);
-            break;
-        }
-        if(data ==0){
-          alert("서비스의 오류가 발생했습니다 관리자에게 문의해주세요");
-          break;
-        }
-      }
-      
-      
-  }})
+      })
   
   }
     

@@ -78,6 +78,16 @@ const FilterTextMD = styled.span`
 `;
 
 const FindSpaceList = () => {
+  
+  const dispatch = useDispatch();
+  const currentUrl = window.location.href;
+  useEffect(()=>{
+    if(currentUrl == "http://localhost:3000/findspace"){
+      dispatch(setReset());
+    }
+  },[currentUrl])
+  
+ 
 
   const [formData, setFormData] = useState({});
   const [spaceVoList,setSpaceVoList] = useState([]);
@@ -85,7 +95,7 @@ const FindSpaceList = () => {
   const [dataLoad,setDataLoad] = useState(1);
   const [imgPath,setImgPath]= useState([]);
   const spaceVo = useSelector((state)=>state.space);
-  const dispatch = useDispatch();
+ 
 
   const queryParams = new URLSearchParams({
     datedata: spaceVo.reservationDate,
@@ -224,7 +234,6 @@ const FindSpaceList = () => {
            ></ListCard>
           </div>
          </Fragment>
-      
       )
     })}
   </InnerLayoutDiv>

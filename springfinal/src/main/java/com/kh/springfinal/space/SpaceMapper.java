@@ -1,5 +1,6 @@
 package com.kh.springfinal.space;
 
+import com.kh.springfinal.reservation.SpaceReservVo;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -64,10 +65,10 @@ public interface SpaceMapper {
             NO, SPACE_NO, MEMBER_NO, PAYMENT_NO, PACKAGE_NO, ADULT, CHILD, BABY, REQUEST, AMOUNT, USE_DAY
             )VALUES(
            (SELECT GET_SPACE_RESERVATION_CODE FROM DUAL),
-             #{vo.no}, #{memberNo}, #{vo.paymentNo}, #{vo.packageNo}, #{vo.adult}, #{vo.child}, #{vo.baby}, #{vo.request}, #{vo.amount}, #{vo.useDay}
+             #{vo.spaceNo}, #{memberNo}, #{vo.paymentNo}, #{vo.packageNo}, #{vo.adult}, #{vo.child}, #{vo.baby}, #{vo.request}, #{vo.amount}, #{vo.useDay}
             )
             """)
-    int reservation(SpaceVo vo, String memberNo);
+    int reservation(SpaceReservVo vo, String memberNo);
 
     @Select("""
             SELECT DISTINCT USE_DAY
@@ -83,4 +84,27 @@ public interface SpaceMapper {
             )
             """)
     String[] getIsAvailable(String no);
+
+    @Select("""
+            SELECT NO, SPACE_NO, PACKAGE_NO, USE_DAY
+            FROM SPACE_RESERVATION
+            WHERE SPACE_NO = #{no}
+              AND USE_DAY = #{date}
+              AND SPACE_NO NOT IN (
+                  SELECT SPACE_NO
+                  FROM SPACE_RESERVATION
+                  WHERE SPACE_NO = #{no}
+                    AND USE_DAY = #{date}
+                  GROUP BY SPACE_NO
+                  HAVING COUNT(SPACE_NO) = 2
+              )
+            
+            """)
+    SpaceReservVo packageDone(String no,String date);
+
+    @Select("""
+             SELECT NO,RESERVATION_DATE FROM SPACE_RESERVATION
+              WHERE SPACE_NO =#{spaceNo} AND PACKAGE_NO =#{packageNo} AND USE_DAY =#{useDay}
+            """)
+    SpaceReservVo getNowTime(SpaceReservVo vo);
 }

@@ -1,5 +1,6 @@
 package com.kh.springfinal.space;
 
+import com.kh.springfinal.reservation.SpaceReservVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +28,7 @@ public class SpaceService {
 
         List<String> features = mapper.getFeatures(no);
 
-        System.out.println("features ::: " +features);
+//        System.out.println("features ::: " +features);
 
         List<AttachmentVo> attachments = mapper.spaceGetAttachmentByNo(no);
 
@@ -47,7 +48,7 @@ public class SpaceService {
         return spaceVo;
     }
 
-    public int reservation(SpaceVo vo, String memberNo) {
+    public int reservation(SpaceReservVo vo, String memberNo) {
         int result = mapper.reservation(vo,memberNo);
         return result;
     }
@@ -65,5 +66,13 @@ public class SpaceService {
         }
 
         return result; // 변환된 배열 반환
+    }
+
+    public SpaceReservVo packageDone(String no,String date) {
+        return mapper.packageDone(no,date);
+    }
+
+    public SpaceReservVo getNowTime(SpaceReservVo vo) {
+        return mapper.getNowTime(vo);
     }
 }
