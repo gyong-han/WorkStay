@@ -1,3 +1,4 @@
+//findspaceDetial
 import styled from 'styled-components';
 import { BiMessageAltDetail } from "react-icons/bi";
 import { RxShare2 } from "react-icons/rx";
@@ -12,6 +13,7 @@ import { useEffect, useState } from 'react';
 import CalendarTime from '../../components/FilterBar/CalendalTime';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPackageType, setReservationDone, setSpaceVo } from '../../redux/spaceSlice';
+import PackageReservationDone from '../../components/package/PackageReservationDone';
 
 const Layout =styled.div`
 width: 100%;
@@ -166,7 +168,11 @@ const FindSpaceDetail = () => {
   const dispatch = useDispatch();
   const {x} = useParams();
   const spaceVo = useSelector((state) => state.space);
+  const [packageNo,setPackageNo] = useState("");
   // console.log(x);
+
+
+  
 
   useEffect(()=>{
     fetch(("http://localhost:8080/space/detail"),{
@@ -181,7 +187,7 @@ const FindSpaceDetail = () => {
       // console.log("data ::: ",data);
       dispatch(setSpaceVo(data));
     })
-  },[x,dispatch])
+  },[x,dispatch]);
 
   useEffect(()=>{
     fetch(("http://localhost:8080/space/isAvailable"),{
@@ -192,7 +198,24 @@ const FindSpaceDetail = () => {
       console.log(data);
       dispatch(setReservationDone(data));
     })
-  },[x])
+  },[x]);
+
+   useEffect(()=>{
+    const fd = new FormData();
+    fd.append("no",x);
+    fd.append("useDay",spaceVo.reservationDate);
+    if(!spaceVo.reservationDate){
+      return;
+    }
+    fetch(("http://localhost:8080/space/packagedone"),{
+      method:"POST",
+      body:fd,
+    }).then((resp)=>resp.json())
+    .then((data)=>{
+      console.log("DATA::",data);
+      setPackageNo(data.packageNo);
+    })
+  },[x,spaceVo]);
 
 
 
@@ -248,13 +271,20 @@ const FindSpaceDetail = () => {
       <PackageDiv>
         <div>PACKAGE</div>
         <div>
-          <PackageDisplay img={"https://vrthumb.clipartkorea.co.kr/2023/04/12/pc0040625240.jpg"} titleHandler={()=>{dispatch(setPackageType({packageType:"낮 패키지"}))}}
-            title={"낮 패키지"} standard={"6"} max={"12"} price={spaceVo.daytimePrice}  url={`/findspace/spacebooking/${x}`} imgPaths={spaceVo.attachmentFilePaths}></PackageDisplay>
+          {packageNo != "1"?<PackageDisplay img={"https://vrthumb.clipartkorea.co.kr/2023/04/12/pc0040625240.jpg"} titleHandler={()=>{dispatch(setPackageType({packageType:"낮 패키지"}))}}
+            title={"낮 패키지"} standard={"6"} max={"12"} price={spaceVo.daytimePrice}  url={`/findspace/spacebooking/${x}`} imgPaths={spaceVo.attachmentFilePaths}></PackageDisplay>:
+          <PackageReservationDone img={"https://cdn.ownerclan.com/qiMNa49EgFO3USYFFjlxWueE4HXsJLKBIV9e1~D4~Y4/marketize/auto/as/v1.jpg"}></PackageReservationDone>
+            
+            }
+          
         </div>
         <div></div>
         <div>
-          <PackageDisplay img={"https://png.pngtree.com/background/20230424/original/pngtree-meeting-inside-a-conference-room-with-business-people-picture-image_2457183.jpg"} titleHandler={()=>{dispatch(setPackageType({packageType :"밤 패키지"}))}}
-            title={"밤 패키지"} standard={"4"} max={"8"} price={spaceVo.nightPrice} url={`/findspace/spacebooking/${x}`}  imgPaths={spaceVo.attachmentFilePaths}></PackageDisplay>
+          {packageNo != "2"?<PackageDisplay img={"https://png.pngtree.com/background/20230424/original/pngtree-meeting-inside-a-conference-room-with-business-people-picture-image_2457183.jpg"} titleHandler={()=>{dispatch(setPackageType({packageType :"밤 패키지"}))}}
+          title={"밤 패키지"} standard={"4"} max={"8"} price={spaceVo.nightPrice} url={`/findspace/spacebooking/${x}`}  imgPaths={spaceVo.attachmentFilePaths}></PackageDisplay>:
+          <PackageReservationDone img={"https://cdn.ownerclan.com/qiMNa49EgFO3USYFFjlxWueE4HXsJLKBIV9e1~D4~Y4/marketize/auto/as/v1.jpg"}></PackageReservationDone>
+          }
+          
        </div>
         <div></div>
       </PackageDiv>

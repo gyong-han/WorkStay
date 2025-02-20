@@ -1,5 +1,6 @@
 package com.kh.springfinal.space;
 
+import com.kh.springfinal.reservation.SpaceReservVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,8 +37,8 @@ public class SpaceController {
     }
 
     @PostMapping("reservation")
-    public int reservation(SpaceVo vo,String memberNo){
-
+    public int reservation(SpaceReservVo vo, String memberNo){
+        System.out.println("vo::"+vo);
         String date = vo.getUseDay();
         String formattedDate = date.replaceAll("-", "");
         vo.setUseDay(formattedDate);
@@ -49,9 +50,28 @@ public class SpaceController {
     @PostMapping("isAvailable")
     public String[] getIsAvailable(@RequestBody String no){
         String[] date = service.getIsAvailable(no);
-        System.out.println("date :::"+date);
+//        System.out.println("date :::"+date);
         return date;
     }
 
+    @PostMapping("packagedone")
+    public SpaceReservVo packageDone(String no, String useDay){
+        String date = useDay.replaceAll("-", "");
+
+        SpaceReservVo vo = service.packageDone(no,date);
+        if(vo == null){
+            return new SpaceReservVo();
+        }
+        return vo;
+
+    }
+    @PostMapping("getTimeNow")
+    public SpaceReservVo m01(SpaceReservVo vo){
+        String date = vo.getUseDay();
+        String formattedDate = date.replaceAll("-", "");
+        vo.setUseDay(formattedDate);
+        SpaceReservVo getvo = service.getNowTime(vo);
+        return getvo;
+    }
 
 }
