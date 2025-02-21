@@ -1,4 +1,4 @@
-package com.kh.springfinal.stayReservation;
+package com.kh.springfinal.roomReservation;
 
 public class RoomReservationController {
 }

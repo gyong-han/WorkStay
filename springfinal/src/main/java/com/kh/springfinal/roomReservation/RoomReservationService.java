@@ -1,4 +1,4 @@
-package com.kh.springfinal.stayReservation;
+package com.kh.springfinal.roomReservation;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
