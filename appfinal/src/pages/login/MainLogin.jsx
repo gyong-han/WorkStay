@@ -152,7 +152,6 @@ const MainLogin = () => {
         const no = getPayload(token, "no");
         const email = getPayload(token, "email");
         const pageNick = getPayload(token, "pageNick");
-        console.log("Decoded email:", email);
 
         dispatch(login({ no, email, pageNick }));
         navi("/");

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getPayload } from "../utils/jwtUtil";
+// import { getPayload } from "../utils/jwtUtil";
 
 const memberSlice = createSlice({
   name: "member",
@@ -11,20 +11,23 @@ const memberSlice = createSlice({
   reducers: {
     login: (state, action) => {
       const token = action.payload;
-      localStorage.setItem("token", token);
-      const { no, email, pageNick } = getPayload(token);
-      state.no = no;
-      state.email = email;
-      state.pageNick = pageNick;
+      // const { no, email, pageNick } = getPayload(token);
+      state.no = token.no;
+      state.email = token.email;
+      state.pageNick = token.pageNick;
     },
     logout: (state) => {
       state.no = null;
       state.email = null;
       state.pageNick = "LOGIN";
     },
+    findpwd: (state, action) => {
+      const token = action.payload;
+      state.email = token.email;
+    },
   },
 });
 
-export const { login, logout } = memberSlice.actions;
+export const { login, logout, findpwd } = memberSlice.actions;
 
 export default memberSlice.reducer;
