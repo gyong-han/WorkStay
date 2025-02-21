@@ -2,10 +2,11 @@ import React, { Fragment, useEffect, useState } from "react";
 import Display from "../../components/FilterBar/Display";
 import styled from "styled-components";
 import { IoMdSearch } from "react-icons/io";
-import { IoCheckmarkCircleOutline } from "react-icons/io5";
 import { CiFilter } from "react-icons/ci";
 import { RiResetRightFill } from "react-icons/ri";
 import StayListCard from "./stayComponent/StayListCard";
+import SortDropdown from "../../components/listcomponents/SortDropdown";
+import axios from "axios";
 
 const Layout = styled.div`
   width: 100%;
@@ -71,12 +72,18 @@ const FilterTextMD = styled.span`
   text-align: end;
 `;
 
+const FilterDiv = styled.div`
+  margin-bottom: 20px;
+  width: 500px;
+`;
+
 const FindStayList = () => {
   const [formData, setFormData] = useState({});
   const [stayVoList, setStayVoList] = useState([]);
   const [attachmentVoList, setAttachmentVoList] = useState([]);
   const [dataLoad, setDataLoad] = useState(1);
   const [imgPath, setImgPath] = useState([]);
+  const [sortOption, setSortOption] = useState("latest");
 
   const handleChange = (e) => {
     setFormData((prev) => {
@@ -108,7 +115,6 @@ const FindStayList = () => {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        // console.log("attachment ::", data);
         setAttachmentVoList(data);
         setDataLoad((prev) => prev + 1);
       })
@@ -124,21 +130,20 @@ const FindStayList = () => {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        // console.log("volist ::", data);
         if (attachmentVoList.length > 0) {
-          // console.log("##### voListData : " , data);
           setStayVoList(data);
+
           // map돌려서 필터링해서 맞춰주고 썸네일파일을 제일 앞으로보낸 배열 생성
           const arr = data.map((vo) => {
             const matchingAttachments = attachmentVoList.filter(
               (att) => att.stayNo === vo.no
             );
-            console.log("matchingAttachments ::", matchingAttachments);
 
             const imgPaths =
               matchingAttachments.length > 0
                 ? matchingAttachments.map((att) => att.filePath)
                 : null;
+
             imgPaths.unshift(vo.filePath); //필터링 부분 입니다
             const dataObject = {
               [vo.no]: imgPaths,
@@ -147,11 +152,27 @@ const FindStayList = () => {
           });
 
           // 리턴값을 저장
+          console.log("imgPath 에 저장하는 arr : ", arr);
+
           setImgPath(arr);
           console.log(stayVoList);
         }
       });
   }, [dataLoad]);
+
+  useEffect(() => {
+    const changeOptionData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/stay/list?sort=${sortOption}`
+        );
+        setStayVoList(response.data);
+      } catch (error) {
+        console.error("숙소 데이터 불러오기 실패", error);
+      }
+    };
+    changeOptionData();
+  }, [sortOption]);
 
   return (
     <>
@@ -171,18 +192,13 @@ const FindStayList = () => {
           </form>
         </SearchWrapper>
         <FilterWrapper>
-          <div>
-            <Btn>
-              <FilterText>최신순</FilterText>
-              <IoCheckmarkCircleOutline size={18} />
-            </Btn>
-          </div>
+          <FilterDiv>
+            <SortDropdown onSortChange={setSortOption} />
+          </FilterDiv>
           <div></div>
           <div>
-            <Btn>
-              <CiFilter size={18} />
-              <FilterTextMD>필터</FilterTextMD>
-            </Btn>
+            <CiFilter size={18} />
+            <FilterTextMD>필터</FilterTextMD>
           </div>
           <div>
             <Btn>
@@ -193,29 +209,32 @@ const FindStayList = () => {
         </FilterWrapper>
 
         <InnerLayoutDiv>
-          {stayVoList.map((vo, idx) => {
-            const voImgPaths = imgPath[idx][vo.no]; //<<<<<<<<<<<<<<객체로 담긴 배열을 풀어내는 과정입니다.
-            console.log("voIMG", voImgPaths);
+          {imgPath.length === 0 ? (
+            <h1>imgPath 비어있음</h1>
+          ) : (
+            stayVoList.map((vo, idx) => {
+              const voImgPaths = imgPath[idx][vo.no]; //<<<<<<<<<<<<<<객체로 담긴 배열을 풀어내는 과정입니다.
 
-            return (
-              <Fragment key={vo.no}>
-                <div></div>
-                <div>
-                  <StayListCard
-                    no={vo.no}
-                    price={vo.price}
-                    url={"findstay"}
-                    imgPaths={voImgPaths}
-                    //  clickHandler={clickHandler}
-                    title={vo.name}
-                    min={vo.standardGuest}
-                    max={vo.maxGuest}
-                    address={vo.address}
-                  ></StayListCard>
-                </div>
-              </Fragment>
-            );
-          })}
+              return (
+                <Fragment key={vo.no}>
+                  <div></div>
+                  <div>
+                    <StayListCard
+                      no={vo.no}
+                      price={vo.price}
+                      url={"findstay"}
+                      imgPaths={voImgPaths}
+                      //  clickHandler={clickHandler}
+                      title={vo.name}
+                      min={vo.standardGuest}
+                      max={vo.maxGuest}
+                      address={vo.address}
+                    ></StayListCard>
+                  </div>
+                </Fragment>
+              );
+            })
+          )}
         </InnerLayoutDiv>
       </Layout>
     </>

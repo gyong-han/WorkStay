@@ -10,21 +10,19 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("stay")
-@CrossOrigin
 public class StayController {
     private final StayService stayService;
 
-    @GetMapping("list")
-    public List<StayVo> getFindStayAll(){
-        try{
-             List<StayVo> voList = stayService.getFindStayAll();
-            System.out.println("voList = " + voList);
-             return voList;
-        }catch (Exception e){
-            log.warn(e.getMessage());
-            throw new IllegalStateException("[STAY-ERROR-01]STAY LIST FAIL");
-        }
-    }
+//    @GetMapping("list")
+//    public List<StayVo> getFindStayAll(){
+//        try{
+//             List<StayVo> voList = stayService.getFindStayAll();
+//             return voList;
+//        }catch (Exception e){
+//            log.warn(e.getMessage());
+//            throw new IllegalStateException("[STAY-ERROR-01]STAY LIST FAIL");
+//        }
+//    }
     @GetMapping("attachmentlist")
     public List<StayAttachmentVo> attachmentList(){
         try{
@@ -33,6 +31,16 @@ public class StayController {
         }catch (Exception e){
             log.warn(e.getMessage());
             throw new IllegalStateException("[STAY-ERROR-02]STAY ATTACHMENT-LIST FAIL");
+        }
+    }
+
+    @GetMapping("list")
+    public List<StayVo> sortByList(@RequestParam(defaultValue = "latest")String sort){
+        try{
+            return stayService.sortByList(sort);
+        }catch (Exception e){
+            log.warn(e.getMessage());
+            throw new IllegalStateException("[STAY-ERROR-03]STAY SORT-LIST FAIL");
         }
     }
 
@@ -46,15 +54,15 @@ public class StayController {
 //        }
 //    }
 
-//    @GetMapping("detail")
-//    public StayVo getFindStayByNo(@RequestBody Long no){
-//        try{
-//            return stayService.getFindStayByNo(no);
-//        }catch (Exception e){
-//            log.warn(e.getMessage());
-//            throw new IllegalStateException("[STAY-ERROR-03]STAY DETAIL FAIL");
-//        }
-//    }
+    @PostMapping("detail")
+    public StayVo getFindStayByNo(@RequestBody Long no){
+        try{
+            return stayService.getFindStayByNo(no);
+        }catch (Exception e){
+            log.warn(e.getMessage());
+            throw new IllegalStateException("[STAY-ERROR-03]STAY DETAIL FAIL");
+        }
+    }
 
 
 }
