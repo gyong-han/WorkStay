@@ -59,7 +59,7 @@ function App() {
             }
           />
           <Route
-            path="/slog"
+            path="/slog/*"
             element={
               <Layout>
                 <Slog />
