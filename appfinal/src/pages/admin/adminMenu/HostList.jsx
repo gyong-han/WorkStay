@@ -55,11 +55,13 @@ const StyledTable = styled.table`
 `;
 
 const HostList = () => {
+  window.scrollTo(0, 0);
   const navigate = useNavigate();
   const [dataArr, setDataArr] = useState([]);
 
   const hostDetail = (no) => {
     navigate(`/adminMenu/hostDetail/${no}`);
+    window.scrollTo(0, 0);
   };
 
   useEffect(() => {

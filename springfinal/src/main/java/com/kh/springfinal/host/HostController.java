@@ -151,4 +151,5 @@ public class HostController {
         Map<String,Object> stayReservDetail = service.getStayReservDetail(stayReservNo);
         return stayReservDetail;
     }
+
 }

@@ -28,4 +28,5 @@ public class StayVo {
     private String filePath;
     private String hostName;
     private String[] attachmentFilePaths;
+    private String businessTypeName;
 }

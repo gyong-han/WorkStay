@@ -117,7 +117,7 @@ const ThirdEnrollStay = () => {
               margin="10px"
               marginBot="70px"
             >
-              스테이 신청
+              독채 신청
             </HeaderDiv>
           </div>
           <div>

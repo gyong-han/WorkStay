@@ -14,6 +14,7 @@ const StatusSpan = styled.span`
 `;
 
 const SpaceDelReq = () => {
+  window.scrollTo(0, 0);
   return (
     <>
       <MainDiv>

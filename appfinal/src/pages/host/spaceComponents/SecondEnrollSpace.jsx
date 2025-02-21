@@ -368,8 +368,8 @@ const SecondEnrollSpace = () => {
                   onChange={handleChange}
                 />
                 <datalist id="business_type">
-                  <option value="1">스페이스1</option>
-                  <option value="2">스페이스2</option>
+                  <option value="1">숙박</option>
+                  <option value="2">공간 대여</option>
                 </datalist>
               </div>
               <DataTitle top="40px">사업자 등록번호 *</DataTitle>
