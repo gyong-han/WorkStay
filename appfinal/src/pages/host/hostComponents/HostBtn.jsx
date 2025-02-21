@@ -14,7 +14,7 @@ const Btn = styled.button`
   margin-top: ${(props) => {
     return props.top;
   }};
-  border: 1px solid #049dd9;
+  border: 1px solid #2b8c44;
   border-radius: 5px;
   font-size: ${(props) => {
     return props.font;

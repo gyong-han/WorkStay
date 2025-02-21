@@ -17,6 +17,7 @@ const StatusSpan = styled.span`
   color: ${(props) => (props.isSelected ? props.colorSelected : "black")};
 `;
 const SpaceApprovalMgmt = () => {
+  window.scrollTo(0, 0);
   const [status, setStatus] = useState("1");
   const [dataArr, setDataArr] = useState([]);
 

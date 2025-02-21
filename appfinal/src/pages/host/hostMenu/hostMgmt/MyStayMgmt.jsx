@@ -15,6 +15,7 @@ const StatusSpan = styled.span`
 `;
 
 const MyStayMgmt = () => {
+  window.scrollTo(0, 0);
   const [dataArr, setDataArr] = useState([]);
   useEffect(() => {
     const fd = new FormData();

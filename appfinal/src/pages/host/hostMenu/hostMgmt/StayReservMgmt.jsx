@@ -56,6 +56,7 @@ const StyledTable = styled.table`
 `;
 
 const StayReservMgmt = () => {
+  window.scrollTo(0, 0);
   const [status, setStatus] = useState("5");
   const [dataArr, setDataArr] = useState([]);
   const navigate = useNavigate();
@@ -66,6 +67,7 @@ const StayReservMgmt = () => {
 
   const reservDetail = (reservNo) => {
     navigate(`/hostMenu/hostMgmtMenu/stayReserv/detail/${reservNo}`);
+    window.scrollTo(0, 0);
   };
 
   useEffect(() => {
