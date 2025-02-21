@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FaAngleDown } from "react-icons/fa6";
 import Btn from "../../components/Btn";
-import { useNavigate } from "react-router-dom";
-import Calendar from "../../components/FilterBar/Calendal";
 import { Accordion } from "react-bootstrap";
-import SelectPerson from "../stay/stayComponent/SelectPerson";
 import CalendarTime from "../../components/FilterBar/CalendalTime";
 import { useSelector } from "react-redux";
+import SelectPeople from "./spaceComponents/SelectPeople";
+import { useNavigate } from "react-router-dom";
 
 
 const Layout = styled.div`
@@ -234,6 +233,7 @@ const Ptag = styled.p`
 `;
 
 const Booking = () => {
+  
   const termsData = [
     {
       id: 1,
@@ -349,8 +349,65 @@ const Booking = () => {
 
   // 날짜 선택
   const [selectDate,setSelectDate] = useState("");
+  const [request,setRequest] = useState("");
   const spaceVo = useSelector((state)=>state.space);
+  const priceData = spaceVo.packageType === '낮 패키지'?spaceVo.daytimePrice :spaceVo.nightPrice;
+  const packageNo = spaceVo.packageType === '낮 패키지'?1:2;
+  const price = priceData.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const navi = useNavigate();
+  
 
+  const fd = new FormData();
+  fd.append("spaceNo",spaceVo.no);
+  fd.append("memberNo",1);
+  fd.append("paymentNo",1);
+  fd.append("packageNo",packageNo);
+  fd.append("adult",spaceVo.adult);
+  fd.append("child",spaceVo.child);
+  fd.append("baby",spaceVo.baby);
+  fd.append("request",request);
+  fd.append("amount",priceData);
+  fd.append("useDay",spaceVo.reservationDate);
+
+  
+
+// AMOUNT
+// USE_DAY
+
+  const clickHandler = (e)=>{
+      let errorMsg = "";
+        for (let [key, value] of fd.entries()) {
+          if (!value) {  // 값이 없으면
+          switch(key){
+            case "no" : errorMsg = "작성자 정보가 없습니다. 다시 로그인 해주세요";break;
+            case "request" : errorMsg="요청사항을 작성해주세요"; break;
+            case "amount" : errorMsg="가격이 책정되지 않았습니다. 처음부터 다시 예약해주세요."; break;
+            case "useDay" : errorMsg="예약하실 날짜를 선택해주세요."; break;
+          }
+      }
+
+      // 오류가 있으면 alert을 띄움
+     
+    }
+    if (errorMsg) {
+      alert(errorMsg);
+      return;
+    }
+
+    e.preventDefault();
+    fetch("http://127.0.0.1:8080/space/reservation",{
+      method : "POST",
+      body : fd,
+    }).then((resp)=>resp.text())
+    .then((data)=>{
+      console.log(data);
+        navi("/findspace/successbooking");
+      })
+  
+  }
+    
+
+  
   return (
     <Layout>
       <BookingText>BOOKING</BookingText>
@@ -372,7 +429,7 @@ const Booking = () => {
       <ReservationWrapper>
         <ReservationDiv>
           <InfoText>예약 스페이스</InfoText>
-          <Info>온숲 / Room A1</Info>
+          <Info>{spaceVo.name} / {spaceVo.packageType}</Info>
         </ReservationDiv>
         <ReservationLine />
         <ReservationDiv>
@@ -404,13 +461,13 @@ const Booking = () => {
         <ReservationDiv>
           <InfoText>인원</InfoText>
           <Info>
-            <SelectPerson maxAdults={4} maxChildren={4} maxInfant={4} adultCnt={spaceVo.adult} childCnt={spaceVo.child} babyCnt={spaceVo.baby}/>
+            <SelectPeople maxAdults={40} maxChildren={10} maxInfant={5}/>
           </Info>
         </ReservationDiv>
         <ReservationLine />
         <ReservationDiv>
           <InfoText>요청사항</InfoText>
-          <Request
+          <Request onChange={(e)=>{setRequest(e.target.value)}}
             placeholder="사전에 협의되지 않은 상업 사진 및 영상 촬영은 불가합니다.
 상업적 용도의 촬영은 별도 대관료를 책정하여 운영하고 있습니다."
           />
@@ -423,22 +480,20 @@ const Booking = () => {
           <div>
             <ChargeText>
               <span>객실요금</span>
-              <span>₩180,000</span>
+              <span>₩{price}</span>
             </ChargeText>
             <ChargeDate>
-              <span>2025-01-20</span>
-              <span>₩180,000</span>
+              <span>{spaceVo.reservationDate}</span>
+              <span>₩{price}</span>
             </ChargeDate>
             <ChargeDate>
-              <span>2025-01-20</span>
-              <span>₩180,000</span>
             </ChargeDate>
             <ChargeLine />
           </div>
           <div></div>
           <ChargeText>
             <span></span>
-            <span>₩180,000</span>
+            <span>₩{price}</span>
           </ChargeText>
         </ReservationDiv>
         <ReservationLine />
@@ -474,7 +529,7 @@ const Booking = () => {
         </Agree>
       </UserAgreeWrapper>
       <PaddingDiv>
-        <Btn w={"500px"}>결제하기</Btn>
+        <Btn f={clickHandler} w={"500px"}>결제하기</Btn>
       </PaddingDiv>
       <ProvisionDiv>
         <ProvisionSpan>
@@ -488,6 +543,7 @@ const Booking = () => {
         </ProvisionSpan>
       </ProvisionDiv>
     </Layout>
+    
   );
 };
 

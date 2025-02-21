@@ -23,4 +23,8 @@ public class RoomVo {
     private String[] attachmentFilePaths;
     private List<String> features;
     private String hostName;
+  
+    private String singleSize;
+    private String doubleSize;
+    private String queenSize;
 }

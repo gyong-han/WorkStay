@@ -1,5 +1,8 @@
 package com.kh.springfinal.host;
 
+import com.kh.springfinal.guest.GuestVo;
+import com.kh.springfinal.reservation.SpaceReservVo;
+import com.kh.springfinal.reservation.StayReservVo;
 import com.kh.springfinal.space.SpaceVo;
 import com.kh.springfinal.room.RoomVo;
 import com.kh.springfinal.stay.StayVo;
@@ -8,7 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -72,5 +77,36 @@ public class HostService {
 
     public List<StayVo> getMyStayList(String hostNo) {
         return mapper.getMyStayList(hostNo);
+    }
+
+    public List<TableVo> getSpaceReservList(String status, String hostNo) {
+        return mapper.getSpaceReservList(status,hostNo);
+    }
+
+    public List<TableVo> getRoomReservList(String status, String hostNo) {
+        return mapper.getRoomReservList(status,hostNo);
+    }
+
+    public Map<String, Object> getSpaceReservDetail(String spaceReservNo) {
+        Map<String,Object> spaceReservDetail = new HashMap<>();
+
+        GuestVo guestVo = mapper.getSpaceReservGuest(spaceReservNo);
+        SpaceReservVo spaceVo = mapper.getSpaceReserv(spaceReservNo);
+
+        spaceReservDetail.put("guestVo",guestVo);
+        spaceReservDetail.put("spaceVo",spaceVo);
+        return spaceReservDetail;
+    }
+
+    public Map<String, Object> getStayReservDetail(String stayReservNo) {
+        Map<String,Object> stayReservDetail = new HashMap<>();
+
+        GuestVo guestVo = mapper.getStayReservGuest(stayReservNo);
+        StayReservVo stayVo = mapper.getStayReserv(stayReservNo);
+
+        stayReservDetail.put("guestVo",guestVo);
+        stayReservDetail.put("stayVo",stayVo);
+
+        return stayReservDetail;
     }
 }

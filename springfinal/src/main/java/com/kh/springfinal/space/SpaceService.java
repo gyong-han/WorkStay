@@ -1,9 +1,12 @@
 package com.kh.springfinal.space;
 
+import com.kh.springfinal.reservation.SpaceReservVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -12,8 +15,8 @@ import java.util.List;
 public class SpaceService {
 
     private final SpaceMapper mapper;
-    public List<SpaceVo> spaceGetListAll() {
-        return mapper.spaceGetListAll();
+    public List<SpaceVo> spaceGetListAll(String area,String people,String date) {
+        return mapper.spaceGetListAll(area,people,date);
     }
 
     public List<AttachmentVo> spaceGetAttachment() {
@@ -25,7 +28,7 @@ public class SpaceService {
 
         List<String> features = mapper.getFeatures(no);
 
-        System.out.println("features ::: " +features);
+//        System.out.println("features ::: " +features);
 
         List<AttachmentVo> attachments = mapper.spaceGetAttachmentByNo(no);
 
@@ -43,5 +46,33 @@ public class SpaceService {
         spaceVo.setFeatures(features);
 
         return spaceVo;
+    }
+
+    public int reservation(SpaceReservVo vo, String memberNo) {
+        int result = mapper.reservation(vo,memberNo);
+        return result;
+    }
+
+    public String[] getIsAvailable(String no) {
+        String[] data = mapper.getIsAvailable(no); // 원본 데이터 (yyyyMMdd 형식)
+        String[] result = new String[data.length]; // 변환된 값을 저장할 배열
+
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        for (int i = 0; i < data.length; i++) {
+            LocalDate date = LocalDate.parse(data[i], inputFormatter);
+            result[i] = date.format(outputFormatter); // 변환된 값 저장
+        }
+
+        return result; // 변환된 배열 반환
+    }
+
+    public SpaceReservVo packageDone(String no,String date) {
+        return mapper.packageDone(no,date);
+    }
+
+    public SpaceReservVo getNowTime(SpaceReservVo vo) {
+        return mapper.getNowTime(vo);
     }
 }

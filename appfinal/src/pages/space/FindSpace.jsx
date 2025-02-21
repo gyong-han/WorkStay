@@ -4,6 +4,7 @@ import FindSpaceList from './FindSpaceList';
 import FindSpaceDetail from './FindSpaceDetail';
 import FindSpaceBooking from './FindSpaceBooking';
 import Booking from './Booking';
+import SpaceReservation from './SpaceReservation';
 const FindSpace = () => {
   return (
     <>
@@ -12,6 +13,7 @@ const FindSpace = () => {
       <Route path='/detail/:x' element={<FindSpaceDetail></FindSpaceDetail>}></Route>
       <Route path='/spacebooking/:x' element={<FindSpaceBooking/>}></Route>
       <Route path='/booking/:x' element={<Booking/>}></Route>
+      <Route path='/successbooking' element={<SpaceReservation/>}/>
     </Routes>
     </>
   );

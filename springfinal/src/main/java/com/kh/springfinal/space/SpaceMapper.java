@@ -1,5 +1,7 @@
 package com.kh.springfinal.space;
 
+import com.kh.springfinal.reservation.SpaceReservVo;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -7,14 +9,8 @@ import java.util.List;
 
 @Mapper
 public interface SpaceMapper {
-    @Select("""
-             SELECT S.NO,S.NAME,NIGHT_PRICE,DAYTIME_PRICE,MAX_GUEST,STANDARD_GUEST,ADDRESS,SA.FILE_PATH
-             FROM SPACE S
-             JOIN SPACE_ATTACHMENT SA ON (S.NO = SA.SPACE_NO)
-             WHERE STATUS_NO = '2'
-             AND SA.THUMBNAIL = 'Y'
-            """)
-    List<SpaceVo> spaceGetListAll();
+
+    List<SpaceVo> spaceGetListAll(String area,String people,String date);
 
     @Select("""
             SELECT NO,SPACE_NO,FILE_PATH FROM SPACE_ATTACHMENT
@@ -63,4 +59,52 @@ public interface SpaceMapper {
             WHERE SPACE_NO =#{no}
             """)
     List<String> getFeatures(Long no);
+
+    @Insert("""
+            INSERT INTO SPACE_RESERVATION(
+            NO, SPACE_NO, MEMBER_NO, PAYMENT_NO, PACKAGE_NO, ADULT, CHILD, BABY, REQUEST, AMOUNT, USE_DAY
+            )VALUES(
+           (SELECT GET_SPACE_RESERVATION_CODE FROM DUAL),
+             #{vo.spaceNo}, #{memberNo}, #{vo.paymentNo}, #{vo.packageNo}, #{vo.adult}, #{vo.child}, #{vo.baby}, #{vo.request}, #{vo.amount}, #{vo.useDay}
+            )
+            """)
+    int reservation(SpaceReservVo vo, String memberNo);
+
+    @Select("""
+            SELECT DISTINCT USE_DAY
+            FROM SPACE_RESERVATION
+            WHERE SPACE_NO = #{no}
+            AND USE_DAY IN (
+                SELECT USE_DAY
+                FROM SPACE_RESERVATION
+                WHERE SPACE_NO = #{no}
+                AND PACKAGE_NO IN (1, 2)
+                GROUP BY USE_DAY
+                HAVING COUNT(DISTINCT PACKAGE_NO) = 2
+            )
+            """)
+    String[] getIsAvailable(String no);
+
+    @Select("""
+            SELECT NO, SPACE_NO, PACKAGE_NO, USE_DAY
+            FROM SPACE_RESERVATION
+            WHERE SPACE_NO = #{no}
+              AND USE_DAY = #{date}
+              AND SPACE_NO NOT IN (
+                  SELECT SPACE_NO
+                  FROM SPACE_RESERVATION
+                  WHERE SPACE_NO = #{no}
+                    AND USE_DAY = #{date}
+                  GROUP BY SPACE_NO
+                  HAVING COUNT(SPACE_NO) = 2
+              )
+            
+            """)
+    SpaceReservVo packageDone(String no,String date);
+
+    @Select("""
+             SELECT NO,RESERVATION_DATE FROM SPACE_RESERVATION
+              WHERE SPACE_NO =#{spaceNo} AND PACKAGE_NO =#{packageNo} AND USE_DAY =#{useDay}
+            """)
+    SpaceReservVo getNowTime(SpaceReservVo vo);
 }

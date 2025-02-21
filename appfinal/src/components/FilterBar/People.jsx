@@ -166,6 +166,7 @@ const People = ({ isOpen, onClose }) => {
     console.log("영아 : ", baby);
     
     dispatch(setMemberCnt({adult,child,baby}))
+    dispatch(RESET());
     onClose();
   }
 
@@ -206,16 +207,16 @@ const People = ({ isOpen, onClose }) => {
           <TitleDiv>
             <CounterDiv>
               <div class="minusBtn">
-                <ModalBtn
+                <ModalBtn disabled={adult<=0?true:false}
                   str="-"
                   f={() => {
                     dispatch(DECREMENT_ADULT());
                   }}
-                />
+                  />
               </div>
               <div class="Counter">{adult}</div>
               <div>
-                <ModalBtn
+                <ModalBtn disabled={adult>=40?true:false}
                   str="+"
                   f={() => {
                     dispatch(INCREMENT_ADULT());
@@ -225,16 +226,16 @@ const People = ({ isOpen, onClose }) => {
             </CounterDiv>
             <CounterDiv>
               <div class="minusBtn">
-                <ModalBtn
+                <ModalBtn disabled={child<=0?true:false}
                   str="-"
                   f={() => {
                     dispatch(DECREMENT_CHILD());
                   }}
-                ></ModalBtn>
+                 ></ModalBtn>
               </div>
               <div class="Counter">{child}</div>
               <div>
-                <ModalBtn
+                <ModalBtn disabled={child>=10?true:false}
                   str="+"
                   f={() => {
                     dispatch(INCREMENT_CHILD());
@@ -244,7 +245,7 @@ const People = ({ isOpen, onClose }) => {
             </CounterDiv>
             <CounterDiv>
               <div class="minusBtn">
-                <ModalBtn
+                <ModalBtn disabled={baby<=0?true:false}
                   str="-"
                   f={() => {
                     dispatch(DECREMENT_BABY());
@@ -253,11 +254,12 @@ const People = ({ isOpen, onClose }) => {
               </div>
               <div class="Counter">{baby}</div>
               <div>
-                <ModalBtn
+                <ModalBtn disabled={baby>=5?true:false}
                   str="+"
                   f={() => {
                     dispatch(INCREMENT_BABY());
                   }}
+                  
                 ></ModalBtn>
               </div>
             </CounterDiv>

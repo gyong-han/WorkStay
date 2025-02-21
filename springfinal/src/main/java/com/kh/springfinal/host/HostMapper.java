@@ -1,5 +1,8 @@
 package com.kh.springfinal.host;
 
+import com.kh.springfinal.guest.GuestVo;
+import com.kh.springfinal.reservation.SpaceReservVo;
+import com.kh.springfinal.reservation.StayReservVo;
 import com.kh.springfinal.space.SpaceVo;
 import com.kh.springfinal.room.RoomVo;
 import com.kh.springfinal.stay.StayVo;
@@ -113,7 +116,10 @@ public interface HostMapper {
                 INTRODUCTION,
                 PRICE,
                 MAX_GUEST,
-                STANDARD_GUEST
+                STANDARD_GUEST,
+                SINGLE_SIZE,
+                DOUBLE_SIZE,
+                QUEEN_SIZE
             )
             VALUES
             (
@@ -123,7 +129,10 @@ public interface HostMapper {
                 #{introduction},
                 #{price},
                 #{maxGuest},
-                #{standardGuest}
+                #{standardGuest},
+                #{singleSize},
+                #{doubleSize},
+                #{queenSize}
             )
             """)
     int enrollRoom(RoomVo vo);
@@ -194,4 +203,71 @@ public interface HostMapper {
             """)
     List<StayVo> getMyStayList(String hostNo);
 
+    @Select("""
+            SELECT SR.NO,S.NAME,M.NAME AS HOST_NAME,M.PHONE,P.NAME AS PACKAGE_NAME,TO_CHAR(TO_DATE(SR.USE_DAY, 'YYYYMMDD'), 'YYYY.MM.DD') AS USE_DAY
+            FROM SPACE_RESERVATION SR
+            JOIN SPACE S ON (SR.SPACE_NO = S.NO)
+            JOIN MEMBER M ON (SR.MEMBER_NO = M.NO)
+            JOIN PACKAGE P ON (SR.PACKAGE_NO = P.NO)
+            WHERE S.HOST_NO = #{hostNo}
+            AND SR.STATUS_NO = #{status}
+            """)
+    List<TableVo> getSpaceReservList(String status, String hostNo);
+
+    @Select("""
+            
+            SELECT RS.NO,M.NAME AS HOST_NAME,M.PHONE,R.NAME AS ROOM_NAME,S.NAME,
+            TO_CHAR(TO_DATE(CHECK_IN, 'YYYYMMDD'), 'YYYY.MM.DD') || '~' ||  TO_CHAR(TO_DATE(CHECK_OUT, 'YYYYMMDD'), 'MM.DD') AS USE_DAY
+            FROM ROOM_RESERVATION RS
+            JOIN MEMBER M ON(RS.MEMBER_NO = M.NO)
+            JOIN ROOM R ON(RS.ROOM_NO = R.NO)
+            JOIN STAY S ON(R.STAY_NO = S.NO)
+            WHERE S.HOST_NO = #{hostNo}
+            AND RS.STATUS_NO = #{status}
+            """)
+    List<TableVo> getRoomReservList(String status, String hostNo);
+
+
+    @Select("""
+            SELECT M.NAME,M.EMAIL,M.PHONE
+            FROM MEMBER M
+            JOIN SPACE_RESERVATION SR ON (M.NO = SR.MEMBER_NO)
+            WHERE SR.NO = #{spaceReservNum}
+            """)
+    GuestVo getSpaceReservGuest(String spaceReservNo);
+
+    @Select("""
+            SELECT ADULT,CHILD,BABY,ADULT+CHILD+BABY AS TOTAL_PERSON,S.NAME AS SPACE_NAME,P.NAME AS PACKAGE_NAME,SR.REQUEST AS REQUEST,
+            SR.AMOUNT AS AMOUNT,PM.NAME AS PAYMENT_NAME,
+            TO_CHAR(TO_DATE(SR.USE_DAY, 'YYYYMMDD'), 'YYYY-MM-DD') AS USE_DAY,
+            TO_CHAR(SR.RESERVATION_DATE, 'YYYY-MM-DD HH24:MI') AS RESERVATION_DATE
+            FROM SPACE_RESERVATION SR
+            JOIN SPACE S ON (SR.SPACE_NO = S.NO)
+            JOIN PACKAGE P ON (SR.PACKAGE_NO = P.NO)
+            JOIN PAYMENT PM ON (SR.PAYMENT_NO = PM.NO)
+            WHERE SR.NO = #{spaceReservNo}
+            """)
+    SpaceReservVo getSpaceReserv(String spaceReservNo);
+
+    @Select("""
+            SELECT M.NAME,M.EMAIL,M.PHONE
+            FROM MEMBER M
+            JOIN ROOM_RESERVATION RR ON (M.NO = RR.MEMBER_NO)
+            WHERE RR.NO = #{stayReservNo}
+            """)
+    GuestVo getStayReservGuest(String stayReservNo);
+
+    @Select("""
+            SELECT R.NAME AS ROOM_NAME,S.NAME AS SPACE_NAME,ADULT,CHILD,BABY,ADULT+CHILD+BABY AS TOTAL_PERSON,REQUEST,AMOUNT,
+            M.NAME AS PAYMENT_NAME,
+            TO_CHAR(TO_DATE(CHECK_IN, 'YYYYMMDD'), 'YYYY-MM-DD') AS CHECK_IN,
+            TO_CHAR(TO_DATE(CHECK_OUT, 'YYYYMMDD'), 'YYYY-MM-DD') AS CHECK_OUT,
+            TO_CHAR(RESERVATION_DATE, 'YYYY-MM-DD HH24:MI') AS RESERVATION_DATE
+            FROM ROOM_RESERVATION RR
+            JOIN ROOM R ON (RR.ROOM_NO = R.NO)
+            JOIN STAY S ON(R.STAY_NO = S.NO)
+            JOIN PAYMENT M ON(RR.PAYMENT_NO = M.NO)
+            WHERE RR.NO = #{stayReservNo}
+            """)
+    StayReservVo getStayReserv(String stayReservNo);
 }

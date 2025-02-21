@@ -35,8 +35,8 @@ const HeaderDiv = styled.div`
 `;
 
 const BtnArea = styled.div`
-  margin-top: 80px;
-  margin-bottom: 80px;
+  margin-top: 60px;
+  margin-bottom: 60px;
   display: grid;
   place-items: center;
 `;
@@ -85,6 +85,9 @@ const ThirdEnrollStay = () => {
       fd.append("price", formDataArr[idx].price);
       fd.append("maxGuest", formDataArr[idx].max_guest);
       fd.append("standardGuest", formDataArr[idx].standard_guest);
+      fd.append("singleSize", formDataArr[idx].singleSize);
+      fd.append("doubleSize", formDataArr[idx].doubleSize);
+      fd.append("queenSize", formDataArr[idx].queenSize);
       fd.append("features", featuresArr[idx]);
       fd.append("thumbnail", fileData[idx].thumbnail);
       fd.append("room_floor_plan", fileData[idx].room_floor_plan);

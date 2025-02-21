@@ -6,6 +6,9 @@ import { IoMdSearch } from "react-icons/io";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
 import { CiFilter } from "react-icons/ci";
 import { RiResetRightFill } from "react-icons/ri";
+import { useDispatch, useSelector } from "react-redux";
+import { setReset } from "../../redux/spaceSlice";
+import { getAttachmentAll, getSpaceListAll } from "../../components/service/spaceServcie";
 
 
 
@@ -76,13 +79,31 @@ const FilterTextMD = styled.span`
 `;
 
 const FindSpaceList = () => {
+  
+  const dispatch = useDispatch();
+  const currentUrl = window.location.href;
+  useEffect(()=>{
+    if(currentUrl == "http://localhost:3000/findspace"){
+      dispatch(setReset());
+    }
+  },[currentUrl])
+  
+ 
 
   const [formData, setFormData] = useState({});
   const [spaceVoList,setSpaceVoList] = useState([]);
   const [attachmentVoList,setAttachmentVoList]= useState([]);
   const [dataLoad,setDataLoad] = useState(1);
   const [imgPath,setImgPath]= useState([]);
+  const spaceVo = useSelector((state)=>state.space);
+ 
 
+  const queryParams = new URLSearchParams({
+    datedata: spaceVo.reservationDate,
+    people: spaceVo.adult+spaceVo.child+spaceVo.baby,
+    // spaceVo의 다른 필드들도 동일하게 처리
+    area: spaceVo.area,  // 추가적인 필드, 예: area
+}).toString();
   const handleChange = (e) => {
     setFormData((prev) => {
       return {
@@ -104,27 +125,23 @@ const FindSpaceList = () => {
         // console.log("data : ", data);
       });
   };
-  
+  //spaceService.js 활용하여 async 사용해보기
   useEffect(()=>{
-    //스페이스 목록에있는 파일들의 첨부파일 전부다 가져오기
-    fetch("http://127.0.0.1:8080/space/attachmentlist",{
-      method:'GET'
-    })
-    .then((resp)=>resp.json())
-    .then((data)=>{
+    getAttachmentAll().then((data)=>{
       setAttachmentVoList(data);
+      console.log("data :::" ,data);
       setDataLoad((prev)=>prev+1);
-    })
-    .then(()=>{})
-  },[]);
+    });
+  },[])
+
+
+
 
   useEffect(()=>{
     // 스페이스 목록 데이터 가져오기
-    fetch("http://127.0.0.1:8080/space/list",{
-      method:'GET'
-    })
-    .then((resp)=>resp.json())
-    .then((data)=>{
+    getSpaceListAll(queryParams).then((data)=>{
+      console.log("LISTDATA::::",data);
+      
       if(attachmentVoList.length>0){
       // console.log("##### voListData : " , data);
       setSpaceVoList(data);
@@ -143,7 +160,7 @@ const FindSpaceList = () => {
           
       }
     })
-  },[dataLoad]);
+  },[dataLoad,queryParams]);
 
 
 
@@ -182,7 +199,9 @@ const FindSpaceList = () => {
     <div>
     <Btn>
             <RiResetRightFill size={18} />
-            <FilterText>초기화</FilterText>
+            <FilterText onClick={()=>{
+              dispatch(setReset());
+            }}>초기화</FilterText>
           </Btn>
     </div>
         </FilterWrapper>
@@ -208,7 +227,6 @@ const FindSpaceList = () => {
            ></ListCard>
           </div>
          </Fragment>
-      
       )
     })}
   </InnerLayoutDiv>

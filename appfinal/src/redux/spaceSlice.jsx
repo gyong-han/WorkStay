@@ -1,9 +1,9 @@
-//spaceSlice
 import { createSlice } from '@reduxjs/toolkit';
 
 const spaceSlice = createSlice({
   name: 'space', // slice 이름
   initialState:{
+    no :'',
     address: '서울 강남구 태헤란로 130',
     brn : '',
     businessTypeNo:'',
@@ -19,16 +19,21 @@ const spaceSlice = createSlice({
     sns :'',
     standardGuest:'',
     tagline:'',
-    packageType : '',
+    packageNo : '',
     features :[],
     reservationDate:'',
     adult:0,
     child:0,
     baby:0,
+    area:'',
+    reservationDone:[],
+    reservationNo:'',
+    payDay:'',
 
   },
   reducers: {
     setSpaceVo : (state,action)=>{
+    state.no = action.payload.no;
     state.address = action.payload.address;
     state.brn = action.payload.brn;
     state.businessTypeNo = action.payload.businessTypeNo;
@@ -48,21 +53,56 @@ const spaceSlice = createSlice({
     },
     setPackageType : (state,action)=>{
       state.packageType = action.payload.packageType;
+      
     },
     setreservationDate : (state,action) =>{
       state.reservationDate = action.payload;
     },
     setMemberCnt : (state,action) =>{
-      
       state.adult = action.payload.adult;
-      state.child = action.payload.kids;
+      state.child = action.payload.child;
       state.baby = action.payload.baby;
     },
+    setArea : (state,action)=>{
+      state.area = action.payload;
+    },
+    setReset : (state)=>{
+    state.no ='';
+    state.brn = '';
+    state.businessTypeNo='';
+    state.daytimePrice ='';
+    state.nightPrice ='';
+    state.enrollDate='';
+    state.introduction='';
+    state.maxGuest='';
+    state.name ='';
+    state.phone='';
+    state.sns ='';
+    state.standardGuest='';
+    state.tagline='';
+    state.packageType = '';
+    state.features =[];
+    state.reservationDate='';
+    state.adult=0;
+    state.child=0;
+    state.baby=0;
+    state.area='';
 
+    },
+    setReservationDone : (state,action)=>{
+      state.reservationDone = action.payload;
+    },
+    setReservationInfo: (state,action)=>{
+      console.log("Info 시작 ~~~~");
+      console.log("action에 들어온값",action.payload);
+      state.reservationNo = action.payload.no;
+      state.payDay = action.payload.reservationDate;
+    },
+    
     
   },
 });
 
 
-export const { setSpaceVo,setPackageType,setreservationDate,setMemberCnt } = spaceSlice.actions;
+export const { setSpaceVo,setPackageType,setreservationDate,setMemberCnt,setArea,setReset,setReservationDone,setReservationInfo } = spaceSlice.actions;
 export default spaceSlice.reducer;

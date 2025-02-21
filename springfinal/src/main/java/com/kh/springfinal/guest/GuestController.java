@@ -26,22 +26,46 @@ public class GuestController {
 
     //로그인
     @PostMapping("login")
-    public void login(@RequestBody GuestVo vo){
+    public String login(@RequestBody GuestVo vo){
         try{
-
-            log.info("Login API called with email: {}", vo.getEmail());
             String token = service.login(vo);
-            log.info("Generated Token in Controller: {}", token);
+            return token;
         }catch(Exception e) {
             throw new IllegalStateException("[GUEST-LOGIN] EMAIL-LOGIN FAIL ...");
         }
     }
 
     //아이디 찾기
+    @PostMapping("findid")
+    public GuestVo findId(@RequestBody GuestVo vo){
+        try{
+            GuestVo result = service.findId(vo);
+            return result;
+        }catch(Exception e) {
+            throw new IllegalStateException("[GUEST-FINDID] FINDID FAIL ...");
+        }
+    }
 
     //비밀번호 찾기
+    @PostMapping("findpwd")
+    public String findPwd(@RequestBody GuestVo vo){
+        try{
+            String token = service.findPwd(vo);
+            return token;
+        }catch(Exception e) {
+            throw new IllegalStateException("[GUEST-FINDPWD] FINDPWD FAIL ...");
+        }
+    }
 
     //새로운 비밀번호 생성하기
+    @PostMapping("newpwd")
+    public GuestVo newPwd(@RequestBody GuestVo vo){
+        System.out.println("controller vo = " + vo);
+        GuestVo result = service.newPwd(vo);
+        System.out.println("result = " + result);
+        return result;
+
+    }
 
     //회원 수정하기
 
