@@ -142,12 +142,7 @@ const FindStayBooking = () => {
         </IconLayoutDiv>
       </ContentLayout>
       <div></div>
-      <Infomation
-        morning={150000}
-        night={820000}
-        standard={10}
-        max={20}
-      ></Infomation>
+      <Infomation price={150000} standard={2} max={4}></Infomation>
     </Layout>
   );
 };

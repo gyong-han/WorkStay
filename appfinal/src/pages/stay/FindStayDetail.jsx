@@ -4,13 +4,13 @@ import { RxShare2 } from "react-icons/rx";
 import { IoBookmarkOutline } from "react-icons/io5";
 import { IoBookmark } from "react-icons/io5";
 import PictureSlide from "../../components/listcomponents/PictureSlide";
-import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import PackageDisplay from "../../components/package/PackageDisplay";
 import Map from "../../components/map/Map";
 import Infomation from "../../components/Infomation";
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Calendar from "../../components/FilterBar/Calendal";
+import { useSelector } from "react-redux";
 
 const Layout = styled.div`
   width: 100%;
@@ -134,9 +134,26 @@ const PackageDiv = styled.div`
 const FindStayDetail = () => {
   const [bookMark, setBookMark] = useState();
   const [result, setResult] = useState([]);
-
   const { x } = useParams();
-  console.log(x);
+  const stayVo = useSelector((state) => state.stay);
+
+  // console.log(x);
+
+  useEffect(() => {
+    const url = "http://localhost:8080/stay/detail";
+    const option = {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(x),
+    };
+    fetch(url, option)
+      .then((resp) => resp.json())
+      .then((data) => {
+        console.log("data :: ", data);
+      });
+  });
 
   const park = "4";
   let parking = "";
@@ -248,12 +265,7 @@ const FindStayDetail = () => {
         </Map>
       </div>
       <div></div>
-      <Infomation
-        morning={150000}
-        night={820000}
-        standard={10}
-        max={20}
-      ></Infomation>
+      <Infomation price={10000} standard={10} max={20}></Infomation>
     </Layout>
   );
 };
