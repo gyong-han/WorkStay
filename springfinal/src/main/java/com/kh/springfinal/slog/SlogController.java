@@ -4,11 +4,11 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +44,18 @@ public class SlogController {
         return fileUrls;
     }
 
+    @GetMapping("list")
+    public ResponseEntity<Object> findAll(@RequestParam(defaultValue = "1") int pno){
+
+        try{
+            List<SlogVo> result = slogService.findAll(pno);
+            return ResponseEntity.ok().body(result);
+
+        }catch(Exception e){
+            throw new IllegalStateException("[list] fail....");
+        }
+    }
+
 
 
     @PostMapping("insert")
@@ -53,6 +65,29 @@ public class SlogController {
         return List.of("Success");
     }
 
+
+
+
+    @GetMapping("{no}")
+    public SlogVo getSlogVo (@PathVariable String no){
+        try{
+            return slogService.getSlogVo(no);
+        } catch(Exception e){
+            throw new IllegalStateException("[DETAIL] FAIL........");
+        }
+    }
+
+    @GetMapping("rec")
+    public List<RecPlaceVo> findRecPlace(@RequestParam Long no) {
+        System.out.println("no = " + no);
+        List<RecPlaceVo> recPlaces = slogService.findRecplace(no);
+        if (recPlaces == null || recPlaces.isEmpty()) {
+            return new ArrayList<>();
+
+        }
+        System.out.println(recPlaces);
+        return recPlaces;
+    }
 
 
 
