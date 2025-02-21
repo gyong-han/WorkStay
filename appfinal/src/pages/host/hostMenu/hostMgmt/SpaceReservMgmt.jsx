@@ -56,6 +56,7 @@ const StyledTable = styled.table`
 `;
 
 const SpaceReservMgmt = () => {
+  window.scrollTo(0, 0);
   const [status, setStatus] = useState("5");
   const [dataArr, setDataArr] = useState([]);
   const navigate = useNavigate();
@@ -66,6 +67,7 @@ const SpaceReservMgmt = () => {
 
   const reservDetail = (reservNo) => {
     navigate(`/hostMenu/hostMgmtMenu/spaceReserv/detail/${reservNo}`);
+    window.scrollTo(0, 0);
   };
 
   useEffect(() => {
