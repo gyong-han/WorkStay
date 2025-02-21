@@ -8,6 +8,7 @@ import java.util.List;
 public class RoomVo {
     private Long no;
     private Long stayNo;
+    private Long hostNo;
     private String name;
     private String introduction;
     private String price;

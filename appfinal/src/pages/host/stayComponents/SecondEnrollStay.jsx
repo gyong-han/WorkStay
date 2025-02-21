@@ -155,6 +155,11 @@ const RadioDiv = styled.div`
   }
 `;
 
+const RadioArea = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+`;
+
 const SecondEnrollStay = () => {
   const [phone, setPhone] = useState("");
   const [brn, setbrn] = useState("");
@@ -178,11 +183,6 @@ const SecondEnrollStay = () => {
       };
     });
   };
-
-  const RadioArea = styled.div`
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-  `;
 
   const changephone = (e) => {
     let inputValue = e.target.value;
@@ -277,7 +277,7 @@ const SecondEnrollStay = () => {
             <Hr />
           </div>
           <StayDiv>
-            <EnrollHeader>스페이스 정보</EnrollHeader>
+            <EnrollHeader>스테이 정보</EnrollHeader>
             <div></div>
             <DataTitle top="40px">스테이 이름 *</DataTitle>
             <DataInput
@@ -323,7 +323,7 @@ const SecondEnrollStay = () => {
               />
               <datalist id="business_type">
                 <option value="1">숙박</option>
-                <option value="2">워케이션</option>
+                <option value="2">공간 대여</option>
               </datalist>
             </div>
             <DataTitle top="40px">사업자 등록번호 *</DataTitle>
@@ -355,44 +355,44 @@ const SecondEnrollStay = () => {
                 <input
                   type="radio"
                   name="season"
-                  id="spring"
+                  id="봄"
                   onChange={handleChange2}
-                  checked={formData.season === "spring"}
+                  checked={formData.season === "봄"}
                 />
-                <label for="spring" />
+                <label for="봄" />
                 <span>봄</span>
               </RadioDiv>
               <RadioDiv>
                 <input
                   type="radio"
                   name="season"
-                  id="summer"
+                  id="여름"
                   onChange={handleChange2}
-                  checked={formData.season === "summer"}
+                  checked={formData.season === "여름"}
                 />
-                <label for="summer" />
+                <label for="여름" />
                 <span>여름</span>
               </RadioDiv>
               <RadioDiv>
                 <input
                   type="radio"
                   name="season"
-                  id="fall"
+                  id="가을"
                   onChange={handleChange2}
-                  checked={formData.season === "fall"}
+                  checked={formData.season === "가을"}
                 />
-                <label for="fall" />
+                <label for="가을" />
                 <span>가을</span>
               </RadioDiv>
               <RadioDiv>
                 <input
                   type="radio"
                   name="season"
-                  id="winter"
+                  id="겨울"
                   onChange={handleChange2}
-                  checked={formData.season === "winter"}
+                  checked={formData.season === "겨울"}
                 />
-                <label for="winter" />
+                <label for="겨울" />
                 <span>겨울</span>
               </RadioDiv>
             </RadioArea>

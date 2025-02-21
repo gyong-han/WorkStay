@@ -69,10 +69,12 @@ const Footer = () => {
 
   function enrollStay() {
     navigate("/enroll/stay");
+    window.scrollTo(0, 0);
   }
 
   function enrollSpace() {
     navigate("/enroll/space");
+    window.scrollTo(0, 0);
   }
 
   return (

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Table from "../../../components/table/Table";
+import { useNavigate } from "react-router-dom";
 
 const MainDiv = styled.div`
   display: grid;
@@ -15,7 +16,9 @@ const StatusSpan = styled.span`
 `;
 
 const SpaceEnrollReq = () => {
+  window.scrollTo(0, 0);
   const [dataArr, setDataArr] = useState([]);
+  const navigate = useNavigate();
   useEffect(() => {
     fetch("http://127.0.0.1:8080/api/admin/spaceEnrollReqList", {
       method: "POST",
@@ -25,6 +28,11 @@ const SpaceEnrollReq = () => {
         setDataArr(data);
       });
   }, []);
+
+  const moveDetail = (no) => {
+    navigate(`/adminMenu/spaceEnrollReqDetail/${no}`);
+  };
+
   return (
     <>
       <MainDiv>
@@ -38,6 +46,7 @@ const SpaceEnrollReq = () => {
             th3="전화번호"
             th4="공간명"
             dataArr={dataArr}
+            f={moveDetail}
           />
         </div>
       </MainDiv>
