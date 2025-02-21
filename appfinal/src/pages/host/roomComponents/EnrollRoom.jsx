@@ -103,6 +103,8 @@ const TextArea = styled.textarea`
   margin-top: 35px;
   border-radius: 5px;
   resize: none;
+  font-family: "Pretendard-Regular";
+  font-size: 1.2rem;
 `;
 
 const DataTitle2 = styled.div`

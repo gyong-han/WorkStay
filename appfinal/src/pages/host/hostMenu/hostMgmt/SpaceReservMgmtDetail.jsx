@@ -129,7 +129,7 @@ const SpaceResrvMgmtDetail = () => {
               <StatusSpan size="15px" color="gray">
                 예약 상세 ❯
               </StatusSpan>
-              <StatusSpan size="15px"> {stayName}</StatusSpan>
+              <StatusSpan size="15px"> {spaceVo.spaceName}</StatusSpan>
             </StyleDiv>
           </div>
           <div>
