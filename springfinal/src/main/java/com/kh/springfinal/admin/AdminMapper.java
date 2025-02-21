@@ -34,13 +34,12 @@ public interface AdminMapper {
     List<TableVo> getSpaceEnrollReqList();
 
     @Select("""
-            SELECT M.NO,M.NAME AS HOSTNAME,M.EMAIL,M.PHONE,COUNT(DISTINCT ST.NAME) AS stayCnt,COUNT(DISTINCT SP.NAME) AS spaceCnt
+            SELECT M.NO, M.NAME AS HOSTNAME, M.EMAIL, M.PHONE,
+            (SELECT COUNT(*) FROM STAY S WHERE S.HOST_NO = M.NO AND S.STATUS_NO = 2) AS STAY_CNT,
+            (SELECT COUNT(*) FROM SPACE SP WHERE SP.HOST_NO = M.NO AND SP.STATUS_NO = 2) AS SPACE_CNT
             FROM MEMBER M
-            LEFT JOIN STAY ST ON (M.NO = ST.HOST_NO)
-            LEFT JOIN SPACE SP ON (M.NO = SP.HOST_NO)
-            WHERE HOST_PERMISSION = 'Y'
-            GROUP BY M.NO, M.NAME,M.EMAIL,M.PHONE
-            ORDER BY M.NO DESC
+            WHERE M.HOST_PERMISSION = 'Y'
+            ORDER BY M.NO
             """)
     List<TableVo> getHostList();
 
@@ -60,7 +59,6 @@ public interface AdminMapper {
             AND STATUS_NO = '2'
             AND THUMBNAIL = 'Y'
             GROUP BY S.NAME,S.ADDRESS,S.PHONE,S.SNS,S.NO
-            ORDER BY S.ENROLL_DATE DESC
             """)
     List<TableVo> getStayList(String hostNo);
 
@@ -72,7 +70,6 @@ public interface AdminMapper {
             AND STATUS_NO = '2'
             AND THUMBNAIL = 'Y'           
             GROUP BY S.NO,S.NAME,S.ADDRESS,S.PHONE,S.SNS  
-            ORDER BY S.ENROLL_DATE DESC
             """)
     List<TableVo> getSpaceList(String hostNo);
 
@@ -81,7 +78,6 @@ public interface AdminMapper {
             FROM MEMBER M
             JOIN SPACE S ON (M.NO = S.HOST_NO)
             WHERE S.NO = #{enrollReqNo}
-            AND STATUS_NO = '1'
             """)
     GuestVo getSpaceHostVoEnrollReq(Long enrollReqNo);
 
@@ -91,7 +87,6 @@ public interface AdminMapper {
             FROM SPACE S
             JOIN BUSINESS_TYPE BT ON (S.BUSINESS_TYPE_NO = BT.NO)
             WHERE S.NO = #{enrollReqNo}
-            AND STATUS_NO = '1'
             """)
     SpaceVo getSpaceVoEnrollReq(Long enrollReqNo);
 
@@ -154,7 +149,6 @@ public interface AdminMapper {
             FROM MEMBER M
             JOIN STAY S ON (M.NO = S.HOST_NO)
             WHERE S.NO = #{enrollReqNo}
-            AND STATUS_NO = '1'
             """)
     GuestVo getStayHostVoEnrollReq(Long enrollReqNo);
 
@@ -163,7 +157,6 @@ public interface AdminMapper {
             FROM STAY S
             JOIN BUSINESS_TYPE BT ON (S.BUSINESS_TYPE_NO = BT.NO)
             WHERE S.NO = #{enrollReqNo}
-            AND STATUS_NO = '1'
             """)
     StayVo getStayVoEnrollReq(Long enrollReqNo);
 

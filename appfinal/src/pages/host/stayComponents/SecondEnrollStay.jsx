@@ -81,7 +81,7 @@ const StayDiv = styled.div`
   grid-template-rows: (10, 1fr);
 `;
 
-const DataList = styled.input`
+const DataSelect = styled.select`
   border: 0.5px solid black;
   width: 150px;
   height: 30px;
@@ -89,7 +89,6 @@ const DataList = styled.input`
   font-weight: 400;
   margin-top: 37px;
   border-radius: 8px;
-  line-height: 3;
   text-align: center;
   appearance: none;
   background: url("https://cdn.iconscout.com/icon/premium/png-256-thumb/triangle-down-5065327-4219907.png?f=webp")
@@ -102,6 +101,8 @@ const TextArea = styled.textarea`
   margin-top: 35px;
   border-radius: 5px;
   resize: none;
+  font-family: "Pretendard-Regular";
+  font-size: 1.2rem;
 `;
 
 const BtnArea = styled.div`
@@ -163,7 +164,9 @@ const RadioArea = styled.div`
 const SecondEnrollStay = () => {
   const [phone, setPhone] = useState("");
   const [brn, setbrn] = useState("");
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    business_type_no: "1",
+  });
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -316,15 +319,10 @@ const SecondEnrollStay = () => {
             />
             <DataTitle top="40px">스테이 업종명 *</DataTitle>
             <div>
-              <DataList
-                list="business_type"
-                name="business_type_no"
-                onChange={handleChange}
-              />
-              <datalist id="business_type">
+              <DataSelect name="business_type_no" onChange={handleChange}>
                 <option value="1">숙박</option>
                 <option value="2">공간 대여</option>
-              </datalist>
+              </DataSelect>
             </div>
             <DataTitle top="40px">사업자 등록번호 *</DataTitle>
             <DataInput
