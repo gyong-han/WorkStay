@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import GuestDropdown from "./listcomponents/GuestDropdown";
+import HostDropdown from "./listcomponents/HostDropdown";
+import AdminDropdown from "./listcomponents/AdminDropdown";
 
 const HeaderContainer = styled.header`
   display: grid;
@@ -43,16 +46,34 @@ const StyledLink = styled(Link)`
   }
 `;
 
-const Login = styled(Link)`
-  text-align: right;
+const UserSection = styled.div`
+  justify-self: end;
+  position: relative;
+`;
+
+const GuestButton = styled.button`
+  background: none;
+  border: none;
+  font-size: 16px;
   color: #049dd9;
-  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+`;
+
+const DropdownWrapper = styled.div`
+  position: absolute;
+  top: 35px;
+  left: 30%;
+  transform: translateX(-50%);
+  min-width: 180px;
 `;
 
 const Header = () => {
   const pageNick = useSelector((state) => {
     return state.member.pageNick;
   });
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   return (
     <HeaderContainer>
       <Logo>
@@ -66,7 +87,49 @@ const Header = () => {
         <StyledLink to="/traffic">TRAFFIC</StyledLink>
         <StyledLink to="/slog">S-LOG</StyledLink>
       </NavMenu>
-      <Login to="/login">{pageNick}</Login>
+      <UserSection>
+        {pageNick === "LOGIN" ? (
+          <Link
+            to="/login"
+            style={{ textDecoration: "none", color: "#049dd9" }}
+          >
+            {pageNick}
+          </Link>
+        ) : pageNick === "GUEST" ? (
+          <>
+            <GuestButton onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+              {pageNick}
+            </GuestButton>
+            {isDropdownOpen && (
+              <DropdownWrapper>
+                <GuestDropdown />
+              </DropdownWrapper>
+            )}
+          </>
+        ) : pageNick === "HOST" ? (
+          <>
+            <GuestButton onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+              {pageNick}
+            </GuestButton>
+            {isDropdownOpen && (
+              <DropdownWrapper>
+                <HostDropdown />
+              </DropdownWrapper>
+            )}
+          </>
+        ) : pageNick === "ADMIN" ? (
+          <>
+            <GuestButton onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+              {pageNick}
+            </GuestButton>
+            {isDropdownOpen && (
+              <DropdownWrapper>
+                <AdminDropdown />
+              </DropdownWrapper>
+            )}
+          </>
+        ) : null}
+      </UserSection>
     </HeaderContainer>
   );
 };
