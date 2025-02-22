@@ -44,7 +44,7 @@ const roomSlice = createSlice({
     selectCheckOut: (state, action) => {
       state.checkOut = action.payload.checkOut;
     },
-    setMemberCnt: (state, action) => {
+    setMemberCount: (state, action) => {
       state.adult = action.payload.adult;
       state.child = action.payload.kids;
       state.baby = action.payload.baby;
@@ -52,7 +52,7 @@ const roomSlice = createSlice({
   },
 });
 
-export const { setRoomVo, selectCheckIn, selectCheckOut, setMemberCnt } =
+export const { setRoomVo, selectCheckIn, selectCheckOut, setMemberCount } =
   roomSlice.actions;
 
 export default roomSlice.reducer;
