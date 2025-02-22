@@ -35,24 +35,22 @@ public class StayController {
     }
 
     @GetMapping("list")
-    public List<StayVo> sortByList(@RequestParam(defaultValue = "latest")String sort){
+    public List<StayVo> sortByList(    @RequestParam(defaultValue = "latest") String sort,
+                                       @RequestParam(required = false) String people,
+                                       @RequestParam(required = false) String area,
+                                       @RequestParam(required = false) String dateData){
         try{
-            return stayService.sortByList(sort);
+            System.out.println("sort = " + sort);
+            System.out.println("people = " + people);
+            System.out.println("area = " + area);
+            System.out.println("dateData = " + dateData);
+            String date = (dateData != null) ? dateData.replaceAll("-", "") : null;
+            return stayService.sortByList(sort, people, area, date);
         }catch (Exception e){
             log.warn(e.getMessage());
             throw new IllegalStateException("[STAY-ERROR-03]STAY SORT-LIST FAIL");
         }
     }
-
-//    @GetMapping("{name}")
-//    public void findStayByName(String name){
-//        try{
-//            stayService.findStayByName(name);
-//        }catch (Exception e){
-//            log.warn(e.getMessage());
-//            throw new IllegalStateException("[STAY-ERROR-03]STAY SEARCH-LIST FAIL");
-//        }
-//    }
 
     @PostMapping("detail")
     public StayVo getFindStayByNo(@RequestBody Long no){
@@ -63,6 +61,4 @@ public class StayController {
             throw new IllegalStateException("[STAY-ERROR-03]STAY DETAIL FAIL");
         }
     }
-
-
 }
