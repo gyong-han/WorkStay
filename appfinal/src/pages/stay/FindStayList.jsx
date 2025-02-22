@@ -6,7 +6,12 @@ import { CiFilter } from "react-icons/ci";
 import { RiResetRightFill } from "react-icons/ri";
 import StayListCard from "./stayComponent/StayListCard";
 import SortDropdown from "../../components/listcomponents/SortDropdown";
-import axios from "axios";
+import {
+  getAttachment,
+  getStayListAll,
+} from "../../components/service/stayService";
+import { setSort, setStayData } from "../../redux/staySlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Layout = styled.div`
   width: 100%;
@@ -80,10 +85,10 @@ const FilterDiv = styled.div`
 const FindStayList = () => {
   const [formData, setFormData] = useState({});
   const [stayVoList, setStayVoList] = useState([]);
-  const [attachmentVoList, setAttachmentVoList] = useState([]);
-  const [dataLoad, setDataLoad] = useState(1);
   const [imgPath, setImgPath] = useState([]);
-  const [sortOption, setSortOption] = useState("latest");
+  const stayVo = useSelector((state) => state.stay);
+  const roomVo = useSelector((state) => state.room);
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setFormData((prev) => {
@@ -92,6 +97,49 @@ const FindStayList = () => {
         [e.target.name]: e.target.value,
       };
     });
+  };
+
+  const queryParams = new URLSearchParams({
+    datedata: stayVo.reservationDate || "", // undefined 방지
+    people: (roomVo.adult || 0) + (roomVo.child || 0) + (roomVo.baby || 0), // undefined 방지
+    area: stayVo.address || "", // undefined 방지
+    sort: stayVo.sort || "latest", // 기본값 설정
+  }).toString();
+
+  const AttachmentData = async () => {
+    const attachmentData = await getAttachment();
+    // console.log("먼저 가져와야할 데이터::",attachmentData);
+    const listData = await getStayListAll(queryParams);
+    // console.log(
+    //   "보내는 요청 URL: ",
+    //   `http://localhost:8080/stay/list?${queryParams}`
+    // );
+    // console.log("queryParams :: ", queryParams);
+    // console.log("sort 값 확인: ", stayVo.sort);
+    // console.log("꺼내온 데이터 ::", listData);
+    setStayVoList(listData);
+    dispatch(setStayData(listData));
+
+    //
+    const arr = listData.map((vo) => {
+      const matchingAttachments = attachmentData.filter(
+        (att) => att.stayNo === vo.no
+      );
+      // console.log("matchingAttachments::", matchingAttachments);
+      // console.log(vo.filePath);
+
+      const imgPaths =
+        matchingAttachments.length > 0
+          ? matchingAttachments.map((att) => att.filePath)
+          : null;
+      imgPaths.unshift(vo.filePath);
+      const dataObject = {
+        [vo.no]: imgPaths,
+      };
+      return dataObject;
+    });
+    // 리턴값을 저장
+    setImgPath(arr);
   };
 
   const handleSubmit = (e) => {
@@ -108,71 +156,73 @@ const FindStayList = () => {
   };
 
   useEffect(() => {
-    //숙소 목록에있는 파일들의 첨부파일 전부다 가져오기      <<<<<<<<<<<<        1번째 패치부분
-    fetch("http://localhost:8080/stay/attachmentlist", {
-      // <<<<<<<<<<<<<<여기 주소 바꾸시고 attchment 백으로 가져오시면 됩니다!
-      method: "GET",
-    })
-      .then((resp) => resp.json())
-      .then((data) => {
-        setAttachmentVoList(data);
-        setDataLoad((prev) => prev + 1);
-      })
-      .then(() => {});
-  }, []);
+    AttachmentData();
+    // //숙소 목록에있는 파일들의 첨부파일 전부다 가져오기      <<<<<<<<<<<<        1번째 패치부분
+    // fetch("http://localhost:8080/stay/attachmentlist", {
+    //   // <<<<<<<<<<<<<<여기 주소 바꾸시고 attchment 백으로 가져오시면 됩니다!
+    //   method: "GET",
+    // })
+    //   .then((resp) => resp.json())
+    //   .then((data) => {
+    //     setAttachmentVoList(data);
+    //     setDataLoad((prev) => prev + 1);
+    //   })
+    //   .then(() => {});
+  }, [stayVo.sort]);
 
-  useEffect(() => {
-    // 스에디 목록 데이터 가져오기   <<<<<<<<<<<<<<<<<<<  2번째 패치 부분
-    fetch("http://localhost:8080/stay/list", {
-      //이부분 인데 목록조회 용 리스트 데이터 + 첨부파일 조인해서 첨부파일에 썸네일 Y로 되어있는것 까지 같이져와야합니다
-      // 첨부파일용 썸네일은 StayVo << filepath 에 저장하시고 날리시면 됩니다
-      method: "GET",
-    })
-      .then((resp) => resp.json())
-      .then((data) => {
-        if (attachmentVoList.length > 0) {
-          setStayVoList(data);
+  // useEffect(() => {
+  //   // 스에디 목록 데이터 가져오기   <<<<<<<<<<<<<<<<<<<  2번째 패치 부분
+  //   fetch("http://localhost:8080/stay/list", {
+  //     //이부분 인데 목록조회 용 리스트 데이터 + 첨부파일 조인해서 첨부파일에 썸네일 Y로 되어있는것 까지 같이져와야합니다
+  //     // 첨부파일용 썸네일은 StayVo << filepath 에 저장하시고 날리시면 됩니다
+  //     method: "GET",
+  //   })
+  //     .then((resp) => resp.json())
+  //     .then((data) => {
+  //       if (attachmentVoList.length > 0) {
+  //         setStayVoList(data);
 
-          // map돌려서 필터링해서 맞춰주고 썸네일파일을 제일 앞으로보낸 배열 생성
-          const arr = data.map((vo) => {
-            const matchingAttachments = attachmentVoList.filter(
-              (att) => att.stayNo === vo.no
-            );
+  //         // map돌려서 필터링해서 맞춰주고 썸네일파일을 제일 앞으로보낸 배열 생성
+  //         const arr = data.map((vo) => {
+  //           const matchingAttachments = attachmentVoList.filter(
+  //             (att) => att.stayNo === vo.no
+  //           );
+  //           console.log("oalsdfasodkfs", matchingAttachments);
 
-            const imgPaths =
-              matchingAttachments.length > 0
-                ? matchingAttachments.map((att) => att.filePath)
-                : null;
+  //           const imgPaths =
+  //             matchingAttachments.length > 0
+  //               ? matchingAttachments.map((att) => att.filePath)
+  //               : null;
 
-            imgPaths.unshift(vo.filePath); //필터링 부분 입니다
-            const dataObject = {
-              [vo.no]: imgPaths,
-            };
-            return dataObject;
-          });
+  //           imgPaths.unshift(vo.filePath); //필터링 부분 입니다
+  //           const dataObject = {
+  //             [vo.no]: imgPaths,
+  //           };
+  //           return dataObject;
+  //         });
 
-          // 리턴값을 저장
-          console.log("imgPath 에 저장하는 arr : ", arr);
+  //         // 리턴값을 저장
+  //         console.log("imgPath 에 저장하는 arr : ", arr);
 
-          setImgPath(arr);
-          console.log(stayVoList);
-        }
-      });
-  }, [dataLoad]);
+  //         setImgPath(arr);
+  //         console.log(stayVoList);
+  //       }
+  //     });
+  // }, [dataLoad]);
 
-  useEffect(() => {
-    const changeOptionData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8080/stay/list?sort=${sortOption}`
-        );
-        setStayVoList(response.data);
-      } catch (error) {
-        console.error("숙소 데이터 불러오기 실패", error);
-      }
-    };
-    changeOptionData();
-  }, [sortOption]);
+  // useEffect(() => {
+  //   const changeOptionData = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `http://localhost:8080/stay/list?sort=${sortOption}`
+  //       );
+  //       setStayVoList(response.data);
+  //     } catch (error) {
+  //       console.error("숙소 데이터 불러오기 실패", error);
+  //     }
+  //   };
+  //   changeOptionData();
+  // }, [sortOption]);
 
   return (
     <>
@@ -193,7 +243,7 @@ const FindStayList = () => {
         </SearchWrapper>
         <FilterWrapper>
           <FilterDiv>
-            <SortDropdown onSortChange={setSortOption} />
+            <SortDropdown />
           </FilterDiv>
           <div></div>
           <div>
