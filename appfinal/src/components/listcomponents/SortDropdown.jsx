@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import axios from "axios";
 import styled from "styled-components";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
+import { useDispatch } from "react-redux";
+import { setSort } from "../../redux/staySlice";
 
 const DropdownContainer = styled.div`
   position: relative;
@@ -52,9 +53,10 @@ const DropdownItem = styled.li`
   }
 `;
 
-const SortDropdown = ({ onSortChange }) => {
+const SortDropdown = ({}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("최신순");
+  const dispatch = useDispatch();
 
   const options = [
     { value: "latest", label: "최신순" },
@@ -68,7 +70,7 @@ const SortDropdown = ({ onSortChange }) => {
     setIsOpen(false);
 
     try {
-      onSortChange(option.value);
+      dispatch(setSort(option.value));
     } catch (error) {
       console.error("정렬 옵션 변경 실패", error);
     }
