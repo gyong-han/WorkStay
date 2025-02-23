@@ -77,4 +77,21 @@ public class GuestService {
     }
 
 
+    public GuestVo mypage(String email) {
+        GuestVo dbVo = mapper.mypage(email);
+        return dbVo;
+    }
+
+
+    public GuestVo editMember(GuestVo vo) {
+        if (vo.getPwd() != null && !vo.getPwd().isEmpty()) {
+            String encodedPwd = encoder.encode(vo.getPwd());
+            vo.setPwd(encodedPwd);
+        } else {
+            vo.setPwd(null);
+        }
+        int result = mapper.editMember(vo);
+        return vo;
+    }
+
 }//class

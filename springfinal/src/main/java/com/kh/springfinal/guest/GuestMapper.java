@@ -47,4 +47,14 @@ public interface GuestMapper {
             """)
     int newPwd(GuestVo vo);
 
+
+    @Select("""
+            SELECT *
+            FROM MEMBER
+            WHERE EMAIL = #{email}
+            """)
+    GuestVo mypage(String email);
+
+    int editMember(GuestVo vo);
+
 }
