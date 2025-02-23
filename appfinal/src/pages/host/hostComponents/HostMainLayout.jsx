@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -60,17 +61,48 @@ const MenuDiv = styled.div`
 const HostMainLayout = ({ children }) => {
   const navigate = useNavigate();
   const [selectedMenu, setSelectedMenu] = useState("");
+  const [memberVo, setMemberVo] = useState({});
 
   function movePath(e) {
     setSelectedMenu(e.target.id);
     navigate(`/hostMenu/${e.target.id}`);
   }
+  const token = localStorage.getItem("token");
+
+  //토큰 정보 있으면 화면에 보여주기
+  useEffect(() => {
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      setMemberVo((prev) => ({
+        ...prev,
+        email: decodedToken.email,
+        pageNick: decodedToken.pageNick,
+      }));
+
+      // 🔹 2. 회원 정보 가져오기 (프론트에서 직접 이메일 보냄)
+      fetch(
+        `http://127.0.0.1:8080/api/guest/mypage?email=${decodedToken.email}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setMemberVo(data);
+        })
+        .catch((err) => console.error("회원 정보 불러오기 실패:", err));
+    }
+  }, [token]);
+
   return (
     <>
       <HomeDiv>
         <div>
           <HeaderDiv size="40px" color="#049dd9" margin="70px" weight="400">
-            Guest
+            {memberVo.pageNick}
           </HeaderDiv>
           <HeaderDiv
             size="50px"
@@ -79,7 +111,7 @@ const HostMainLayout = ({ children }) => {
             margin="10px"
             marginBot="70px"
           >
-            이예은님 반가워요!
+            {memberVo.name}님 반가워요!
           </HeaderDiv>
           <Hr />
         </div>

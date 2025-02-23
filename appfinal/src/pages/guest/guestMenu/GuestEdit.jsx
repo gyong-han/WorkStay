@@ -187,7 +187,7 @@ const GuestEdit = () => {
 
     if (response.ok) {
       alert("회원 정보가 수정되었습니다.");
-      navi("/");
+      navi("/hostMenu/editHost");
     } else {
       alert("수정 실패. 다시 시도해주세요.");
     }

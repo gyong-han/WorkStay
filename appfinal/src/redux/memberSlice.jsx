@@ -20,6 +20,7 @@ const memberSlice = createSlice({
       state.no = null;
       state.email = null;
       state.pageNick = "LOGIN";
+      localStorage.removeItem("token"); // 로그아웃 시 JWT 삭제
     },
     findpwd: (state, action) => {
       const token = action.payload;
