@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Btn from "../../components/Btn";
 import { useDispatch, useSelector } from "react-redux";
 import { setReservationInfo } from "../../redux/spaceSlice";
+import { getInfomation, inputReservation } from "../../components/service/spaceServcie";
 
 const Wrapper = styled.div`
   display: grid;
@@ -99,30 +100,34 @@ const ButtonWrapper = styled.div`
 `;
 
 const SpaceReservation = () => {
-  // const [Info, setInfo] = useState({});
-  const spaceVo = useSelector((state)=>state.space);
 
-  const dispatch = useDispatch();
-  const price = spaceVo.packageType === '낮 패키지'?spaceVo.daytimePrice :spaceVo.nightPrice;
-  const priceWon = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  const packageNo = spaceVo.packageType === '낮 패키지'?1:2;
-
+  const fd1 = localStorage.getItem("fd");
+  const fdData = JSON.parse(fd1);  
 
   const fd = new FormData();
-  fd.append("packageNo",packageNo);
-  fd.append("spaceNo",spaceVo.no);
-  fd.append("useDay",spaceVo.reservationDate);  
+  
+  fd.append("packageNo",fdData.packageNo);
+  fd.append("spaceNo",fdData.spaceNo);
+  fd.append("useDay",fdData.useDay);  
+
+  console.log("fdData ::::",fdData);
+  const dispatch = useDispatch();
+  const price = fdData.amount;
+  const priceWon = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const spaceVo = useSelector((state)=>state.space);
+
+  const Reservation  = async ()=>{
+    const insertData  = await inputReservation(fdData);
+    console.log("insert :::",insertData);
+    
+    const getInfo = await getInfomation(fd);
+    dispatch(setReservationInfo(getInfo));
+
 
   useEffect(()=>{
-    fetch(("http://127.0.0.1:8080/space/getTimeNow"),{
-      method:"POST",
-      body:fd,
-    }).then((resp)=>resp.json())
-    .then((data)=>{
-      console.log(data);
-      dispatch(setReservationInfo(data));
-    })
-  },[price,spaceVo])
+    Reservation ();
+  },[fdData])
+
 
   return (
     <>
@@ -132,9 +137,9 @@ const SpaceReservation = () => {
         <LineDiv />
         <ReservationWrapper>
           <InfoWrapper>
-            <Title>{spaceVo.name}</Title>
-            <Info>{spaceVo.reservationDate}</Info>
-            <Info>{spaceVo.packageType} / 성인 {spaceVo.adult}명 / 아동 {spaceVo.child}명 / 유아 {spaceVo.baby}명</Info>
+            <Title>{fdData.name}</Title>
+            <Info>{fdData.useDay}</Info>
+            <Info>{fdData.packageNo===1?"낮 패키지":"밤 패키지"} / 성인 {fdData.adult}명 / 아동 {fdData.child}명 / 유아 {fdData.baby}명</Info>
             <Cost>₩{priceWon}</Cost>
             <Info>예약 확정({spaceVo.payDay})</Info>
           </InfoWrapper>
@@ -164,6 +169,7 @@ const SpaceReservation = () => {
       </Wrapper>
     </>
   );
-};
 
+};
+};
 export default SpaceReservation;

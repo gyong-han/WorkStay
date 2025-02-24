@@ -83,17 +83,20 @@ const FindSpaceList = () => {
   
   const dispatch = useDispatch();
   const currentUrl = window.location.href;
-  useEffect(()=>{
-    if(currentUrl == "http://localhost:3000/findspace"){
-      dispatch(setReset());
-    }
-  },[currentUrl])
+  const spaceVo = useSelector((state)=>state.space);
+  
+  // useEffect(()=>{
+  //   // console.log("현재 URL 은 :::::",currentUrl);
+    
+  //   if(currentUrl == "http://localhost:3000/findspace"){
+  //     dispatch(setReset());
+  //   }
+  // },[])
 
   
   const [formData, setFormData] = useState({});
   const [spaceVoList,setSpaceVoList] = useState([]);
   const [imgPath,setImgPath]= useState([]);
-  const spaceVo = useSelector((state)=>state.space);
  
 
   const queryParams = new URLSearchParams({
@@ -114,8 +117,8 @@ const FindSpaceList = () => {
      //
      const arr = listData.map((vo)=>{
       const matchingAttachments = attachmentData.filter((att) => att.spaceNo === vo.no);
-      console.log("matchingAttachments::",matchingAttachments);
-      console.log(vo.filePath);
+      // console.log("matchingAttachments::",matchingAttachments);
+      // console.log(vo.filePath);
       
       const imgPaths =  matchingAttachments.length > 0 ? matchingAttachments.map((att) => att.filePath) : null;  
       imgPaths.unshift(vo.filePath);
@@ -154,9 +157,8 @@ const FindSpaceList = () => {
   //spaceService.js 활용하여 async 사용해보기
   useEffect(()=>{
     AttachmentData();
-    // ListData();
 
-  },[])
+  },[queryParams])
 
 
 
@@ -235,6 +237,7 @@ const FindSpaceList = () => {
            ></ListCard>
           </div>
          </Fragment>
+         
       )
     })}
   </InnerLayoutDiv>

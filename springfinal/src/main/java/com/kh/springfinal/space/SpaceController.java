@@ -17,6 +17,9 @@ public class SpaceController {
     @GetMapping("list")
     public List<SpaceVo> spaceGetListAll(@RequestParam String area,String people, String datedata) throws InterruptedException {
         String date = datedata.replaceAll("-", "");
+        System.out.println("area"+area);
+        System.out.println("people"+people);
+        System.out.println("date"+date);
         List<SpaceVo> voList = service.spaceGetListAll(area,people,date);
 
 //        System.out.println("vo :::"+ voList);
@@ -37,12 +40,13 @@ public class SpaceController {
     }
 
     @PostMapping("reservation")
-    public int reservation(SpaceReservVo vo, String memberNo){
+    public int reservation(@RequestBody SpaceReservVo vo){
         System.out.println("vo::"+vo);
         String date = vo.getUseDay();
         String formattedDate = date.replaceAll("-", "");
         vo.setUseDay(formattedDate);
-        int result = service.reservation(vo,memberNo);
+        int result = service.reservation(vo);
+        System.out.println("result ==="+result);
 
         return result;
 
@@ -67,11 +71,14 @@ public class SpaceController {
     }
     @PostMapping("getTimeNow")
     public SpaceReservVo m01(SpaceReservVo vo){
+        System.out.println("vo@@@@@ = " + vo);
         String date = vo.getUseDay();
         String formattedDate = date.replaceAll("-", "");
         vo.setUseDay(formattedDate);
-        SpaceReservVo getvo = service.getNowTime(vo);
-        return getvo;
+        SpaceReservVo getVo = service.getNowTime(vo);
+
+        System.out.println("getVO ~~~~~:::::::::::::::"+getVo);
+        return getVo;
     }
 
 }

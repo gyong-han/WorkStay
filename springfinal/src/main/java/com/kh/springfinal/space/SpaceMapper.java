@@ -65,10 +65,10 @@ public interface SpaceMapper {
             NO, SPACE_NO, MEMBER_NO, PAYMENT_NO, PACKAGE_NO, ADULT, CHILD, BABY, REQUEST, AMOUNT, USE_DAY
             )VALUES(
            (SELECT GET_SPACE_RESERVATION_CODE FROM DUAL),
-             #{vo.spaceNo}, #{memberNo}, #{vo.paymentNo}, #{vo.packageNo}, #{vo.adult}, #{vo.child}, #{vo.baby}, #{vo.request}, #{vo.amount}, #{vo.useDay}
+             #{spaceNo}, #{memberNo}, #{paymentNo}, #{packageNo}, #{adult}, #{child}, #{baby}, #{request}, #{amount}, #{useDay}
             )
             """)
-    int reservation(SpaceReservVo vo, String memberNo);
+    int reservation(SpaceReservVo vo);
 
     @Select("""
             SELECT DISTINCT USE_DAY

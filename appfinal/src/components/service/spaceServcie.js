@@ -20,4 +20,34 @@ const getSpaceListAll = async (paramData)=>{
     console.log("error",e);
   }
 }
-export {getAttachmentAll,getSpaceListAll};
+
+
+const inputReservation = async (fdData)=>{
+  try{
+    const result = await fetch((`${BASE_URL}/space/reservation`),{
+      method : "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(fdData),}
+     );
+    const data = await result.text();
+    return data;
+  }catch(e){
+    console.log("error",e);
+  }
+}
+
+const getInfomation = async(fd)=>{
+  try{
+    const result = await fetch((`${BASE_URL}/space/getTimeNow`),{
+      method:"POST",
+      body:fd,
+    });
+    const data = await result.JSON();
+    return data;
+  }catch(e){
+    console.log("error",e);
+  }
+}
+export {getAttachmentAll,getSpaceListAll,inputReservation,getInfomation};

@@ -29,6 +29,7 @@ const spaceSlice = createSlice({
     reservationDone:[],
     reservationNo:'',
     payDay:'',
+    request:'',
 
   },
   reducers: {
@@ -64,6 +65,8 @@ const spaceSlice = createSlice({
       state.baby = action.payload.baby;
     },
     setArea : (state,action)=>{
+      console.log("시시시시작 시작 ~~~~");
+      console.log("action에 들어온값",action.payload);
       state.area = action.payload;
     },
     setReset : (state)=>{
@@ -87,22 +90,28 @@ const spaceSlice = createSlice({
     state.child=0;
     state.baby=0;
     state.area='';
+    state.reservationDone= '';
 
     },
     setReservationDone : (state,action)=>{
       state.reservationDone = action.payload;
     },
     setReservationInfo: (state,action)=>{
-      console.log("Info 시작 ~~~~");
-      console.log("action에 들어온값",action.payload);
+    
       state.reservationNo = action.payload.no;
       state.payDay = action.payload.reservationDate;
     },
+    setRequest : (state,action)=>{
+      console.log("액션시작 ~~~");
+      console.log("액션들어온값  ~~~",action.payload);
+      
+      state.request = action.payload;
+    }
     
     
   },
 });
 
 
-export const { setSpaceVo,setPackageType,setreservationDate,setMemberCnt,setArea,setReset,setReservationDone,setReservationInfo } = spaceSlice.actions;
+export const { setSpaceVo,setPackageType,setreservationDate,setMemberCnt,setArea,setReset,setReservationDone,setReservationInfo,setRequest } = spaceSlice.actions;
 export default spaceSlice.reducer;
