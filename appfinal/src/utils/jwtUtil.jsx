@@ -5,10 +5,7 @@ const getPayload = (token, key) => {
     return null;
   }
   const payload = jwtDecode(token);
-  if (key) {
-    return payload[key];
-  }
-  return payload;
+  return key ? payload[key] : payload;
 };
 
 export { getPayload };

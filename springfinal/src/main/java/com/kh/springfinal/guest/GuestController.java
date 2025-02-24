@@ -1,5 +1,6 @@
 package com.kh.springfinal.guest;
 
+import com.kh.springfinal.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 public class GuestController {
 
     private final GuestService  service;
+    private final JwtUtil jwtUtil;
+
 
     //회원가입
     @PostMapping("join")
@@ -60,14 +63,24 @@ public class GuestController {
     //새로운 비밀번호 생성하기
     @PostMapping("newpwd")
     public GuestVo newPwd(@RequestBody GuestVo vo){
-        System.out.println("controller vo = " + vo);
         GuestVo result = service.newPwd(vo);
-        System.out.println("result = " + result);
         return result;
 
     }
 
     //회원 수정하기
+    @GetMapping("mypage")
+    public GuestVo mypage(@RequestParam String email){
+        GuestVo result = service.mypage(email);
+        return result;
+    }
+
+    @PostMapping("editMember")
+    public GuestVo editMember(@RequestBody GuestVo vo){
+        GuestVo result = service.editMember(vo);
+        return result;
+    }
+
 
     //숙소 예약정보 불러오기
 
