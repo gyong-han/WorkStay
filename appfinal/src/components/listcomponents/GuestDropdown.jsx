@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/memberSlice";
@@ -20,8 +19,6 @@ const DropdownItem = styled(Link)`
   color: #202020;
   text-decoration: none;
   &:hover {
-    background: #049dd9;
-    color: #fafafa;
     color: #049dd9;
   }
 `;
@@ -52,7 +49,6 @@ const GuestDropdown = () => {
     { label: "북마크", path: "/hostMenu/bookmark" },
     { label: "메시지", path: "/hostMenu/message" },
     { label: "회원 정보 수정", path: "/hostMenu/editHost" },
-    { label: "로그아웃", path: "#" },
   ];
 
   return (

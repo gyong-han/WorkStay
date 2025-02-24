@@ -123,7 +123,7 @@ const SpaceDetail = () => {
     navi(newPath);
   }
 
-  const stayName = "온숲";
+  const stayName = "숲";
 
   return (
     <>
@@ -149,7 +149,7 @@ const SpaceDetail = () => {
           <div></div>
           <ImgDiv>
             <DataCard
-              title={"온숲"}
+              title={"숲"}
               address={"경기도 양평군 지평면 학교담길 35-33"}
               phone={"0504-0903-2641"}
               email={"onsoup@gmail.com"}

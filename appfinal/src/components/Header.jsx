@@ -60,10 +60,6 @@ const GuestButton = styled.button`
   cursor: pointer;
 `;
 
-const DropdownWrapper = styled.div`
-  position: absolute;
-  top: 35px;
-  left: 30%;
 const HostButton = styled.button`
   background: none;
   border: none;
@@ -85,7 +81,7 @@ const AdminButton = styled.button`
 const DropdownWrapper = styled.div`
   position: absolute;
   top: 25px;
-  left: -30%;
+  left: -70%;
   transform: translateX(-50%);
   min-width: 180px;
 `;
@@ -130,9 +126,6 @@ const Header = () => {
           </>
         ) : pageNick === "HOST" ? (
           <>
-            <GuestButton onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
-              {pageNick}
-            </GuestButton>
             <HostButton onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
               {pageNick}
             </HostButton>
@@ -144,9 +137,6 @@ const Header = () => {
           </>
         ) : pageNick === "ADMIN" ? (
           <>
-            <GuestButton onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
-              {pageNick}
-            </GuestButton>
             <AdminButton onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
               {pageNick}
             </AdminButton>

@@ -1,9 +1,12 @@
 package com.kh.springfinal.guest;
 
+import com.kh.springfinal.host.TableVo;
 import com.kh.springfinal.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/guest")
@@ -30,12 +33,8 @@ public class GuestController {
     //로그인
     @PostMapping("login")
     public String login(@RequestBody GuestVo vo){
-        try{
             String token = service.login(vo);
             return token;
-        }catch(Exception e) {
-            throw new IllegalStateException("[GUEST-LOGIN] EMAIL-LOGIN FAIL ...");
-        }
     }
 
     //아이디 찾기
@@ -82,9 +81,32 @@ public class GuestController {
     }
 
 
-    //숙소 예약정보 불러오기
+    //숙소 예약 정보 불러오기
+    @PostMapping("stayReserv")
+    public List<MypageVo> stayReserv(@RequestBody MypageVo vo){
+        List<MypageVo> stayReserv = service.stayReserv(vo);
+        return stayReserv;
+    }
+
+    //숙소 예약 취소 불러오기
+    @PostMapping("stayCancleReserv")
+    public List<MypageVo> stayCancleReserv(@RequestBody MypageVo vo){
+        List<MypageVo> stayCancleReserv = service.stayCancleReserv(vo);
+        return stayCancleReserv;
+    }
 
     //공간 예약 정보 불러오기
+    @PostMapping("spaceReserv")
+    public List<MypageVo> spaceReserv(@RequestBody MypageVo vo){
+        List<MypageVo> spaceReserv = service.spaceReserv(vo);
+        return spaceReserv;
+    }
+    //공간 예약 취소 불러오기
+    @PostMapping("spaceCancleReserv")
+    public List<MypageVo> spaceCancleReserv(@RequestBody MypageVo vo){
+        List<MypageVo> spaceCancleReserv = service.spaceCancleReserv(vo);
+        return spaceCancleReserv;
+    }
 
     //s-log 불러오기
 
