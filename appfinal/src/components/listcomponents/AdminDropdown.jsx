@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/memberSlice";
@@ -19,6 +20,8 @@ const DropdownItem = styled(Link)`
   color: #202020;
   text-decoration: none;
   &:hover {
+    background: #f20530;
+    color: #fafafa;
     color: #f20530;
   }
 `;
@@ -39,6 +42,10 @@ const LogoutButton = styled.button`
 `;
 
 const AdminDropdown = () => {
+  const menuItems = [
+    { label: "관리자", path: "/adminMenu" },
+    { label: "로그아웃", path: "#" },
+  ];
   const dispatch = useDispatch();
   const navi = useNavigate();
 
