@@ -1,5 +1,8 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../../redux/memberSlice";
 
 const DropdownContainer = styled.div`
   position: absolute;
@@ -19,10 +22,29 @@ const DropdownItem = styled(Link)`
   &:hover {
     background: #2b8c44;
     color: #fafafa;
+    color: #2b8c44;
+  }
+`;
+
+const LogoutButton = styled.button`
+  width: 100%;
+  padding: 8px 16px;
+  background: none;
+  border: none;
+  text-align: left;
+  color: #202020;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 700;
+  &:hover {
+    color: #2b8c44;
   }
 `;
 
 const HostDropdown = () => {
+  const dispatch = useDispatch();
+  const navi = useNavigate();
+
   const menuItems = [
     { label: "숙소 예약 정보", path: "/hostMenu" },
     { label: "공간 예약 정보", path: "/hostMenu/spaceReserv" },
@@ -41,6 +63,15 @@ const HostDropdown = () => {
           {item.label}
         </DropdownItem>
       ))}
+      <LogoutButton
+        onClick={() => {
+          localStorage.removeItem("token");
+          dispatch(logout());
+          navi("/");
+        }}
+      >
+        로그아웃
+      </LogoutButton>
     </DropdownContainer>
   );
 };

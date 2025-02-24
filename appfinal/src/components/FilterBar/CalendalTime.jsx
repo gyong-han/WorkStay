@@ -5,7 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import Form from "react-bootstrap/Form";
 import { format } from "date-fns";
 import "./styles/datepicker.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setreservationDate } from "../../redux/spaceSlice";
 
 
@@ -13,20 +13,18 @@ import { setreservationDate } from "../../redux/spaceSlice";
 
 
 const CalendarTime = ({children,type,position}) => {
-  
+  const spaceVo = useSelector((state)=>state.space);
   const [dateRange , setDateRange] = useState([]);
   const dispatch =useDispatch();
 
-  // const isBlockedDate = (date) => {
-  //   const blockedDates = [
-  //     new Date("2025-02-20"),  // 막을 날짜
-  //   ];
-  //   return blockedDates.some(blockedDate => 
-  //     date.getFullYear() === blockedDate.getFullYear() &&
-  //     date.getMonth() === blockedDate.getMonth() &&
-  //     date.getDate() === blockedDate.getDate()
-  //   );
-  // };
+  const isBlockedDate = (date) => {
+    const blockedDates = spaceVo.reservationDone.map((date) => new Date(date));
+    return blockedDates.some(blockedDate => 
+      date.getFullYear() === blockedDate.getFullYear() &&
+      date.getMonth() === blockedDate.getMonth() &&
+      date.getDate() === blockedDate.getDate()
+    );
+  };
 
   
   return (
@@ -35,7 +33,7 @@ const CalendarTime = ({children,type,position}) => {
       locale={ko}
       selectsRange={false}
       minDate={new Date()}
-      // filterDate={(date) => !isBlockedDate(date)}
+      filterDate={(date) => !isBlockedDate(date)}
       onChange={(update) => {
         
         

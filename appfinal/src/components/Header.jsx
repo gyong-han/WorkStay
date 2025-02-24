@@ -64,6 +64,28 @@ const DropdownWrapper = styled.div`
   position: absolute;
   top: 35px;
   left: 30%;
+const HostButton = styled.button`
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #2b8c44;
+  font-weight: 600;
+  cursor: pointer;
+`;
+
+const AdminButton = styled.button`
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #f20530;
+  font-weight: 600;
+  cursor: pointer;
+`;
+
+const DropdownWrapper = styled.div`
+  position: absolute;
+  top: 25px;
+  left: -30%;
   transform: translateX(-50%);
   min-width: 180px;
 `;
@@ -111,6 +133,9 @@ const Header = () => {
             <GuestButton onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
               {pageNick}
             </GuestButton>
+            <HostButton onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+              {pageNick}
+            </HostButton>
             {isDropdownOpen && (
               <DropdownWrapper>
                 <HostDropdown />
@@ -122,6 +147,9 @@ const Header = () => {
             <GuestButton onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
               {pageNick}
             </GuestButton>
+            <AdminButton onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+              {pageNick}
+            </AdminButton>
             {isDropdownOpen && (
               <DropdownWrapper>
                 <AdminDropdown />

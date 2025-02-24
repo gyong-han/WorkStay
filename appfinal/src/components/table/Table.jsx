@@ -37,7 +37,11 @@ const StyledTable = styled.table`
   }
 `;
 
-const Table = ({ th1, th2, th3, th4, dataArr }) => {
+const Table = ({ th1, th2, th3, th4, dataArr, f }) => {
+  const formatPhoneNumber = (phone) => {
+    return phone.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
+  };
+
   return (
     <>
       <StyledTable>
@@ -55,12 +59,12 @@ const Table = ({ th1, th2, th3, th4, dataArr }) => {
               <tr
                 key={idx}
                 onClick={() => {
-                  console.log(data.no);
+                  f(data.no);
                 }}
               >
                 <td>{data.hostName}</td>
                 <td>{data.email}</td>
-                <td>{data.phone}</td>
+                <td>{formatPhoneNumber(data.phone)}</td>
                 <td>{data.name}</td>
               </tr>
             );

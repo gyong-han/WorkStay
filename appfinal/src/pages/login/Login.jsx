@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import KakaoLoginButton from "./KakaoLoginButton";
 
 const MainDiv = styled.div`
   display: grid;
@@ -80,7 +81,9 @@ const Login = () => {
       <MainDiv>
         <StyleMain>L O G I N</StyleMain>
 
-        <StyleInputId>카카오 로그인</StyleInputId>
+        <StyleInputId>
+          <KakaoLoginButton />
+        </StyleInputId>
 
         <StyleInputPwd>네이버 로그인</StyleInputPwd>
         <BtnDiv>

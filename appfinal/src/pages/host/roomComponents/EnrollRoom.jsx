@@ -6,7 +6,7 @@ const RoomDiv = styled.div`
   display: grid;
   height: 100vh;
   grid-template-columns: 1fr 3fr;
-  grid-template-rows: (9, 1fr);
+  grid-template-rows: (10, 1fr);
 `;
 
 const EnrollHeader = styled.div`
@@ -66,10 +66,36 @@ const DataInput2 = styled.input`
   }
 `;
 
+const DataInput3 = styled.input`
+  display: inline-block;
+  border: none;
+  border-bottom: 1px solid black;
+  background-color: #fafafa;
+  margin-left: 10px;
+  width: 80px;
+  height: 25px;
+  outline: none;
+  font-size: 25px;
+  font-weight: 400;
+  line-height: 5;
+  text-align: center;
+  margin-right: ${(props) => {
+    return props.right;
+  }};
+  margin-top: ${(props) => {
+    return props.top;
+  }};
+`;
+
 const Span = styled.span`
   font-size: 25px;
   margin-left: 20px;
   margin-right: 20px;
+`;
+
+const Span2 = styled.span`
+  font-size: 20px;
+  margin-top: 10px;
 `;
 
 const TextArea = styled.textarea`
@@ -77,6 +103,8 @@ const TextArea = styled.textarea`
   margin-top: 35px;
   border-radius: 5px;
   resize: none;
+  font-family: "Pretendard-Regular";
+  font-size: 1.2rem;
 `;
 
 const DataTitle2 = styled.div`
@@ -95,6 +123,7 @@ const CheckBoxArea = styled.div`
 `;
 
 const CheckDiv = styled.div`
+  margin-top: 10px;
   display: flex; /* 수정: 수평 정렬을 위해 flexbox 추가 */
   align-items: center; /* 수정: 체크박스와 텍스트를 세로로 정렬 */
 
@@ -334,6 +363,57 @@ const EnrollRoom = ({
             <span>야외 수영장</span>
           </CheckDiv>
         </CheckBoxArea>
+
+        <DataTitle top="40px">독채 침대 *</DataTitle>
+        <div>
+          <Span2>싱글 사이즈 : </Span2>
+          <DataInput3
+            type="number"
+            name="singleSize"
+            placeholder="갯수"
+            top="40px"
+            defaultValue="0"
+            min="0"
+            onChange={(e) => {
+              setFormDataArr((prev) => {
+                prev[no][e.target.name] = e.target.value;
+                return [...prev];
+              });
+            }}
+          />
+          <Span>/</Span>
+          <Span2>더블 사이즈 : </Span2>
+          <DataInput3
+            type="number"
+            name="doubleSize"
+            placeholder="갯수"
+            top="40px"
+            defaultValue="0"
+            min="0"
+            onChange={(e) => {
+              setFormDataArr((prev) => {
+                prev[no][e.target.name] = e.target.value;
+                return [...prev];
+              });
+            }}
+          />
+          <Span>/</Span>
+          <Span2>퀸 사이즈 : </Span2>
+          <DataInput3
+            type="number"
+            name="queenSize"
+            placeholder="갯수"
+            top="40px"
+            defaultValue="0"
+            min="0"
+            onChange={(e) => {
+              setFormDataArr((prev) => {
+                prev[no][e.target.name] = e.target.value;
+                return [...prev];
+              });
+            }}
+          />
+        </div>
 
         <DataTitle top="40px">독채 소개 *</DataTitle>
         <TextArea

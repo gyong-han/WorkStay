@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Btn from "../../components/Btn";
+import { useDispatch, useSelector } from "react-redux";
+import { setReservationInfo } from "../../redux/spaceSlice";
 
 const Wrapper = styled.div`
   display: grid;
@@ -98,6 +100,29 @@ const ButtonWrapper = styled.div`
 
 const SpaceReservation = () => {
   // const [Info, setInfo] = useState({});
+  const spaceVo = useSelector((state)=>state.space);
+
+  const dispatch = useDispatch();
+  const price = spaceVo.packageType === '낮 패키지'?spaceVo.daytimePrice :spaceVo.nightPrice;
+  const priceWon = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const packageNo = spaceVo.packageType === '낮 패키지'?1:2;
+
+
+  const fd = new FormData();
+  fd.append("packageNo",packageNo);
+  fd.append("spaceNo",spaceVo.no);
+  fd.append("useDay",spaceVo.reservationDate);  
+
+  useEffect(()=>{
+    fetch(("http://127.0.0.1:8080/space/getTimeNow"),{
+      method:"POST",
+      body:fd,
+    }).then((resp)=>resp.json())
+    .then((data)=>{
+      console.log(data);
+      dispatch(setReservationInfo(data));
+    })
+  },[price,spaceVo])
 
   return (
     <>
@@ -107,11 +132,11 @@ const SpaceReservation = () => {
         <LineDiv />
         <ReservationWrapper>
           <InfoWrapper>
-            <Title>꿈속의나라</Title>
-            <Info>2025-01-20 ~ 2025-01-24</Info>
-            <Info>Room A1 / 성인 2명 / 아동 0명 / 유아 0명</Info>
-            <Cost>₩360,000</Cost>
-            <Info>예약 확정(2025-01-01 / 11:25)</Info>
+            <Title>{spaceVo.name}</Title>
+            <Info>{spaceVo.reservationDate}</Info>
+            <Info>{spaceVo.packageType} / 성인 {spaceVo.adult}명 / 아동 {spaceVo.child}명 / 유아 {spaceVo.baby}명</Info>
+            <Cost>₩{priceWon}</Cost>
+            <Info>예약 확정({spaceVo.payDay})</Info>
           </InfoWrapper>
           <Img></Img>
         </ReservationWrapper>
@@ -123,7 +148,7 @@ const SpaceReservation = () => {
           <SubTitle>이메일</SubTitle>
         </UserInfoWrapper>
         <UserWrapper>
-          <Info1>20250101</Info1>
+          <Info1>{spaceVo.reservationNo}</Info1>
           <Info1>이예은</Info1>
           <Info1>010-1234-5678</Info1>
           <Info1>gamza@gamil.com</Info1>

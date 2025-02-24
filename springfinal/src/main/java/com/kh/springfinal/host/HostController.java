@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/host")
@@ -65,6 +66,11 @@ public class HostController {
     public int enrollRoom(RoomVo vo, @RequestParam MultipartFile thumbnail, @RequestParam List<String> features
             , @RequestParam("room_floor_plan") MultipartFile roomFloorPlan, @RequestParam List<MultipartFile> attachment) throws IOException {
 
+
+        if ("undefined".equals(vo.getDoubleSize())) vo.setDoubleSize("0");
+        if ("undefined".equals(vo.getSingleSize())) vo.setSingleSize("0");
+        if ("undefined".equals(vo.getQueenSize())) vo.setQueenSize("0");
+
         AttachVo thumbnailVo = new AttachVo();
         thumbnailVo.setFilePath(FileUtil.uploadFileToAws(thumbnail,s3,bucket));
         thumbnailVo.setOriginName(thumbnail.getOriginalFilename());
@@ -80,6 +86,7 @@ public class HostController {
             attachVo.setOriginName(file.getOriginalFilename());
             attachVoList.add(attachVo);
         }
+
 
         int result = service.enrollRoom(vo,features,thumbnailVo,roomFloorPlanVo,attachVoList);
 
@@ -113,4 +120,36 @@ public class HostController {
         List<StayVo> myStayList = service.getMyStayList(hostNo);
         return myStayList;
     }
+
+    //내 공간 예약 목록조회
+    @PostMapping("space/reservList")
+    public List<TableVo> getSpaceReservList(@RequestParam String status, @RequestParam String hostNo){
+        List<TableVo> spaceResrvList = service.getSpaceReservList(status,hostNo);
+        return spaceResrvList;
+    }
+
+    //내 독채 예약 목록조회
+    @PostMapping("room/reservList")
+    public List<TableVo> getRoomReservList(@RequestParam String status, @RequestParam String hostNo){
+        List<TableVo> roomReservList = service.getRoomReservList(status,hostNo);
+       return roomReservList;
+
+    }
+
+    //내 공간 예약 상세조회
+    @PostMapping("space/reservDetail")
+    public Map<String, Object> getSpaceReservDetail(@RequestBody String spaceReservNum){
+        String spaceReservNo = spaceReservNum.replace("\"", "");
+        Map<String,Object> spaceReservDetail = service.getSpaceReservDetail(spaceReservNo);
+        return spaceReservDetail;
+    }
+
+    //내 숙소 예약 상세조회
+    @PostMapping("stay/reservDetail")
+    public Map<String, Object> getStayReservDetail(@RequestBody String stayReservNum){
+        String stayReservNo = stayReservNum.replace("\"", "");
+        Map<String,Object> stayReservDetail = service.getStayReservDetail(stayReservNo);
+        return stayReservDetail;
+    }
+
 }

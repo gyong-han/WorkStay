@@ -95,7 +95,7 @@ const DataInput2 = styled.input`
   }};
 `;
 
-const DataList = styled.input`
+const DataSelect = styled.select`
   border: 0.5px solid black;
   width: 150px;
   height: 30px;
@@ -103,7 +103,6 @@ const DataList = styled.input`
   font-weight: 400;
   margin-top: 37px;
   border-radius: 8px;
-  line-height: 3;
   text-align: center;
   appearance: none;
   background: url("https://cdn.iconscout.com/icon/premium/png-256-thumb/triangle-down-5065327-4219907.png?f=webp")
@@ -126,6 +125,8 @@ const TextArea = styled.textarea`
   height: 150px;
   margin-top: 35px;
   border-radius: 5px;
+  font-family: "Pretendard-Regular";
+  font-size: 1.2rem;
   resize: none;
 `;
 
@@ -196,7 +197,9 @@ const CheckDiv = styled.div`
 const SecondEnrollSpace = () => {
   const [phone, setPhone] = useState("");
   const [brn, setbrn] = useState("");
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    business_type_no: "1",
+  });
   const [featuresArr, setFeaturesArr] = useState([]);
   const [fileData, setFileData] = useState({});
   const navigate = useNavigate();
@@ -239,12 +242,6 @@ const SecondEnrollSpace = () => {
   };
 
   const enrollSpace = () => {
-    // console.log("formData ::: ", formData);
-    // console.log("featuresArr :::", featuresArr);
-    // console.log("fleData :::", fileData);
-
-    // console.log("-----------------------------------");
-
     const fd = new FormData();
     fd.append("hostNo", "1");
     fd.append("name", formData.name);
@@ -362,15 +359,10 @@ const SecondEnrollSpace = () => {
               />
               <DataTitle top="40px">스페이스 업종명 *</DataTitle>
               <div>
-                <DataList
-                  list="business_type"
-                  name="business_type_no"
-                  onChange={handleChange}
-                />
-                <datalist id="business_type">
-                  <option value="1">스페이스1</option>
-                  <option value="2">스페이스2</option>
-                </datalist>
+                <DataSelect name="business_type_no" onChange={handleChange}>
+                  <option value="1">숙박</option>
+                  <option value="2">공간 대여</option>
+                </DataSelect>
               </div>
               <DataTitle top="40px">사업자 등록번호 *</DataTitle>
               <DataInput

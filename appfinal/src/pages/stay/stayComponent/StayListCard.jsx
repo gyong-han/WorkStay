@@ -82,8 +82,6 @@ const StayListCard = (props) => {
 
   const Price = props.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-  console.log(Price);
-
   return (
     <Layout no={props.no}>
       <TextWrapper>

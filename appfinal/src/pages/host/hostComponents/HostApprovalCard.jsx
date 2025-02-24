@@ -11,6 +11,7 @@ const DataDiv = styled.div`
   margin-left: 50px;
   margin-bottom: 30px;
   border: none;
+  cursor: pointer;
 `;
 
 const DataArea = styled.div`
@@ -50,10 +51,14 @@ const PriceDiv = styled.div`
 `;
 
 //vo 받아와서 값 넣기
-const HostApprovalCard = ({ status, vo }) => {
+const HostApprovalCard = ({ status, vo, f }) => {
   return (
     <>
-      <DataDiv>
+      <DataDiv
+        onClick={() => {
+          f(vo.no);
+        }}
+      >
         <DataArea>
           {/* vo에서 가져온 상태에 따라 생성 여부 결정(승인:생성X / 대기,반려 : 생성O) */}
           {status == 1 ? <></> : <TextDiv size="15px">{status}</TextDiv>}

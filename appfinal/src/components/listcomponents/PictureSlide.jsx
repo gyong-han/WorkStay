@@ -13,10 +13,8 @@ const Slide = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-  transition: transform 0.3s ease-in-out; /* 슬라이드 전환 애니메이션 추가 */
-  transform: translateX(
-    ${(props) => -props.index * 100}
-  ); /* 인덱스에 따라 이동 */
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(${(props) => -props.index * 100}%);
 `;
 
 const SlideImage = styled.img`
@@ -43,10 +41,13 @@ const ArrowButton = styled.button`
 const Xdiv = styled.div`
   width: 100%;
   height: 100%;
+  border-radius: 5px;
 `;
 
 const PictureSlide = ({ w, h, imgPaths, main }) => {
-  console.log("img path ~~~ ::: ", imgPaths);
+  console.log("imgpPathsss : ", imgPaths);
+
+  // console.log("img path ~~~ ::: ", imgPaths);
 
   // 화면넘길때마다 가질 인덱스 구성
   const [slideIdx, setSlideIdx] = useState(0);
@@ -70,16 +71,28 @@ const PictureSlide = ({ w, h, imgPaths, main }) => {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [main, imgPaths.length]);
+  }, [main, imgPaths]);
+
+  if (!imgPaths) {
+    return (
+      <>
+        <h1>null</h1>
+      </>
+    );
+  }
 
   return (
     <SlideContainer w={w} h={h}>
       <Slide index={slideIdx}>
-        {imgPaths.map((src, idx) => (
-          <Xdiv key={idx}>
-            <SlideImage src={src} alt={`Slide ${idx + 1}`} w={w} h={h} />
-          </Xdiv>
-        ))}
+        {imgPaths.length === 0 ? (
+          <h1>imgPath Null</h1>
+        ) : (
+          imgPaths.map((src, idx) => (
+            <Xdiv key={idx}>
+              <SlideImage src={src} alt={`Slide ${idx + 1}`} w={w} h={h} />
+            </Xdiv>
+          ))
+        )}
       </Slide>
       <ArrowButton left onClick={goToPreviousSlide}>
         ❮

@@ -1,5 +1,8 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../../redux/memberSlice";
 
 const DropdownContainer = styled.div`
   position: absolute;
@@ -19,6 +22,22 @@ const DropdownItem = styled(Link)`
   &:hover {
     background: #f20530;
     color: #fafafa;
+    color: #f20530;
+  }
+`;
+
+const LogoutButton = styled.button`
+  width: 100%;
+  padding: 8px 16px;
+  background: none;
+  border: none;
+  text-align: left;
+  color: #202020;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 700;
+  &:hover {
+    color: #f20530;
   }
 `;
 
@@ -27,6 +46,10 @@ const AdminDropdown = () => {
     { label: "관리자", path: "/adminMenu" },
     { label: "로그아웃", path: "#" },
   ];
+  const dispatch = useDispatch();
+  const navi = useNavigate();
+
+  const menuItems = [{ label: "관리자", path: "/adminMenu" }];
 
   return (
     <DropdownContainer>
@@ -35,6 +58,15 @@ const AdminDropdown = () => {
           {item.label}
         </DropdownItem>
       ))}
+      <LogoutButton
+        onClick={() => {
+          localStorage.removeItem("token");
+          dispatch(logout());
+          navi("/");
+        }}
+      >
+        로그아웃
+      </LogoutButton>
     </DropdownContainer>
   );
 };

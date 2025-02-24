@@ -8,6 +8,7 @@ import { CiFilter } from "react-icons/ci";
 import { RiResetRightFill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { setReset } from "../../redux/spaceSlice";
+import { getAttachmentAll, getSpaceListAll } from "../../components/service/spaceServcie";
 
 
 
@@ -78,6 +79,16 @@ const FilterTextMD = styled.span`
 `;
 
 const FindSpaceList = () => {
+  
+  const dispatch = useDispatch();
+  const currentUrl = window.location.href;
+  useEffect(()=>{
+    if(currentUrl == "http://localhost:3000/findspace"){
+      dispatch(setReset());
+    }
+  },[currentUrl])
+  
+ 
 
   const [formData, setFormData] = useState({});
   const [spaceVoList,setSpaceVoList] = useState([]);
@@ -85,7 +96,7 @@ const FindSpaceList = () => {
   const [dataLoad,setDataLoad] = useState(1);
   const [imgPath,setImgPath]= useState([]);
   const spaceVo = useSelector((state)=>state.space);
-  const dispatch = useDispatch();
+ 
 
   const queryParams = new URLSearchParams({
     datedata: spaceVo.reservationDate,
@@ -114,31 +125,23 @@ const FindSpaceList = () => {
         // console.log("data : ", data);
       });
   };
-  
+  //spaceService.js 활용하여 async 사용해보기
   useEffect(()=>{
-    //스페이스 목록에있는 파일들의 첨부파일 전부다 가져오기
-    fetch("http://127.0.0.1:8080/space/attachmentlist",{
-      method:'GET',
-    
-    })
-    .then((resp)=>resp.json())
-    .then((data)=>{
+    getAttachmentAll().then((data)=>{
       setAttachmentVoList(data);
+      console.log("data :::" ,data);
       setDataLoad((prev)=>prev+1);
-    })
-    .then(()=>{})
-  },[]);
+    });
+  },[])
+
+
+
 
   useEffect(()=>{
     // 스페이스 목록 데이터 가져오기
-    fetch(`http://127.0.0.1:8080/space/list?${queryParams}`,{
-      method:'GET',
-        headers:{
-        "content-type" : "application/json"
-      },
-    })
-    .then((resp)=>resp.json())
-    .then((data)=>{
+    getSpaceListAll(queryParams).then((data)=>{
+      console.log("LISTDATA::::",data);
+      
       if(attachmentVoList.length>0){
       // console.log("##### voListData : " , data);
       setSpaceVoList(data);
@@ -157,7 +160,7 @@ const FindSpaceList = () => {
           
       }
     })
-  },[dataLoad,spaceVo]);
+  },[dataLoad,queryParams]);
 
 
 
@@ -224,7 +227,6 @@ const FindSpaceList = () => {
            ></ListCard>
           </div>
          </Fragment>
-      
       )
     })}
   </InnerLayoutDiv>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import HostApprovalCard from "../../hostComponents/HostApprovalCard";
-import { data } from "react-router-dom";
+import { data, useNavigate } from "react-router-dom";
 
 const MainDiv = styled.div`
   display: grid;
@@ -17,8 +17,10 @@ const StatusSpan = styled.span`
   color: ${(props) => (props.isSelected ? props.colorSelected : "black")};
 `;
 const SpaceApprovalMgmt = () => {
+  window.scrollTo(0, 0);
   const [status, setStatus] = useState("1");
   const [dataArr, setDataArr] = useState([]);
+  const navigate = useNavigate();
 
   const handleStatus = (e) => {
     setStatus(e.target.id);
@@ -37,6 +39,10 @@ const SpaceApprovalMgmt = () => {
         setDataArr(data);
       });
   }, [status]);
+
+  const moveDetail = (spaceNo) => {
+    navigate(`/adminMenu/spaceEnrollReqDetail/${spaceNo}`);
+  };
 
   return (
     <>
@@ -63,7 +69,15 @@ const SpaceApprovalMgmt = () => {
           </StatusSpan>
         </div>
         {dataArr.map((vo, idx) => {
-          return <HostApprovalCard key={idx} status="1" vo={vo} id={vo.no} />;
+          return (
+            <HostApprovalCard
+              key={idx}
+              status="1"
+              vo={vo}
+              id={vo.no}
+              f={moveDetail}
+            />
+          );
         })}
       </MainDiv>
     </>

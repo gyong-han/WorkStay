@@ -3,6 +3,7 @@ import { NavLink, Routes, Route } from "react-router-dom";
 import styled from "styled-components";
 import SlogWrite from "./SlogWrite";
 import SlogList from "./SlogList";
+import SlogDetail from "./SlogDetail";
 
 const Container = styled.div`
   text-align: center;
@@ -32,10 +33,12 @@ const Slog = () => {
       <h1>S-LOG</h1>
       <NavBar>
         <NavLink to="/slog/write">작성하기</NavLink>
+        <NavLink to="/slog/list">리스트</NavLink>
       </NavBar>
       <Routes>
         <Route path="write" element={<SlogWrite />} />
         <Route path="list" element={<SlogList />} />
+        <Route path="detail/:no" element={<SlogDetail />} />
       </Routes>
     </Container>
   );
