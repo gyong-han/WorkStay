@@ -79,17 +79,50 @@ public class SlogController {
 
     @GetMapping("rec")
     public List<RecPlaceVo> findRecPlace(@RequestParam Long no) {
-        System.out.println("no = " + no);
+//        System.out.println("no = " + no);
         List<RecPlaceVo> recPlaces = slogService.findRecplace(no);
         if (recPlaces == null || recPlaces.isEmpty()) {
             return new ArrayList<>();
 
         }
-        System.out.println(recPlaces);
+//        System.out.println(recPlaces);
         return recPlaces;
+    }
+
+    @DeleteMapping("delete/{no}")
+    public int delete(@PathVariable("no") String no){
+        int result = slogService.delete(no);
+        return result;
     }
 
 
 
-}
+
+        @PutMapping("/edit/{no}")
+        public int editSlog(@PathVariable("no") String no,
+                            @RequestParam("title") String title,
+                            @RequestParam("content") String content,
+                            @RequestParam("tagline") String tagline,
+                            @RequestParam(value = "fileUrl", required = false) String fileUrl,
+                            @RequestParam(value = "originalName", required = false) String originalName,
+                            @RequestParam(value = "files", required = false) MultipartFile[] files,
+                            SlogVo slogVo) {
+
+            slogVo.setNo(no);
+            System.out.println("editno = " + no);
+            int result = slogService.edit(slogVo);
+            return result;
+
+
+        }
+    }
+
+
+
+
+
+
+
+
+
 

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { useLocation } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
 
@@ -20,6 +21,7 @@ const MainDiv = styled.div`
   grid-template-columns: 1fr 8fr 1fr;
   grid-template-rows: 1fr;
 `;
+
 const LeftBlank = styled.div`
   background-color: #fafafa;
 `;
@@ -29,6 +31,9 @@ const RightBlank = styled.div`
 `;
 
 const Layout = ({ children }) => {
+  const location = useLocation();
+  const hideFooter = location.pathname === "/slog/write";
+
   return (
     <>
       <LayoutContainer>
@@ -39,7 +44,7 @@ const Layout = ({ children }) => {
           <RightBlank />
         </MainDiv>
       </LayoutContainer>
-      <Footer />
+      {!hideFooter && <Footer />}
     </>
   );
 };
