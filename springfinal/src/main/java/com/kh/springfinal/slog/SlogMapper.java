@@ -1,9 +1,6 @@
 package com.kh.springfinal.slog;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -59,6 +56,7 @@ public interface SlogMapper {
             SELECT
             *
             FROM SLOG
+            WHERE DEL_YN = 'N'
             ORDER BY NO DESC
             OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
             """)
@@ -72,4 +70,45 @@ public interface SlogMapper {
             """)
     List<RecPlaceVo> findRecPlace(Long no);
 
+    @Update("""
+            UPDATE SLOG
+            SET
+            DEL_YN = 'Y'
+            WHERE NO = #{no}
+            """)
+    int delete(String no);
+
+
+    @Update("""
+            UPDATE SLOG
+            SET
+            TITLE = #{title}
+            ,TAGLINE = #{tagline}
+            ,CONTENT = #{content}
+            WHERE NO = #{no}
+            """)
+    int edit(SlogVo slogVo);
+
+    @Insert("""
+            INSERT INTO SLOG
+            
+            (
+            NO
+            ,TITLE
+            ,CONTENT
+            ,TAGLINE
+            ,FILE_URL
+            ,ORIGINAL_NAME
+            )
+            VALUES
+            (
+            SEQ_SLOG.NEXTVAL
+            ,#{title}
+            ,#{content}
+            ,#{tagline}
+            ,#{fileUrl}
+            ,#{originalName}
+            )
+            """)
+    int reinsert(SlogVo slogVo);
 }

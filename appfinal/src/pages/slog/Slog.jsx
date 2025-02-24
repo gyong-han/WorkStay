@@ -39,6 +39,7 @@ const Slog = () => {
         <Route path="write" element={<SlogWrite />} />
         <Route path="list" element={<SlogList />} />
         <Route path="detail/:no" element={<SlogDetail />} />
+        <Route path="edit/:no" element={<SlogWrite />} />
       </Routes>
     </Container>
   );

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 
 const Container = styled.div`
   padding: 16px;
   max-width: 800px;
-  height: 800px;
+  height: 1020px;
   margin: 0 auto;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -91,8 +91,8 @@ const Editor = styled.div`
     flex-grow: 1;
     padding: 10px;
     border: 1px solid #ccc;
-    min-height: 580px;
-    max-height: 580px;
+    min-height: 800px;
+    max-height: 800px;
     overflow-y: auto;
     outline: none;
     white-space: pre-wrap;
@@ -101,13 +101,16 @@ const Editor = styled.div`
 `;
 
 const SlogWrite = () => {
+  const { no } = useParams();
+  console.log("no::::", no);
+  const location = useLocation();
   const [content, setContent] = useState();
   const [originalNames, setOriginalNames] = useState([]);
   const [url, setUrl] = useState([]);
   const [formData, setFormData] = useState({
-    title: "",
-    content: "",
-    tagline: "",
+    title: location.state?.title || "",
+    tagline: location.state?.tagline || "",
+    content: location.state?.content || "",
     files: "",
     fileUrl: "",
     originalName: "",
@@ -121,6 +124,16 @@ const SlogWrite = () => {
   const [center, setCenter] = useState();
   const [left, setLeft] = useState();
   const navigate = useNavigate();
+
+  // useEffect(`127.0.0.1:8080/api/slog/edit/${no}`)
+  //   .then((resp) => resp.json())
+  //   .then((data) => {
+  //     setFormData({
+  //       title: data.title,
+  //       content: data.content,
+  //       tagline: data.tagline,
+  //     });
+  //   });
 
   const handleInput = (e) => {
     setContent(e.target.innerHTML);
@@ -173,15 +186,27 @@ const SlogWrite = () => {
     fd.append("fileUrl", url.join(","));
     fd.append("originalName", originalNames.join(","));
 
-    fetch("http://127.0.0.1:8080/api/slog/insert", {
-      method: "POST",
-      body: fd,
-    })
-      .then((resp) => resp.text())
-      .then((data) => {
-        navigate("/slog/list");
-        console.log("data : ", data);
-      });
+    if (no) {
+      fetch(`http://127.0.0.1:8080/api/slog/edit/${no}`, {
+        method: "PUT",
+        body: fd,
+      })
+        .then((resp) => resp.text())
+        .then((data) => {
+          console.log("수정한 데이터 ::: ", data);
+          navigate("/slog/list");
+        });
+    } else {
+      fetch("http://127.0.0.1:8080/api/slog/insert", {
+        method: "POST",
+        body: fd,
+      })
+        .then((resp) => resp.text())
+        .then((data) => {
+          navigate("/slog/list");
+          console.log("발행한 데이터 : ", data);
+        });
+    }
   };
   const handleInputChange = (e) => {
     setFormData((prev) => {
@@ -318,6 +343,7 @@ const SlogWrite = () => {
             suppressContentEditableWarning={true}
             onInput={handleInput}
             onChange={handleInputChange}
+            Value={formData.title}
             placeholder="제목을 입력하세요"
           ></input>
         </Title>
@@ -329,6 +355,7 @@ const SlogWrite = () => {
             suppressContentEditableWarning={true}
             onInput={handleInput}
             onChange={handleInputChange}
+            value={formData.tagline}
             placeholder="태그라인을 입력하세요"
           ></input>
         </Tagline>
@@ -349,6 +376,7 @@ const SlogWrite = () => {
             }}
             onInput={handleInput}
             onChange={handleInputChange}
+            dangerouslySetInnerHTML={{ __html: formData.content }}
             placeholder="저널을 입력하세요"
           />
         </Editor>

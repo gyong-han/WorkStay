@@ -41,4 +41,12 @@ public class SlogService {
     }
 
 
+    public int delete(String no) {
+        return slogMapper.delete(no);
+    }
+
+
+    public int edit(SlogVo slogVo) {
+        return slogMapper.edit(slogVo);
+    }
 }

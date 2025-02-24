@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { setSlogVo } from "../../redux/slogDetailSlice";
 import Map from "../../components/map/Map";
 import { setRecVo } from "../../redux/slogRecSlice";
+import MapRec from "../../components/map/MapRec";
 
 const Container = styled.div`
   width: 100%;
@@ -40,12 +41,13 @@ const RightBlank = styled.div`
 const Content = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  /* justify-content: center;
+  align-items: center; */
   height: auto;
   margin-top: 100px;
 
-  img {
+  .img {
+    text-align: center;
     width: 500px;
     height: 400px;
   }
@@ -96,19 +98,30 @@ const EditDeleteBtn = styled.div`
     background-color: #049dd9;
     border-radius: 10px;
   }
+
+  .share {
+    width: 150px;
+    height: 35px;
+    font-size: 20px;
+    color: #fafafa;
+    font-family: "Pretendard-Regular";
+    background-color: #049dd9;
+    border-radius: 10px;
+  }
 `;
 
 const SlogDetail = () => {
   const { no } = useParams();
   const dispatch = useDispatch();
   const slogVo = useSelector((state) => state.slogDetail);
-  const recVo = useSelector((state) => state.slogRec.recPlaces);
+  const recVo = useSelector((state) => state.slogRec.recPlaces) || [];
+  const navigate = useNavigate();
 
   const [selectedPlace, setSelectedPlace] = useState(null);
 
   // 처음 로드될 때 첫 번째 장소를 자동으로 선택
   useEffect(() => {
-    if (recVo && recVo.length > 0) {
+    if (recVo?.length > 0) {
       setSelectedPlace({ address: recVo[0].address, name: recVo[0].name });
     }
   }, [recVo]);
@@ -129,10 +142,45 @@ const SlogDetail = () => {
       .then((data) => {
         dispatch(setRecVo(data));
       });
-  }, [no, dispatch]);
+  }, [no]);
 
   const handleButtonClick = (address, name) => {
     setSelectedPlace({ address, name });
+  };
+
+  const handleEdit = () => {
+    navigate(`/slog/edit/${no}`, {
+      state: {
+        title: slogVo.title,
+        tagline: slogVo.tagline,
+        content: slogVo.content,
+        fileUrl: slogVo.fileUrl,
+        originalName: slogVo.originalName,
+      },
+    });
+  };
+
+  const handleRemove = async () => {
+    const response = await fetch(
+      `http://127.0.0.1:8080/api/slog/delete/${no}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    // const handleShare = () => {
+
+    // };
+
+    if (response.ok) {
+      alert("게시글이 삭제되었습니다.");
+      navigate("/slog/list");
+    } else {
+      alert("게시글 삭제에 실패했습니다.");
+    }
   };
 
   return (
@@ -146,7 +194,7 @@ const SlogDetail = () => {
           {recVo && Array.isArray(recVo) && recVo.length > 0 ? (
             <>
               {selectedPlace && (
-                <Map
+                <MapRec
                   address={selectedPlace.address}
                   name={selectedPlace.name}
                 />
@@ -174,8 +222,13 @@ const SlogDetail = () => {
         <RightBlank />
       </Main>
       <EditDeleteBtn>
-        <button className="edit">수정하기</button>
-        <button className="delete">삭제하기</button>
+        <button className="edit" onClick={handleEdit}>
+          수정하기
+        </button>
+        <button className="delete" onClick={handleRemove}>
+          삭제하기
+        </button>
+        <button className="share">공유하기</button>
       </EditDeleteBtn>
     </Container>
   );
