@@ -79,6 +79,7 @@ const FilterTextMD = styled.span`
 `;
 
 const FindSpaceList = () => {
+
   
   const dispatch = useDispatch();
   const currentUrl = window.location.href;
@@ -87,13 +88,10 @@ const FindSpaceList = () => {
       dispatch(setReset());
     }
   },[currentUrl])
-  
- 
 
+  
   const [formData, setFormData] = useState({});
   const [spaceVoList,setSpaceVoList] = useState([]);
-  const [attachmentVoList,setAttachmentVoList]= useState([]);
-  const [dataLoad,setDataLoad] = useState(1);
   const [imgPath,setImgPath]= useState([]);
   const spaceVo = useSelector((state)=>state.space);
  
@@ -101,9 +99,38 @@ const FindSpaceList = () => {
   const queryParams = new URLSearchParams({
     datedata: spaceVo.reservationDate,
     people: spaceVo.adult+spaceVo.child+spaceVo.baby,
-    // spaceVo의 다른 필드들도 동일하게 처리
-    area: spaceVo.area,  // 추가적인 필드, 예: area
+    area: spaceVo.area,  
 }).toString();
+
+
+// async 사용하여 데이터값 추출해보기
+  const AttachmentData = async ()=>{
+    const attachmentData = await getAttachmentAll();
+    // console.log("먼저 가져와야할 데이터::",attachmentData);
+     const listData = await getSpaceListAll(queryParams);
+    //  console.log("꺼내온 데이터 ::",listData );
+     setSpaceVoList(listData);
+
+     //
+     const arr = listData.map((vo)=>{
+      const matchingAttachments = attachmentData.filter((att) => att.spaceNo === vo.no);
+      console.log("matchingAttachments::",matchingAttachments);
+      console.log(vo.filePath);
+      
+      const imgPaths =  matchingAttachments.length > 0 ? matchingAttachments.map((att) => att.filePath) : null;  
+      imgPaths.unshift(vo.filePath);
+      const dataObject = {
+        [vo.no] : imgPaths,
+      }
+      return dataObject;      
+      })
+      // 리턴값을 저장
+      setImgPath(arr);
+  }
+  
+
+
+
   const handleChange = (e) => {
     setFormData((prev) => {
       return {
@@ -122,45 +149,26 @@ const FindSpaceList = () => {
     })
       .then((resp) => resp.text())
       .then((data) => {
-        // console.log("data : ", data);
       });
   };
   //spaceService.js 활용하여 async 사용해보기
   useEffect(()=>{
-    getAttachmentAll().then((data)=>{
-      setAttachmentVoList(data);
-      console.log("data :::" ,data);
-      setDataLoad((prev)=>prev+1);
-    });
+    AttachmentData();
+    // ListData();
+
   },[])
 
 
 
 
-  useEffect(()=>{
-    // 스페이스 목록 데이터 가져오기
-    getSpaceListAll(queryParams).then((data)=>{
-      console.log("LISTDATA::::",data);
+  // useEffect(()=>{
+  //   // 스페이스 목록 데이터 가져오기
+  //   getSpaceListAll(queryParams).then((data)=>{
+  //     console.log("LISTDATA::::",data);
       
-      if(attachmentVoList.length>0){
-      // console.log("##### voListData : " , data);
-      setSpaceVoList(data);
-      // map돌려서 필터링해서 맞춰주고 썸네일파일을 제일 앞으로보낸 배열 생성
-        const arr = data.map((vo)=>{
-          const matchingAttachments = attachmentVoList.filter((att) => att.spaceNo === vo.no);
-          const imgPaths =  matchingAttachments.length > 0 ? matchingAttachments.map((att) => att.filePath) : null;  
-          imgPaths.unshift(vo.filePath);
-          const dataObject = {
-            [vo.no] : imgPaths,
-          }
-          return dataObject;      
-          })
-          // 리턴값을 저장
-          setImgPath(arr);
-          
-      }
-    })
-  },[dataLoad,queryParams]);
+    
+  //   })
+  // },[dataLoad,queryParams]);
 
 
 
