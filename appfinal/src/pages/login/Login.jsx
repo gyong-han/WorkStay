@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import KakaoLoginButton from "./KakaoLoginButton";
+import NaverLoginButton from "./NaverLoginButton";
 
 const MainDiv = styled.div`
   display: grid;
@@ -85,7 +86,9 @@ const Login = () => {
           <KakaoLoginButton />
         </StyleInputId>
 
-        <StyleInputPwd>네이버 로그인</StyleInputPwd>
+        <StyleInputPwd>
+          <NaverLoginButton />
+        </StyleInputPwd>
         <BtnDiv>
           <BtnTagID to="/login/email">이메일 로그인</BtnTagID>
           <Ptag>|</Ptag>
