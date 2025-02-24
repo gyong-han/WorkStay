@@ -13,7 +13,7 @@ const FindSpace = () => {
       <Route path='/detail/:x' element={<FindSpaceDetail></FindSpaceDetail>}></Route>
       <Route path='/spacebooking/:x' element={<FindSpaceBooking/>}></Route>
       <Route path='/booking/:x' element={<Booking/>}></Route>
-      <Route path='/successbooking' element={<SpaceReservation/>}/>
+      <Route path='/successbooking/:x' element={<SpaceReservation/>}/>
     </Routes>
     </>
   );

@@ -18,7 +18,7 @@ const CalendarTime = ({children,type,position}) => {
   const dispatch =useDispatch();
 
   const isBlockedDate = (date) => {
-    const blockedDates = spaceVo.reservationDone.map((date) => new Date(date));
+    const blockedDates = spaceVo.reservationDone?spaceVo.reservationDone.map((date) => new Date(date)):[];
     return blockedDates.some(blockedDate => 
       date.getFullYear() === blockedDate.getFullYear() &&
       date.getMonth() === blockedDate.getMonth() &&

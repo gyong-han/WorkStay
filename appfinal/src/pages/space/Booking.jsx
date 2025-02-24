@@ -7,6 +7,7 @@ import CalendarTime from "../../components/FilterBar/CalendalTime";
 import { useSelector } from "react-redux";
 import SelectPeople from "./spaceComponents/SelectPeople";
 import { useNavigate } from "react-router-dom";
+import PaymentBtn from "../../components/payment/PaymentBtn";
 
 
 const Layout = styled.div`
@@ -357,55 +358,49 @@ const Booking = () => {
   const navi = useNavigate();
   
 
-  const fd = new FormData();
-  fd.append("spaceNo",spaceVo.no);
-  fd.append("memberNo",1);
-  fd.append("paymentNo",1);
-  fd.append("packageNo",packageNo);
-  fd.append("adult",spaceVo.adult);
-  fd.append("child",spaceVo.child);
-  fd.append("baby",spaceVo.baby);
-  fd.append("request",request);
-  fd.append("amount",priceData);
-  fd.append("useDay",spaceVo.reservationDate);
+  // const fd = new FormData();
+  // fd.append("spaceNo",spaceVo.no);
+  // fd.append("memberNo",1);
+  // fd.append("paymentNo",1);
+  // fd.append("packageNo",packageNo);
+  // fd.append("adult",spaceVo.adult);
+  // fd.append("child",spaceVo.child);
+  // fd.append("baby",spaceVo.baby);
+  // fd.append("request",request);
+  // fd.append("amount",priceData);
+  // fd.append("useDay",spaceVo.reservationDate);
+  const fd = {
+    spaceNo: spaceVo.no,
+    memberNo: 1,
+    paymentNo: 1,
+    packageNo: packageNo,
+    adult: spaceVo.adult,
+    child: spaceVo.child,
+    baby: spaceVo.baby,
+    request: request,
+    amount: priceData,
+    useDay: spaceVo.reservationDate,
+    name : spaceVo.name,
+};
+
+// 이제 `fd` 객체는 로컬스토리지에 저장할 수 있습니다.
+
+localStorage.setItem("fd", JSON.stringify(fd));
+
+
+  const formData = new FormData();
+  formData.append("no",spaceVo.no);
+  formData.append("name",spaceVo.name);
+  formData.append("packageType",spaceVo.packageType);
+  formData.append("price",priceData);
+  
+  
 
   
 
 // AMOUNT
 // USE_DAY
 
-  const clickHandler = (e)=>{
-      let errorMsg = "";
-        for (let [key, value] of fd.entries()) {
-          if (!value) {  // 값이 없으면
-          switch(key){
-            case "no" : errorMsg = "작성자 정보가 없습니다. 다시 로그인 해주세요";break;
-            case "request" : errorMsg="요청사항을 작성해주세요"; break;
-            case "amount" : errorMsg="가격이 책정되지 않았습니다. 처음부터 다시 예약해주세요."; break;
-            case "useDay" : errorMsg="예약하실 날짜를 선택해주세요."; break;
-          }
-      }
-
-      // 오류가 있으면 alert을 띄움
-     
-    }
-    if (errorMsg) {
-      alert(errorMsg);
-      return;
-    }
-
-    e.preventDefault();
-    fetch("http://127.0.0.1:8080/space/reservation",{
-      method : "POST",
-      body : fd,
-    }).then((resp)=>resp.text())
-    .then((data)=>{
-      console.log(data);
-        navi("/findspace/successbooking");
-      })
-  
-  }
-    
 
   
   return (
@@ -500,8 +495,12 @@ const Booking = () => {
         <ReservationDiv>
           <InfoText>결제방법 선택</InfoText>
           <div>
-            <RadioBtn checked name="payment" />
-            <Info>결제 방식 선택</Info>
+            <RadioBtn checked name="kakao" />
+            <Info>카카오페이</Info>
+            <RadioBtn checked name="kakao" />
+            <Info>계좌이체</Info>
+            
+            
           </div>
         </ReservationDiv>
         <ReservationLine />
@@ -529,7 +528,8 @@ const Booking = () => {
         </Agree>
       </UserAgreeWrapper>
       <PaddingDiv>
-        <Btn f={clickHandler} w={"500px"}>결제하기</Btn>
+        {/* <Btn f={clickHandler} w={"500px"}>결제하기</Btn> */}
+        <PaymentBtn reservationData ={formData}/>
       </PaddingDiv>
       <ProvisionDiv>
         <ProvisionSpan>

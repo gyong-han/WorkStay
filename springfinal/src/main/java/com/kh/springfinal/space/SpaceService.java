@@ -48,8 +48,8 @@ public class SpaceService {
         return spaceVo;
     }
 
-    public int reservation(SpaceReservVo vo, String memberNo) {
-        int result = mapper.reservation(vo,memberNo);
+    public int reservation(SpaceReservVo vo) {
+        int result = mapper.reservation(vo);
         return result;
     }
 
