@@ -87,7 +87,7 @@ const DropdownWrapper = styled.div`
   top: 25px;
   left: -30%;
   transform: translateX(-50%);
-  min-width: 180px;
+  min-width: 181px;
 `;
 
 const Header = () => {
