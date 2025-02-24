@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode"; // jwtDecode 추가
 import SpaceReservationCard from "../../../components/reservationInfo/SpaceReservationCard";
 
 const MainDiv = styled.div`
@@ -10,13 +11,8 @@ const MainDiv = styled.div`
 
 const StatusSpan = styled.span`
   font-size: 25px;
-  margin-left: ${(props) => {
-    return props.left;
-  }};
-
-  color: ${(props) => {
-    return props.color;
-  }};
+  margin-left: ${(props) => props.left};
+  color: ${(props) => props.color};
   cursor: pointer;
 
   &:hover {
@@ -24,13 +20,48 @@ const StatusSpan = styled.span`
   }
 `;
 
-const BlankDiv = styled.div`
-  height: 200px;
-`;
-
-const SpaceResrv = () => {
+const StayResrv = () => {
   const navigate = useNavigate();
   const [selectedMenu, setSelectedMenu] = useState("");
+  const [status, setStatus] = useState("1");
+  const [dataArr, setDataArr] = useState([]);
+  const [email, setEmail] = useState(""); // email을 상태로 관리
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        console.log("decodedToken: ", decodedToken);
+        setEmail(decodedToken.email); // 상태 업데이트
+      } catch (error) {
+        console.error("토큰 디코딩 실패:", error);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!email) return; // email이 없으면 요청하지 않음
+
+    fetch("http://127.0.0.1:8080/api/guest/spaceReserv", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }), // email을 포함하여 요청 전송
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        console.log("data : ", data);
+        setDataArr(data);
+      })
+      .catch((error) => {});
+  }, [email, status]); // email 상태가 변경되면 다시 요청
+
+  const moveDetail = (stayNo) => {
+    navigate(`/hostMenu/spaceReserv/spacedetail/${stayNo}`);
+  };
 
   function movePath(e) {
     setSelectedMenu(e.target.id);
@@ -61,15 +92,21 @@ const SpaceResrv = () => {
           </StatusSpan>
         </div>
         <div>
-          {/* map으로 반복 돌리기 / vo 보내기*/}
-          <SpaceReservationCard hideDate={false} />
-          <SpaceReservationCard hideDate={false} />
-          {/* <GuestResrvDetail /> */}
+          {dataArr.length > 0 ? (
+            dataArr.map((reservation, index) => (
+              <SpaceReservationCard
+                key={index}
+                hideDate={false}
+                data={reservation}
+              />
+            ))
+          ) : (
+            <p>예약 내역이 없습니다.</p>
+          )}
         </div>
       </MainDiv>
-      <BlankDiv />
     </>
   );
 };
 
-export default SpaceResrv;
+export default StayResrv;

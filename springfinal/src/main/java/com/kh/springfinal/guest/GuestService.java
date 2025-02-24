@@ -7,6 +7,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -94,4 +96,20 @@ public class GuestService {
         return vo;
     }
 
+    public List<MypageVo> stayReserv(MypageVo vo) {
+        return mapper.stayReserv(vo);
+    }
+
+    public List<MypageVo> stayCancleReserv(MypageVo vo) {
+        return mapper.stayCancleReserv(vo);
+    }
+
+
+    public List<MypageVo> spaceReserv(MypageVo vo) {
+        return mapper.spaceReserv(vo);
+    }
+
+    public List<MypageVo> spaceCancleReserv(MypageVo vo) {
+        return mapper.spaceCancleReserv(vo);
+    }
 }//class
