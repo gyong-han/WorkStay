@@ -130,43 +130,47 @@ public interface GuestMapper {
 
     @Select("""
             SELECT
-                ST.PROGRESS_STATE
-                ,S.NAME
-                ,RE.USE_DAY
-                ,P.NAME AS packageName
-                ,RE.ADULT
-                ,RE.AMOUNT
-                , MIN(FILE_PATH) AS FILE_PATH
+                ST.PROGRESS_STATE,
+                S.NAME ,
+                RE.USE_DAY,
+                P.NAME AS packageName,
+                RE.ADULT,
+                RE.AMOUNT,
+                (SELECT FILE_PATH
+                FROM SPACE_ATTACHMENT SA
+                WHERE SA.SPACE_NO = S.NO
+                AND SA.THUMBNAIL = 'Y'
+                AND ROWNUM = 1) AS FILE_PATH
             FROM MEMBER M
-            LEFT OUTER JOIN SPACE S ON (M.NO = S.HOST_NO)
-            LEFT OUTER JOIN SPACE_RESERVATION RE ON (S.NO = RE.SPACE_NO)
-            LEFT OUTER JOIN STATUS ST ON (ST.NO = RE.STATUS_NO)
-            LEFT OUTER JOIN PACKAGE P ON (P.NO = RE.PACKAGE_NO)
-            LEFT OUTER JOIN SPACE_ATTACHMENT ST ON (S.NO = ST.SPACE_NO)
+            JOIN SPACE_RESERVATION RE ON (M.NO = RE.MEMBER_NO)
+            JOIN SPACE S ON (RE.SPACE_NO = S.NO)
+            JOIN STATUS ST ON (RE.STATUS_NO = ST.NO)
+            LEFT JOIN PACKAGE P ON (P.NO = RE.PACKAGE_NO)
             WHERE M.EMAIL = #{email}
-            AND ST.NO !=6
-            GROUP BY ST.PROGRESS_STATE, S.NAME, RE.USE_DAY, P.NAME, RE.ADULT, RE.AMOUNT
+            AND ST.NO != 6
             """)
     List<MypageVo> spaceReserv(MypageVo vo);
 
     @Select("""
             SELECT
-                ST.PROGRESS_STATE
-                ,S.NAME
-                ,RE.USE_DAY
-                ,P.NAME AS packageName
-                ,RE.ADULT
-                ,RE.AMOUNT
-                , MIN(FILE_PATH) AS FILE_PATH
+                ST.PROGRESS_STATE,
+                S.NAME ,
+                RE.USE_DAY,
+                P.NAME AS packageName,
+                RE.ADULT,
+                RE.AMOUNT,
+                (SELECT FILE_PATH
+                FROM SPACE_ATTACHMENT SA
+                WHERE SA.SPACE_NO = S.NO
+                AND SA.THUMBNAIL = 'Y'
+                AND ROWNUM = 1) AS FILE_PATH
             FROM MEMBER M
-            LEFT OUTER JOIN SPACE S ON (M.NO = S.HOST_NO)
-            LEFT OUTER JOIN SPACE_RESERVATION RE ON (S.NO = RE.SPACE_NO)
-            LEFT OUTER JOIN STATUS ST ON (ST.NO = RE.STATUS_NO)
-            LEFT OUTER JOIN PACKAGE P ON (P.NO = RE.PACKAGE_NO)
-            LEFT OUTER JOIN SPACE_ATTACHMENT ST ON (S.NO = ST.SPACE_NO)
+            JOIN SPACE_RESERVATION RE ON (M.NO = RE.MEMBER_NO)
+            JOIN SPACE S ON (RE.SPACE_NO = S.NO)
+            JOIN STATUS ST ON (RE.STATUS_NO = ST.NO)
+            LEFT JOIN PACKAGE P ON (P.NO = RE.PACKAGE_NO)
             WHERE M.EMAIL = #{email}
-            AND ST.NO =6
-            GROUP BY ST.PROGRESS_STATE, S.NAME, RE.USE_DAY, P.NAME, RE.ADULT, RE.AMOUNT
+            AND ST.NO = 6
             """)
     List<MypageVo> spaceCancleReserv(MypageVo vo);
 
