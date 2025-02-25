@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import HostApprovalCard from "../../hostComponents/HostApprovalCard";
+import { useNavigate } from "react-router-dom";
 
 const MainDiv = styled.div`
   display: grid;
@@ -17,6 +18,7 @@ const StatusSpan = styled.span`
 const MyStayMgmt = () => {
   window.scrollTo(0, 0);
   const [dataArr, setDataArr] = useState([]);
+  const navigate = useNavigate();
   useEffect(() => {
     const fd = new FormData();
     fd.append("hostNo", "1");
@@ -29,6 +31,12 @@ const MyStayMgmt = () => {
         setDataArr(data);
       });
   }, []);
+
+  const moveDetail = (stayNum) => {
+    navigate(`myStayDetail/${stayNum}`);
+    window.scrollTo(0, 0);
+  };
+
   return (
     <>
       <MainDiv>
@@ -36,7 +44,15 @@ const MyStayMgmt = () => {
           <StatusSpan left="330px">내 숙소 목록</StatusSpan>
         </div>
         {dataArr.map((vo, idx) => {
-          return <HostApprovalCard key={idx} status="1" vo={vo} id={vo.no} />;
+          return (
+            <HostApprovalCard
+              key={idx}
+              status="1"
+              vo={vo}
+              id={vo.no}
+              f={moveDetail}
+            />
+          );
         })}
       </MainDiv>
     </>

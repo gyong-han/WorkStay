@@ -6,9 +6,7 @@ import com.kh.springfinal.reservation.StayReservVo;
 import com.kh.springfinal.space.SpaceVo;
 import com.kh.springfinal.room.RoomVo;
 import com.kh.springfinal.stay.StayVo;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -186,7 +184,7 @@ public interface HostMapper {
             FROM SPACE S
             JOIN SPACE_ATTACHMENT SA ON (S.NO = SA.SPACE_NO)
             WHERE HOST_NO = #{hostNo}
-            AND STATUS_NO = '2'
+            AND (STATUS_NO = '2' OR STATUS_NO = '7')
             AND THUMBNAIL = 'Y'
             """)
     List<SpaceVo> getMySpaceList(String hostNo);
@@ -197,7 +195,7 @@ public interface HostMapper {
             JOIN ROOM R ON S.NO = R.STAY_NO
             JOIN ROOM_ATTACHMENT RA ON R.NO = RA.ROOM_NO
             WHERE HOST_NO = #{hostNo}
-            AND STATUS_NO = '2'
+            AND (STATUS_NO = '2' OR STATUS_NO = '7')
             AND THUMBNAIL = 'Y'
             GROUP BY S.NO, S.NAME, ADDRESS, S.ENROLL_DATE
             """)
@@ -270,4 +268,179 @@ public interface HostMapper {
             WHERE RR.NO = #{stayReservNo}
             """)
     StayReservVo getStayReserv(String stayReservNo);
+
+    @Select("""
+            SELECT NO,NAME,ADDRESS,PHONE,SNS,BUSINESS_TYPE_NO,BRN,TAGLINE,INTRODUCTION,STANDARD_GUEST,MAX_GUEST,
+            DAYTIME_PRICE,NIGHT_PRICE
+            FROM SPACE
+            WHERE NO = #{spaceNum}
+            """)
+    SpaceVo getMySpaceVo(String spaceNo);
+
+    @Select("""
+            SELECT FEATURES_NO
+            FROM SPACE_FEATURES
+            WHERE SPACE_NO = #{spaceNo}
+            """)
+    List<String> getMySpaceFeaturesList(String spaceNo);
+
+    @Select("""
+            SELECT ORIGIN_NAME AS NAME,FILE_PATH
+            FROM SPACE_FLOOR_PLAN
+            WHERE SPACE_NO = #{spaceNo}
+            """)
+    AttachVo getMySpaceRoomFloorPlan(String spaceNo);
+
+    @Select("""
+            SELECT ORIGIN_NAME AS NAME,FILE_PATH
+            FROM SPACE_ATTACHMENT
+            WHERE SPACE_NO = #{spaceNo}
+            AND THUMBNAIL = 'Y'
+            """)
+    AttachVo getMySpaceThumbNail(String spaceNo);
+
+    @Select("""
+            SELECT ORIGIN_NAME AS NAME,FILE_PATH
+            FROM SPACE_ATTACHMENT
+            WHERE SPACE_NO = #{spaceNo}
+            AND THUMBNAIL = 'N'
+            """)
+    List<AttachVo> getMySpaceAttach(String spaceNo);
+
+    @Update("""
+            UPDATE SPACE SET
+            PHONE = #{phone},
+            STANDARD_GUEST = #{standardGuest},
+            MAX_GUEST = #{maxGuest},
+            DAYTIME_PRICE = #{daytimePrice},
+            NIGHT_PRICE = #{nightPrice}
+            WHERE NO = #{no}
+            """)
+    int updateMySpace(SpaceVo spaceVo);
+
+    @Delete("""
+            DELETE 
+            FROM SPACE_FEATURES
+            WHERE SPACE_NO = #{no} 
+            """)
+    int deleteMySpaceFeatures(SpaceVo spaceVo);
+
+    @Insert("""
+            INSERT INTO SPACE_FEATURES (SPACE_NO,FEATURES_NO) VALUES (#{spaceVo.no},#{feature})
+            """)
+    int insertMySpaceFeatures(SpaceVo spaceVo, String feature);
+
+    @Insert("""
+            INSERT INTO EDIT_SPACE (NO,SPACE_NO,HOST_NO,SNS,INTRODUCTION,MODIFY_DATE,TAGLINE)
+            VALUES (SEQ_EDIT_SPACE.NEXTVAL,#{no},#{hostNo},#{sns},#{introduction},SYSDATE,#{tagline})
+            """)
+    int insertMySpaceEdit(SpaceVo spaceVo);
+
+    @Update("""
+            UPDATE SPACE SET
+            STATUS_NO = '7'
+            WHERE NO = #{spaceNo}
+            """)
+    int deleteMySpace(String spaceNo);
+
+    @Select("""
+            SELECT NO,NAME,ADDRESS,PHONE,SNS,BRN,TAGLINE,INTRODUCTION,SEASON,BUSINESS_TYPE_NO,HOST_NO
+            FROM STAY
+            WHERE NO = #{stayNo}
+            """)
+    StayVo getMyStay(String stayNo);
+
+    @Update("""
+            UPDATE STAY SET
+            PHONE = #{phone},
+            SEASON = #{season}
+            WHERE NO = #{no}
+            """)
+    int updateMyStay(StayVo stayVo);
+
+    @Insert("""
+            INSERT INTO EDIT_STAY (NO,STAY_NO,HOST_NO,INTRODUCTION,SNS,MODIFY_DATE,TAGLINE)
+            VALUES (SEQ_EDIT_STAY.NEXTVAL,#{no},#{hostNo},#{introduction},#{sns},SYSDATE,#{tagline})
+            """)
+    int insertMyStayedit(StayVo stayVo);
+
+    @Select("""
+            SELECT R.NO
+            FROM ROOM R
+            JOIN STAY S ON(R.STAY_NO = S.NO)
+            WHERE R.STAY_NO = #{stayNum}   
+            """)
+    List<String> getMyRoomNo(String stayNum);
+
+    @Select("""
+            SELECT R.NO,R.NAME,R.STANDARD_GUEST,R.MAX_GUEST,R.PRICE,R.SINGLE_SIZE,R.DOUBLE_SIZE,R.QUEEN_SIZE,R.INTRODUCTION,S.HOST_NO
+            FROM ROOM R
+            JOIN STAY S ON (R.STAY_NO = S.NO)
+            WHERE R.NO = #{roomNo}
+            """)
+    RoomVo getMyRoomVo(String roomNo);
+
+    @Select("""
+            SELECT RF.FEATURES_NO
+            FROM ROOM R
+            JOIN ROOM_FEATURES RF ON(R.NO = RF.ROOM_NO)
+            WHERE R.NO = #{roomNo}
+            """)
+    List<String> getMyRoomFeaturesList(String roomNo);
+
+    @Select("""
+            SELECT ORIGIN_NAME AS NAME,FILE_PATH
+            FROM ROOM_FLOOR_PLAN
+            WHERE ROOM_NO = #{roomNo}
+            """)
+    AttachVo getRoomFloorPlan(String roomNo);
+
+    @Select("""
+            SELECT ORIGIN_NAME AS NAME,FILE_PATH
+            FROM ROOM_ATTACHMENT
+            WHERE ROOM_NO = #{roomNo}
+            AND THUMBNAIL = 'Y'
+            """)
+    AttachVo getRoomThumbNail(String roomNo);
+
+    @Select("""
+            SELECT NO,ORIGIN_NAME AS NAME,FILE_PATH
+            FROM ROOM_ATTACHMENT
+            WHERE ROOM_NO = #{roomNo}
+            AND THUMBNAIL = 'N'
+            """)
+    List<AttachVo> getRoomAttach(String roomNo);
+
+    @Update("""
+            UPDATE ROOM SET
+            STANDARD_GUEST = #{standardGuest},
+            MAX_GUEST = #{maxGuest},
+            PRICE = #{price},
+            SINGLE_SIZE = #{singleSize},
+            DOUBLE_SIZE = #{doubleSize},
+            QUEEN_SIZE = #{queenSize}
+            WHERE NO = #{no}
+            """)
+    int updateMyRoom(RoomVo roomVo);
+
+    @Delete("""
+            DELETE 
+            FROM ROOM_FEATURES
+            WHERE ROOM_NO = #{no}
+            """)
+    int deleteMyRoomFeatures(RoomVo roomVo);
+
+    @Insert("""
+            INSERT INTO ROOM_FEATURES
+            (ROOM_NO,FEATURES_NO) VALUES
+            (#{roomVo.no},#{feature})
+            """)
+    int insertMyRoomFeatures(RoomVo roomVo, String feature);
+
+    @Insert("""
+            INSERT INTO EDIT_ROOM 
+            (NO,ROOM_NO,NAME,INTRODUCTION) VALUES
+            (SEQ_EDIT_ROOM.NEXTVAL,#{no},#{name},#{introduction})
+            """)
+    int insertMyRoomEdit(RoomVo roomVo);
 }

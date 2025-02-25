@@ -8,4 +8,5 @@ public class AttachVo {
     private String spaceNo;
     private String originName;
     private String filePath;
+    private String name;
 }

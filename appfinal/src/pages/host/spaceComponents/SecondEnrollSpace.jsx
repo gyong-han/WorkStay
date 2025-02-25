@@ -242,38 +242,40 @@ const SecondEnrollSpace = () => {
   };
 
   const enrollSpace = () => {
-    const fd = new FormData();
-    fd.append("hostNo", "1");
-    fd.append("name", formData.name);
-    fd.append("address", formData.address);
-    fd.append("phone", formData.phone);
-    fd.append("sns", formData.sns);
-    fd.append("businessTypeNo", formData.business_type_no);
-    fd.append("brn", formData.brn);
-    fd.append("tagline", formData.tagline);
-    fd.append("introduction", formData.introduction);
-    fd.append("standardGuest", formData.standard_guest);
-    fd.append("maxGuest", formData.max_guest);
-    fd.append("daytimePrice", formData.daytime_price);
-    fd.append("nightPrice", formData.night_price);
-    fd.append("features", featuresArr);
-    fd.append("space_floor_plan", fileData.space_floor_plan);
-    fd.append("thumbnail", fileData.thumbnail);
-    fileData.attachment.map((file) => fd.append("attachment", file));
+    console.log(fileData);
 
-    fetch("http://127.0.0.1:8080/api/host/enroll/space", {
-      method: "POST",
-      headers: {},
-      body: fd,
-    })
-      .then((resp) => resp.text())
-      .then((data) => {
-        console.log(data);
-        if (data === "1") {
-          navigate("/hostMenu/hostMgmtMenu/spaceApprovalMgmt");
-          window.scrollTo(0, 0);
-        }
-      });
+    // const fd = new FormData();
+    // fd.append("hostNo", "1");
+    // fd.append("name", formData.name);
+    // fd.append("address", formData.address);
+    // fd.append("phone", formData.phone);
+    // fd.append("sns", formData.sns);
+    // fd.append("businessTypeNo", formData.business_type_no);
+    // fd.append("brn", formData.brn);
+    // fd.append("tagline", formData.tagline);
+    // fd.append("introduction", formData.introduction);
+    // fd.append("standardGuest", formData.standard_guest);
+    // fd.append("maxGuest", formData.max_guest);
+    // fd.append("daytimePrice", formData.daytime_price);
+    // fd.append("nightPrice", formData.night_price);
+    // fd.append("features", featuresArr);
+    // fd.append("space_floor_plan", fileData.space_floor_plan);
+    // fd.append("thumbnail", fileData.thumbnail);
+    // fileData.attachment.map((file) => fd.append("attachment", file));
+
+    // fetch("http://127.0.0.1:8080/api/host/enroll/space", {
+    //   method: "POST",
+    //   headers: {},
+    //   body: fd,
+    // })
+    //   .then((resp) => resp.text())
+    //   .then((data) => {
+    //     console.log(data);
+    //     if (data === "1") {
+    //       navigate("/hostMenu/hostMgmtMenu/spaceApprovalMgmt");
+    //       window.scrollTo(0, 0);
+    //     }
+    //   });
   };
 
   return (

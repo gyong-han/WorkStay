@@ -152,4 +152,56 @@ public class HostController {
         return stayReservDetail;
     }
 
+    //내 공간 상세조회
+    @PostMapping("mySpaceDetail")
+    public Map<String, Object> getMySpaceDetail(@RequestBody String spaceNum){
+        String spaceNo = spaceNum.replace("\"", "");
+        Map<String,Object> mySpaceDetail = service.getMySpaceDetail(spaceNo);
+        return mySpaceDetail;
+    }
+
+    //내 공간 수정요청
+    @PostMapping("modifyMySpace")
+    public int modifyMySpace(SpaceVo spaceVo, @RequestParam List<String> features){
+        int result = service.modifyMySpace(spaceVo,features);
+        System.out.println("result = " + result);
+        return result;
+    }
+
+    //내 공간 입점삭제
+    @PostMapping("deleteMySpace")
+    public int deleteMySpace(@RequestBody String spaceNum){
+        String spaceNo = spaceNum.replace("\"", "");
+        int result = service.deleteMySpace(spaceNo);
+        return result;
+    }
+
+    //내 숙소 상세조회
+    @PostMapping("myStayDetail")
+    public StayVo getMyStayDetail(@RequestBody String stayNum){
+        String stayNo = stayNum.replace("\"", "");
+        StayVo stayVo = service.getMyStayDetail(stayNo);
+        return stayVo;
+    }
+
+    //내 숙소 수정요청
+    @PostMapping("modifyMyStay")
+    public int modifyMyStay(StayVo stayVo){
+        int result = service.modifyMyStay(stayVo);
+        System.out.println("result = " + result);
+        return result;
+    }
+
+    //내 독채 상세조회
+    @PostMapping("myRoomDetail")
+    public List<Map<String, Object>> getMyRoomDEtail(@RequestParam String stayNum){
+        return service.getMyRoomDetail(stayNum);
+    }
+
+    //내 독채 수정요청
+    @PostMapping("modifyMyRoom")
+    public int modifyMyRoom(RoomVo roomVo,  @RequestParam List<String> features){
+        int result = service.modifyMyRoom(roomVo,features);
+        return 1;
+    }
 }

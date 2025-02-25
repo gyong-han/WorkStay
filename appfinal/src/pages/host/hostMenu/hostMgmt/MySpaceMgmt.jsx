@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import HostApprovalCard from "../../hostComponents/HostApprovalCard";
+import { useNavigate } from "react-router-dom";
 
 const MainDiv = styled.div`
   display: grid;
@@ -15,8 +16,8 @@ const StatusSpan = styled.span`
 `;
 
 const MySpaceMgmt = () => {
-  window.scrollTo(0, 0);
   const [dataArr, setDataArr] = useState([]);
+  const navigate = useNavigate();
   useEffect(() => {
     const fd = new FormData();
     fd.append("hostNo", "1");
@@ -29,6 +30,11 @@ const MySpaceMgmt = () => {
         setDataArr(data);
       });
   }, []);
+
+  const moveDetail = (spaceNo) => {
+    navigate(`mySpaceDetail/${spaceNo}`);
+    window.scrollTo(0, 0);
+  };
   return (
     <>
       <MainDiv>
@@ -36,7 +42,15 @@ const MySpaceMgmt = () => {
           <StatusSpan left="330px">내 공간 목록</StatusSpan>
         </div>
         {dataArr.map((vo, idx) => {
-          return <HostApprovalCard key={idx} status="1" vo={vo} id={vo.no} />;
+          return (
+            <HostApprovalCard
+              key={idx}
+              status="1"
+              vo={vo}
+              id={vo.no}
+              f={moveDetail}
+            />
+          );
         })}
       </MainDiv>
     </>
