@@ -388,11 +388,12 @@ const Booking = () => {
 localStorage.setItem("fd", JSON.stringify(fd));
 
 
-  const formData = new FormData();
-  formData.append("no",spaceVo.no);
-  formData.append("name",spaceVo.name);
-  formData.append("packageType",spaceVo.packageType);
-  formData.append("price",priceData);
+const fdData = {
+  no: spaceVo.no,
+  name: spaceVo.name,
+  packageType: spaceVo.packageType,
+  price: priceData,
+};
   
   
 
@@ -529,7 +530,7 @@ localStorage.setItem("fd", JSON.stringify(fd));
       </UserAgreeWrapper>
       <PaddingDiv>
         {/* <Btn f={clickHandler} w={"500px"}>결제하기</Btn> */}
-        <PaymentBtn reservationData ={formData}/>
+        <PaymentBtn reservationData ={fdData}/>
       </PaddingDiv>
       <ProvisionDiv>
         <ProvisionSpan>

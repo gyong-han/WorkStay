@@ -40,6 +40,7 @@ public class KakaoPayService {
     private HttpHeaders getHeaders() {
         HttpHeaders headers = new HttpHeaders();
         String auth = "KakaoAK " + adminKey;
+        headers.set("Access-Control-Allow-Origin", "https://t1.kakaocdn.net");
         headers.set("Authorization", auth);
         headers.set("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
         return headers;

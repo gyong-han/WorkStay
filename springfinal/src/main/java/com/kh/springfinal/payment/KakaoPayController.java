@@ -1,10 +1,8 @@
 package com.kh.springfinal.payment;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/payment")
 public class KakaoPayController {
@@ -16,7 +14,7 @@ public class KakaoPayController {
     }
 
     @PostMapping("/ready")
-    public KakaoPayVo readyToKakaoPay(KakaoPayReadyVo vo) {
+    public KakaoPayVo readyToKakaoPay(@RequestBody  KakaoPayReadyVo vo) {
         System.out.println("vo = " + vo);
         return kakaoPayService.kakaoPayReady(vo);
     }

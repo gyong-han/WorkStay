@@ -23,6 +23,8 @@ const getSpaceListAll = async (paramData)=>{
 
 
 const inputReservation = async (fdData)=>{
+ 
+  
   try{
     const result = await fetch((`${BASE_URL}/space/reservation`),{
       method : "POST",
@@ -39,12 +41,13 @@ const inputReservation = async (fdData)=>{
 }
 
 const getInfomation = async(fd)=>{
+  console.log("fd",fd);
   try{
     const result = await fetch((`${BASE_URL}/space/getTimeNow`),{
       method:"POST",
       body:fd,
     });
-    const data = await result.JSON();
+    const data = await result.json();
     return data;
   }catch(e){
     console.log("error",e);

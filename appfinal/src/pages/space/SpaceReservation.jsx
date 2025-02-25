@@ -122,11 +122,11 @@ const SpaceReservation = () => {
     
     const getInfo = await getInfomation(fd);
     dispatch(setReservationInfo(getInfo));
-
+  };
 
   useEffect(()=>{
     Reservation ();
-  },[fdData])
+  },[])
 
 
   return (
@@ -170,6 +170,6 @@ const SpaceReservation = () => {
     </>
   );
 
-};
+
 };
 export default SpaceReservation;
