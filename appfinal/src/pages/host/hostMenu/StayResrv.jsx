@@ -16,7 +16,7 @@ const StatusSpan = styled.span`
   cursor: pointer;
 
   &:hover {
-    color: #049dd9;
+    color: #f20530;
   }
 `;
 
@@ -53,7 +53,6 @@ const StayResrv = () => {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        console.log("data : ", data);
         setDataArr(data);
       })
       .catch((error) => {
@@ -61,8 +60,10 @@ const StayResrv = () => {
       });
   }, [email, status]); // email 상태가 변경되면 다시 요청
 
-  const moveDetail = (stayNo) => {
-    navigate(`/hostMenu/staydetail/${stayNo}`);
+  const moveDetail = (roomNo, reno) => {
+    navigate(
+      `/hostMenu/staydetail?email=${email}&reno=${reno}&roomNo=${roomNo}`
+    );
   };
 
   function movePath(e) {
@@ -100,6 +101,9 @@ const StayResrv = () => {
                 key={index}
                 hideDate={false}
                 data={reservation}
+                moveDetail={() =>
+                  moveDetail(reservation.roomNo, reservation.reno)
+                }
               />
             ))
           ) : (

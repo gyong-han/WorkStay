@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { data, useLocation, useNavigate, useParams } from "react-router-dom";
 import HostBtn from "../../host/hostComponents/HostBtn";
 import DataCard from "../../admin/adminComponents/DataCard";
+import { jwtDecode } from "jwt-decode";
 
 const MainDiv = styled.div`
   display: grid;
@@ -109,21 +110,77 @@ const StayDetail = () => {
   const navi = useNavigate();
   const location = useLocation(); // 현재 경로 가져오기
   const [selectedMenu, setSelectedMenu] = useState("");
+  const [params, setParams] = useState({ reno: "", roomNo: "" });
+  const [data, setData] = useState("");
+  const [email, setEmail] = useState("");
+  const [no, setNo] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        setEmail(decodedToken.email);
+        setNo(decodedToken.no);
+      } catch (error) {
+        console.error("토큰 디코딩 실패:", error);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    // Query Params 가져오기
+    const queryParams = new URLSearchParams(location.search);
+    const renoParam = queryParams.get("reno");
+    const roomNoParam = queryParams.get("roomNo");
+
+    setParams({ reno: renoParam, roomNo: roomNoParam });
+  }, [location.search]);
+
+  useEffect(() => {
+    if (!email || !params.reno || !params.roomNo) {
+      console.log("필수 값이 누락됨:", { email, ...params });
+      return;
+    }
+
+    console.log("API 요청 실행:", { email, ...params });
+
+    fetch(
+      `http://127.0.0.1:8080/api/guest/stayDetailReserv?email=${email}&reno=${params.reno}&roomNo=${params.roomNo}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((resp) => {
+        if (!resp.ok) {
+          throw new Error(`서버 응답 오류: ${resp.status}`);
+        }
+        return resp.json();
+      })
+      .then((responseData) => {
+        setData(responseData);
+      })
+      .catch((error) => {
+        console.error("숙소 상세 정보 가져오기 실패:", error);
+      });
+  }, [email, params]);
 
   function movePath(e) {
     setSelectedMenu(e.target.id);
 
     // 현재 경로에 'staycancle' 추가
-    const newPath = `${location.pathname}/staycancle`.replace(
-      /\/+/g,
-      "/",
-      "staycancle"
-    );
+    const newPath =
+      `${location.pathname}/staycancle?no=${no}&reno=${params.reno}`.replace(
+        /\/+/g,
+        "/",
+        "staycancle"
+      );
 
     navi(newPath);
   }
-
-  const stayName = "온숲";
 
   return (
     <>
@@ -134,7 +191,7 @@ const StayDetail = () => {
               <StatusSpan size="15px" color="gray">
                 예약 상세 ❯
               </StatusSpan>
-              <StatusSpan size="15px"> {stayName}</StatusSpan>
+              <StatusSpan size="15px"> {data.name}</StatusSpan>
             </StyleDiv>
           </div>
           <div>
@@ -149,13 +206,10 @@ const StayDetail = () => {
           <div></div>
           <ImgDiv>
             <DataCard
-              title={"온숲"}
-              address={"경기도 양평군 지평면 학교담길 35-33"}
-              phone={"0504-0903-2641"}
-              email={"onsoup@gmail.com"}
-              img={
-                "https://images.stayfolio.com/system/pictures/images/000/242/946/original/6ccc6545741b3626b8ab3f6679276176cb2be9e7.jpg?1730794640"
-              }
+              title={data.name}
+              address={data.address}
+              phone={data.phone}
+              img={data.filePath}
             />
           </ImgDiv>
           <div></div>
@@ -194,19 +248,20 @@ const StayDetail = () => {
           <div></div>
           <div>
             <TitleDiv left="5px" bot="30px">
-              20250101
+              {data.reno}
             </TitleDiv>
             <TitleDiv left="5px" bot="30px">
-              온숲 / Room A1
+              {data.name} / {data.roomName}
             </TitleDiv>
             <TitleDiv left="5px" bot="30px">
-              총 2명 (성인 : 2명/ 아동 : 0명 / 영아 : 0명)
+              총 {data.totalPerson}명 (성인 : {data.adult}명/ 아동 :{" "}
+              {data.child}명 / 영아 : {data.baby}명)
             </TitleDiv>
             <TitleDiv left="5px" bot="30px">
-              2025-01-21 16:00
+              {data.checkIn} 16:00
             </TitleDiv>
             <TitleDiv left="5px" bot="30px">
-              2025-01-22 11:00
+              {data.checkOut} 11:00
             </TitleDiv>
           </div>
           <div></div>
@@ -218,7 +273,7 @@ const StayDetail = () => {
             06. 요청사항
           </TitleDiv>
           <div></div>
-          <TextArea value={stayName} readOnly />
+          <TextArea value={data.request} readOnly />
           <div></div>
           <div></div>
           <div>
@@ -266,7 +321,7 @@ const StayDetail = () => {
               총 결제 금액
             </StatusSpan>
             <StatusSpan size="17px" right="10px">
-              ₩360,000
+              ₩{data.amount}
             </StatusSpan>
           </AmountDiv>
           <div></div>
@@ -277,7 +332,7 @@ const StayDetail = () => {
           <TitleDiv left="40px">02. 결제 방법</TitleDiv>
           <div></div>
           <TitleDiv left="5px">
-            카드 결제 (결제 완료 : 2025-01-01 11:23)
+            카드 결제 (결제 완료 : {data.reservationDate})
           </TitleDiv>
           <div></div>
           <div></div>
@@ -292,6 +347,7 @@ const StayDetail = () => {
                 str="예약취소"
                 top="100px"
                 f={movePath}
+                border="none"
               />
             </div>
             <div>
@@ -300,9 +356,10 @@ const StayDetail = () => {
                 height="50px"
                 font="20px"
                 backColor="#FAFAFA"
-                color="#049DD9"
+                color="#202020"
                 str="이용 안내 및 환불 규정"
                 top="100px"
+                border="1px solid #049DD9"
               />
             </div>
           </BtnDiv>

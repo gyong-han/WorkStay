@@ -11,11 +11,20 @@ public class MypageVo {
     private String checkOut;
     private String name;
     private String adult;
-    private String price;
+    private String child;
+    private String baby;
+    private String amount;
+    private String address;
+    private String phone;
+    private String request;
     private String useDay;
     private String packageName;
-    private String daytimePrice;
-    private String nightPrice;
     private String filePath;
+    private String totalPerson;
+    private String reno;
+    private String no;
+    private String roomNo;
+    private String reservationDate;
+
 
 }

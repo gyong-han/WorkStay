@@ -1,6 +1,5 @@
 package com.kh.springfinal.guest;
 
-import com.kh.springfinal.host.TableVo;
 import com.kh.springfinal.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -107,6 +106,28 @@ public class GuestController {
         List<MypageVo> spaceCancleReserv = service.spaceCancleReserv(vo);
         return spaceCancleReserv;
     }
+
+    //숙소 예약 상세 조회
+    @GetMapping("stayDetailReserv")
+    public MypageVo stayDetailReserv(@RequestParam String email , @RequestParam String reno , @RequestParam String roomNo){
+        MypageVo dbVo = service.stayDetailReserv(email,reno,roomNo);
+        return dbVo;
+    }
+
+    //숙소 예약 취소
+    @PostMapping("stayCancle")
+    public MypageVo stayCancle(@RequestBody MypageVo vo){
+        MypageVo result = service.stayCancle(vo);
+        return result;
+    }
+
+    //공간 예약 상세 조회
+
+
+    //공간 예약 취소
+
+
+
 
     //s-log 불러오기
 
