@@ -30,6 +30,7 @@ const spaceSlice = createSlice({
     reservationNo:'',
     payDay:'',
     request:'',
+    titleData:'',
 
   },
   reducers: {
@@ -51,6 +52,7 @@ const spaceSlice = createSlice({
     state.standardGuest= action.payload.standardGuest;
     state.tagline= action.payload.tagline;
     state.features =action.payload.features;
+    
     },
     setPackageType : (state,action)=>{
       state.packageType = action.payload.packageType;
@@ -91,6 +93,7 @@ const spaceSlice = createSlice({
     state.baby=0;
     state.area='';
     state.reservationDone= '';
+    state.titleData = '';
 
     },
     setReservationDone : (state,action)=>{
@@ -102,10 +105,13 @@ const spaceSlice = createSlice({
       state.payDay = action.payload.reservationDate;
     },
     setRequest : (state,action)=>{
-      console.log("액션시작 ~~~");
-      console.log("액션들어온값  ~~~",action.payload);
       
       state.request = action.payload;
+    },
+    setTitleSearch : (state,action)=>{
+      console.log("액션시작",action.payload);
+      
+      state.titleData = action.payload;
     }
     
     
@@ -113,5 +119,5 @@ const spaceSlice = createSlice({
 });
 
 
-export const { setSpaceVo,setPackageType,setreservationDate,setMemberCnt,setArea,setReset,setReservationDone,setReservationInfo,setRequest } = spaceSlice.actions;
+export const { setSpaceVo,setPackageType,setreservationDate,setMemberCnt,setArea,setReset,setReservationDone,setReservationInfo,setRequest,setTitleSearch } = spaceSlice.actions;
 export default spaceSlice.reducer;

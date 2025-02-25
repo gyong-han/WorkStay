@@ -15,8 +15,8 @@ import java.util.List;
 public class SpaceService {
 
     private final SpaceMapper mapper;
-    public List<SpaceVo> spaceGetListAll(String area,String people,String date) {
-        return mapper.spaceGetListAll(area,people,date);
+    public List<SpaceVo> spaceGetListAll(String area,String people,String date,String title) {
+        return mapper.spaceGetListAll(area,people,date,title);
     }
 
     public List<AttachmentVo> spaceGetAttachment() {
@@ -74,5 +74,18 @@ public class SpaceService {
 
     public SpaceReservVo getNowTime(SpaceReservVo vo) {
         return mapper.getNowTime(vo);
+    }
+
+    public int bookmark(SpaceReservVo vo) {
+       return mapper.bookmark(vo);
+
+    }
+
+    public int bookmarkdel(SpaceReservVo vo) {
+        return mapper.bookmarkdel(vo);
+    }
+
+    public int getbookmark(SpaceReservVo vo) {
+        return mapper.getbookmark(vo);
     }
 }

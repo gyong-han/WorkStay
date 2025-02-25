@@ -14,6 +14,7 @@ import CalendarTime from '../../components/FilterBar/CalendalTime';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPackageType, setReservationDone, setSpaceVo } from '../../redux/spaceSlice';
 import PackageReservationDone from '../../components/package/PackageReservationDone';
+import { getBookmarkInfo } from '../../components/service/spaceServcie';
 
 const Layout =styled.div`
 width: 100%;
@@ -164,13 +165,48 @@ const PackageDiv = styled.div`
 `;
 
 const FindSpaceDetail = () => {
-  const [bookMark,setBookMark] = useState();
+  const [bookMark,setBookMark] = useState(false);
   const dispatch = useDispatch();
   const {x} = useParams();
   const spaceVo = useSelector((state) => state.space);
   const [packageNo,setPackageNo] = useState("");
   // console.log(x);
 
+
+  // useEffect(()=>{
+    // const dataObj = {
+    //   memberNo : 1,                          //로그인 정보 가져오자
+    //   spaceNo : spaceVo.no,
+    // }
+  //   fetch(("http://localhost:8080/space/getbookmarkInfo"),{
+  //     method :"POST",
+  //     headers : {
+  //       "content-type" : "application/json",
+  //     },
+  //     body : JSON.stringify(dataObj),
+  //   })
+  //   .then((resp)=>resp.text())
+  //   .then((data)=>{
+  //     console.log(data);
+  //     const x = JSON.parse(data);
+  //     console.log(x);
+      
+      
+  //     setBookMark(x);
+      
+  //   })
+  // },[])
+  const bookmarkdata = async ()=>{
+    const dataObj = {
+      memberNo : 1,                          //로그인 정보 가져오자
+      spaceNo : x,
+    }
+    const data = await getBookmarkInfo(dataObj);
+    const inData = JSON.parse(data);
+    console.log("첫번째로 가져온거 ~~~ ",inData);
+    setBookMark(inData)
+    
+  }
 
   
 
@@ -187,6 +223,7 @@ const FindSpaceDetail = () => {
       // console.log("data ::: ",data);
       dispatch(setSpaceVo(data));
     })
+    bookmarkdata();
   },[x,dispatch]);
 
   useEffect(()=>{
@@ -219,6 +256,50 @@ const FindSpaceDetail = () => {
 
 
 
+
+  /////////////////////////////////////////////////////클릭함수
+  const bookmarkInsert = ()=>{
+    const dataObj = {
+      memberNo : 1,                          //로그인 정보 가져오자
+      spaceNo : spaceVo.no,
+    }
+    if(bookMark == true){
+      setBookMark(false);
+      fetch(("http://localhost:8080/space/bookmarkdel"),{
+        method :"POST",
+        headers : {
+          "content-type" : "application/json",
+        },
+        body : JSON.stringify(dataObj),
+        
+      })
+      .then((resp)=>resp.text())
+      .then((data)=>{
+        console.log("삭제된데이터수:",data);
+        alert("북마크가 해지되었습니다.")
+      })
+    }else{
+      setBookMark(true);
+      fetch(("http://localhost:8080/space/bookmark"),{
+        method :"POST",
+        headers : {
+          "content-type" : "application/json",
+        },
+        body : JSON.stringify(dataObj),
+        
+      })
+      .then((resp)=>resp.text())
+      .then((data)=>{
+        console.log(data);
+        alert("마이페이지 찜목록에 저장되었습니다.")
+      })
+    }
+    
+
+  }
+
+
+
   const park = "4";
   let parking=""
   if(park==="4"){
@@ -242,8 +323,8 @@ const FindSpaceDetail = () => {
           <div><BiMessageAltDetail /></div>
           <div><RxShare2 /></div>
           
-          <div onClick={() => setBookMark(!bookMark)}>
-             {bookMark ? <IoBookmark/> : <IoBookmarkOutline/>}
+          <div onClick={bookmarkInsert}>
+             {!bookMark ? <IoBookmarkOutline/> : <IoBookmark/>}
           </div>
           <div>메세지</div>
           <div>공유하기</div>

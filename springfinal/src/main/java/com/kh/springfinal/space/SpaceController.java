@@ -15,12 +15,13 @@ public class SpaceController {
     private final SpaceService service;
 
     @GetMapping("list")
-    public List<SpaceVo> spaceGetListAll(@RequestParam String area,String people, String datedata) throws InterruptedException {
+    public List<SpaceVo> spaceGetListAll(@RequestParam String area,String people, String datedata,String title) throws InterruptedException {
         String date = datedata.replaceAll("-", "");
-        System.out.println("area"+area);
-        System.out.println("people"+people);
-        System.out.println("date"+date);
-        List<SpaceVo> voList = service.spaceGetListAll(area,people,date);
+//        System.out.println("area"+area);
+//        System.out.println("people"+people);
+//        System.out.println("date"+date);
+//        System.out.println("title ::: "+title);
+        List<SpaceVo> voList = service.spaceGetListAll(area,people,date,title);
 
 //        System.out.println("vo :::"+ voList);
         return voList;
@@ -41,7 +42,7 @@ public class SpaceController {
 
     @PostMapping("reservation")
     public int reservation(@RequestBody SpaceReservVo vo){
-        System.out.println("vo::"+vo);
+//        System.out.println("vo::"+vo);
         String date = vo.getUseDay();
         String formattedDate = date.replaceAll("-", "");
         vo.setUseDay(formattedDate);
@@ -71,14 +72,33 @@ public class SpaceController {
     }
     @PostMapping("getTimeNow")
     public SpaceReservVo m01(SpaceReservVo vo){
-        System.out.println("vo@@@@@ = " + vo);
+//        System.out.println("vo@@@@@ = " + vo);
         String date = vo.getUseDay();
         String formattedDate = date.replaceAll("-", "");
         vo.setUseDay(formattedDate);
         SpaceReservVo getVo = service.getNowTime(vo);
 
-        System.out.println("getVO ~~~~~:::::::::::::::"+getVo);
+//        System.out.println("getVO ~~~~~:::::::::::::::"+getVo);
         return getVo;
+    }
+    @PostMapping("bookmark")
+    public int bookmark(@RequestBody SpaceReservVo vo){
+        return service.bookmark(vo);
+
+    }
+    @PostMapping("bookmarkdel")
+    public int bookmarkdel(@RequestBody SpaceReservVo vo){
+       return service.bookmarkdel(vo);
+    }
+    @PostMapping("getbookmarkInfo")
+    public boolean getbookmark(@RequestBody SpaceReservVo vo){
+        int result = service.getbookmark(vo);
+        if(result >= 1){
+            return true;
+        }else{
+            return false;
+        }
+
     }
 
 }

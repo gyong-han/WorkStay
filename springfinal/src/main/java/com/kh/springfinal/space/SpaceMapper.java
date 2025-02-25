@@ -1,6 +1,7 @@
 package com.kh.springfinal.space;
 
 import com.kh.springfinal.reservation.SpaceReservVo;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -10,7 +11,7 @@ import java.util.List;
 @Mapper
 public interface SpaceMapper {
 
-    List<SpaceVo> spaceGetListAll(String area,String people,String date);
+    List<SpaceVo> spaceGetListAll(String area,String people,String date,String title);
 
     @Select("""
             SELECT NO,SPACE_NO,FILE_PATH FROM SPACE_ATTACHMENT
@@ -107,4 +108,28 @@ public interface SpaceMapper {
               WHERE SPACE_NO =#{spaceNo} AND PACKAGE_NO =#{packageNo} AND USE_DAY =#{useDay}
             """)
     SpaceReservVo getNowTime(SpaceReservVo vo);
+
+    @Insert("""
+            INSERT INTO SPACE_BOOKMARK(MEMBER_NO,SPACE_NO)VALUES(#{memberNo},#{spaceNo})
+            """)
+    int bookmark(SpaceReservVo vo);
+
+    @Delete("""
+            DELETE FROM SPACE_BOOKMARK WHERE
+            MEMBER_NO=#{memberNo} AND SPACE_NO=#{spaceNo}
+            """)
+    int bookmarkdel(SpaceReservVo vo);
+
+    @Select("""
+            SELECT CASE
+                     WHEN EXISTS (
+                        SELECT 1
+                        FROM SPACE_BOOKMARK
+                        WHERE MEMBER_NO = #{memberNo} AND SPACE_NO = #{spaceNo}
+                     ) THEN 1
+                     ELSE 0
+                   END AS is_exist
+            FROM DUAL
+            """)
+    int getbookmark(SpaceReservVo vo);
 }

@@ -25,6 +25,10 @@
             GROUP BY SPACE_NO
             HAVING COUNT(DISTINCT PACKAGE_NO) = 2)
         </if>
+        <if test="title != null and title !='' ">
+            AND S.NAME LIKE '%'||#{title}||'%'
+        </if>
+
 
 
     </select>
