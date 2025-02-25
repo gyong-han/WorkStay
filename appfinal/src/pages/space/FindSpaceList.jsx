@@ -7,8 +7,9 @@ import { IoCheckmarkCircleOutline } from "react-icons/io5";
 import { CiFilter } from "react-icons/ci";
 import { RiResetRightFill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
-import { setReset } from "../../redux/spaceSlice";
+import { setReset, setTitleSearch } from "../../redux/spaceSlice";
 import { getAttachmentAll, getSpaceListAll } from "../../components/service/spaceServcie";
+import SortDropdown from "../../components/listcomponents/SortDropdown";
 
 
 
@@ -43,7 +44,7 @@ const SearchWrapper = styled.div`
 `;
 const FilterWrapper = styled.div`
   display: grid;
-  grid-template-columns: 100px 1fr 100px 100px;
+  grid-template-columns: 120px 1fr 100px 100px;
   grid-template-rows: 1fr;
   border-bottom: 2px solid #202020;
   margin-top: 70px;
@@ -84,17 +85,7 @@ const FindSpaceList = () => {
   const dispatch = useDispatch();
   const currentUrl = window.location.href;
   const spaceVo = useSelector((state)=>state.space);
-  
-  // useEffect(()=>{
-  //   // console.log("현재 URL 은 :::::",currentUrl);
-    
-  //   if(currentUrl == "http://localhost:3000/findspace"){
-  //     dispatch(setReset());
-  //   }
-  // },[])
-
-  
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState();
   const [spaceVoList,setSpaceVoList] = useState([]);
   const [imgPath,setImgPath]= useState([]);
  
@@ -103,23 +94,18 @@ const FindSpaceList = () => {
     datedata: spaceVo.reservationDate,
     people: spaceVo.adult+spaceVo.child+spaceVo.baby,
     area: spaceVo.area,  
+    title: spaceVo.titleData
 }).toString();
 
 
 // async 사용하여 데이터값 추출해보기
   const AttachmentData = async ()=>{
     const attachmentData = await getAttachmentAll();
-    // console.log("먼저 가져와야할 데이터::",attachmentData);
      const listData = await getSpaceListAll(queryParams);
-    //  console.log("꺼내온 데이터 ::",listData );
      setSpaceVoList(listData);
 
-     //
      const arr = listData.map((vo)=>{
       const matchingAttachments = attachmentData.filter((att) => att.spaceNo === vo.no);
-      // console.log("matchingAttachments::",matchingAttachments);
-      // console.log(vo.filePath);
-      
       const imgPaths =  matchingAttachments.length > 0 ? matchingAttachments.map((att) => att.filePath) : null;  
       imgPaths.unshift(vo.filePath);
       const dataObject = {
@@ -132,49 +118,22 @@ const FindSpaceList = () => {
   }
   
 
-
-
   const handleChange = (e) => {
-    setFormData((prev) => {
-      return {
-        ...prev,
-        [e.target.name]: e.target.value,
-      };
-    });
+    setFormData(e.target.value);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch("localhost:8080/findspace", {
-      method: "GET",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(formData),
-    })
-      .then((resp) => resp.text())
-      .then((data) => {
-      });
+    console.log(formData);
+    dispatch(setTitleSearch(formData));
+    
   };
-  //spaceService.js 활용하여 async 사용해보기
+
   useEffect(()=>{
     AttachmentData();
 
   },[queryParams])
 
-
-
-
-  // useEffect(()=>{
-  //   // 스페이스 목록 데이터 가져오기
-  //   getSpaceListAll(queryParams).then((data)=>{
-  //     console.log("LISTDATA::::",data);
-      
-    
-  //   })
-  // },[dataLoad,queryParams]);
-
-
-
-  
   
   return(<> 
 <Layout>
@@ -194,10 +153,7 @@ const FindSpaceList = () => {
   </SearchWrapper>
   <FilterWrapper>
     <div>
-    <Btn>
-            <FilterText>최신순</FilterText>
-            <IoCheckmarkCircleOutline size={18} />
-          </Btn>
+    <SortDropdown/>
     </div>
     <div></div>
     <div>

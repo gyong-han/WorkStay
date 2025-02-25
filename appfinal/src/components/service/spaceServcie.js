@@ -53,4 +53,24 @@ const getInfomation = async(fd)=>{
     console.log("error",e);
   }
 }
-export {getAttachmentAll,getSpaceListAll,inputReservation,getInfomation};
+
+const getBookmarkInfo =async (dataObj)=>{
+  try{
+    const result = await fetch((`${BASE_URL}/space/getbookmarkInfo`),{
+      method :"POST",
+      headers : {
+        "content-type" : "application/json",
+      },
+      body : JSON.stringify(dataObj),
+      
+    })
+    const data = await result.text();
+    return data;
+  }catch(e){
+    console.log("error",e);
+    
+  }
+}
+
+
+export {getAttachmentAll,getSpaceListAll,inputReservation,getInfomation,getBookmarkInfo};
