@@ -18,7 +18,7 @@ const DataArea = styled.div`
   background-color: transparent;
   display: grid;
   grid-template-rows: 40px 30px 20px 20px 145px 45px;
-  color: black;
+  color: #202020;
   align-items: center;
 `;
 
@@ -46,7 +46,7 @@ const PriceDiv = styled.div`
   }
 `;
 
-const ReservationCard = ({ data, hideDate }) => {
+const ReservationCard = ({ data, hideDate, moveDetail }) => {
   const navi = useNavigate();
   const location = useLocation(); // 현재 경로 가져오기
 
@@ -76,11 +76,11 @@ const ReservationCard = ({ data, hideDate }) => {
           <div></div>
           <PriceDiv>
             {!hideDate && (
-              <TextDiv onClick={movePath} size="15px">
+              <TextDiv onClick={moveDetail} size="15px">
                 예약 상세 확인
               </TextDiv>
             )}
-            <TextDiv size="20px">₩{data.price}</TextDiv>
+            <TextDiv size="20px">₩{data.amount}</TextDiv>
           </PriceDiv>
         </DataArea>
         <ImgTag src={data.filePath} alt="숙소 이미지" />

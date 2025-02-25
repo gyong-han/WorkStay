@@ -86,7 +86,7 @@ const StayResrv = () => {
             left="20px"
             id="spaceCancleReserv"
             selected={selectedMenu === "spaceCancleReserv"}
-            color="#049dd9"
+            color="#F20530"
           >
             취소 내역
           </StatusSpan>

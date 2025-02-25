@@ -16,7 +16,7 @@ const StatusSpan = styled.span`
   cursor: pointer;
 
   &:hover {
-    color: #049dd9;
+    color: #f20530;
   }
 `;
 

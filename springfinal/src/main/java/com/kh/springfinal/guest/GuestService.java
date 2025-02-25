@@ -69,12 +69,8 @@ public class GuestService {
     public GuestVo newPwd(GuestVo vo) {
         String encodedPwd = encoder.encode(vo.getPwd());
         vo.setPwd(encodedPwd);
-        System.out.println("encodedPwd = " + encodedPwd);
-        System.out.println("service vo = " + vo);
         int dbVo = mapper.newPwd(vo);
         String token = jwtUtil.createJwtPwdToken(vo.getEmail());
-        System.out.println("token = " + token);
-        System.out.println("dbVo = " + dbVo);
         return vo;
     }
 
@@ -111,5 +107,14 @@ public class GuestService {
 
     public List<MypageVo> spaceCancleReserv(MypageVo vo) {
         return mapper.spaceCancleReserv(vo);
+    }
+
+    public MypageVo stayDetailReserv(String email, String reno, String roomNo) {
+        return mapper.stayDetailReserv(email, reno,roomNo);
+    }
+
+    public MypageVo stayCancle(MypageVo vo) {
+        int result = mapper.stayCancle(vo);
+        return vo;
     }
 }//class

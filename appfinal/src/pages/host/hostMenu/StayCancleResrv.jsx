@@ -91,7 +91,7 @@ const StayCancleResrv = () => {
             left="20px"
             id="stayCancleReserv"
             selected={selectedMenu === "stayCancleReserv"}
-            color="#049dd9"
+            color="#F20530"
           >
             취소 내역
           </StatusSpan>

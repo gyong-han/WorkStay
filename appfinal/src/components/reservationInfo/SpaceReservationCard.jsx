@@ -18,7 +18,6 @@ const DataArea = styled.div`
   background-color: transparent;
   display: grid;
   grid-template-rows: 40px 30px 20px 20px 145px 45px;
-  color: black;
   align-items: center;
 `;
 
@@ -29,6 +28,7 @@ const TextDiv = styled.div`
   font-weight: ${(props) => {
     return props.weight;
   }};
+
   cursor: pointer;
 `;
 
@@ -88,7 +88,7 @@ const SpaceReservationCard = ({ data, hideDate }) => {
                 예약 상세 확인
               </TextDiv>
             )}
-            <TextDiv size="20px">₩{data.daytimePrice}</TextDiv>
+            <TextDiv size="20px">₩{data.amount}</TextDiv>
           </PriceDiv>
         </DataArea>
         <ImgTag src={data.filePath} />
