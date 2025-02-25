@@ -1,8 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
-import { setRequest } from "../../redux/spaceSlice";
 
 const Button = styled.button`
   width: ${(props) => {
@@ -29,34 +26,39 @@ const Button = styled.button`
 `;
 
 
-const PaymentBtn = ({reservationData,lateFuction,request}) => {
-    const [paymentUrl, setPaymentUrl] = useState("");
-    const dispatch = useDispatch()
+const PaymentBtn = ({reservationData}) => {
+  const [paymentUrl, setPaymentUrl] = useState("");
 
-    // 결제 준비를 위한 API 호출
-    const handlePayment = async () => {
+  // 결제 준비를 위한 API 호출
+  const handlePayment = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/payment/ready", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(reservationData),  // reservationData를 JSON 형식으로 전송
+      });
   
-      try {
-          // dispatch(setRequest(request));
-
-            
-            const response = await axios.post("http://localhost:8080/payment/ready",reservationData);
-            const { next_redirect_pc_url } = response.data;  // 카카오에서 리턴한 결제 페이지 URL
-            setPaymentUrl(next_redirect_pc_url);
-
-            // 결제 페이지로 리다이렉트
-            window.location.href = next_redirect_pc_url;  // 카카오 결제 페이지로 리다이렉트
-            // window.open (
-            //   next_redirect_pc_url,
-            //   '_blank',
-            //   'width=500,height=700'
-            // );
-            // lateFuction();
-        } catch (error) {
-            console.error("결제 준비 오류:", error);
-        }
-        
-    };
+      if (!response.ok) {
+        throw new Error("네트워크 응답에 실패했습니다.");
+      }
+  
+      const data = await response.json();
+      const { next_redirect_pc_url } = data;  // 카카오에서 리턴한 결제 페이지 URL
+      setPaymentUrl(next_redirect_pc_url);
+  
+      // 결제 페이지로 리다이렉트
+      window.location.href = next_redirect_pc_url;  // 카카오 결제 페이지로 리다이렉트
+      // window.open (
+      //   next_redirect_pc_url,
+      //   '_blank',
+      //   'width=500,height=700'
+      // );
+    } catch (error) {
+      console.error("결제 준비 오류:", error);
+    }
+  };
 
     return (
         <Button onClick={handlePayment}>
