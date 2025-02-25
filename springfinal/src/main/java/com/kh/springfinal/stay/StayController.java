@@ -40,10 +40,6 @@ public class StayController {
                                        @RequestParam(required = false) String area,
                                        @RequestParam(required = false) String dateData){
         try{
-            System.out.println("sort = " + sort);
-            System.out.println("people = " + people);
-            System.out.println("area = " + area);
-            System.out.println("dateData = " + dateData);
             String date = (dateData != null) ? dateData.replaceAll("-", "") : null;
             return stayService.sortByList(sort, people, area, date);
         }catch (Exception e){
@@ -55,9 +51,11 @@ public class StayController {
     @PostMapping("detail")
     public StayVo getFindStayByNo(@RequestBody Long no){
         try{
-            return stayService.getFindStayByNo(no);
+            StayVo stayVo = stayService.getFindStayByNo(no);
+            return stayVo;
         }catch (Exception e){
             log.warn(e.getMessage());
+            System.out.println("error :: "+ e.getMessage());
             throw new IllegalStateException("[STAY-ERROR-03]STAY DETAIL FAIL");
         }
     }

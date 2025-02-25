@@ -6,7 +6,7 @@ const getAttachment = async () => {
     const data = await result.json();
     return data;
   } catch (e) {
-    console.log("error", e);
+    console.log("Stay Attachment Error", e);
   }
 };
 
@@ -16,7 +16,29 @@ const getStayListAll = async (paramData) => {
     const data = await result.json();
     return data;
   } catch (e) {
-    console.log("error", e);
+    console.log("Stay List Error", e);
   }
 };
-export { getAttachment, getStayListAll };
+
+const getStayDetail = async (x) => {
+  try {
+    const result = await fetch(`${BASE_URL}/stay/detail`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(x),
+    });
+
+    if (!result.ok) {
+      throw new Error(`HTTP error! Status: ${result.status}`);
+    }
+    const data = await result.json();
+    console.log("data :: ", data);
+    return data;
+  } catch (e) {
+    console.log("Stay Detail Error", e);
+  }
+};
+
+export { getAttachment, getStayListAll, getStayDetail };

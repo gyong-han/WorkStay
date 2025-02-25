@@ -29,4 +29,7 @@ public class StayVo {
     private String hostName;
     private String[] attachmentFilePaths;
     private String businessTypeName;
+
+    private String roomNo;
+    private String roomName;
 }
