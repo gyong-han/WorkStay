@@ -76,7 +76,8 @@ const AttachmentUpload = ({
             {fileData?.[name] &&
             (Array.isArray(fileData[name])
               ? fileData[name].length > 0
-              : fileData[name] instanceof File)
+              : fileData[name] instanceof File ||
+                typeof fileData[name] === "object")
               ? "파일 다시 선택"
               : "이미지 첨부파일 올리기"}
           </FileSpan>

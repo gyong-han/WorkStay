@@ -74,8 +74,6 @@ const ThirdEnrollStay = () => {
   }, []);
 
   const enrollRoom = async () => {
-    console.log(stayNum);
-
     const url = "http://127.0.0.1:8080/api/host/enroll/room";
     for (let idx = 0; idx < formDataArr.length; ++idx) {
       const fd = new FormData();

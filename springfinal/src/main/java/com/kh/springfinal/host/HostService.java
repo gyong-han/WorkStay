@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,5 +109,83 @@ public class HostService {
         stayReservDetail.put("stayVo",stayVo);
 
         return stayReservDetail;
+    }
+
+    public Map<String, Object> getMySpaceDetail(String spaceNo) {
+        SpaceVo spaceVo = mapper.getMySpaceVo(spaceNo);
+        List<String> featuresList = mapper.getMySpaceFeaturesList(spaceNo);
+        AttachVo spaceFloorPlan = mapper.getMySpaceRoomFloorPlan(spaceNo);
+        AttachVo spaceThumbNail = mapper.getMySpaceThumbNail(spaceNo);
+        List<AttachVo> spaceAttachList = mapper.getMySpaceAttach(spaceNo);
+        Map<String,Object> attachMap = new HashMap<>();
+        attachMap.put("space_floor_plan",spaceFloorPlan);
+        attachMap.put("thumbnail",spaceThumbNail);
+        attachMap.put("attachment",spaceAttachList);
+        Map<String,Object> mySpaceDetail = new HashMap<>();
+        mySpaceDetail.put("spaceVo",spaceVo);
+        mySpaceDetail.put("featuresList",featuresList);
+        mySpaceDetail.put("attachMap",attachMap);
+        return mySpaceDetail;
+    }
+
+    public int modifyMySpace(SpaceVo spaceVo, List<String> features) {
+        int result1 = mapper.updateMySpace(spaceVo);
+        int result2 = mapper.deleteMySpaceFeatures(spaceVo);
+        int result3 = 0;
+        for (String feature : features) {
+            result3 = mapper.insertMySpaceFeatures(spaceVo,feature);
+        }
+        int result4 = mapper.insertMySpaceEdit(spaceVo);
+        return result1*result2*result3*result4;
+    }
+
+    public int deleteMySpace(String spaceNo) {
+        int result = mapper.deleteMySpace(spaceNo);
+        return result;
+    }
+
+    public StayVo getMyStayDetail(String stayNo) {
+        StayVo stayVo = mapper.getMyStay(stayNo);
+        return stayVo;
+    }
+
+    public int modifyMyStay(StayVo stayVo) {
+        int result1 = mapper.updateMyStay(stayVo);
+        int result2 = mapper.insertMyStayedit(stayVo);
+        return result1*result2;
+    }
+
+    public List<Map<String, Object>> getMyRoomDetail(String stayNum) {
+        List<String> roomNoList = mapper.getMyRoomNo(stayNum);
+        List<Map<String,Object>> myRoomDetail = new ArrayList<>();
+
+        for (String roomNo : roomNoList) {
+            Map<String,Object> roomMap = new HashMap<>();
+            RoomVo roomVo = mapper.getMyRoomVo(roomNo);
+            List<String> featuresList = mapper.getMyRoomFeaturesList(roomNo);
+            Map<String,Object> attachMap = new HashMap<>();
+            AttachVo roomFloorPlan = mapper.getRoomFloorPlan(roomNo);
+            AttachVo roomThumbNail = mapper.getRoomThumbNail(roomNo);
+            List<AttachVo> roomAttachList = mapper.getRoomAttach(roomNo);
+            attachMap.put("roomFloorPlan",roomFloorPlan);
+            attachMap.put("thumbnail",roomThumbNail);
+            attachMap.put("attachment",roomAttachList);
+            roomMap.put("roomVo",roomVo);
+            roomMap.put("featuresList",featuresList);
+            roomMap.put("fileData",attachMap);
+            myRoomDetail.add(roomMap);
+        }
+        return myRoomDetail;
+    }
+
+    public int modifyMyRoom(RoomVo roomVo, List<String> features) {
+        int result1 = mapper.updateMyRoom(roomVo);
+        int result2 = mapper.deleteMyRoomFeatures(roomVo);
+        int result3 = 0;
+        for (String feature : features) {
+            result3 = mapper.insertMyRoomFeatures(roomVo,feature);
+        }
+        int result4 = mapper.insertMyRoomEdit(roomVo);
+        return 1;
     }
 }
