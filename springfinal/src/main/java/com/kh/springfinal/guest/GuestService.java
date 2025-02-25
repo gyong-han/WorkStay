@@ -109,12 +109,15 @@ public class GuestService {
         return mapper.spaceCancleReserv(vo);
     }
 
-    public MypageVo stayDetailReserv(String email, String reno, String roomNo) {
-        return mapper.stayDetailReserv(email, reno,roomNo);
+    public MypageVo stayDetailReserv(String reno) {
+        return mapper.stayDetailReserv(reno);
     }
 
-    public MypageVo stayCancle(MypageVo vo) {
-        int result = mapper.stayCancle(vo);
-        return vo;
+    public int stayCancle(String no,String reno) {
+        int result = mapper.stayCancle(no,reno);
+        System.out.println("s result = " + result);
+        return result;
     }
+
+
 }//class

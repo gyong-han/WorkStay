@@ -8,6 +8,7 @@ import styled from "styled-components";
 const Btn = styled.button`
   border: none;
   background-color: #fafafa;
+  cursor: pointer;
 `;
 
 const KakaoLoginButton = () => {
@@ -61,7 +62,6 @@ const KakaoLoginButton = () => {
       localStorage.setItem("token", token);
       console.log("JWT:", token);
 
-      // ✅ JWT 디코딩 후 Redux 상태 업데이트
       const decoded = jwtDecode(token);
       dispatch(login(decoded)); // Redux 상태 업데이트
     } catch (error) {

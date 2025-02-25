@@ -109,15 +109,18 @@ public class GuestController {
 
     //숙소 예약 상세 조회
     @GetMapping("stayDetailReserv")
-    public MypageVo stayDetailReserv(@RequestParam String email , @RequestParam String reno , @RequestParam String roomNo){
-        MypageVo dbVo = service.stayDetailReserv(email,reno,roomNo);
+    public MypageVo stayDetailReserv(@RequestParam String reno){
+        MypageVo dbVo = service.stayDetailReserv(reno);
         return dbVo;
     }
 
     //숙소 예약 취소
     @PostMapping("stayCancle")
-    public MypageVo stayCancle(@RequestBody MypageVo vo){
-        MypageVo result = service.stayCancle(vo);
+    public int stayCancle(@RequestParam String no, @RequestParam String reno){
+        System.out.println("cno = " + no);
+        System.out.println("creno = " + reno);
+        int result = service.stayCancle(no,reno);
+        System.out.println("c result = " + result);
         return result;
     }
 

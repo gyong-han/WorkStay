@@ -61,28 +61,27 @@ public interface GuestMapper {
 
     @Select("""
             SELECT
-                ST.PROGRESS_STATE
-                , R.NAME    AS roomName
-                , RE.CHECK_IN
-                , RE.CHECK_OUT
-                , S.NAME
-                , RE.ADULT
-                , RE.AMOUNT
-                , RE.NO AS reno
-                , R.NO AS roomNo
-                , M.NO AS no
-                , MIN(FILE_PATH)    AS FILE_PATH
+                ST.PROGRESS_STATE,
+                R.NAME AS roomName,
+                RE.CHECK_IN,
+                RE.CHECK_OUT,
+                S.NAME,
+                RE.ADULT,
+                RE.AMOUNT,
+                RE.NO AS reno,
+                R.NO AS roomNo,
+                M.NO AS no,
+                (SELECT MIN(FILE_PATH) FROM ROOM_ATTACHMENT AT WHERE AT.ROOM_NO = R.NO) AS FILE_PATH
             FROM MEMBER M
-            JOIN STAY S ON (M.NO = S.HOST_NO)
-            JOIN ROOM R ON (S.NO = R.STAY_NO)
             JOIN ROOM_RESERVATION RE ON (M.NO = RE.MEMBER_NO)
+            JOIN ROOM R ON (RE.ROOM_NO = R.NO)
+            JOIN STAY S ON (R.STAY_NO = S.NO)
             JOIN STATUS ST ON (RE.STATUS_NO = ST.NO)
-            JOIN ROOM_ATTACHMENT AT ON (R.NO = AT.ROOM_NO)
             WHERE M.EMAIL = #{email}
-            AND ST.NO !=6
+            AND ST.NO != 6
             GROUP BY
                 ST.PROGRESS_STATE,
-                R.NAME, 
+                R.NAME,
                 RE.CHECK_IN,
                 RE.CHECK_OUT,
                 S.NAME,
@@ -96,22 +95,24 @@ public interface GuestMapper {
 
     @Select("""
             SELECT
-                ST.PROGRESS_STATE
-                , R.NAME AS roomName
-                , RE.CHECK_IN
-                , RE.CHECK_OUT
-                , S.NAME
-                , RE.ADULT
-                , RE.AMOUNT
-                , MIN(FILE_PATH)    AS FILE_PATH
+                ST.PROGRESS_STATE,
+                R.NAME AS roomName,
+                RE.CHECK_IN,
+                RE.CHECK_OUT,
+                S.NAME,
+                RE.ADULT,
+                RE.AMOUNT,
+                RE.NO AS reno,
+                R.NO AS roomNo,
+                M.NO AS no,
+                (SELECT MIN(FILE_PATH) FROM ROOM_ATTACHMENT AT WHERE AT.ROOM_NO = R.NO) AS FILE_PATH
             FROM MEMBER M
-            JOIN STAY S ON (M.NO = S.HOST_NO)
-            JOIN ROOM R ON (S.NO = R.STAY_NO)
             JOIN ROOM_RESERVATION RE ON (M.NO = RE.MEMBER_NO)
+            JOIN ROOM R ON (RE.ROOM_NO = R.NO)
+            JOIN STAY S ON (R.STAY_NO = S.NO)
             JOIN STATUS ST ON (RE.STATUS_NO = ST.NO)
-            JOIN ROOM_ATTACHMENT AT ON (R.NO = AT.ROOM_NO)
             WHERE M.EMAIL = #{email}
-            AND ST.NO =6
+            AND ST.NO = 6
             GROUP BY
                 ST.PROGRESS_STATE,
                 R.NAME,
@@ -119,7 +120,10 @@ public interface GuestMapper {
                 RE.CHECK_OUT,
                 S.NAME,
                 RE.ADULT,
-                RE.AMOUNT
+                RE.AMOUNT,
+                RE.NO,
+                R.NO,
+                M.NO
             """)
     List<MypageVo> stayCancleReserv(MypageVo vo);
 
@@ -185,15 +189,12 @@ public interface GuestMapper {
                 , M.NO AS no
                 , TO_CHAR(RESERVATION_DATE, 'YYYY-MM-DD HH24:MI') AS RESERVATION_DATE
                 , RE.ADULT + RE.CHILD + RE.BABY AS TOTAL_PERSON
-                , MIN(FILE_PATH)    AS FILE_PATH
+                , (SELECT MIN(FILE_PATH) FROM ROOM_ATTACHMENT AT WHERE AT.ROOM_NO = R.NO) AS FILE_PATH
             FROM MEMBER M
-            LEFT OUTER JOIN STAY S ON (M.NO = S.HOST_NO)
-            LEFT OUTER JOIN ROOM R ON (S.NO = R.STAY_NO)
-            LEFT OUTER JOIN ROOM_RESERVATION RE ON (M.NO = RE.MEMBER_NO)
-            LEFT OUTER JOIN ROOM_ATTACHMENT AT ON (R.NO = AT.ROOM_NO)
-            WHERE M.EMAIL = #{email}
-            AND RE.NO = #{reno}
-            AND R.NO = #{roomNo}
+            JOIN STAY S ON (M.NO = S.HOST_NO)
+            JOIN ROOM R ON (S.NO = R.STAY_NO)
+            JOIN ROOM_RESERVATION RE ON (RE.ROOM_NO = R.NO)
+            WHERE RE.NO = #{reno}
             GROUP BY
                 R.NAME,
                 TO_CHAR(TO_DATE(RE.CHECK_IN, 'YYYYMMDD'), 'YYYY-MM-DD'),
@@ -211,16 +212,15 @@ public interface GuestMapper {
                 M.NO,
                 TO_CHAR(RESERVATION_DATE, 'YYYY-MM-DD HH24:MI')
             """)
-    MypageVo stayDetailReserv(String email, String reno, String roomNo);
+    MypageVo stayDetailReserv(String reno);
 
 
     @Update("""
             UPDATE ROOM_RESERVATION
                 SET STATUS_NO = 6
-            WHERE STATUS_NO = 5
-            AND MEMBER_NO = #{no}
+            WHERE MEMBER_NO = #{no}
             AND NO = #{reno}
             """)
-    int stayCancle(MypageVo vo);
+    int stayCancle(String no,String reno);
 
 }
