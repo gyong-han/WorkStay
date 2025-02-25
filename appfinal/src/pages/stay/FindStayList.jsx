@@ -274,7 +274,7 @@ const FindStayList = () => {
                       price={vo.price}
                       url={"findstay"}
                       imgPaths={voImgPaths}
-                      //  clickHandler={clickHandler}
+                      // clickHandler={clickHandler}
                       title={vo.name}
                       min={vo.standardGuest}
                       max={vo.maxGuest}

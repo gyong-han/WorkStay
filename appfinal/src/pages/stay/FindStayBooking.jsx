@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import PackageDetailCard from "../../components/package/PackageDetailCard";
-import Infomation from "../../components/Infomation";
 import Btn from "../../components/Btn";
 import CalendarTime from "../../components/FilterBar/CalendalTime";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import Notification from "./stayComponent/noti/Notification";
+import RoomDetailCard from "../room/roomComponent/RoomDetailCard";
+import { getRoomDetail } from "../../components/service/roomService";
+import { setRoomVo } from "../../redux/roomSlice";
+import { setStayVo } from "../../redux/staySlice";
 
 const Layout = styled.div`
   width: 100%;
@@ -32,10 +36,15 @@ const DateDiv = styled.div`
   & > div:nth-child(1) {
     width: 100%;
     height: 100%;
-    display: grid;
-    grid-template-columns: 170px 1fr 170px;
-    justify-content: center;
+    display: flex;
+    justify-content: space-around;
     align-items: center;
+  }
+
+  & > div:nth-child(1) > div:nth-child(1) {
+    width: 500px;
+    font-weight: 600;
+    font-size: 30px;
   }
 `;
 
@@ -78,9 +87,22 @@ const IconLayoutDiv = styled.div`
 
 const FindStayBooking = () => {
   const { x } = useParams();
-  console.log("x ::::", x);
+  const dispatch = useDispatch();
+  const stayVo = useSelector((state) => state.stay);
+  const roomVo = useSelector((state) => state.room);
 
-  const spaceVo = useSelector((state) => state.space);
+  const StayBooking = async () => {
+    const setRoomDetail = await getRoomDetail(x);
+    dispatch(setRoomVo(setRoomDetail));
+    dispatch(setStayVo(setRoomDetail));
+  };
+
+  useEffect(
+    (x) => {
+      StayBooking();
+    },
+    [x]
+  );
 
   return (
     <Layout>
@@ -89,7 +111,7 @@ const FindStayBooking = () => {
       </div>
       <DateDiv>
         <div>
-          <div>인더플럼</div>
+          <div>{stayVo.name}</div>
           <CalendarLayout>
             <CalendarTime type={"text"}>
               날짜를 선택해주세요
@@ -98,7 +120,7 @@ const FindStayBooking = () => {
           </CalendarLayout>
           <div>
             <Link to={"/findstay/booking/1"}>
-              <Btn w={150} h={35} bg={"#049DD9"} size={"20px"}>
+              <Btn w={150} h={35} bg={"#049DD9"} size={"15px"}>
                 예약하기
               </Btn>
             </Link>
@@ -106,11 +128,11 @@ const FindStayBooking = () => {
         </div>
       </DateDiv>
       <ThirdDiv>
-        <PackageDetailCard
-          title={`Room A${x}`}
+        {/* <RoomDetailCard
+          title={`${x}`}
           information={"ROOM INFORMATION"}
-          imgPaths={spaceVo.attachmentFilePaths}
-        ></PackageDetailCard>
+          imgPaths={stayVo.attachmentFilePaths}
+        ></RoomDetailCard> */}
       </ThirdDiv>
       <ContentLayout>
         <TitleDiv>FEATURES</TitleDiv>
@@ -138,11 +160,11 @@ const FindStayBooking = () => {
       <ContentLayout>
         <TitleDiv>ADD-ON SERVICES</TitleDiv>
         <IconLayoutDiv>
-          <div>커피와 스낵 무제한 제공</div>
+          <div></div>
         </IconLayoutDiv>
       </ContentLayout>
       <div></div>
-      <Infomation price={150000} standard={2} max={4}></Infomation>
+      {/* <Notification x={x} rooms={room} stay={stay} /> */}
     </Layout>
   );
 };

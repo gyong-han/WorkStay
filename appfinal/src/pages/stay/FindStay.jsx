@@ -10,7 +10,7 @@ const FindStay = () => {
       <Routes>
         <Route path="/*" element={<FindStayList></FindStayList>}></Route>
         <Route
-          path="/detail/:x"
+          path="/detail/:x/*"
           element={<FindStayDetail></FindStayDetail>}
         ></Route>
         <Route path="/staybooking/:x" element={<FindStayBooking />}></Route>
