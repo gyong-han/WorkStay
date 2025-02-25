@@ -110,18 +110,17 @@ const StayDetail = () => {
   const navi = useNavigate();
   const location = useLocation(); // 현재 경로 가져오기
   const [selectedMenu, setSelectedMenu] = useState("");
-  const [params, setParams] = useState({ reno: "", roomNo: "" });
+  const [params, setParams] = useState({ reno: "" });
   const [data, setData] = useState("");
-  const [email, setEmail] = useState("");
   const [no, setNo] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
-        setEmail(decodedToken.email);
-        setNo(decodedToken.no);
+        setNo(decodedToken.no); // 상태 업데이트
       } catch (error) {
         console.error("토큰 디코딩 실패:", error);
       }
@@ -132,21 +131,20 @@ const StayDetail = () => {
     // Query Params 가져오기
     const queryParams = new URLSearchParams(location.search);
     const renoParam = queryParams.get("reno");
-    const roomNoParam = queryParams.get("roomNo");
 
-    setParams({ reno: renoParam, roomNo: roomNoParam });
+    setParams({ reno: renoParam });
   }, [location.search]);
 
   useEffect(() => {
-    if (!email || !params.reno || !params.roomNo) {
-      console.log("필수 값이 누락됨:", { email, ...params });
+    if (!params.reno) {
+      console.log("필수 값이 누락됨:", { ...params });
       return;
     }
 
-    console.log("API 요청 실행:", { email, ...params });
+    console.log("API 요청 실행:", { ...params });
 
     fetch(
-      `http://127.0.0.1:8080/api/guest/stayDetailReserv?email=${email}&reno=${params.reno}&roomNo=${params.roomNo}`,
+      `http://127.0.0.1:8080/api/guest/stayDetailReserv?reno=${params.reno}`,
       {
         method: "GET",
         headers: {
@@ -166,7 +164,7 @@ const StayDetail = () => {
       .catch((error) => {
         console.error("숙소 상세 정보 가져오기 실패:", error);
       });
-  }, [email, params]);
+  }, [params]);
 
   function movePath(e) {
     setSelectedMenu(e.target.id);

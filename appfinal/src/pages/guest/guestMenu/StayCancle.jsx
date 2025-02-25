@@ -91,6 +91,8 @@ const BtnCancle = styled.button`
 
 const StayCancle = () => {
   const [showTextarea, setShowTextarea] = useState(false);
+  const [params, setParams] = useState({ no: "", reno: "" });
+
   const navi = useNavigate();
   const location = useLocation();
 
@@ -109,7 +111,7 @@ const StayCancle = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    fetch("http://127.0.0.1:8080/api/guest/stayCancle", {
+    fetch(`http://127.0.0.1:8080/api/guest/stayCancle?no=${no}&reno=${reno}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

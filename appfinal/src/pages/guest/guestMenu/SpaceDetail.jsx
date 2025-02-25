@@ -291,6 +291,7 @@ const SpaceDetail = () => {
                 color="#FAFAFA"
                 str="예약취소"
                 top="100px"
+                border="none"
                 f={movePath}
               />
             </div>
@@ -300,8 +301,9 @@ const SpaceDetail = () => {
                 height="50px"
                 font="20px"
                 backColor="#FAFAFA"
-                color="#049DD9"
+                color="#202020"
                 str="이용 안내 및 환불 규정"
+                border="1px solid #049DD9"
                 top="100px"
               />
             </div>

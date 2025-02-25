@@ -60,10 +60,8 @@ const StayResrv = () => {
       });
   }, [email, status]); // email 상태가 변경되면 다시 요청
 
-  const moveDetail = (roomNo, reno) => {
-    navigate(
-      `/hostMenu/staydetail?email=${email}&reno=${reno}&roomNo=${roomNo}`
-    );
+  const moveDetail = (reno) => {
+    navigate(`/hostMenu/staydetail?reno=${reno}`);
   };
 
   function movePath(e) {
@@ -101,9 +99,7 @@ const StayResrv = () => {
                 key={index}
                 hideDate={false}
                 data={reservation}
-                moveDetail={() =>
-                  moveDetail(reservation.roomNo, reservation.reno)
-                }
+                moveDetail={() => moveDetail(reservation.reno)}
               />
             ))
           ) : (
