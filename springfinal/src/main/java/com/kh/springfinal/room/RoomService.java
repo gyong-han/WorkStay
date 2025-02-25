@@ -39,4 +39,12 @@ public class RoomService {
 
         return roomVo;
     }
+
+    public List<RoomAttachmentVo> attachmentList() {
+        return roomMapper.attachmentList();
+    }
+
+//    public List<RoomAttachmentVo> attachmentList() {
+//        return roomMapper.getRoomAttachmentList();
+//    }
 }

@@ -17,4 +17,7 @@ private String baby;
 private String request;
 private String amount;
 private String reservationDate;
+
+private String useDay;
+
 }
