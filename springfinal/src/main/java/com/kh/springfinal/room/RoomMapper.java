@@ -18,16 +18,24 @@ public interface RoomMapper {
                 , R.MAX_GUEST
                 , R.ENROLL_DATE
                 , A.THUMBNAIL
+                , A.FILE_PATH
                 FROM ROOM R
                 JOIN ROOM_ATTACHMENT A ON (R.NO = A.ROOM_NO)
-                WHERE R.NO = #{no}
-                AND A.THUMBNAIL = 'N'
+                WHERE R.STAY_NO = #{no}
+                AND A.THUMBNAIL = 'Y'
                 AND R.DEL_YN = 'N'
             """)
     List<RoomVo> getRoomListByStayNo(Long no);
 
     @Select("""
-            
+            SELECT R.NO, R.STAY_NO, R.NAME, R.INTRODUCTION, R.PRICE, R.MAX_GUEST, R.STANDARD_GUEST,
+            R.SINGLE_SIZE, R.DOUBLE_SIZE, R.QUEEN_SIZE, RA.FILE_PATH, RA.THUMBNAIL, S.NAME AS STAY_NAME
+            FROM ROOM R
+            JOIN ROOM_ATTACHMENT RA ON (R.NO = RA.ROOM_NO)
+            JOIN STAY S ON (R.STAY_NO = S.NO)
+            WHERE R.NO = 1
+            AND RA.THUMBNAIL = 'Y'
+            AND R.DEL_YN = 'N'
             """)
     RoomVo getRoomInfoByNo(Long no);
 
@@ -39,7 +47,19 @@ public interface RoomMapper {
     List<String> getFeatures(Long no);
 
     @Select("""
-            
+            SELECT NO, ROOM_NO, FILE_PATH, THUMBNAIL
+            FROM ROOM_ATTACHMENT
+            WHERE ROOM_NO = #{no}
+            AND THUMBNAIL = 'N'
+            AND DEL_YN = 'N'
             """)
     List<RoomAttachmentVo> getAttachmentByNo(Long no);
+
+    @Select("""
+            SELECT NO, ROOM_NO, FILE_PATH, THUMBNAIL
+            FROM ROOM_ATTACHMENT
+            WHERE THUMBNAIL = 'N'
+            AND DEL_YN = 'N'
+            """)
+    List<RoomAttachmentVo> attachmentList();
 }

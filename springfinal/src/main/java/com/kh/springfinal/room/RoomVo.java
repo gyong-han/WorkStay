@@ -28,4 +28,6 @@ public class RoomVo {
     private String singleSize;
     private String doubleSize;
     private String queenSize;
+
+    private String stayName;
 }

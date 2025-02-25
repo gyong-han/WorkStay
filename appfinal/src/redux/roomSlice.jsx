@@ -6,6 +6,7 @@ const roomSlice = createSlice({
     no: "",
     stayNo: "",
     memberNo: "",
+    rooms: [],
     name: "",
     enrollDate: "",
     tagline: "",
@@ -18,6 +19,9 @@ const roomSlice = createSlice({
     features: [],
     checkIn: "",
     checkOut: "",
+    reservationDate: [],
+    reservationDone: [],
+    reservationNo: "",
     adult: 0,
     child: 0,
     baby: 0,
@@ -27,6 +31,7 @@ const roomSlice = createSlice({
       state.no = action.payload.no;
       state.stayNo = action.payload.stayNo;
       state.memberNo = action.payload.memberNo;
+      state.rooms = action.payload;
       state.name = action.payload.name;
       state.enrollDate = action.payload.enrollDate;
       state.tagline = action.payload.tagline;
@@ -34,8 +39,6 @@ const roomSlice = createSlice({
       state.price = action.payload.price;
       state.standardGuest = action.payload.standardGuest;
       state.maxGuest = action.payload.maxGuest;
-      state.filePath = action.payload.filePath;
-      state.attachmentFilePaths = action.payload.attachmentFilePaths;
       state.features = action.payload.features;
     },
     selectCheckIn: (state, action) => {
@@ -49,10 +52,27 @@ const roomSlice = createSlice({
       state.child = action.payload.kids;
       state.baby = action.payload.baby;
     },
+    setRoomData: (state, action) => {
+      state.filePath = action.payload[0].filePath;
+      state.attachmentFilePaths = action.payload.attachmentFilePaths;
+    },
+    setStayReservationDate: (state, action) => {
+      state.reservationDate = action.payload;
+    },
+    setStayReservationDone: (state, action) => {
+      state.reservationDone = action.payload;
+    },
   },
 });
 
-export const { setRoomVo, selectCheckIn, selectCheckOut, setMemberCount } =
-  roomSlice.actions;
+export const {
+  setRoomVo,
+  selectCheckIn,
+  selectCheckOut,
+  setMemberCount,
+  setRoomData,
+  setStayReservationDate,
+  setStayReservationDone,
+} = roomSlice.actions;
 
 export default roomSlice.reducer;
