@@ -202,6 +202,6 @@ public class HostController {
     @PostMapping("modifyMyRoom")
     public int modifyMyRoom(RoomVo roomVo,  @RequestParam List<String> features){
         int result = service.modifyMyRoom(roomVo,features);
-        return 1;
+        return result;
     }
 }
