@@ -138,7 +138,6 @@ public interface GuestMapper {
                 P.NAME AS packageName,
                 RE.ADULT,
                 RE.AMOUNT,
-                RE.NO AS reno,
                 (SELECT FILE_PATH
                 FROM SPACE_ATTACHMENT SA
                 WHERE SA.SPACE_NO = S.NO
@@ -231,42 +230,5 @@ public interface GuestMapper {
             AND NO = #{reno}
             """)
     int stayCancle(String no,String reno);
-
-    @Select("""
-            SELECT
-                S.NAME,
-                S.ADDRESS,
-                S.PHONE,
-                RE.NO AS reno,
-                P.NAME AS packageName,
-                RE.ADULT,
-                RE.CHILD,
-                RE.BABY,
-                RE.USE_DAY,
-                RE.REQUEST,
-                RE.AMOUNT,
-                M.NO AS no,
-                RE.ADULT + RE.CHILD + RE.BABY AS TOTAL_PERSON,
-                TO_CHAR(RE.RESERVATION_DATE, 'YYYY-MM-DD HH24:MI') AS reservationDate,
-                (SELECT FILE_PATH FROM SPACE_ATTACHMENT SA
-                 WHERE SA.SPACE_NO = S.NO
-                 AND SA.THUMBNAIL = 'Y'
-                 AND ROWNUM = 1) AS FILE_PATH
-            FROM SPACE_RESERVATION RE
-            JOIN SPACE S ON (RE.SPACE_NO = S.NO)
-            JOIN STATUS ST ON (RE.STATUS_NO = ST.NO)
-            JOIN MEMBER M ON (RE.MEMBER_NO = M.NO)
-            LEFT JOIN PACKAGE P ON (P.NO = RE.PACKAGE_NO)
-            WHERE RE.NO = #{reno}
-            """)
-    MypageVo spaceDetailReserve(String reno);
-
-    @Update("""
-            UPDATE SPACE_RESERVATION
-                SET STATUS_NO = 6
-            WHERE MEMBER_NO = #{no}
-            AND NO= #{reno}
-            """)
-    int spaceCancle(String no, String reno);
 
 }
