@@ -1,4 +1,3 @@
-//findspaceDetial
 import styled from 'styled-components';
 import { BiMessageAltDetail } from "react-icons/bi";
 import { RxShare2 } from "react-icons/rx";
@@ -188,7 +187,7 @@ const FindSpaceDetail = () => {
     }
     const data = await getBookmarkInfo(dataObj);
     const inData = JSON.parse(data);
-    console.log("첫번째로 가져온거 ~~~ ",inData);
+    // console.log("첫번째로 가져온거 ~~~ ",inData);
     setBookMark(inData)
     
   }
@@ -205,7 +204,7 @@ const FindSpaceDetail = () => {
     })
     .then((resp)=>resp.json())
     .then((data)=>{
-      // console.log("data ::: ",data);
+      console.log("디테일 데이터 시점  ::: ",data);
       dispatch(setSpaceVo(data));
     })
     bookmarkdata();
@@ -217,7 +216,7 @@ const FindSpaceDetail = () => {
       body:x,
     }).then((resp)=>resp.json())
     .then((data)=>{
-      // console.log(data);
+      console.log("DATA111::",data);
       dispatch(setReservationDone(data));
     })
   },[x]);
@@ -234,7 +233,7 @@ const FindSpaceDetail = () => {
       body:fd,
     }).then((resp)=>resp.json())
     .then((data)=>{
-      console.log("DATA::",data);
+      console.log("DATA222::",data);
       setPackageNo(data.packageNo);
     })
   },[x,spaceVo]);
@@ -260,7 +259,7 @@ const FindSpaceDetail = () => {
       })
       .then((resp)=>resp.text())
       .then((data)=>{
-        console.log("삭제된데이터수:",data);
+        // console.log("삭제된데이터수:",data);
         alert("북마크가 해지되었습니다.")
       })
     }else{
@@ -275,7 +274,7 @@ const FindSpaceDetail = () => {
       })
       .then((resp)=>resp.text())
       .then((data)=>{
-        console.log(data);
+        // console.log(data);
         alert("마이페이지 찜목록에 저장되었습니다.")
       })
     }
@@ -339,7 +338,7 @@ const FindSpaceDetail = () => {
       <PackageDiv>
         <div>PACKAGE</div>
         <div>
-          {packageNo !== "1"?<PackageDisplay img={"https://vrthumb.clipartkorea.co.kr/2023/04/12/pc0040625240.jpg"} titleHandler={()=>{dispatch(setPackageType({packageType:"낮 패키지"}))}}
+          {packageNo != "1"?<PackageDisplay img={"https://vrthumb.clipartkorea.co.kr/2023/04/12/pc0040625240.jpg"} titleHandler={()=>{dispatch(setPackageType({packageType:"낮 패키지"}))}}
             title={"낮 패키지"} standard={"6"} max={"12"} price={spaceVo.daytimePrice}  url={`/findspace/spacebooking/${x}`} imgPaths={spaceVo.attachmentFilePaths}></PackageDisplay>:
           <PackageReservationDone img={"https://cdn.ownerclan.com/qiMNa49EgFO3USYFFjlxWueE4HXsJLKBIV9e1~D4~Y4/marketize/auto/as/v1.jpg"}></PackageReservationDone>
             
@@ -348,7 +347,7 @@ const FindSpaceDetail = () => {
         </div>
         <div></div>
         <div>
-          {packageNo !== "2"?<PackageDisplay img={"https://png.pngtree.com/background/20230424/original/pngtree-meeting-inside-a-conference-room-with-business-people-picture-image_2457183.jpg"} titleHandler={()=>{dispatch(setPackageType({packageType :"밤 패키지"}))}}
+          {packageNo != "2"?<PackageDisplay img={"https://png.pngtree.com/background/20230424/original/pngtree-meeting-inside-a-conference-room-with-business-people-picture-image_2457183.jpg"} titleHandler={()=>{dispatch(setPackageType({packageType :"밤 패키지"}))}}
           title={"밤 패키지"} standard={"4"} max={"8"} price={spaceVo.nightPrice} url={`/findspace/spacebooking/${x}`}  imgPaths={spaceVo.attachmentFilePaths}></PackageDisplay>:
           <PackageReservationDone img={"https://cdn.ownerclan.com/qiMNa49EgFO3USYFFjlxWueE4HXsJLKBIV9e1~D4~Y4/marketize/auto/as/v1.jpg"}></PackageReservationDone>
           }

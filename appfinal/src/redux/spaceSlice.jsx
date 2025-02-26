@@ -31,6 +31,7 @@ const spaceSlice = createSlice({
     payDay:'',
     request:'',
     titleData:'',
+    sort:'',
 
   },
   reducers: {
@@ -94,6 +95,7 @@ const spaceSlice = createSlice({
     state.area='';
     state.reservationDone= '';
     state.titleData = '';
+    state.sort= '';
 
     },
     setReservationDone : (state,action)=>{
@@ -109,9 +111,21 @@ const spaceSlice = createSlice({
       state.request = action.payload;
     },
     setTitleSearch : (state,action)=>{
-      console.log("액션시작",action.payload);
-      
       state.titleData = action.payload;
+    },
+    setOrderByStandard : (state,action)=>{
+      console.log("액션시작",action.payload);
+      state.sort = action.payload;
+    },
+    setResetSearch : (state)=>{
+      state.reservationDate='';
+      state.adult=0;
+      state.child=0;
+      state.baby=0;
+      state.area='';
+      state.reservationDone= '';
+      state.titleData = '';
+      state.sort= ''
     }
     
     
@@ -119,5 +133,5 @@ const spaceSlice = createSlice({
 });
 
 
-export const { setSpaceVo,setPackageType,setreservationDate,setMemberCnt,setArea,setReset,setReservationDone,setReservationInfo,setRequest,setTitleSearch } = spaceSlice.actions;
+export const { setSpaceVo,setPackageType,setreservationDate,setMemberCnt,setArea,setReset,setReservationDone,setReservationInfo,setRequest,setTitleSearch,setOrderByStandard,setResetSearch } = spaceSlice.actions;
 export default spaceSlice.reducer;
