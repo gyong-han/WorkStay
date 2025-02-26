@@ -55,8 +55,8 @@ const StayResrv = () => {
       .catch((error) => {});
   }, [email, status]); // email 상태가 변경되면 다시 요청
 
-  const moveDetail = (stayNo) => {
-    navigate(`/hostMenu/spaceReserv/spacedetail/${stayNo}`);
+  const moveDetail = (reno) => {
+    navigate(`/hostMenu/spaceReserv/spacedetail?reno=${reno}`);
   };
 
   function movePath(e) {
@@ -94,6 +94,7 @@ const StayResrv = () => {
                 key={index}
                 hideDate={false}
                 data={reservation}
+                moveDetail={() => moveDetail(reservation.reno)}
               />
             ))
           ) : (

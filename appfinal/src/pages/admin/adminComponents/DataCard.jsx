@@ -29,6 +29,7 @@ const TextDiv = styled.div`
   white-space: nowrap;
   text-overflow: ellipsis;
   padding-right: 10px;
+  letter-spacing: 1px;
 `;
 
 const ImgTag = styled.img`

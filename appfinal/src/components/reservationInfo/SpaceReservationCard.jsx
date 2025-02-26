@@ -50,7 +50,7 @@ const PriceDiv = styled.div`
   }
 `;
 
-const SpaceReservationCard = ({ data, hideDate }) => {
+const SpaceReservationCard = ({ data, hideDate, moveDetail }) => {
   const navi = useNavigate();
   const location = useLocation(); // 현재 경로 가져오기
 
@@ -84,7 +84,7 @@ const SpaceReservationCard = ({ data, hideDate }) => {
           <div></div>
           <PriceDiv>
             {!hideDate && (
-              <TextDiv onClick={movePath} size="15px">
+              <TextDiv onClick={moveDetail} size="15px">
                 예약 상세 확인
               </TextDiv>
             )}
