@@ -117,18 +117,23 @@ public class GuestController {
     //숙소 예약 취소
     @PostMapping("stayCancle")
     public int stayCancle(@RequestParam String no, @RequestParam String reno){
-        System.out.println("cno = " + no);
-        System.out.println("creno = " + reno);
         int result = service.stayCancle(no,reno);
-        System.out.println("c result = " + result);
         return result;
     }
 
     //공간 예약 상세 조회
-
+    @GetMapping("spaceDetailReserv")
+    public MypageVo spaceDetailReserv(@RequestParam String reno){
+        MypageVo result = service.spaceDetailReserve(reno);
+        return result;
+    }
 
     //공간 예약 취소
-
+    @PostMapping("spaceCancle")
+    public int spaceCancle(@RequestParam String no, @RequestParam String reno){
+        int result = service.spaceCancle(no,reno);
+        return result;
+    }
 
 
 
