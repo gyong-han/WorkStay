@@ -15,8 +15,13 @@ import java.util.List;
 public class SpaceService {
 
     private final SpaceMapper mapper;
-    public List<SpaceVo> spaceGetListAll(String area,String people,String date,String title) {
-        return mapper.spaceGetListAll(area,people,date,title);
+    public List<SpaceVo> spaceGetListAll(String area,String people,String date,String title,String sort) {
+        System.out.println("sort 22222222:::"+sort);
+        if(sort.equals("popular")){
+            return mapper.spaceGetListPopular(area,people,date,title,sort);
+        }else{
+        return mapper.spaceGetListAll(area,people,date,title,sort);
+        }
     }
 
     public List<AttachmentVo> spaceGetAttachment() {

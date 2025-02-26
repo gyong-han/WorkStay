@@ -16,16 +16,17 @@ public class SpaceController {
     private final SpaceService service;
 
     @GetMapping("list")
-    public List<SpaceVo> spaceGetListAll(@RequestParam String area,String people, String datedata,String title) throws InterruptedException {
+    public List<SpaceVo> spaceGetListAll(@RequestParam String area,String people, String datedata,String title,String sort) throws InterruptedException {
         String date = datedata.replaceAll("-", "");
 //        System.out.println("area"+area);
 //        System.out.println("people"+people);
 //        System.out.println("date"+date);
+        System.out.println("sort:::"+sort);
         if(title.equals("undefined")){
             title = null;
         }
-        System.out.println("title ::: "+title);
-        List<SpaceVo> voList = service.spaceGetListAll(area,people,date,title);
+//        System.out.println("title ::: "+title);
+        List<SpaceVo> voList = service.spaceGetListAll(area,people,date,title,sort);
 
 //        System.out.println("vo :::"+ voList);
         return voList;

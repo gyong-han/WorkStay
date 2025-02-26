@@ -11,7 +11,7 @@ import java.util.List;
 @Mapper
 public interface SpaceMapper {
 
-    List<SpaceVo> spaceGetListAll(String area,String people,String date,String title);
+    List<SpaceVo> spaceGetListAll(String area,String people,String date,String title ,String sort);
 
     @Select("""
             SELECT NO,SPACE_NO,FILE_PATH FROM SPACE_ATTACHMENT
@@ -132,4 +132,6 @@ public interface SpaceMapper {
             FROM DUAL
             """)
     int getbookmark(SpaceReservVo vo);
+
+    List<SpaceVo> spaceGetListPopular(String area, String people, String date, String title, String sort);
 }

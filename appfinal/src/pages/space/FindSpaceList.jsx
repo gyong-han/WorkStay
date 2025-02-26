@@ -7,9 +7,9 @@ import { IoCheckmarkCircleOutline } from "react-icons/io5";
 import { CiFilter } from "react-icons/ci";
 import { RiResetRightFill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
-import { setReset, setTitleSearch } from "../../redux/spaceSlice";
+import { setReset, setResetSearch, setTitleSearch } from "../../redux/spaceSlice";
 import { getAttachmentAll, getSpaceListAll } from "../../components/service/spaceServcie";
-import SortDropdown from "../../components/listcomponents/SortDropdown";
+import SortDropdownSpace from "../../components/listcomponents/SortDropdownSpace";
 
 
 
@@ -81,24 +81,45 @@ const FilterTextMD = styled.span`
 
 const FindSpaceList = () => {
 
-  
   const dispatch = useDispatch();
-  const currentUrl = window.location.href;
+    // if (window.location.href&&document.referrer !== window.location.href) {
+    //   console.log("이전페이지 ",document.referrer);
+    //     dispatch(setResetSearch())
+    // } 
+  
   const spaceVo = useSelector((state)=>state.space);
   const [formData, setFormData] = useState();
   const [spaceVoList,setSpaceVoList] = useState([]);
   const [imgPath,setImgPath]= useState([]);
  
 
+
+  // console.log("쏘트 ~~~~~~~:::::",spaceVo.sort);
   const queryParams = new URLSearchParams({
     datedata: spaceVo.reservationDate,
     people: spaceVo.adult+spaceVo.child+spaceVo.baby,
     area: spaceVo.area,  
-    title: spaceVo.titleData
+    title: spaceVo.titleData,
+    sort:spaceVo.sort,
 }).toString();
 
 
-// async 사용하여 데이터값 추출해보기
+
+  
+
+  const handleChange = (e) => {
+    
+    setFormData(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(setTitleSearch(formData));
+  };
+
+  useEffect(()=>{
+    // async 사용하여 데이터값 추출해보기
+    // console.log("Redux space 상태 확인:", spaceVo);
   const AttachmentData = async ()=>{
     const attachmentData = await getAttachmentAll();
      const listData = await getSpaceListAll(queryParams);
@@ -116,22 +137,7 @@ const FindSpaceList = () => {
       // 리턴값을 저장
       setImgPath(arr);
   }
-  
-
-  const handleChange = (e) => {
-    setFormData(e.target.value);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
-    dispatch(setTitleSearch(formData));
-    
-  };
-
-  useEffect(()=>{
     AttachmentData();
-
   },[queryParams])
 
   
@@ -153,7 +159,7 @@ const FindSpaceList = () => {
   </SearchWrapper>
   <FilterWrapper>
     <div>
-    <SortDropdown/>
+    <SortDropdownSpace/>
     </div>
     <div></div>
     <div>
@@ -164,7 +170,9 @@ const FindSpaceList = () => {
     </div>
     <div>
     <Btn>
-            <RiResetRightFill size={18} />
+            <RiResetRightFill size={18} onClick={()=>{
+              dispatch(setReset());
+            }} />
             <FilterText onClick={()=>{
               dispatch(setReset());
             }}>초기화</FilterText>
