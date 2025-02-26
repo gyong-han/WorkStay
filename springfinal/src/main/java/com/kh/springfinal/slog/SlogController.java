@@ -44,6 +44,27 @@ public class SlogController {
         return fileUrls;
     }
 
+    @PostMapping("title/upload")
+    public List<String> titleUpload(@RequestParam("files") MultipartFile[] files) throws IOException {
+
+        List<String> titleFileUrls = new ArrayList<>();
+
+        for (MultipartFile file : files) {
+
+
+            String randomName = "TITLE_" + System.currentTimeMillis() + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+
+
+            s3.putObject("hsi-server", randomName, file.getInputStream(), new ObjectMetadata());
+
+
+            String titleFileUrl = s3.getUrl("hsi-server", randomName).toString();
+            titleFileUrls.add(titleFileUrl);
+        }
+
+        return titleFileUrls;
+    }
+
     @GetMapping("list")
     public ResponseEntity<Object> findAll(@RequestParam(defaultValue = "1") int pno){
 
@@ -66,16 +87,34 @@ public class SlogController {
     }
 
 
+    @GetMapping("kakao/{no}")
+    public SlogVo shareKakao (@PathVariable String no){
+
+//        System.out.println("Controller ::: no = " + no);
+
+        try{
+            return slogService.shareKakao(no);
+        } catch(Exception e){
+            log.error(e.getMessage());
+            throw new IllegalStateException("[DETAIL] FAIL........");
+        }
+    }
 
 
     @GetMapping("{no}")
     public SlogVo getSlogVo (@PathVariable String no){
+
+//        System.out.println("Controller ::: no = " + no);
+
         try{
             return slogService.getSlogVo(no);
         } catch(Exception e){
+            log.error(e.getMessage());
             throw new IllegalStateException("[DETAIL] FAIL........");
         }
     }
+
+
 
     @GetMapping("rec")
     public List<RecPlaceVo> findRecPlace(@RequestParam Long no) {

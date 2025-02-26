@@ -9,6 +9,7 @@ const slogDetailSlice = createSlice({
     tagline: "",
     fileUrl: "",
     originalName: "",
+    titleFileUrl: "",
   },
   reducers: {
     setSlogVo: (state, action) => {
@@ -18,6 +19,7 @@ const slogDetailSlice = createSlice({
       state.tagline = action.payload.tagline;
       state.fileUrl = action.payload.fileUrl;
       state.originalName = action.payload.originalName;
+      state.titleFileUrl = action.payload.titleFileUrl;
     },
   },
 });

@@ -17,6 +17,7 @@ public interface SlogMapper {
             ,CONTENT
             ,TAGLINE
             ,FILE_URL
+            ,TITLE_FILE_URL
             ,ORIGINAL_NAME
             )
             VALUES
@@ -26,6 +27,7 @@ public interface SlogMapper {
             ,#{content}
             ,#{tagline}
             ,#{fileUrl}
+            ,#{titleFileUrl}
             ,#{originalName}
             )
             """)
@@ -46,6 +48,7 @@ public interface SlogMapper {
             ,CONTENT
             ,TAGLINE
             ,FILE_URL
+            ,TITLE_FILE_URL
             ,ORIGINAL_NAME
             FROM SLOG
             WHERE NO = #{no}
@@ -89,26 +92,17 @@ public interface SlogMapper {
             """)
     int edit(SlogVo slogVo);
 
-    @Insert("""
-            INSERT INTO SLOG
-            
-            (
-            NO
-            ,TITLE
+
+
+    @Select("""
+            SELECT
+            TITLE
             ,CONTENT
             ,TAGLINE
             ,FILE_URL
             ,ORIGINAL_NAME
-            )
-            VALUES
-            (
-            SEQ_SLOG.NEXTVAL
-            ,#{title}
-            ,#{content}
-            ,#{tagline}
-            ,#{fileUrl}
-            ,#{originalName}
-            )
+            FROM SLOG
+            WHERE NO = #{no}
             """)
-    int reinsert(SlogVo slogVo);
+    SlogVo shareKakao(String no);
 }

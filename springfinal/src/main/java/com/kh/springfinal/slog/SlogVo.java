@@ -11,5 +11,6 @@ public class SlogVo {
     private String content;
     private String tagline;
     private String fileUrl;
+    private String titleFileUrl;
     private String originalName;
 }

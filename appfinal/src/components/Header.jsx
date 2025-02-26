@@ -60,10 +60,6 @@ const GuestButton = styled.button`
   cursor: pointer;
 `;
 
-const DropdownWrapper = styled.div`
-  position: absolute;
-  top: 35px;
-  left: 30%;
 const HostButton = styled.button`
   background: none;
   border: none;

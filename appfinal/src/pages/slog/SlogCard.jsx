@@ -17,7 +17,7 @@ const Container = styled.div`
 `;
 
 const SlogCard = ({ vo }) => {
-  const firstImage = vo.fileUrl ? vo.fileUrl.split(",")[0] : "";
+  const firstImage = vo.titleFileUrl;
   return (
     <Container>
       <img
