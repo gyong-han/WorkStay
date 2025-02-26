@@ -11,6 +11,10 @@ import HostDetail from "../HostDetail";
 import SpaceEnrollReqDetail from "../SpaceEnrollReqDetail";
 import StayEnrollReqDetail from "../StayEnrollReqDetail";
 import RoomEnrollReqDetail from "../RoomEnrollReqDetail";
+import RoomEditReq from "./RoomEditReq";
+import SpaceEditReqDetail from "../SpaceEditReqDetail";
+import StayEditReqDetail from "../StayEditReqDetail";
+import RoomEditReqDetail from "../RoomEditReqDetail";
 
 const AdminMenu = () => {
   return (
@@ -45,6 +49,14 @@ const AdminMenu = () => {
           element={
             <AdminLayOut>
               <StayEditReq />
+            </AdminLayOut>
+          }
+        />
+        <Route
+          path="roomEditReq/*"
+          element={
+            <AdminLayOut>
+              <RoomEditReq />
             </AdminLayOut>
           }
         />
@@ -92,6 +104,20 @@ const AdminMenu = () => {
         <Route
           path="/roomEnrollReqDetail/:enrollReqNo"
           element={<RoomEnrollReqDetail />}
+        />
+
+        <Route
+          path="/spaceEditReq/spaceEditReqDetail/:spaceNum"
+          element={<SpaceEditReqDetail />}
+        />
+
+        <Route
+          path="/stayEditReq/stayEditReqDetail/:stayNum"
+          element={<StayEditReqDetail />}
+        />
+        <Route
+          path="/roomEditReq/roomEditReqDetail/:roomNum"
+          element={<RoomEditReqDetail />}
         />
       </Routes>
     </>

@@ -48,12 +48,11 @@ const StyledTable = styled.table`
     cursor: pointer;
   }
 `;
-
-const StayEditReq = () => {
+const RoomEditReq = () => {
   const [formData, setFormData] = useState([]);
   const navigate = useNavigate();
   useEffect(() => {
-    fetch("http://127.0.0.1:8080/api/admin/stayEditReq", {
+    fetch("http://127.0.0.1:8080/api/admin/roomEditReq", {
       method: "POST",
     })
       .then((resp) => resp.json())
@@ -63,19 +62,19 @@ const StayEditReq = () => {
   }, []);
 
   const formatPhoneNumber = (phone) => {
+    phone = String(phone);
     return phone.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
   };
 
-  const moveDetail = (stayNo) => {
-    navigate(`stayEditReqDetail/${stayNo}`);
+  const moveDetail = (roomNo) => {
+    navigate(`roomEditReqDetail/${roomNo}`);
     window.scrollTo(0, 0);
   };
-
   return (
     <>
       <MainDiv>
         <div>
-          <StatusSpan left="300px">숙소 수정 요청 목록</StatusSpan>
+          <StatusSpan left="300px">독채 수정 요청 목록</StatusSpan>
         </div>
 
         <div>
@@ -83,7 +82,7 @@ const StayEditReq = () => {
             <thead>
               <tr>
                 <th>이름</th>
-                <th>숙소명</th>
+                <th>독채명</th>
                 <th>전화번호</th>
                 <th>수정요청일</th>
               </tr>
@@ -112,4 +111,4 @@ const StayEditReq = () => {
   );
 };
 
-export default StayEditReq;
+export default RoomEditReq;

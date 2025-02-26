@@ -1,6 +1,9 @@
 package com.kh.springfinal.admin;
 
 import com.kh.springfinal.host.TableVo;
+import com.kh.springfinal.room.RoomVo;
+import com.kh.springfinal.space.SpaceVo;
+import com.kh.springfinal.stay.StayVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -83,5 +86,86 @@ public class AdminController {
     @PostMapping("companionStay")
     public int companionStay(@RequestParam Long stayNo){
         return service.companionStay(stayNo);
+    }
+
+    //공간 수정요청 목록조회
+    @PostMapping("spaceEditReq")
+    public List<SpaceVo> getSpaceEditReqList(){
+        return service.getSpaceEditList();
+    }
+
+    //숙소 수정요청 목록조회
+    @PostMapping("stayEditReq")
+    public List<StayVo> getStayEditReqList(){
+        return service.getStayEditList();
+    }
+
+    //독채 수정요청 목록조회
+    @PostMapping("roomEditReq")
+    public List<RoomVo> getRoomEditReqList(){
+        return service.getRoomEditList();
+    }
+
+    //공간 수정요청 상세조회
+    @PostMapping("spaceEditReqDetail")
+    public Map<String, Object> getSpaceEditReqDetail(@RequestBody String spaceNum){
+        String spaceNo = spaceNum.replace("\"", "");
+        return service.getSpaceEditReqDetail(spaceNo);
+    }
+
+    //숙소 수정요청 상세조회
+    @PostMapping("stayEditReqDetail")
+    public Map<String, Object> getStayEditReqDetail(@RequestBody String stayNum){
+        String stayNo = stayNum.replace("\"","");
+        return service.getStayEditReqDetail(stayNo);
+    }
+
+    //독채 수정요청 상세조회
+    @PostMapping("roomEditReqDetail")
+    public Map<String, Object> getRoomEditReqDetail(@RequestBody String roomNum){
+        String roomNo = roomNum.replace("\"","");
+        return service.getRoomEditReqDetail(roomNo);
+    }
+
+    //공간 수정 승인
+    @PostMapping("approveEditSpace")
+    public int approveEditSpace(@RequestBody String spaceNum){
+        String spaceNo = spaceNum.replace("\"","");
+        return service.approveEditSpace(spaceNo);
+    }
+
+    //공간 수정 반려
+    @PostMapping("companionEditSpace")
+    public int companionEditSpace(@RequestBody String spaceNum){
+        String spaceNo = spaceNum.replace("\"","");
+        return service.companionEditSpace(spaceNo);
+    }
+
+    //숙소 수정 승인
+    @PostMapping("approveEditStay")
+    public int approveEditStay(@RequestBody String stayNum){
+        String stayNo = stayNum.replace("\"","");
+        return service.approveEditStay(stayNo);
+    }
+
+    //숙소 수정 반려
+    @PostMapping("companionEditStay")
+    public int companionEditStay(@RequestBody String stayNum){
+        String stayNo = stayNum.replace("\"","");
+        return service.companionEditStay(stayNo);
+    }
+
+    //독채 수정 승인
+    @PostMapping("approveEditRoom")
+    public int approveEditRoom(@RequestBody String roomNum){
+        String roomNo = roomNum.replace("\"","");
+        return service.approveEditRoom(roomNo);
+    }
+
+    //독채 수정 반려
+    @PostMapping("companionEditRoom")
+    public int companionEditRoom(@RequestBody String roomNum){
+        String roomNo = roomNum.replace("\"","");
+        return service.companionEditRoom(roomNo);
     }
 }
