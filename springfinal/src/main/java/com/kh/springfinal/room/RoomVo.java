@@ -17,6 +17,7 @@ public class RoomVo {
     private String delYn;
     private String enrollDate;
     private String modifyDate;
+    private String phone;
 
     private String checkIn;
     private String checkOut;
