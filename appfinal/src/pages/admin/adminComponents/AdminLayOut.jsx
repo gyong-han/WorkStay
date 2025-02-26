@@ -42,7 +42,7 @@ const Hr = styled.hr`
 const MenuAreaDiv = styled.div`
   margin-top: 40px;
   display: grid;
-  grid-template-rows: repeat(7, 60px);
+  grid-template-rows: repeat(8, 60px);
   place-items: center center;
   position: fixe;
 `;
@@ -111,11 +111,18 @@ const AdminLayOut = ({ children }) => {
               숙소 수정 요청
             </MenuDiv>
             <MenuDiv
+              id="roomEditReq"
+              onClick={movePath}
+              selected={selectedMenu === "roomEditReq"}
+            >
+              독채 수정 요청
+            </MenuDiv>
+            <MenuDiv
               id="spaceEditReq"
               onClick={movePath}
               selected={selectedMenu === "spaceEditReq"}
             >
-              숙소 수정 요청
+              공간 수정 요청
             </MenuDiv>
             <MenuDiv
               id="stayDelReq"

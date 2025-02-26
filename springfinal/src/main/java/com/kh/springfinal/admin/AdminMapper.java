@@ -222,4 +222,193 @@ public interface AdminMapper {
             WHERE NO = #{stayNo}
             """)
     int companionStay(Long stayNo);
+
+    @Select("""
+            SELECT S.NO,M.NAME AS HOST_NAME,S.NAME,M.PHONE,TO_CHAR(ES.MODIFY_DATE, 'YYYY.MM.DD') AS MODIFY_DATE
+            FROM EDIT_SPACE ES
+            JOIN SPACE S ON (ES.SPACE_NO = S.NO)
+            JOIN MEMBER M ON (S.HOST_NO = M.NO)
+            WHERE ES.STATUS_NO = '1' 
+            ORDER BY MODIFY_DATE
+            """)
+    List<SpaceVo> getSpaceEditList();
+
+    @Select("""
+            SELECT S.NO,M.NAME AS HOST_NAME,S.NAME,M.PHONE,TO_CHAR(ES.MODIFY_DATE, 'YYYY.MM.DD') AS MODIFY_DATE
+            FROM EDIT_STAY ES
+            JOIN STAY S ON (ES.STAY_NO = S.NO)
+            JOIN MEMBER M ON (S.HOST_NO = M.NO)
+            WHERE ES.STATUS_NO = '1'
+            ORDER BY MODIFY_DATE
+            """)
+    List<StayVo> getStayEditList();
+
+    @Select("""
+            SELECT R.NO,M.NAME AS HOST_NAME,R.NAME,M.PHONE,TO_CHAR(ER.MODIFY_DATE, 'YYYY.MM.DD') AS MODIFY_DATE
+            FROM EDIT_ROOM ER
+            JOIN ROOM R ON (ER.ROOM_NO = R.NO)
+            JOIN STAY S ON (R.STAY_NO = S.NO)
+            JOIN MEMBER M ON (S.HOST_NO = M.NO)
+            WHERE ER.STATUS_NO = '1'
+            ORDER BY ER.MODIFY_DATE
+            """)
+    List<RoomVo> getRoomEditList();
+
+    @Select("""
+            SELECT S.NAME,ADDRESS,PHONE,SNS,BT.NAME AS BUSINESS_TYPE_NAME,BRN,TAGLINE,
+            INTRODUCTION,STANDARD_GUEST,MAX_GUEST,DAYTIME_PRICE,NIGHT_PRICE
+            FROM SPACE S
+            JOIN BUSINESS_TYPE BT ON (S.BUSINESS_TYPE_NO = BT.NO)
+            WHERE S.NO = #{spaceNo}
+            """)
+    SpaceVo getOriginSpace(String spaceNo);
+
+    @Select("""
+            SELECT M.NAME,M.PHONE,M.EMAIL
+            FROM MEMBER M
+            JOIN SPACE S ON(M.NO = S.HOST_NO)
+            WHERE S.NO = #{spaceNo}
+            """)
+    GuestVo getSpaceHostVo(String spaceNo);
+
+    @Select("""
+            SELECT FEATURES_NO
+            FROM SPACE_FEATURES
+            WHERE SPACE_NO = #{spaceNo}
+            """)
+    List<String> getSpaceFeaturesList(String spaceNo);
+
+    @Select("""
+            SELECT SNS,INTRODUCTION,TAGLINE
+            FROM EDIT_SPACE
+            WHERE SPACE_NO = #{spaceNo}
+            AND STATUS_NO = '1'
+            """)
+    SpaceVo getEditSpace(String spaceNo);
+
+    @Select("""
+            SELECT M.NAME,M.PHONE,M.EMAIL
+            FROM MEMBER M
+            JOIN STAY S ON(M.NO = S.HOST_NO)
+            WHERE S.NO = #{stayNo}
+            """)
+    GuestVo getStayHostVo(String stayNo);
+
+    @Select("""
+            SELECT S.NO,S.NAME,ADDRESS,PHONE,BT.NAME AS BUSINESS_TYPE_NAME,BRN,SEASON
+            FROM STAY S
+            JOIN BUSINESS_TYPE BT ON (S.BUSINESS_TYPE_NO = BT.NO)
+            WHERE S.NO = #{stayNo}
+            """)
+    StayVo getOriginStay(String stayNo);
+
+    @Select("""
+            SELECT SNS,INTRODUCTION,TAGLINE
+            FROM EDIT_STAY
+            WHERE STAY_NO = #{stayNo}
+            AND STATUS_NO = '1'
+            """)
+    StayVo getEditStay(String stayNo);
+
+    @Select("""
+            SELECT NAME,INTRODUCTION
+            FROM EDIT_ROOM
+            WHERE ROOM_NO = #{roomNo}
+            AND STATUS_NO = '1'
+            """)
+    SpaceVo getEditRoom(String roomNo);
+
+    @Select("""
+            SELECT RF.FEATURES_NO
+            FROM ROOM R
+            JOIN ROOM_FEATURES RF ON(R.NO = RF.ROOM_NO)
+            WHERE R.NO = #{roomNo}
+            """)
+    List<String> getRoomFeaturesList(String roomNo);
+
+    @Update("""
+            MERGE INTO SPACE S
+            USING EDIT_SPACE ES
+            ON (S.NO = ES.SPACE_NO AND ES.STATUS_NO ='1')
+            WHEN MATCHED THEN
+                UPDATE SET
+                    S.SNS = ES.SNS,
+                    S.TAGLINE = ES.TAGLINE,
+                    S.INTRODUCTION=ES.INTRODUCTION
+            WHERE ES.SPACE_NO = '1'
+            """)
+    int approveEditSpace(String spaceNo);
+
+    @Update("""
+            UPDATE EDIT_SPACE SET
+            STATUS_NO = '2'
+            WHERE SPACE_NO = #{spaceNo}
+            AND STATUS_NO = '1'
+            """)
+    int updateStaus(String spaceNo);
+
+    @Update("""
+            UPDATE EDIT_SPACE SET
+            STATUS_NO = '3'
+            WHERE SPACE_NO = #{spaceNo}
+            AND STATUS_NO = '1' 
+            """)
+    int companionEditSpace(String spaceNo);
+
+    @Update("""
+            MERGE INTO STAY S
+            USING EDIT_STAY ES
+            ON (S.NO = ES.STAY_NO AND ES.STATUS_NO ='1')
+            WHEN MATCHED THEN
+                UPDATE SET
+                    S.SNS = ES.SNS,
+                    S.TAGLINE = ES.TAGLINE,
+                    S.INTRODUCTION=ES.INTRODUCTION
+                WHERE ES.STAY_NO = #{stayNo}
+            """)
+    int approveEditStay(String stayNo);
+
+    @Update("""
+            UPDATE EDIT_STAY SET
+            STATUS_NO = '2'
+            WHERE STAY_NO = #{stayNo}
+            AND STATUS_NO = '1'
+            """)
+    int updateStayStaus(String stayNo);
+
+    @Update("""
+            UPDATE EDIT_STAY SET
+            STATUS_NO = '3'
+            WHERE STAY_NO = #{stayNo}
+            AND STATUS_NO = '1' 
+            """)
+    int companionEditStay(String stayNo);
+
+    @Update("""
+            MERGE INTO ROOM R
+            USING EDIT_ROOM ER
+            ON (R.NO = ER.ROOM_NO AND ER.STATUS_NO ='1')
+            WHEN MATCHED THEN
+                UPDATE SET
+                    R.NAME = ER.NAME,
+                    R.INTRODUCTION=ER.INTRODUCTION
+                WHERE ER.ROOM_NO = #{roomNo}
+            """)
+    int approveEditRoom(String roomNo);
+
+    @Update("""
+            UPDATE EDIT_ROOM SET
+            STATUS_NO = '2'
+            WHERE ROOM_NO = #{roomNo}
+            AND STATUS_NO = '1'
+            """)
+    int updateRoomStatus(String roomNo);
+
+    @Update("""
+            UPDATE EDIT_ROOM SET
+            STATUS_NO = '3'
+            WHERE ROOM_NO = #{roomNo}
+            AND STATUS_NO = '1' 
+            """)
+    int companionEditRoom(String roomNo);
 }

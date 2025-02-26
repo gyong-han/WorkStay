@@ -112,4 +112,101 @@ public class AdminService {
     public int companionStay(Long stayNo) {
         return mapper.companionStay(stayNo);
     }
+
+    public List<SpaceVo> getSpaceEditList() {
+        List<SpaceVo> spaceList =  mapper.getSpaceEditList();
+        return spaceList;
+    }
+
+    public Map<String, Object> getSpaceEditReqDetail(String spaceNo) {
+        Map<String,Object> editReqDetail = new HashMap<>();
+        GuestVo hostVo = mapper.getSpaceHostVo(spaceNo);
+        SpaceVo originSpaceVo = mapper.getOriginSpace(spaceNo);
+        SpaceVo editSpaceVo = mapper.getEditSpace(spaceNo);
+        List<String> featuresList = mapper.getSpaceFeaturesList(spaceNo);
+//        AttachVo spaceFloorPlan = mapper.getSpaceFloorPlan(spaceNo);
+//        AttachVo spaceThumbNail = mapper.getSpaceThumbNailEnrollReq(spaceNo);
+//        List<AttachVo> spaceAttachList = mapper.getSpaceAttachEnrollReq(spaceNo);
+        editReqDetail.put("hostVo",hostVo);
+        editReqDetail.put("spaceVo",originSpaceVo);
+        editReqDetail.put("editSpaceVo",editSpaceVo);
+        editReqDetail.put("featuresList",featuresList);
+        return editReqDetail;
+    }
+
+    public List<StayVo> getStayEditList() {
+        List<StayVo> stayList = mapper.getStayEditList();
+        return stayList;
+    }
+
+    public List<RoomVo> getRoomEditList() {
+        List<RoomVo> roomList = mapper.getRoomEditList();
+        return roomList;
+    }
+
+    public Map<String, Object> getStayEditReqDetail(String stayNo) {
+        Map<String,Object> editReqDetail = new HashMap<>();
+        GuestVo hostVo = mapper.getStayHostVo(stayNo);
+        StayVo originStayVo = mapper.getOriginStay(stayNo);
+        StayVo editStayVo = mapper.getEditStay(stayNo);
+        editReqDetail.put("hostVo",hostVo);
+        editReqDetail.put("stayVo",originStayVo);
+        editReqDetail.put("editStayVo",editStayVo);
+        return editReqDetail;
+    }
+
+    public Map<String, Object> getRoomEditReqDetail(String roomNo) {
+        Map<String,Object> editReqDetail = new HashMap<>();
+        RoomVo originRoomVo = mapper.getRoomVo(roomNo);
+        SpaceVo editRoomVo = mapper.getEditRoom(roomNo);
+        originRoomVo.setName(editRoomVo.getName());
+        originRoomVo.setIntroduction(editRoomVo.getIntroduction());
+        List<String> featuresList = mapper.getRoomFeaturesList(roomNo);
+//        AttachVo spaceFloorPlan = mapper.getSpaceFloorPlan(roomNo);
+//        AttachVo spaceThumbNail = mapper.getSpaceThumbNailEnrollReq(roomNo);
+//        List<AttachVo> spaceAttachList = mapper.getSpaceAttachEnrollReq(roomNo);
+        editReqDetail.put("roomVo",originRoomVo);
+        editReqDetail.put("featuresList",featuresList);
+
+        return editReqDetail;
+    }
+
+    public int approveEditSpace(String spaceNo) {
+        int result1 = mapper.approveEditSpace(spaceNo);
+        int result2 = 0;
+        if(result1 > 0){
+            result2 = mapper.updateStaus(spaceNo);
+        }
+        return result1 * result2;
+    }
+
+    public int companionEditSpace(String spaceNo) {
+        return mapper.companionEditSpace(spaceNo);
+    }
+
+    public int approveEditStay(String stayNo) {
+        int result1 = mapper.approveEditStay(stayNo);
+        int result2 = 0;
+        if(result1 > 0){
+            result2 = mapper.updateStayStaus(stayNo);
+        }
+        return result1 * result2;
+    }
+
+    public int companionEditStay(String stayNo) {
+        return mapper.companionEditStay(stayNo);
+    }
+
+    public int approveEditRoom(String roomNo) {
+        int result1 = mapper.approveEditRoom(roomNo);
+        int result2 = 0;
+        if(result1 > 0){
+            result2 = mapper.updateRoomStatus(roomNo);
+        }
+        return result1 * result2;
+    }
+
+    public int companionEditRoom(String roomNo) {
+        return mapper.companionEditRoom(roomNo);
+    }
 }
