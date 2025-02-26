@@ -103,6 +103,11 @@ const MyRoomDetail = () => {
     }
   };
 
+  const moveList = () => {
+    navigate("/hostMenu/hostMgmtMenu/");
+    window.scrollTo(0, 0);
+  };
+
   return (
     <>
       <HomeDiv>
@@ -158,7 +163,7 @@ const MyRoomDetail = () => {
               backColor="white"
               str="목록가기"
               color="black"
-              // f={companion}
+              f={moveList}
             />
             <div></div>
           </BtnArea>
