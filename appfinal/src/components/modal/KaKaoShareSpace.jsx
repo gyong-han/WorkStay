@@ -1,0 +1,84 @@
+import { useEffect, useState } from "react";
+
+const KakaoShareSpace = ({ no }) => {
+  const[content,setContent] = useState();
+  useEffect(() => {
+    const shareKakao = async () => {
+      const response = await fetch(
+        `http://127.0.0.1:8080/space/detail`,
+        {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body:JSON.stringify(no),
+        }
+      );
+      const data = await response.json();
+      console.log("가져온 데이터 ",data);
+      setContent(data);
+    };
+    shareKakao();
+  }, [no]);
+
+  useEffect(() => {
+    const createKakaoButton = () => {
+      if (window.Kakao && content) {
+        const kakao = window.Kakao;
+        if (!kakao.isInitialized()) {
+          kakao.init("e27f5cee69f66bf555b7350910107a59");
+        }
+
+        kakao.Share.createDefaultButton({
+          container: "#kakaotalk-sharing-space-btn",
+          objectType: "feed",
+          content: {
+            title: content.name,
+            description: content.tagline,
+            imageUrl: content.filePath,
+            link: {
+              webUrl: `http://localhost:3000/findspace/detail/${no}`,
+            },
+          },
+          social: {
+            likeCount: content.likeCount || 0,
+            commentCount: content.commentCount || 0,
+            sharedCount: content.sharedCount || 0,
+          },
+          buttons: [
+            {
+              title: "앱으로 보기",
+              link: {
+                webUrl: `http://localhost:3000/findspace/detail/${no}`,
+              },
+            },
+          ],
+        });
+      }
+    };
+
+    if (content) {
+      createKakaoButton();
+    }
+  }, [content]);
+
+  return (
+    <button
+    id="kakaotalk-sharing-space-btn"
+    style={{
+      backgroundImage: `url("https://nimage.newsway.co.kr/photo/2024/07/18/20240718000073_0640.jpg")`, 
+      backgroundColor: "#FEE500", // 배경색과 함께 사용 가능
+      backgroundSize: "cover",  // 이미지 크기 조절
+      backgroundPosition: "center", // 이미지 중앙 정렬
+      width: "50px", // 버튼 크기 설정 (필요에 따라 조절)
+      height: "50px",
+      border: "none",
+      borderRadius: "5px",
+      cursor: "pointer",
+    }}
+  >
+  </button>
+  );
+};
+
+export default KakaoShareSpace;

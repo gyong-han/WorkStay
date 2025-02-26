@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setPackageType, setReservationDone, setSpaceVo } from '../../redux/spaceSlice';
 import PackageReservationDone from '../../components/package/PackageReservationDone';
 import { getBookmarkInfo } from '../../components/service/spaceServcie';
+import ShareModal from '../../components/modal/ShareModal';
 
 const Layout =styled.div`
 width: 100%;
@@ -170,32 +171,16 @@ const FindSpaceDetail = () => {
   const {x} = useParams();
   const spaceVo = useSelector((state) => state.space);
   const [packageNo,setPackageNo] = useState("");
-  // console.log(x);
+  const [modalStatus, setModalStatus] = useState('');
 
-
-  // useEffect(()=>{
-    // const dataObj = {
-    //   memberNo : 1,                          //로그인 정보 가져오자
-    //   spaceNo : spaceVo.no,
-    // }
-  //   fetch(("http://localhost:8080/space/getbookmarkInfo"),{
-  //     method :"POST",
-  //     headers : {
-  //       "content-type" : "application/json",
-  //     },
-  //     body : JSON.stringify(dataObj),
-  //   })
-  //   .then((resp)=>resp.text())
-  //   .then((data)=>{
-  //     console.log(data);
-  //     const x = JSON.parse(data);
-  //     console.log(x);
-      
-      
-  //     setBookMark(x);
-      
-  //   })
-  // },[])
+    //Gallery Modal 관련
+    const openModal = () => {
+      setModalStatus('flex');
+    };
+    const closeModal = () => {
+      setModalStatus('');
+    };
+ 
   const bookmarkdata = async ()=>{
     const dataObj = {
       memberNo : 1,                          //로그인 정보 가져오자
@@ -263,7 +248,7 @@ const FindSpaceDetail = () => {
       memberNo : 1,                          //로그인 정보 가져오자
       spaceNo : spaceVo.no,
     }
-    if(bookMark == true){
+    if(bookMark === true){
       setBookMark(false);
       fetch(("http://localhost:8080/space/bookmarkdel"),{
         method :"POST",
@@ -312,6 +297,8 @@ const FindSpaceDetail = () => {
 
 
   return (
+    <>
+    <ShareModal closeModal={closeModal} modalStatus={modalStatus} no={x}/>
     <Layout>
       <TitleDiv>
         <div>
@@ -321,14 +308,14 @@ const FindSpaceDetail = () => {
         <div></div>
         <InconTitleDiv>
           <div><BiMessageAltDetail /></div>
-          <div><RxShare2 /></div>
+          <div onClick={openModal}><RxShare2 /></div>
           
           <div onClick={bookmarkInsert}>
              {!bookMark ? <IoBookmarkOutline/> : <IoBookmark/>}
           </div>
           <div>메세지</div>
-          <div>공유하기</div>
-          <div>북마크</div>
+          <div onClick={openModal}>공유하기</div>
+          <div onClick={bookmarkInsert}>북마크</div>
         </InconTitleDiv>
         </TitleDiv>
       <div>
@@ -352,7 +339,7 @@ const FindSpaceDetail = () => {
       <PackageDiv>
         <div>PACKAGE</div>
         <div>
-          {packageNo != "1"?<PackageDisplay img={"https://vrthumb.clipartkorea.co.kr/2023/04/12/pc0040625240.jpg"} titleHandler={()=>{dispatch(setPackageType({packageType:"낮 패키지"}))}}
+          {packageNo !== "1"?<PackageDisplay img={"https://vrthumb.clipartkorea.co.kr/2023/04/12/pc0040625240.jpg"} titleHandler={()=>{dispatch(setPackageType({packageType:"낮 패키지"}))}}
             title={"낮 패키지"} standard={"6"} max={"12"} price={spaceVo.daytimePrice}  url={`/findspace/spacebooking/${x}`} imgPaths={spaceVo.attachmentFilePaths}></PackageDisplay>:
           <PackageReservationDone img={"https://cdn.ownerclan.com/qiMNa49EgFO3USYFFjlxWueE4HXsJLKBIV9e1~D4~Y4/marketize/auto/as/v1.jpg"}></PackageReservationDone>
             
@@ -361,7 +348,7 @@ const FindSpaceDetail = () => {
         </div>
         <div></div>
         <div>
-          {packageNo != "2"?<PackageDisplay img={"https://png.pngtree.com/background/20230424/original/pngtree-meeting-inside-a-conference-room-with-business-people-picture-image_2457183.jpg"} titleHandler={()=>{dispatch(setPackageType({packageType :"밤 패키지"}))}}
+          {packageNo !== "2"?<PackageDisplay img={"https://png.pngtree.com/background/20230424/original/pngtree-meeting-inside-a-conference-room-with-business-people-picture-image_2457183.jpg"} titleHandler={()=>{dispatch(setPackageType({packageType :"밤 패키지"}))}}
           title={"밤 패키지"} standard={"4"} max={"8"} price={spaceVo.nightPrice} url={`/findspace/spacebooking/${x}`}  imgPaths={spaceVo.attachmentFilePaths}></PackageDisplay>:
           <PackageReservationDone img={"https://cdn.ownerclan.com/qiMNa49EgFO3USYFFjlxWueE4HXsJLKBIV9e1~D4~Y4/marketize/auto/as/v1.jpg"}></PackageReservationDone>
           }
@@ -392,6 +379,7 @@ const FindSpaceDetail = () => {
       <div></div>
       <Infomation morning={150000} night={820000} standard={10} max={20}></Infomation>
     </Layout>
+    </>
   );
 };
 
