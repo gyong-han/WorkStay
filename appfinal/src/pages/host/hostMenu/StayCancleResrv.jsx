@@ -18,10 +18,6 @@ const StatusSpan = styled.span`
     return props.color;
   }};
   cursor: pointer;
-
-  &:hover {
-    color: #049dd9;
-  }
 `;
 
 const StayCancleResrv = () => {

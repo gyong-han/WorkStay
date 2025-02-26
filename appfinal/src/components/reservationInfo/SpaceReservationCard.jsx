@@ -77,7 +77,7 @@ const SpaceReservationCard = ({ data, hideDate }) => {
           <TextDiv size="25px" weight="600">
             {data.name}
           </TextDiv>
-          <TextDiv size="15px">2025.02.18</TextDiv>
+          <TextDiv size="15px">{data.useDay}</TextDiv>
           <TextDiv size="13px">
             {data.packageName}패키지 / 성인 {data.adult}명
           </TextDiv>

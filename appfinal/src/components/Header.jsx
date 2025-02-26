@@ -44,6 +44,11 @@ const StyledLink = styled(Link)`
     text-decoration: line-through;
     text-decoration-color: lightblue;
   }
+
+  &:hover {
+    text-decoration: line-through;
+    text-decoration-color: lightblue;
+  }
 `;
 
 const UserSection = styled.div`

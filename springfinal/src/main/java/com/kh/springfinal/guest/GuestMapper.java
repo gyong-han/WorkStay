@@ -90,6 +90,7 @@ public interface GuestMapper {
                 RE.NO,
                 R.NO,
                 M.NO
+            ORDER BY RE.CHECK_IN DESC
             """)
     List<MypageVo> stayReserv(MypageVo vo);
 
@@ -124,6 +125,7 @@ public interface GuestMapper {
                 RE.NO,
                 R.NO,
                 M.NO
+            ORDER BY RE.CHECK_IN DESC
             """)
     List<MypageVo> stayCancleReserv(MypageVo vo);
 
@@ -148,6 +150,7 @@ public interface GuestMapper {
             LEFT JOIN PACKAGE P ON (P.NO = RE.PACKAGE_NO)
             WHERE M.EMAIL = #{email}
             AND ST.NO != 6
+            ORDER BY RE.USE_DAY DESC
             """)
     List<MypageVo> spaceReserv(MypageVo vo);
 
@@ -171,6 +174,7 @@ public interface GuestMapper {
             LEFT JOIN PACKAGE P ON (P.NO = RE.PACKAGE_NO)
             WHERE M.EMAIL = #{email}
             AND ST.NO = 6
+            ORDER BY RE.USE_DAY DESC
             """)
     List<MypageVo> spaceCancleReserv(MypageVo vo);
 
