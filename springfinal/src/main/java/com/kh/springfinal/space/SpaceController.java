@@ -1,6 +1,7 @@
 package com.kh.springfinal.space;
 
 import com.kh.springfinal.reservation.SpaceReservVo;
+import com.kh.springfinal.slog.SlogVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,10 @@ public class SpaceController {
 //        System.out.println("area"+area);
 //        System.out.println("people"+people);
 //        System.out.println("date"+date);
-//        System.out.println("title ::: "+title);
+        if(title.equals("undefined")){
+            title = null;
+        }
+        System.out.println("title ::: "+title);
         List<SpaceVo> voList = service.spaceGetListAll(area,people,date,title);
 
 //        System.out.println("vo :::"+ voList);
@@ -72,13 +76,11 @@ public class SpaceController {
     }
     @PostMapping("getTimeNow")
     public SpaceReservVo m01(SpaceReservVo vo){
-//        System.out.println("vo@@@@@ = " + vo);
         String date = vo.getUseDay();
         String formattedDate = date.replaceAll("-", "");
         vo.setUseDay(formattedDate);
         SpaceReservVo getVo = service.getNowTime(vo);
 
-//        System.out.println("getVO ~~~~~:::::::::::::::"+getVo);
         return getVo;
     }
     @PostMapping("bookmark")
