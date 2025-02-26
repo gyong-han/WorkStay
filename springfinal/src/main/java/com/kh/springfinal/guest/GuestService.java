@@ -17,7 +17,7 @@ public class GuestService {
 
     private final GuestMapper mapper;
     private final JwtUtil jwtUtil;
-        private final BCryptPasswordEncoder encoder;
+    private final BCryptPasswordEncoder encoder;
 
     public GuestVo join(GuestVo vo) {
 
@@ -120,4 +120,12 @@ public class GuestService {
     }
 
 
+    public MypageVo spaceDetailReserve(String reno) {
+        return mapper.spaceDetailReserve(reno);
+    }
+
+    public int spaceCancle(String no, String reno) {
+        int result = mapper.spaceCancle(no,reno);
+        return result;
+    }
 }//class
