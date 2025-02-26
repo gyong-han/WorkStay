@@ -15,6 +15,8 @@ import { setPackageType, setReservationDone, setSpaceVo } from '../../redux/spac
 import PackageReservationDone from '../../components/package/PackageReservationDone';
 import { getBookmarkInfo } from '../../components/service/spaceServcie';
 import ShareModal from '../../components/modal/ShareModal';
+import { RiInstagramLine } from "react-icons/ri";
+import { SiNaver } from "react-icons/si";
 
 const Layout =styled.div`
 width: 100%;
@@ -158,10 +160,65 @@ const PackageDiv = styled.div`
     margin-top: 240px;
     font-size: 40px;
     font-weight: 600;
+    
 
     
     
   }
+`;
+const InfoDiv = styled.div`
+  width: 270px;
+  height: 270px;
+  background-color: white;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr 1fr 25px 25px 1fr;
+  z-index: 1000;
+  margin-right: 950px;
+  margin-bottom: 200px;
+  position: absolute;
+  justify-items: center;
+
+  &>div{
+    width: 80%;
+    height: 90%;
+    display: flex;
+    align-items: center;
+
+  }
+  &>div:nth-child(1){
+    padding-top: 10px;
+    font-size: 25px;
+    font-weight: 600;
+  }
+  &>div:nth-child(2){
+    font-size: 25px;
+  }
+  &>div:nth-child(3),
+  &>div:nth-child(4),
+  &>div:nth-child(5){
+    display: flex;
+    align-items: end;
+    color: #999;
+  }
+ 
+
+`;
+const InfomationDiv = styled.div`
+  width: 100%;
+  height: 100%;
+  gap: 20px;
+  &>svg{
+    color: #999;
+  }
+  &>svg:hover{
+    color: black;
+  }
+  &>svg:nth-child(1){
+    width: 20px;
+    height: 20px;
+  }
+  
 `;
 
 const FindSpaceDetail = () => {
@@ -292,6 +349,9 @@ const FindSpaceDetail = () => {
     parking = "스페이스 공간 주차불가능";
   }
 
+  const cleaned = spaceVo.phone.replace(/\D/g, '');
+  const formattedPhoneNumber = cleaned.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+
 
 
 
@@ -374,7 +434,16 @@ const FindSpaceDetail = () => {
         </div>
         <div></div>
       </div>
-      <div><Map address={spaceVo.address} name={spaceVo.name}>space</Map></div>
+      <div>
+        <InfoDiv>
+          <div>HELLO.</div>
+          <div>{spaceVo.name}</div>
+          <div>({spaceVo.address})</div>
+          <div>{formattedPhoneNumber}</div>
+          <div>{spaceVo.sns}</div>
+          <InfomationDiv><RiInstagramLine /><SiNaver /></InfomationDiv>
+        </InfoDiv>
+        <Map address={spaceVo.address} name={spaceVo.name}>space</Map></div>
       <div></div>
       <Infomation morning={150000} night={820000} standard={10} max={20}></Infomation>
     </Layout>
