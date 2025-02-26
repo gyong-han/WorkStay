@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, Routes, Route } from "react-router-dom";
+import { NavLink, Routes, Route, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import SlogWrite from "./SlogWrite";
 import SlogList from "./SlogList";
@@ -28,13 +28,18 @@ const NavBar = styled.nav`
 `;
 
 const Slog = () => {
+  const location = useLocation();
+  const hideNavBar = location.pathname === "/slog/write";
+
   return (
     <Container>
       <h1>S-LOG</h1>
-      <NavBar>
-        <NavLink to="/slog/write">작성하기</NavLink>
-        <NavLink to="/slog/list">리스트</NavLink>
-      </NavBar>
+      {!hideNavBar && (
+        <NavBar>
+          <NavLink to="/slog/write">작성하기</NavLink>
+          <NavLink to="/slog/list">리스트</NavLink>
+        </NavBar>
+      )}
       <Routes>
         <Route path="write" element={<SlogWrite />} />
         <Route path="list" element={<SlogList />} />

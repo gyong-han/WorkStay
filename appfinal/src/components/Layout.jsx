@@ -32,7 +32,12 @@ const RightBlank = styled.div`
 
 const Layout = ({ children }) => {
   const location = useLocation();
-  const hideFooter = location.pathname === "/slog/write";
+  if (
+    location.pathname === "/slog/write" ||
+    location.pathname.includes === "/slog/edit"
+  ) {
+    return <>{children}</>;
+  }
 
   return (
     <>
@@ -44,7 +49,7 @@ const Layout = ({ children }) => {
           <RightBlank />
         </MainDiv>
       </LayoutContainer>
-      {!hideFooter && <Footer />}
+      <Footer />
     </>
   );
 };

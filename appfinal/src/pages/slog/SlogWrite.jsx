@@ -1,42 +1,137 @@
-import React, { useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { data, useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
+import { FiAlignJustify } from "react-icons/fi";
+import { CiTextAlignLeft } from "react-icons/ci";
+import { FiItalic } from "react-icons/fi";
+import { HiUnderline } from "react-icons/hi2";
+import { BsTypeBold } from "react-icons/bs";
+import { SlPicture } from "react-icons/sl";
+import { IoVideocamOutline } from "react-icons/io5";
+import { GoSmiley } from "react-icons/go";
+import { TfiLayoutLineSolid } from "react-icons/tfi";
+import { CiLocationOn } from "react-icons/ci";
+import { IoIosLink } from "react-icons/io";
+import { AiOutlineFileAdd } from "react-icons/ai";
+import { AiOutlineTable } from "react-icons/ai";
+import { FaRegTrashCan } from "react-icons/fa6";
 
 const Container = styled.div`
-  padding: 16px;
-  max-width: 800px;
-  height: 1020px;
-  margin: 0 auto;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  width: 100%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
 `;
 
 const NavList = styled.nav`
-  margin-bottom: 16px;
   display: flex;
-  gap: 12px;
+  gap: 20px;
   border-bottom: 2px solid #ccc;
   padding-bottom: 8px;
   flex-wrap: wrap;
+  align-items: center;
+  color: #555;
 
   .submit {
     padding: 8px 16px;
     font-size: 14px;
-    border: 1px solid #ccc;
+    border: none;
     border-radius: 4px;
-    background-color: #f7f7f7;
+    background-color: #049dd9;
+    color: #ffffff;
     cursor: pointer;
+  }
+
+  .font-type {
+    border: none;
+    background-color: #fafafa;
+  }
+
+  .font-size {
+    border: none;
+    background-color: #fafafa;
+  }
+  .custom-file-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    background-color: #fafafa;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .upload-icon {
+    font-size: 24px;
+    margin-bottom: 5px;
+  }
+
+  input[type="file"] {
+    display: none;
+  }
+`;
+
+const NavList2 = styled.nav`
+  display: flex;
+  gap: 12px;
+  border-bottom: 2px solid #ccc;
+  margin-top: 5px;
+  padding-bottom: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  color: #555;
+
+  .submit {
+    padding: 8px 16px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    background-color: #049dd9;
+    color: #ffffff;
+    cursor: pointer;
+  }
+
+  .font-type {
+    border: none;
+    background-color: #fafafa;
+  }
+
+  .font-size {
+    border: none;
+    background-color: #fafafa;
+  }
+  .custom-file-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    background-color: #fafafa;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .upload-icon {
+    font-size: 24px;
+    margin-bottom: 5px;
+  }
+
+  input[type="file"] {
+    display: none;
   }
 `;
 
 const Button = styled.button`
   padding: 8px 16px;
   font-size: 14px;
-  border: 1px solid #ccc;
+  border: none;
   border-radius: 4px;
-  background-color: #f7f7f7;
+  background-color: #fafafa;
   cursor: pointer;
 
   &:hover {
@@ -53,56 +148,128 @@ const Button = styled.button`
   }
 `;
 
+const Main = styled.main`
+  display: grid;
+  grid-template-columns: 2fr 5fr 2fr;
+  grid-template-rows: 1fr;
+`;
+
 const Title = styled.div`
-  margin-bottom: 14px;
-  display: flex;
-  /* border-bottom: 2px solid #ccc; */
+  width: 80%;
+  padding: 15px;
+  /* margin-top: 60px; */
+  margin: 60px auto 0;
+  border: none;
+  outline: none;
   text-align: start;
+  border-bottom: 2px solid #ccc;
+  color: #555;
 
   .title {
     padding: 10px;
-    outline: none;
     min-width: 97%;
+    font-size: 24px;
+    border: none;
+    outline: none;
     border-radius: 10px;
+    background-color: #fafafa;
+  }
+  .font-type {
+    border: none;
+    background-color: #fafafa;
+  }
+
+  .font-size {
+    border: none;
+    background-color: #fafafa;
+  }
+  .custom-file-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    justify-content: center;
+    padding: 15px;
+    background-color: #fafafa;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .upload-icon {
+    font-size: 24px;
+    margin-bottom: 5px;
+  }
+
+  input[type="file"] {
+    display: none;
   }
 `;
 
-const Tagline = styled.div`
-  margin-bottom: 14px;
+const Middle = styled.div`
   display: flex;
-  /* border-bottom: 2px solid #ccc; */
+  flex-direction: column;
+  height: 100vh;
+`;
+
+const LeftBlank = styled.div`
+  background-color: #eeeeee;
+`;
+
+const RightBlank = styled.div`
+  background-color: #eeeeee;
+`;
+
+const Tagline = styled.div`
+  width: 80%;
+  padding: 15px;
+  margin-top: 30px;
+  margin: 30px auto 0;
+  border: none;
+  outline: none;
   text-align: start;
+  border-bottom: 2px solid #ccc;
 
   .tagline {
     padding: 10px;
     min-width: 97%;
+    font-size: 15px;
+    border: none;
+    outline: none;
     border-radius: 10px;
+    background-color: #fafafa;
   }
 `;
 
 const Editor = styled.div`
-  width: 100%;
+  width: 80%;
+  margin: 30px auto 0;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  text-align: start;
-  padding-bottom: 20px;
+  /* text-align: start; */
 
   .content {
     flex-grow: 1;
     padding: 10px;
     border: 1px solid #ccc;
-    min-height: 800px;
-    max-height: 800px;
-    overflow-y: auto;
     outline: none;
+    border: none;
     white-space: pre-wrap;
     word-wrap: break-word;
+  }
+
+  .remove-image {
+    width: 30px;
+    height: 30px;
   }
 `;
 
 const SlogWrite = () => {
   const { no } = useParams();
-  console.log("no::::", no);
+  const [backgroundImage, setBackgroundImage] = useState("");
+  const [selectedImage, setSelectedImage] = useState("");
+  const [buttonPosition, setButtonPosition] = useState({});
   const location = useLocation();
   const [content, setContent] = useState();
   const [originalNames, setOriginalNames] = useState([]);
@@ -125,18 +292,8 @@ const SlogWrite = () => {
   const [left, setLeft] = useState();
   const navigate = useNavigate();
 
-  // useEffect(`127.0.0.1:8080/api/slog/edit/${no}`)
-  //   .then((resp) => resp.json())
-  //   .then((data) => {
-  //     setFormData({
-  //       title: data.title,
-  //       content: data.content,
-  //       tagline: data.tagline,
-  //     });
-  //   });
-
   const handleInput = (e) => {
-    setContent(e.target.innerHTML);
+    setContent(e.target.cloneNode(true).innerHTML);
   };
 
   const handleFileChange = (e) => {
@@ -157,9 +314,9 @@ const SlogWrite = () => {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        setUrl((prevUrls) => [...prevUrls, ...data]);
-        setOriginalNames((prevNames) => [
-          ...prevNames,
+        setUrl((prevUrl) => [...prevUrl, ...data]);
+        setOriginalNames((prevName) => [
+          ...prevName,
           ...Array.from(files).map((file) => file.name),
         ]);
 
@@ -174,16 +331,62 @@ const SlogWrite = () => {
       });
   };
 
+  const handleTitleFileChange = (e) => {
+    if (!e.target.files || e.target.files.length === 0) {
+      return;
+    }
+
+    const files = e.target.files;
+    const fd = new FormData();
+
+    for (let i = 0; i < files.length; i++) {
+      fd.append("files", files[i]);
+    }
+
+    fetch("http://127.0.0.1:8080/api/slog/title/upload", {
+      method: "POST",
+      body: fd,
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        console.log(data);
+        setUrl((prevUrl) => [...prevUrl, ...data]);
+        setOriginalNames((prevName) => [
+          ...prevName,
+          ...Array.from(files).map((file) => file.name),
+        ]);
+        if (data.length > 0) {
+          setBackgroundImage(data[0]);
+        }
+      });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const contentHtml = document.querySelector(".content").innerHTML;
 
+    const normalUrls = [];
+    const titleUrls = [];
+    const isTitleFile = [];
+
+    url.forEach((fileUrl, index) => {
+      const isTitle = fileUrl.includes("TITLE");
+      isTitleFile.push(isTitle);
+
+      if (isTitle) {
+        titleUrls.push(fileUrl);
+      } else {
+        normalUrls.push(fileUrl);
+      }
+    });
+
     const fd = new FormData();
     fd.append("title", formData.title);
     fd.append("content", contentHtml);
     fd.append("tagline", formData.tagline);
-    fd.append("fileUrl", url.join(","));
+    fd.append("fileUrl", normalUrls.join(","));
+    fd.append("titleFileUrl", titleUrls.join(","));
     fd.append("originalName", originalNames.join(","));
 
     if (no) {
@@ -217,17 +420,41 @@ const SlogWrite = () => {
     });
   };
 
-  // const handleRemoveImage = (index) => {
-  //   const newUrls = [...url];
-  //   const newOriginalNames = [...originalNames];
+  const temp = useRef(null);
+  useEffect(() => {
+    temp.current.innerHTML = formData.content;
+  }, []);
 
-  //   newUrls.splice(index, 1);
-  //   newOriginalNames.splice(index, 1);
+  const handleRemoveImage = () => {
+    if (selectedImage) {
+      selectedImage.remove();
+      setSelectedImage(null);
+    }
+  };
 
-  //   setUrl(newUrls);
-  //   setOriginalNames(newOriginalNames);
-  // };
+  useEffect(() => {
+    const editor = temp.current;
+    if (!editor) return;
 
+    const handleImageClick = (e) => {
+      if (e.target.tagName === "IMG") {
+        setSelectedImage(e.target);
+        e.target.style.border = "5px solid #04B2D9";
+
+        const rect = e.target.getBoundingClientRect();
+        setButtonPosition({
+          top: rect.top + window.scrollY - 20,
+          left: rect.left + window.scrollX + rect.width - 40,
+        });
+      }
+    };
+
+    editor.addEventListener("click", handleImageClick);
+
+    return () => {
+      editor.removeEventListener("click", handleImageClick);
+    };
+  }, []);
   const applyStyle = (type, value) => {
     if (type === "fontStyle") {
       setFontStyle(value);
@@ -262,7 +489,91 @@ const SlogWrite = () => {
     <Container>
       <form onSubmit={handleSubmit}>
         <NavList>
+          <label htmlFor="file-upload" className="custom-file-upload">
+            <SlPicture className="upload-icon" />
+            사진
+          </label>
+          <input
+            id="file-upload"
+            type="file"
+            multiple
+            onChange={handleFileChange}
+          />
+          <label htmlFor="file-upload" className="custom-file-upload">
+            <IoVideocamOutline className="upload-icon" />
+            동영상
+          </label>
+          <input
+            id="file-upload"
+            type="file"
+            multiple
+            onChange={handleFileChange}
+          />
+          <label htmlFor="file-upload" className="custom-file-upload">
+            <GoSmiley className="upload-icon" />
+            스티커
+          </label>
+          <input
+            id="file-upload"
+            type="file"
+            multiple
+            onChange={handleFileChange}
+          />
+          <label htmlFor="file-upload" className="custom-file-upload">
+            <TfiLayoutLineSolid className="upload-icon" />
+            구분선
+          </label>
+          <input
+            id="file-upload"
+            type="file"
+            multiple
+            onChange={handleFileChange}
+          />
+          <label htmlFor="file-upload" className="custom-file-upload">
+            <CiLocationOn className="upload-icon" />
+            장소
+          </label>
+          <input
+            id="file-upload"
+            type="file"
+            multiple
+            onChange={handleFileChange}
+          />
+          <label htmlFor="file-upload" className="custom-file-upload">
+            <IoIosLink className="upload-icon" />
+            링크
+          </label>
+          <input
+            id="file-upload"
+            type="file"
+            multiple
+            onChange={handleFileChange}
+          />
+          <label htmlFor="file-upload" className="custom-file-upload">
+            <AiOutlineFileAdd className="upload-icon" />
+            파일
+          </label>
+          <input
+            id="file-upload"
+            type="file"
+            multiple
+            onChange={handleFileChange}
+          />
+          <label htmlFor="file-upload" className="custom-file-upload">
+            <AiOutlineTable className="upload-icon" />표
+          </label>
+          <input
+            id="file-upload"
+            type="file"
+            multiple
+            onChange={handleFileChange}
+          />
+          <input type="submit" className="submit" value={"발행"} />
+        </NavList>
+
+        <NavList2>
           <select
+            className="font-type"
             onChange={(e) => applyStyle("fontStyle", e.target.value)}
             value={fontStyle}
           >
@@ -274,6 +585,7 @@ const SlogWrite = () => {
           </select>
 
           <select
+            className="font-size"
             onChange={(e) => applyStyle("fontSize", e.target.value)}
             value={fontSize}
           >
@@ -297,89 +609,143 @@ const SlogWrite = () => {
             onClick={toggleBold}
             style={{ fontWeight: isBold ? "bold" : "normal" }}
           >
-            B
+            <BsTypeBold />
           </Button>
           <Button
             type="button"
             onClick={toggleItalic}
             style={{ fontStyle: isItalic ? "italic" : "normal" }}
           >
-            I
+            <FiItalic />
           </Button>
           <Button
             type="button"
             onClick={toggleUnderline}
             style={{ textDecoration: isUnderline ? "underline" : "none" }}
           >
-            U
+            <HiUnderline />
           </Button>
           <Button
             type="button"
             onClick={toggleCenter}
             style={{ textAlign: center ? "center" : "none" }}
           >
-            가운데 정렬
+            <FiAlignJustify />
           </Button>
           <Button
             type="button"
             onClick={toggleLeft}
             style={{ textAlign: left ? "left" : "none" }}
           >
-            왼쪽 정렬
+            <CiTextAlignLeft />
           </Button>
-          <input type="submit" className="submit" value={"발행"} />
-          <input
-            type="file"
-            className="files"
-            multiple
-            onChange={handleFileChange}
-          ></input>
-        </NavList>
+        </NavList2>
 
-        <Title>
-          <input
-            className="title"
-            contentEditable
-            suppressContentEditableWarning={true}
-            onInput={handleInput}
-            onChange={handleInputChange}
-            Value={formData.title}
-            placeholder="제목을 입력하세요"
-          ></input>
-        </Title>
+        <Main>
+          <LeftBlank />
+          <Middle>
+            <Title>
+              <label htmlFor="title-upload" className="title-upload-label">
+                사진 선택
+              </label>
+              <input
+                id="title-upload"
+                type="file"
+                onChange={handleTitleFileChange}
+              />
 
-        <Tagline>
-          <input
-            className="tagline"
-            contentEditable
-            suppressContentEditableWarning={true}
-            onInput={handleInput}
-            onChange={handleInputChange}
-            value={formData.tagline}
-            placeholder="태그라인을 입력하세요"
-          ></input>
-        </Tagline>
+              <div
+                className="title-background"
+                style={{
+                  width: "100%",
+                  height: "200px",
+                  backgroundImage: backgroundImage
+                    ? `url(${backgroundImage})`
+                    : "none",
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  position: "relative",
+                }}
+              >
+                {!backgroundImage && <></>}
+                <input
+                  className="title"
+                  contentEditable
+                  suppressContentEditableWarning={true}
+                  onInput={handleInput}
+                  onChange={handleInputChange}
+                  Value={formData.title}
+                  placeholder="제목"
+                  style={{
+                    width: "80%",
+                    padding: "10px",
+                    fontSize: "24px",
+                    fontWeight: "bold",
+                    color: "white",
+                    textAlign: "center",
+                    backgroundColor: "rgba(0, 0, 0, 0.308)",
+                    backdropFilter: "blur(5px)",
+                    border: "none",
+                    outline: "none",
+                    position: "absolute",
+                  }}
+                ></input>
+              </div>
+            </Title>
 
-        <Editor>
-          <div
-            className="content"
-            contentEditable
-            suppressContentEditableWarning={true}
-            style={{
-              fontFamily: fontStyle,
-              fontSize: fontSize,
-              color: fontColor,
-              fontWeight: isBold ? "bold" : "normal",
-              fontStyle: isItalic ? "italic" : "normal",
-              textDecoration: isUnderline ? "underline" : "none",
-              textAlign: center ? "center" : left ? "left" : "initial",
-            }}
-            onInput={handleInput}
-            onChange={handleInputChange}
-            dangerouslySetInnerHTML={{ __html: formData.content }}
-            placeholder="저널을 입력하세요"
-          />
-        </Editor>
+            <Tagline>
+              <input
+                className="tagline"
+                contentEditable
+                suppressContentEditableWarning={true}
+                onInput={handleInput}
+                onChange={handleInputChange}
+                value={formData.tagline}
+                placeholder="태그라인"
+              ></input>
+            </Tagline>
+
+            <Editor>
+              <div
+                ref={temp}
+                className="content"
+                contentEditable
+                suppressContentEditableWarning={true}
+                style={{
+                  fontFamily: fontStyle,
+                  fontSize: fontSize,
+                  color: fontColor,
+                  fontWeight: isBold ? "bold" : "normal",
+                  fontStyle: isItalic ? "italic" : "normal",
+                  textDecoration: isUnderline ? "underline" : "none",
+                  textAlign: center ? "center" : left ? "left" : "initial",
+                }}
+                onInput={handleInput}
+                onChange={handleInputChange}
+                // dangerouslySetInnerHTML={{ __html: formData.content }}
+                placeholder="저널을 입력하세요"
+              />
+              {selectedImage && (
+                <button
+                  className="Remove-Image"
+                  style={{
+                    top: `${buttonPosition.top}px`,
+                    left: `${buttonPosition.left}px`,
+                    position: "absolute",
+                  }}
+                  onClick={handleRemoveImage}
+                >
+                  <FaRegTrashCan />
+                </button>
+              )}
+            </Editor>
+          </Middle>
+          <RightBlank />
+        </Main>
       </form>
     </Container>
   );

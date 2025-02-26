@@ -6,6 +6,7 @@ import { setSlogVo } from "../../redux/slogDetailSlice";
 import Map from "../../components/map/Map";
 import { setRecVo } from "../../redux/slogRecSlice";
 import MapRec from "../../components/map/MapRec";
+import KakaoShare from "./KakaoShare";
 
 const Container = styled.div`
   width: 100%;
@@ -13,8 +14,7 @@ const Container = styled.div`
 `;
 
 const Title = styled.div`
-  font-size: 24px;
-  background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcqvPKlTG6wa5euR2GWyj8EBvrXFGgcKxIDw&s");
+  font-size: 32px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -47,7 +47,7 @@ const Content = styled.div`
   margin-top: 100px;
 
   .img {
-    text-align: center;
+    /* text-align: center; */
     width: 500px;
     height: 400px;
   }
@@ -110,12 +110,45 @@ const EditDeleteBtn = styled.div`
   }
 `;
 
+const ModalContainer = styled.div`
+  display: ${(props) => (props.isOpen ? "flex" : "none")};
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+`;
+
+const ModalContent = styled.div`
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+  text-align: center;
+  position: relative;
+
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+  }
+`;
+
 const SlogDetail = () => {
   const { no } = useParams();
   const dispatch = useDispatch();
   const slogVo = useSelector((state) => state.slogDetail);
   const recVo = useSelector((state) => state.slogRec.recPlaces) || [];
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [selectedPlace, setSelectedPlace] = useState(null);
 
@@ -171,10 +204,6 @@ const SlogDetail = () => {
       }
     );
 
-    // const handleShare = () => {
-
-    // };
-
     if (response.ok) {
       alert("게시글이 삭제되었습니다.");
       navigate("/slog/list");
@@ -183,9 +212,26 @@ const SlogDetail = () => {
     }
   };
 
+  const openKakaoModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <Container>
-      <Title>{slogVo.title}</Title>
+      <Title
+        style={{
+          backgroundImage: `url(${slogVo.titleFileUrl})`,
+          width: "100%",
+          height: "100%",
+          objectFit: "contain",
+        }}
+      >
+        {slogVo.title}
+      </Title>
       <Main>
         <LeftBlank />
         <Content>
@@ -228,8 +274,20 @@ const SlogDetail = () => {
         <button className="delete" onClick={handleRemove}>
           삭제하기
         </button>
-        <button className="share">공유하기</button>
+        <button className="share" onClick={openKakaoModal}>
+          트레블 공유하기
+        </button>
       </EditDeleteBtn>
+
+      <ModalContainer isOpen={isModalOpen}>
+        <ModalContent>
+          <button className="close-btn" onClick={closeModal}>
+            ×
+          </button>
+          <h2>공유하기</h2>
+          <KakaoShare no={no} />
+        </ModalContent>
+      </ModalContainer>
     </Container>
   );
 };

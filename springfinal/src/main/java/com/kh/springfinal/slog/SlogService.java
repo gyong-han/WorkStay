@@ -20,11 +20,10 @@ public class SlogService {
     }
 
 
-    public SlogVo detail(String no) {
-        return slogMapper.detail(no);
-    }
-
     public SlogVo getSlogVo(String no) {
+
+//        System.out.println("Service :::: no = " + no);
+
         return slogMapper.findByNo(no);
     }
 
@@ -36,7 +35,7 @@ public class SlogService {
 
 
     public List<RecPlaceVo> findRecplace(Long no) {
-        System.out.println("no = " + no);
+
         return slogMapper.findRecPlace(no);
     }
 
@@ -48,5 +47,13 @@ public class SlogService {
 
     public int edit(SlogVo slogVo) {
         return slogMapper.edit(slogVo);
+    }
+
+
+    public SlogVo shareKakao(String no) {
+
+        System.out.println("Service :::: no = " + no);
+
+        return slogMapper.shareKakao(no);
     }
 }
