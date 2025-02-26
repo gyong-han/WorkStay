@@ -252,8 +252,8 @@ const StayDetail = () => {
               {data.name} / {data.roomName}
             </TitleDiv>
             <TitleDiv left="5px" bot="30px">
-              총 {data.totalPerson}명 (성인 : {data.adult}명/ 아동 :{" "}
-              {data.child}명 / 영아 : {data.baby}명)
+              총 {data.totalPerson}명 (성인 : {data.adult}명/ 아동 :{data.child}
+              명 / 영아 : {data.baby}명)
             </TitleDiv>
             <TitleDiv left="5px" bot="30px">
               {data.checkIn} 16:00
