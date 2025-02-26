@@ -14,10 +14,6 @@ const StatusSpan = styled.span`
   margin-left: ${(props) => props.left};
   color: ${(props) => props.color};
   cursor: pointer;
-
-  &:hover {
-    color: #f20530;
-  }
 `;
 
 const StayResrv = () => {
