@@ -6,6 +6,15 @@ const slogSlice = createSlice({
     voList: [],
     pno: 0,
     isLoading: false,
+    slogVo: {
+      no: "",
+      title: "",
+      content: "",
+      tagline: "",
+      fileUrl: "",
+      originalName: "",
+      titleFileUrl: "",
+    },
   },
   reducers: {
     setLoading: (state, action) => {
@@ -21,9 +30,13 @@ const slogSlice = createSlice({
       state.pno = 0;
       state.voList = [];
     },
+    setSlogVo: (state, action) => {
+      state.slogVo = action.payload;
+    },
   },
 });
 
-export const { addSlogVoList, plusPno, resetPno, setLoading } =
+export const { addSlogVoList, plusPno, resetPno, setLoading, setSlogVo } =
   slogSlice.actions;
+
 export default slogSlice.reducer;

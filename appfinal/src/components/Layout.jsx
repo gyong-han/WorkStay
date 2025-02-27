@@ -34,7 +34,7 @@ const Layout = ({ children }) => {
   const location = useLocation();
   if (
     location.pathname === "/slog/write" ||
-    location.pathname.includes === "/slog/edit"
+    location.pathname.includes("/slog/edit")
   ) {
     return <>{children}</>;
   }

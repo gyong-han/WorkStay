@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { data, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { FiAlignJustify } from "react-icons/fi";
 import { CiTextAlignLeft } from "react-icons/ci";
@@ -15,6 +15,8 @@ import { IoIosLink } from "react-icons/io";
 import { AiOutlineFileAdd } from "react-icons/ai";
 import { AiOutlineTable } from "react-icons/ai";
 import { FaRegTrashCan } from "react-icons/fa6";
+import { useDispatch, useSelector } from "react-redux";
+import { addSlogVoList } from "../../redux/slogSlice";
 
 const Container = styled.div`
   width: 100%;
@@ -148,10 +150,11 @@ const Button = styled.button`
   }
 `;
 
-const Main = styled.main`
+const Main = styled.div`
   display: grid;
   grid-template-columns: 2fr 5fr 2fr;
   grid-template-rows: 1fr;
+  height: 100vh;
 `;
 
 const Title = styled.div`
@@ -214,10 +217,12 @@ const Middle = styled.div`
 
 const LeftBlank = styled.div`
   background-color: #eeeeee;
+  height: 100vh;
 `;
 
 const RightBlank = styled.div`
   background-color: #eeeeee;
+  height: 100vh;
 `;
 
 const Tagline = styled.div`
@@ -267,6 +272,8 @@ const Editor = styled.div`
 
 const SlogWrite = () => {
   const { no } = useParams();
+  const titleFileUrl = useSelector((state) => state.slogDetail.titleFileUrl);
+  const dispatch = useDispatch();
   const [backgroundImage, setBackgroundImage] = useState("");
   const [selectedImage, setSelectedImage] = useState("");
   const [buttonPosition, setButtonPosition] = useState({});
@@ -356,7 +363,7 @@ const SlogWrite = () => {
           ...Array.from(files).map((file) => file.name),
         ]);
         if (data.length > 0) {
-          setBackgroundImage(data[0]);
+          setBackgroundImage(data);
         }
       });
   };
@@ -365,12 +372,19 @@ const SlogWrite = () => {
     e.preventDefault();
 
     const contentHtml = document.querySelector(".content").innerHTML;
-
-    const normalUrls = [];
     const titleUrls = [];
     const isTitleFile = [];
+    const normalUrls = [];
 
-    url.forEach((fileUrl, index) => {
+    const contentImages = Array.from(
+      document.querySelector(".content").querySelectorAll("img")
+    );
+
+    const contentFileUrls = contentImages.map((img) => img.src);
+
+    console.log("######!!!", contentFileUrls);
+
+    url.forEach((fileUrl) => {
       const isTitle = fileUrl.includes("TITLE");
       isTitleFile.push(isTitle);
 
@@ -385,7 +399,9 @@ const SlogWrite = () => {
     fd.append("title", formData.title);
     fd.append("content", contentHtml);
     fd.append("tagline", formData.tagline);
-    fd.append("fileUrl", normalUrls.join(","));
+
+    contentFileUrls.forEach((fileUrl) => fd.append("fileUrl", fileUrl));
+    console.log("url####", url);
     fd.append("titleFileUrl", titleUrls.join(","));
     fd.append("originalName", originalNames.join(","));
 
@@ -406,8 +422,9 @@ const SlogWrite = () => {
       })
         .then((resp) => resp.text())
         .then((data) => {
+          dispatch(addSlogVoList(data));
           navigate("/slog/list");
-          console.log("발행한 데이터 : ", data);
+          console.log("발행한 데이터 ::: ", data);
         });
     }
   };
@@ -427,8 +444,18 @@ const SlogWrite = () => {
 
   const handleRemoveImage = () => {
     if (selectedImage) {
+      console.log("########### : ", selectedImage);
+      console.log("########### : ", url);
       selectedImage.remove();
       setSelectedImage(null);
+      console.log("##셀렉티드", selectedImage.src);
+
+      for (let i = 0; i < url.length; ++i) {
+        if (url[i].includes(selectedImage)) {
+          url.splice(i);
+          break;
+        }
+      }
     }
   };
 
@@ -439,7 +466,7 @@ const SlogWrite = () => {
     const handleImageClick = (e) => {
       if (e.target.tagName === "IMG") {
         setSelectedImage(e.target);
-        e.target.style.border = "5px solid #04B2D9";
+        // e.target.style.border = "5px solid #04B2D9";
 
         const rect = e.target.getBoundingClientRect();
         setButtonPosition({
@@ -451,30 +478,48 @@ const SlogWrite = () => {
 
     editor.addEventListener("click", handleImageClick);
 
-    return () => {
-      editor.removeEventListener("click", handleImageClick);
-    };
+    // return () => {
+    //   editor.removeEventListener("click", handleImageClick);
+    // };
   }, []);
+
   const applyStyle = (type, value) => {
-    if (type === "fontStyle") {
-      setFontStyle(value);
-    } else if (type === "fontSize") {
-      setFontSize(value);
-    } else if (type === "fontColor") {
-      setFontColor(value);
+    const selection = window.getSelection();
+    if (!selection.rangeCount) return;
+
+    const range = selection.getRangeAt(0);
+    const selectedText = range.toString();
+
+    if (selectedText) {
+      const span = document.createElement("span");
+
+      if (type === "fontStyle") {
+        span.style.fontFamily = value;
+        // setFontStyle(value);
+      } else if (type === "fontSize") {
+        span.style.fontSize = value;
+        // setFontSize(value);
+      } else if (type === "fontColor") {
+        span.style.color = value;
+        // setFontColor(value);
+      }
+
+      span.textContent = selectedText;
+      range.deleteContents();
+      range.insertNode(span);
     }
   };
 
   const toggleBold = () => {
-    setIsBold(!isBold);
+    document.execCommand("bold");
   };
 
   const toggleItalic = () => {
-    setIsItalic(!isItalic);
+    document.execCommand("italic");
   };
 
   const toggleUnderline = () => {
-    setIsUnderline(!isUnderline);
+    document.execCommand("underline");
   };
   const toggleCenter = () => {
     setCenter(true);
@@ -645,7 +690,13 @@ const SlogWrite = () => {
           <LeftBlank />
           <Middle>
             <Title>
-              <label htmlFor="title-upload" className="title-upload-label">
+              <label
+                htmlFor="title-upload"
+                className="title-upload-label"
+                style={{
+                  cursor: "pointer",
+                }}
+              >
                 사진 선택
               </label>
               <input
@@ -659,9 +710,12 @@ const SlogWrite = () => {
                 style={{
                   width: "100%",
                   height: "200px",
-                  backgroundImage: backgroundImage
+                  backgroundImage: titleFileUrl
+                    ? `url(${titleFileUrl})`
+                    : backgroundImage
                     ? `url(${backgroundImage})`
                     : "none",
+
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                   backgroundRepeat: "no-repeat",
@@ -672,6 +726,7 @@ const SlogWrite = () => {
                 }}
               >
                 {!backgroundImage && <></>}
+
                 <input
                   className="title"
                   contentEditable
