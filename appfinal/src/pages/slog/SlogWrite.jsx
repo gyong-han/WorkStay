@@ -395,20 +395,31 @@ const SlogWrite = () => {
       }
     });
 
-    const fd = new FormData();
-    fd.append("title", formData.title);
-    fd.append("content", contentHtml);
-    fd.append("tagline", formData.tagline);
+    const fd1 = new FormData();
+    fd1.append("title", formData.title);
+    fd1.append("content", contentHtml);
+    fd1.append("tagline", formData.tagline);
 
-    contentFileUrls.forEach((fileUrl) => fd.append("fileUrl", fileUrl));
+    contentFileUrls.forEach((fileUrl) => fd1.append("fileUrl", fileUrl));
     console.log("url####", url);
-    fd.append("titleFileUrl", titleUrls.join(","));
-    fd.append("originalName", originalNames.join(","));
+    fd1.append("titleFileUrl", titleUrls);
+    console.log("#####", titleUrls);
+    fd1.append("originalName", originalNames.join(","));
+
+    const fd2 = new FormData();
+    fd2.append("title", formData.title);
+    fd2.append("content", contentHtml);
+    fd2.append("tagline", formData.tagline);
+
+    contentFileUrls.forEach((fileUrl) => fd2.append("fileUrl", fileUrl));
+    console.log("url####", url);
+    fd2.append("titleFileUrl", titleFileUrl);
+    fd2.append("originalName", originalNames.join(","));
 
     if (no) {
       fetch(`http://127.0.0.1:8080/api/slog/edit/${no}`, {
         method: "PUT",
-        body: fd,
+        body: fd2,
       })
         .then((resp) => resp.text())
         .then((data) => {
@@ -418,7 +429,7 @@ const SlogWrite = () => {
     } else {
       fetch("http://127.0.0.1:8080/api/slog/insert", {
         method: "POST",
-        body: fd,
+        body: fd1,
       })
         .then((resp) => resp.text())
         .then((data) => {
