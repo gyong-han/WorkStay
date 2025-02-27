@@ -368,6 +368,20 @@ public interface GuestMapper {
     int removeSpaceBookmark(@Param("no") int no, @Param("targetNo") int targetNo);
 
 
-
+    @Select("""
+            SELECT
+                R.NAME
+                , S.ADDRESS
+                , L.NO
+                , L.TITLE
+                , L.TAGLINE
+                , L.TITLE_FILE_URL
+            FROM ROOM_RESERVATION RE
+            LEFT OUTER JOIN SLOG L ON (RE.NO = L.RESERVATION_NO)
+            LEFT OUTER JOIN ROOM R ON (R.NO = RE.ROOM_NO)
+            LEFT OUTER JOIN STAY S ON (S.NO = R.STAY_NO)
+            WHERE L.MEMBER_NO =#{memberNo}
+            """)
+    SlogListVo slogList(String memberNo);
 
 }//class

@@ -46,6 +46,18 @@ const PriceDiv = styled.div`
   }
 `;
 
+const SLogButton = styled.button`
+  background-color: #fafafa;
+  color: #f20530;
+  border: none;
+  padding: 10px 15px;
+  font-size: 14px;
+  font-weight: 800px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+`;
+
 const ReservationCard = ({ data, hideDate, moveDetail }) => {
   const navi = useNavigate();
   const location = useLocation(); // 현재 경로 가져오기
@@ -57,6 +69,20 @@ const ReservationCard = ({ data, hideDate, moveDetail }) => {
     const finalPath = `${basePath}/${detailPath}`.replace(/([^:]\/)\/+/g, "$1");
 
     navi(finalPath);
+  }
+
+  // S-Log 작성 버튼 클릭 시 이동 (reno + 회원번호 포함)
+  function handleSLogWrite() {
+    const userToken = localStorage.getItem("token"); // 토큰에서 회원 정보 가져오기
+    if (!userToken) {
+      alert("로그인이 필요합니다.");
+      navi("/login");
+      return;
+    }
+    const memberNo = JSON.parse(atob(userToken.split(".")[1])).no; // JWT에서 no 추출
+    const reno = data.reno; // 예약 번호
+
+    navi(`/slog/write?reno=${reno}&memberNo=${memberNo}`);
   }
 
   return (
@@ -75,13 +101,19 @@ const ReservationCard = ({ data, hideDate, moveDetail }) => {
           </TextDiv>
           <div></div>
           <PriceDiv>
+            <div>
+              {data.progressState === "이용완료" && (
+                <SLogButton onClick={handleSLogWrite}>S-Log 작성</SLogButton>
+              )}
+            </div>
             {!hideDate && (
-              <TextDiv onClick={movePath} size="15px">
+              <TextDiv onClick={moveDetail} size="15px">
                 예약 상세 확인
               </TextDiv>
             )}
-            <TextDiv size="20px">₩{data.price}</TextDiv>
+            <TextDiv size="20px">₩{data.amount}</TextDiv>
           </PriceDiv>
+          {/* 🔥 progressState가 4 (이용완료)일 때 S-Log 작성 버튼 표시 */}
         </DataArea>
         <ImgTag src={data.filePath} alt="숙소 이미지" />
       </DataDiv>

@@ -144,8 +144,6 @@ public class GuestController {
         return result;
     }
 
-    //s-log 불러오기
-
 
     // 북마크 조회 (숙소 + 공간)
     @GetMapping("/bookmarks/{no}")
@@ -168,5 +166,11 @@ public class GuestController {
         service.toggleSpaceBookmark(no, targetNo);
     }
 
+    //s-log 불러오기
+    @GetMapping("slogList")
+    public SlogListVo slogList(@RequestParam String memberNo){
+        SlogListVo result = service.slogList(memberNo);
+        return result;
+    }
 
 }

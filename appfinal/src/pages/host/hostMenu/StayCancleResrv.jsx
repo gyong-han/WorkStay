@@ -26,10 +26,15 @@ const StayCancleResrv = () => {
   const [status, setStatus] = useState("1");
   const [dataArr, setDataArr] = useState([]);
   const [email, setEmail] = useState(""); // email을 상태로 관리
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    }
+  });
 
+  useEffect(() => {
     if (token) {
       try {
         const decodedToken = jwtDecode(token);

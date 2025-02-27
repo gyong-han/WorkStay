@@ -43,7 +43,7 @@ const BookmarkIcon = ({ type, targetNo }) => {
 
   return (
     <BookmarkBtn onClick={toggleBookmark}>
-      {bookmarked ? <FaBookmark /> : <FaRegBookmark />}
+      {bookmarked ? <FaRegBookmark /> : <FaBookmark />}
     </BookmarkBtn>
   );
 };

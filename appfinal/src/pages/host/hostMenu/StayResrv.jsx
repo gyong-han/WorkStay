@@ -22,9 +22,16 @@ const StayResrv = () => {
   const [status, setStatus] = useState("1");
   const [dataArr, setDataArr] = useState([]);
   const [email, setEmail] = useState(""); // email을 상태로 관리
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    }
+  });
+
+  useEffect(() => {
+    //토큰 정보 없으면 로그인 페이지로 보내기
 
     if (token) {
       try {

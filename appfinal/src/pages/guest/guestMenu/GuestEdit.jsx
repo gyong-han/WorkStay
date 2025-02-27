@@ -135,6 +135,11 @@ const GuestEdit = () => {
   const guest = useSelector((state) => state.guest); // Redux에서 값 가져오기
 
   const token = localStorage.getItem("token");
+  useEffect(() => {
+    if (!token) {
+      navi("/login");
+    }
+  });
 
   //토큰 정보 있으면 화면에 보여주기
   useEffect(() => {
