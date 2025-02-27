@@ -162,6 +162,7 @@ const ThirdEnrollStay = () => {
           </div>
           <AddBtnArea>
             <HostBtn
+              border="none"
               width="100px"
               height="30px"
               font="15px"
@@ -173,6 +174,7 @@ const ThirdEnrollStay = () => {
           </AddBtnArea>
           <BtnArea>
             <HostBtn
+              border="1px solid #2B8C44"
               width="400px"
               height="50px"
               font="25px"

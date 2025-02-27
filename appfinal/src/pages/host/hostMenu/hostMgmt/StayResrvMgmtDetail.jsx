@@ -291,6 +291,7 @@ const StayResrvMgmtDetail = () => {
           <div></div>
           <div>
             <HostBtn
+              border="none"
               width="400px"
               height="50px"
               font="25px"

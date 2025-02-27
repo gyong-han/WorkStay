@@ -435,6 +435,7 @@ const MyStayDetail = () => {
           <BtnArea>
             <div></div>
             <HostBtn
+              border="none"
               width="300px"
               height="50px"
               font="25px"
@@ -444,6 +445,7 @@ const MyStayDetail = () => {
               f={moveRoomDetail}
             />
             <HostBtn
+              border="1px solid #2B8C44"
               width="300px"
               height="50px"
               font="25px"
