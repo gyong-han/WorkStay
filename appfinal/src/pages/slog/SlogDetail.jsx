@@ -182,6 +182,7 @@ const SlogDetail = () => {
   };
 
   const handleEdit = () => {
+    console.log("titleFileUrl", slogVo.titleFileUrl);
     navigate(`/slog/edit/${no}`, {
       state: {
         title: slogVo.title,
@@ -189,6 +190,7 @@ const SlogDetail = () => {
         content: slogVo.content,
         fileUrl: slogVo.fileUrl,
         originalName: slogVo.originalName,
+        titleFileUrl: slogVo.titleFileUrl,
       },
     });
   };

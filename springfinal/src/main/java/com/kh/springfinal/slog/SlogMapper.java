@@ -88,6 +88,8 @@ public interface SlogMapper {
             TITLE = #{title}
             ,TAGLINE = #{tagline}
             ,CONTENT = #{content}
+            ,FILE_URL = #{fileUrl}
+            ,TITLE_FILE_URL = #{titleFileUrl}
             WHERE NO = #{no}
             """)
     int edit(SlogVo slogVo);

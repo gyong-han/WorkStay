@@ -143,6 +143,7 @@ public class SlogController {
                             @RequestParam("content") String content,
                             @RequestParam("tagline") String tagline,
                             @RequestParam(value = "fileUrl", required = false) String fileUrl,
+                            @RequestParam(value = "titleFileUrl", required = false) String titleFileUrl,
                             @RequestParam(value = "originalName", required = false) String originalName,
                             @RequestParam(value = "files", required = false) MultipartFile[] files,
                             SlogVo slogVo) {
