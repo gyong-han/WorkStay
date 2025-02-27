@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Btn from "../../components/Btn";
 import { useDispatch, useSelector } from "react-redux";
 import { setReservationInfo } from "../../redux/spaceSlice";
-import { getInfomation, inputReservation } from "../../components/service/spaceServcie";
+import { getInfomation, getMemberInfo, inputReservation } from "../../components/service/spaceServcie";
 
 const Wrapper = styled.div`
   display: grid;
@@ -105,28 +105,36 @@ const SpaceReservation = () => {
   const fdData = JSON.parse(fd1);  
 
   const fd = new FormData();
+  const [memberInfo,setMemberInfo] = useState({});
   
   fd.append("packageNo",fdData.packageNo);
   fd.append("spaceNo",fdData.spaceNo);
   fd.append("useDay",fdData.useDay);  
 
-  console.log("fdData ::::",fdData);
+
   const dispatch = useDispatch();
   const price = fdData.amount;
   const priceWon = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const spaceVo = useSelector((state)=>state.space);
 
   const Reservation  = async ()=>{
+    
+    
     const insertData  = await inputReservation(fdData);
-    console.log("insert :::",insertData);
     
     const getInfo = await getInfomation(fd);
     dispatch(setReservationInfo(getInfo));
-  };
 
+    const getMemberInformation = await getMemberInfo(fdData.memberNo);
+    setMemberInfo(getMemberInformation);
+    
+  };
   useEffect(()=>{
     Reservation ();
   },[])
+
+  const cleaned = memberInfo.phone.replace(/\D/g, '');
+  const formattedPhoneNumber = cleaned.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
 
 
   return (
@@ -154,9 +162,9 @@ const SpaceReservation = () => {
         </UserInfoWrapper>
         <UserWrapper>
           <Info1>{spaceVo.reservationNo}</Info1>
-          <Info1>이예은</Info1>
-          <Info1>010-1234-5678</Info1>
-          <Info1>gamza@gamil.com</Info1>
+          <Info1>{memberInfo.name}</Info1>
+          <Info1>{formattedPhoneNumber}</Info1>
+          <Info1>{memberInfo.email}</Info1>
         </UserWrapper>
         <LineDiv />
         <ButtonWrapper>

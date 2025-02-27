@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FaAngleDown } from "react-icons/fa6";
-import Btn from "../../components/Btn";
 import { Accordion } from "react-bootstrap";
 import CalendarTime from "../../components/FilterBar/CalendalTime";
 import { useSelector } from "react-redux";
@@ -371,7 +370,7 @@ const Booking = () => {
   // fd.append("useDay",spaceVo.reservationDate);
   const fd = {
     spaceNo: spaceVo.no,
-    memberNo: 1,
+    memberNo: spaceVo.memberNo,
     paymentNo: 1,
     packageNo: packageNo,
     adult: spaceVo.adult,

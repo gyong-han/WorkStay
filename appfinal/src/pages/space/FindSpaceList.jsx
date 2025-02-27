@@ -7,9 +7,10 @@ import { IoCheckmarkCircleOutline } from "react-icons/io5";
 import { CiFilter } from "react-icons/ci";
 import { RiResetRightFill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
-import { setReset, setResetSearch, setTitleSearch } from "../../redux/spaceSlice";
+import { setLoginMemberNo, setReset, setResetSearch, setTitleSearch } from "../../redux/spaceSlice";
 import { getAttachmentAll, getSpaceListAll } from "../../components/service/spaceServcie";
 import SortDropdownSpace from "../../components/listcomponents/SortDropdownSpace";
+import { jwtDecode } from'jwt-decode'
 
 
 
@@ -120,6 +121,19 @@ const FindSpaceList = () => {
   useEffect(()=>{
     // async 사용하여 데이터값 추출해보기
     // console.log("Redux space 상태 확인:", spaceVo);
+
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        console.log("decodedToken: ", decodedToken.no);
+        dispatch(setLoginMemberNo(decodedToken.no));
+      } catch (error) {
+        console.error("토큰 디코딩 실패:", error);
+      }
+    }
+
   const AttachmentData = async ()=>{
     const attachmentData = await getAttachmentAll();
      const listData = await getSpaceListAll(queryParams);
