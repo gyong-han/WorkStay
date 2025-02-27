@@ -113,7 +113,7 @@ const ReservationCard = ({ data, hideDate, moveDetail }) => {
             )}
             <TextDiv size="20px">₩{data.amount}</TextDiv>
           </PriceDiv>
-          {/* 🔥 progressState가 4 (이용완료)일 때 S-Log 작성 버튼 표시 */}
+          {/*progressState가 4 (이용완료)일 때 S-Log 작성 버튼 표시 */}
         </DataArea>
         <ImgTag src={data.filePath} alt="숙소 이미지" />
       </DataDiv>
