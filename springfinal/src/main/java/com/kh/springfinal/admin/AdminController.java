@@ -168,4 +168,16 @@ public class AdminController {
         String roomNo = roomNum.replace("\"","");
         return service.companionEditRoom(roomNo);
     }
+
+    //공간 삭제 목록조회
+    @PostMapping("deleteSpaceList")
+    public List<SpaceVo> deleteSpaceList(){
+        return service.getDeleteSpaceList();
+    }
+
+    //숙소 삭제 목록조회
+    @PostMapping("deleteStayList")
+    public List<StayVo> deleteStayList(){
+        return service.deleteStayList();
+    }
 }

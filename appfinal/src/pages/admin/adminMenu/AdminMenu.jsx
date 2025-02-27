@@ -15,6 +15,7 @@ import RoomEditReq from "./RoomEditReq";
 import SpaceEditReqDetail from "../SpaceEditReqDetail";
 import StayEditReqDetail from "../StayEditReqDetail";
 import RoomEditReqDetail from "../RoomEditReqDetail";
+import SpaceDelReq from "./SpaceDelReq";
 
 const AdminMenu = () => {
   return (
@@ -80,7 +81,7 @@ const AdminMenu = () => {
           path="/spaceDelReq/*"
           element={
             <AdminLayOut>
-              <SpaceEditReq />
+              <SpaceDelReq />
             </AdminLayOut>
           }
         />

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import HostBtn from "../host/hostComponents/HostBtn";
+import { jwtDecode } from "jwt-decode";
 
 const HomeDiv = styled.div`
   display: grid;
@@ -182,6 +183,20 @@ const SpaceEnrollReqDetail = () => {
   const [spaceThumbNail, setSpaceThumbNail] = useState({});
   const [spaceAttachList, setSpaceAttachList] = useState([]);
   const navigate = useNavigate();
+  const [role, setRole] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        setRole(decodedToken.pageNick); // 상태 업데이트
+      } catch (error) {
+        console.error("토큰 디코딩 실패:", error);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const fd = new FormData();
@@ -231,6 +246,27 @@ const SpaceEnrollReqDetail = () => {
           navigate("/adminMenu");
         }
       });
+  };
+
+  const cancelEnroll = () => {
+    const fd = new FormData();
+    fd.append("spaceNo", enrollReqNo);
+    fetch("http://127.0.0.1:8080/api/host/cancelEnrollSpace", {
+      method: "POST",
+      body: fd,
+    })
+      .then((resp) => resp.text())
+      .then((data) => {
+        if (data > 0) {
+          navigate("/hostMenu/hostMgmtMenu/spaceApprovalMgmt");
+          window.scrollTo(0, 0);
+        }
+      });
+  };
+
+  const moveMenu = () => {
+    navigate("/hostMenu/hostMgmtMenu/spaceApprovalMgmt");
+    window.scrollTo(0, 0);
   };
 
   const formatPhoneNumber = (phone) => {
@@ -499,24 +535,50 @@ const SpaceEnrollReqDetail = () => {
               </SpaceDiv>
               <BtnArea>
                 <div></div>
-                <HostBtn
-                  width="300px"
-                  height="50px"
-                  font="25px"
-                  backColor="#2B8C44"
-                  str="승인하기"
-                  color="white"
-                  f={approve}
-                />
-                <HostBtn
-                  width="300px"
-                  height="50px"
-                  font="25px"
-                  backColor="white"
-                  str="반려하기"
-                  color="black"
-                  f={companion}
-                />
+                {role === "HOST" ? (
+                  <>
+                    <HostBtn
+                      width="300px"
+                      height="50px"
+                      font="25px"
+                      backColor="#2B8C44"
+                      str="목록가기"
+                      color="white"
+                      f={moveMenu}
+                    />
+                    <HostBtn
+                      width="300px"
+                      height="50px"
+                      font="25px"
+                      backColor="white"
+                      str="입점 철회하기"
+                      color="black"
+                      f={cancelEnroll}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <HostBtn
+                      width="300px"
+                      height="50px"
+                      font="25px"
+                      backColor="#2B8C44"
+                      str="승인하기"
+                      color="white"
+                      f={approve}
+                    />
+                    <HostBtn
+                      width="300px"
+                      height="50px"
+                      font="25px"
+                      backColor="white"
+                      str="반려하기"
+                      color="black"
+                      f={companion}
+                    />
+                  </>
+                )}
+
                 <div></div>
               </BtnArea>
             </MainDiv>

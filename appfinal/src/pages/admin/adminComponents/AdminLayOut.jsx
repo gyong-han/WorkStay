@@ -129,14 +129,14 @@ const AdminLayOut = ({ children }) => {
               onClick={movePath}
               selected={selectedMenu === "stayDelReq"}
             >
-              숙소 취소 요청
+              숙소 삭제 목록
             </MenuDiv>
             <MenuDiv
               id="spaceDelReq"
               onClick={movePath}
               selected={selectedMenu === "spaceDelReq"}
             >
-              공간 취소 요청
+              공간 삭제 목록
             </MenuDiv>
           </MenuAreaDiv>
           <div>{children}</div>
