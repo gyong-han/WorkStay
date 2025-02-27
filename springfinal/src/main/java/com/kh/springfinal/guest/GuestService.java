@@ -128,4 +128,46 @@ public class GuestService {
         int result = mapper.spaceCancle(no,reno);
         return result;
     }
+
+    public GuestVo memberQuit(GuestVo vo) {
+        int result = mapper.memberQuit(vo);
+        return vo;
+    }
+
+    // 숙소 북마크 목록 조회
+    public List<StayBookmarkVo> getStayBookmarks(int no) {
+        return mapper.getStayBookmarks(no);
+    }
+
+    // 공간 북마크 목록 조회
+    public List<SpaceBookmarkVo> getSpaceBookmarks(int no) {
+        return mapper.getSpaceBookmarks(no);
+    }
+
+    // 북마크 추가/삭제 (숙소)
+    public void toggleStayBookmark(int no, int targetNo) {
+        List<StayBookmarkVo> bookmarks = mapper.checkStayBookmark(no);
+
+        if (!bookmarks.isEmpty()) { // 북마크가 이미 있으면 삭제
+            mapper.removeStayBookmark(no, targetNo);
+        } else { // 없으면 추가
+            mapper.addStayBookmark(no, targetNo);
+        }
+    }
+
+
+    // 북마크 추가/삭제 (공간)
+    public void toggleSpaceBookmark(int no, int targetNo) {
+        List<SpaceBookmarkVo> bookmarks = mapper.checkSpaceBookmark(no);
+
+        if (!bookmarks.isEmpty()) { // 북마크가 이미 있으면 삭제
+            mapper.removeSpaceBookmark(no, targetNo);
+        } else { // 없으면 추가
+            mapper.addSpaceBookmark(no, targetNo);
+        }
+    }
+
+
+
+
 }//class

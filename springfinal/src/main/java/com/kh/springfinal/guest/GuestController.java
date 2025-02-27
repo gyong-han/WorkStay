@@ -5,7 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/guest")
@@ -135,11 +137,36 @@ public class GuestController {
         return result;
     }
 
-
+    //회원 탈퇴 하기
+    @PostMapping("memberQuit")
+    public GuestVo memberQuit(@RequestBody GuestVo vo){
+        GuestVo result = service.memberQuit(vo);
+        return result;
+    }
 
     //s-log 불러오기
 
-    //북마크 불러오기
+
+    // 북마크 조회 (숙소 + 공간)
+    @GetMapping("/bookmarks/{no}")
+    public Map<String, List<?>> getBookmarks(@PathVariable int no) {
+        Map<String, List<?>> bookmarks = new HashMap<>();
+        bookmarks.put("stays", service.getStayBookmarks(no));
+        bookmarks.put("spaces", service.getSpaceBookmarks(no));
+        return bookmarks;
+    }
+
+    // 북마크 추가/삭제 (숙소)
+    @PostMapping("/stay/{no}/{targetNo}")
+    public void toggleStayBookmark(@PathVariable int no, @PathVariable int targetNo) {
+        service.toggleStayBookmark(no, targetNo);
+    }
+
+    // 북마크 추가/삭제 (공간)
+    @PostMapping("/space/{no}/{targetNo}")
+    public void toggleSpaceBookmark(@PathVariable int no, @PathVariable int targetNo) {
+        service.toggleSpaceBookmark(no, targetNo);
+    }
 
 
 }

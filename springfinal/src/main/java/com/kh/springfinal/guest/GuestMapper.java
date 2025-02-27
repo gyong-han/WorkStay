@@ -1,9 +1,6 @@
 package com.kh.springfinal.guest;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -269,4 +266,108 @@ public interface GuestMapper {
             """)
     int spaceCancle(String no, String reno);
 
-}
+
+    @Update("""
+            UPDATE MEMBER
+                SET DEL_YN ='Y'
+            WHERE EMAIL = #{email}
+            AND DEL_YN = 'N'
+            """)
+    int memberQuit(GuestVo vo);
+
+    // 숙소 북마크 목록 조회
+    @Select("""
+        SELECT 
+            S.NO AS no,
+            S.NAME AS name,
+            S.ADDRESS AS address,
+            S.TAGLINE AS tagline,
+            (SELECT MIN(FILE_PATH) FROM STAY_ATTACHMENT SA 
+             WHERE SA.STAY_NO = S.NO AND SA.DEL_YN = 'N') AS filePath
+        FROM STAY_BOOKMARK SB
+        JOIN STAY S ON SB.STAY_NO = S.NO
+        WHERE SB.MEMBER_NO = #{no}
+    """)
+    List<StayBookmarkVo> getStayBookmarks(@Param("no") int no);
+
+    // 공간 북마크 목록 조회
+    @Select("""
+        SELECT 
+            SP.NO AS no,
+            SP.NAME AS name,
+            SP.ADDRESS AS address,
+            SP.TAGLINE AS tagline,
+            (SELECT MIN(FILE_PATH) FROM SPACE_ATTACHMENT SA 
+             WHERE SA.SPACE_NO = SP.NO AND SA.DEL_YN = 'N') AS filePath
+        FROM SPACE_BOOKMARK SB
+        JOIN SPACE SP ON SB.SPACE_NO = SP.NO
+        WHERE SB.MEMBER_NO = #{no}
+    """)
+    List<SpaceBookmarkVo> getSpaceBookmarks(@Param("no") int no);
+
+
+    // 숙소 북마크 확인 (숙소 정보 + 대표 이미지)
+    @Select("""
+    SELECT 
+        COUNT(*) AS bookmark_count,
+        S.NO AS no,
+        S.NAME AS name,
+        S.ADDRESS AS address,
+        S.TAGLINE AS tagline,
+        (SELECT MIN(FILE_PATH) FROM STAY_ATTACHMENT SA 
+         WHERE SA.STAY_NO = S.NO AND SA.DEL_YN = 'N') AS filePath
+    FROM STAY_BOOKMARK SB
+    JOIN STAY S ON SB.STAY_NO = S.NO
+    WHERE SB.MEMBER_NO = #{no}
+    GROUP BY S.NO, S.NAME, S.ADDRESS, S.TAGLINE
+    """)
+    List<StayBookmarkVo> checkStayBookmark(@Param("no") int no);
+
+
+    // 공간 북마크 확인 (공간 정보 + 대표 이미지)
+    @Select("""
+    SELECT 
+            COUNT(*) AS bookmarkCount,
+            SP.NAME AS name,
+            SP.ADDRESS AS address,
+            SP.TAGLINE AS tagline,
+            (SELECT MIN(FILE_PATH) FROM SPACE_ATTACHMENT SA 
+             WHERE SA.SPACE_NO = SP.NO AND SA.DEL_YN = 'N') AS filePath
+        FROM SPACE_BOOKMARK SB
+        JOIN SPACE SP ON SB.SPACE_NO = SP.NO
+        WHERE SB.MEMBER_NO = #{no}
+        GROUP BY SP.NO, SP.NAME, SP.ADDRESS, SP.TAGLINE
+    """)
+    List<SpaceBookmarkVo> checkSpaceBookmark(@Param("no") int no);
+
+
+    @Insert("""
+        INSERT INTO STAY_BOOKMARK (MEMBER_NO, STAY_NO) 
+        VALUES (#{no}, #{targetNo})
+    """)
+    int addStayBookmark(@Param("no") int no, @Param("targetNo") int targetNo);
+
+    @Delete("""
+        DELETE FROM STAY_BOOKMARK 
+        WHERE MEMBER_NO = #{no} 
+        AND STAY_NO = #{targetNo}
+    """)
+    int removeStayBookmark(@Param("no") int no, @Param("targetNo") int targetNo);
+
+    @Insert("""
+        INSERT INTO SPACE_BOOKMARK (MEMBER_NO, SPACE_NO) 
+        VALUES (#{no}, #{targetNo})
+    """)
+    int addSpaceBookmark(@Param("no") int no, @Param("targetNo") int targetNo);
+
+    @Delete("""
+        DELETE FROM SPACE_BOOKMARK 
+        WHERE MEMBER_NO = #{no} 
+        AND SPACE_NO = #{targetNo}
+    """)
+    int removeSpaceBookmark(@Param("no") int no, @Param("targetNo") int targetNo);
+
+
+
+
+}//class

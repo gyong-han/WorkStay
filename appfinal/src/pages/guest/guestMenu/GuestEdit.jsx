@@ -4,6 +4,7 @@ import { FaCheck } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { logout } from "../../../redux/memberSlice";
 
 // const MainDiv = styled.div`
 //   display: flex;
@@ -108,11 +109,11 @@ const BtnTag = styled.button`
   width: 500px;
   height: 60px;
   margin-top: 100px;
+  cursor: pointer;
 `;
 
 const OutBtnTag = styled.button`
   display: grid;
-  /* justify-self: center; */
   border: none;
   align-items: center;
   border-radius: 5px;
@@ -123,6 +124,7 @@ const OutBtnTag = styled.button`
   width: 500px;
   height: 60px;
   margin-bottom: 100px;
+  cursor: pointer;
 `;
 
 const GuestEdit = () => {
@@ -205,100 +207,127 @@ const GuestEdit = () => {
 
   const passwordConditions = checkPasswordConditions(password);
 
+  const memberquit = async (e) => {
+    e.preventDefault();
+    // 🔹 undefined 대신 빈 문자열을 사용하여 전송
+    const updatedData = {
+      ...memberVo,
+      pwd: password.length > 0 ? password : "",
+    };
+
+    const response = await fetch("http://127.0.0.1:8080/api/guest/memberQuit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(updatedData), // 토큰에서 추출한 이메일 포함
+    });
+    if (response.ok) {
+      alert("회원 탈퇴 되었습니다.");
+      localStorage.removeItem("token");
+      dispatch(logout());
+      navi("/");
+    } else {
+      alert("탈퇴 실패. 다시 시도해주세요.");
+    }
+  };
   return (
-    <form onSubmit={handleSave}>
+    <>
       <MainWrapper>
-        {/* <MainDiv> */}
-        <MainSpanDiv>회원 정보 수정</MainSpanDiv>
-        {/* </MainDiv> */}
-        <ListDiv>
-          <ListSpanDiv>이메일</ListSpanDiv>
-          <DataDiv type="text" value={memberVo.email} readOnly></DataDiv>
-        </ListDiv>
-        <ListDiv>
-          <ListSpanDiv>이름</ListSpanDiv>
-          <DataDiv type="text" value={memberVo.name} readOnly></DataDiv>
-        </ListDiv>
-        <ListDiv>
-          <ListSpanDiv>비밀번호 변경</ListSpanDiv>
-          <DataDiv
-            type="password"
-            placeholder="비밀번호를 입력 해주세요."
-            value={password}
-            name="pwd"
-            maxLength={20}
-            onChange={(e) => setPassword(e.target.value)}
-          ></DataDiv>
-          <div style={{ marginTop: "10px" }}>
-            <PasswordCheckInput>
-              <PasswordCheck valid={passwordConditions.hasEnglish}>
-                <IoMdCheckmarkStyled valid={passwordConditions.hasEnglish} />
-                영문
-              </PasswordCheck>
+        <form onSubmit={handleSave}>
+          {/* <MainDiv> */}
+          <MainSpanDiv>회원 정보 수정</MainSpanDiv>
+          {/* </MainDiv> */}
+          <ListDiv>
+            <ListSpanDiv>이메일</ListSpanDiv>
+            <DataDiv type="text" value={memberVo.email} readOnly></DataDiv>
+          </ListDiv>
+          <ListDiv>
+            <ListSpanDiv>이름</ListSpanDiv>
+            <DataDiv type="text" value={memberVo.name} readOnly></DataDiv>
+          </ListDiv>
+          <ListDiv>
+            <ListSpanDiv>비밀번호 변경</ListSpanDiv>
+            <DataDiv
+              type="password"
+              placeholder="비밀번호를 입력 해주세요."
+              value={password}
+              name="pwd"
+              maxLength={20}
+              onChange={(e) => setPassword(e.target.value)}
+            ></DataDiv>
+            <div style={{ marginTop: "10px" }}>
+              <PasswordCheckInput>
+                <PasswordCheck valid={passwordConditions.hasEnglish}>
+                  <IoMdCheckmarkStyled valid={passwordConditions.hasEnglish} />
+                  영문
+                </PasswordCheck>
 
-              <PasswordCheck valid={passwordConditions.hasNumber}>
-                <IoMdCheckmarkStyled valid={passwordConditions.hasNumber} />
-                숫자
-              </PasswordCheck>
+                <PasswordCheck valid={passwordConditions.hasNumber}>
+                  <IoMdCheckmarkStyled valid={passwordConditions.hasNumber} />
+                  숫자
+                </PasswordCheck>
 
-              <PasswordCheck valid={passwordConditions.hasSpecialChar}>
-                <IoMdCheckmarkStyled
-                  valid={passwordConditions.hasSpecialChar}
-                />
-                특수문자
-              </PasswordCheck>
+                <PasswordCheck valid={passwordConditions.hasSpecialChar}>
+                  <IoMdCheckmarkStyled
+                    valid={passwordConditions.hasSpecialChar}
+                  />
+                  특수문자
+                </PasswordCheck>
 
-              <PasswordCheck valid={passwordConditions.validLength}>
-                <IoMdCheckmarkStyled valid={passwordConditions.validLength} />
-                8자 이상 20자 이하
-              </PasswordCheck>
-            </PasswordCheckInput>
-          </div>
-        </ListDiv>
-        <ListDiv>
-          <ListSpanDiv>닉네임</ListSpanDiv>
-          <DataDiv
-            type="text"
-            name="nick"
-            value={memberVo.nick}
-            onChange={handleInputChange}
-            placeholder="닉네임을 입력해주세요."
-          ></DataDiv>
-        </ListDiv>
-        <ListDiv>
-          <ListSpanDiv>휴대전화번호</ListSpanDiv>
-          <DataDiv
-            type="text"
-            placeholder="'-'을 제외한 휴대전화 번호를 입력해주세요. ex)01012345678."
-            name="phone"
-            value={memberVo.phone}
-            onChange={handleInputChange}
-          ></DataDiv>
-        </ListDiv>
-        <ListDiv>
-          <ListSpanDiv>생년월일</ListSpanDiv>
-          <DataDiv
-            type="text"
-            placeholder="생년월일을 입력해주세요.(8글자)"
-            name="birthDate"
-            value={memberVo.birthDate}
-            onChange={handleInputChange}
-          ></DataDiv>
-        </ListDiv>
-        <ListDiv>
-          <ListSpanDiv>마케팅 정보 수신</ListSpanDiv>
-          <CheckListDiv>
-            <CheckBtn /> 이벤트, 광고 등 혜택 알림 동의 (선택)
-          </CheckListDiv>
-          <SpanTag>
-            ※ 정보성 알림은 혜택 알림 동의 여부와 상관없이 제공됩니다. (예약
-            안내 및 메세지)
-          </SpanTag>
-        </ListDiv>
-        <BtnTag type="submit">저장하기</BtnTag>
-        <OutBtnTag>회원탈퇴</OutBtnTag>
+                <PasswordCheck valid={passwordConditions.validLength}>
+                  <IoMdCheckmarkStyled valid={passwordConditions.validLength} />
+                  8자 이상 20자 이하
+                </PasswordCheck>
+              </PasswordCheckInput>
+            </div>
+          </ListDiv>
+          <ListDiv>
+            <ListSpanDiv>닉네임</ListSpanDiv>
+            <DataDiv
+              type="text"
+              name="nick"
+              value={memberVo.nick}
+              onChange={handleInputChange}
+              placeholder="닉네임을 입력해주세요."
+            ></DataDiv>
+          </ListDiv>
+          <ListDiv>
+            <ListSpanDiv>휴대전화번호</ListSpanDiv>
+            <DataDiv
+              type="text"
+              placeholder="'-'을 제외한 휴대전화 번호를 입력해주세요. ex)01012345678."
+              name="phone"
+              value={memberVo.phone}
+              onChange={handleInputChange}
+            ></DataDiv>
+          </ListDiv>
+          <ListDiv>
+            <ListSpanDiv>생년월일</ListSpanDiv>
+            <DataDiv
+              type="text"
+              placeholder="생년월일을 입력해주세요.(8글자)"
+              name="birthDate"
+              value={memberVo.birthDate}
+              onChange={handleInputChange}
+            ></DataDiv>
+          </ListDiv>
+          <ListDiv>
+            <ListSpanDiv>마케팅 정보 수신</ListSpanDiv>
+            <CheckListDiv>
+              <CheckBtn /> 이벤트, 광고 등 혜택 알림 동의 (선택)
+            </CheckListDiv>
+            <SpanTag>
+              ※ 정보성 알림은 혜택 알림 동의 여부와 상관없이 제공됩니다. (예약
+              안내 및 메세지)
+            </SpanTag>
+          </ListDiv>
+          <BtnTag type="submit">저장하기</BtnTag>
+        </form>
+        <OutBtnTag onClick={memberquit}>회원탈퇴</OutBtnTag>
       </MainWrapper>
-    </form>
+    </>
   );
 };
 

@@ -1,6 +1,7 @@
 import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 const HomeDiv = styled.div`
@@ -62,6 +63,17 @@ const HostMainLayout = ({ children }) => {
   const navigate = useNavigate();
   const [selectedMenu, setSelectedMenu] = useState("");
   const [memberVo, setMemberVo] = useState({});
+  const [url, setUrl] = useState("");
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    const lastPath = pathname.split("/").pop();
+    setUrl(lastPath);
+  }, []);
+
+  useEffect(() => {
+    setSelectedMenu(url);
+  }, [url]);
 
   function movePath(e) {
     setSelectedMenu(e.target.id);
@@ -97,6 +109,10 @@ const HostMainLayout = ({ children }) => {
     }
   }, [token]);
 
+  const pageNick = useSelector((state) => {
+    return state.member.pageNick;
+  });
+
   return (
     <>
       <HomeDiv>
@@ -117,7 +133,11 @@ const HostMainLayout = ({ children }) => {
         </div>
         <MainDiv>
           <MenuAreaDiv>
-            <MenuDiv id="" onClick={movePath} selected={selectedMenu === ""}>
+            <MenuDiv
+              id=""
+              onClick={movePath}
+              selected={selectedMenu === "" || selectedMenu === "hostMenu"}
+            >
               숙소 예약 정보
             </MenuDiv>
             <MenuDiv
@@ -155,9 +175,17 @@ const HostMainLayout = ({ children }) => {
             >
               메세지
             </MenuDiv>
-            <MenuDiv id="hostMgmtMenu" onClick={movePath}>
-              호스트 관리
-            </MenuDiv>
+            {pageNick === "LOGIN" ? (
+              <></>
+            ) : pageNick === "GUEST" ? (
+              <></>
+            ) : pageNick === "HOST" ? (
+              <MenuDiv id="hostMgmtMenu" onClick={movePath}>
+                호스트 관리
+              </MenuDiv>
+            ) : pageNick === "ADMIN" ? (
+              <></>
+            ) : null}
           </MenuAreaDiv>
           <div>{children}</div>
         </MainDiv>

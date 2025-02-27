@@ -10,6 +10,7 @@ const MainCardDiv = styled.div`
   border-radius: 15px;
   width: 330px;
   height: 380px;
+  margin-bottom: 50px;
 `;
 
 const ImgDIv = styled.div`
@@ -29,15 +30,15 @@ const TopDiv = styled.div`
   grid-template-columns: 8fr 1fr 1fr;
   padding-left: 15px;
 `;
+
 const TitleDiv = styled.div`
   color: #202020;
   font-size: 25px;
-  font-weight: 500;
+  font-weight: 600;
 `;
 
 const MiddleDiv = styled.div`
   display: grid;
-  grid-template-columns: 1fr 2fr;
   padding-left: 15px;
 `;
 
@@ -47,38 +48,29 @@ const AddressDiv = styled.div`
   font-weight: 400;
 `;
 
-const PersonDiv = styled.div`
-  color: #202020;
-  font-size: 15px;
-  font-weight: 400;
-`;
-
-const PriceDiv = styled.div`
-  display: grid;
-  grid-row: 5;
-  color: #202020;
-  font-size: 20px;
-  font-weight: 500;
+const TaglineDiv = styled.div`
+  color: #505050;
+  font-size: 13px;
+  font-weight: 300;
   padding-left: 15px;
 `;
 
-const BookmarkCardlist = () => {
+const BookmarkCardlist = ({ data, type }) => {
   return (
     <>
       <MainCardDiv>
         <ImgDIv>
-          <Img src="https://images.stayfolio.com/system/pictures/images/000/227/543/original/2d1ec4dbef72d47b952882047fd4b7ef72aa4c28.jpg?1716887068" />
+          <Img src={data.filePath} alt="thumbnail" />
         </ImgDIv>
         <TopDiv>
-          <TitleDiv>노모어</TitleDiv>
+          <TitleDiv>{data.name}</TitleDiv>
           <Share />
-          <BookmarkIcon />
+          <BookmarkIcon type={type} targetNo={data.no} />
         </TopDiv>
         <MiddleDiv>
-          <AddressDiv>서울/서대문구</AddressDiv>
-          <PersonDiv>2~4명</PersonDiv>
+          <AddressDiv>{data.address}</AddressDiv>
         </MiddleDiv>
-        <PriceDiv>₩130,000</PriceDiv>
+        <TaglineDiv>{data.tagline}</TaglineDiv>
       </MainCardDiv>
     </>
   );
