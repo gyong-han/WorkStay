@@ -633,6 +633,7 @@ const MySpaceDetail = () => {
             <BtnArea>
               <div></div>
               <HostBtn
+                border="none"
                 width="300px"
                 height="50px"
                 font="25px"
@@ -642,6 +643,7 @@ const MySpaceDetail = () => {
                 f={moveList}
               />
               <HostBtn
+                border="1px solid #2B8C44"
                 width="300px"
                 height="50px"
                 font="25px"

@@ -234,6 +234,7 @@ const FirstEnrollStay = () => {
       </FooterFoot>
       <BtnArea>
         <HostBtn
+          border="none"
           width="400px"
           height="50px"
           backColor="#2B8C44"
