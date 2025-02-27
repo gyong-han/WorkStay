@@ -33,7 +33,7 @@ public interface RoomMapper {
             FROM ROOM R
             JOIN ROOM_ATTACHMENT RA ON (R.NO = RA.ROOM_NO)
             JOIN STAY S ON (R.STAY_NO = S.NO)
-            WHERE R.NO = 1
+            WHERE R.NO = #{no}
             AND RA.THUMBNAIL = 'Y'
             AND R.DEL_YN = 'N'
             """)

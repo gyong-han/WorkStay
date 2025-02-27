@@ -80,6 +80,7 @@ const RoomSlider = ({ rooms }) => {
             standard={room.standardGuest}
             max={room.maxGuest}
             price={room.price}
+            // titleHandler={}
             url={`/findstay/staybooking/${room.no}`}
           />
         ))}

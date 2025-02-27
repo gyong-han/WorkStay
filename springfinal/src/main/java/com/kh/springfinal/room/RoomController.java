@@ -27,9 +27,11 @@ public class RoomController {
     @PostMapping("detail")
     public RoomVo getRoomInfoByNo(@RequestBody Long no){
         try{
-            return roomService.getRoomInfoByNo(no);
+            RoomVo roomVo = roomService.getRoomInfoByNo(no);
+            return roomVo;
         }catch (Exception e){
             log.warn(e.getMessage());
+            System.out.println(e.getMessage());
             throw new IllegalStateException("[ROOM-ERROR-01]ROOM-DETAIL FAIL");
         }
     }
@@ -44,6 +46,14 @@ public class RoomController {
         }
     }
 
+    @PostMapping("isAvailable")
+    public void isAvailable(){
+        try{
+
+        }catch(Exception e){
+
+        }
+    }
 
 
 }

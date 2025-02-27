@@ -8,6 +8,7 @@ const roomSlice = createSlice({
     memberNo: "",
     rooms: [],
     name: "",
+    stayName: "",
     enrollDate: "",
     tagline: "",
     introduction: "",
@@ -22,6 +23,9 @@ const roomSlice = createSlice({
     reservationDate: [],
     reservationDone: [],
     reservationNo: "",
+    queenSize: 0,
+    doubleSize: 0,
+    singleSize: 0,
     adult: 0,
     child: 0,
     baby: 0,
@@ -40,6 +44,10 @@ const roomSlice = createSlice({
       state.standardGuest = action.payload.standardGuest;
       state.maxGuest = action.payload.maxGuest;
       state.features = action.payload.features;
+      state.stayName = action.payload.stayName;
+      state.queenSize = action.payload.queenSize;
+      state.doubleSize = action.payload.doubleSize;
+      state.singleSize = action.payload.singleSize;
     },
     selectCheckIn: (state, action) => {
       state.checkIn = action.payload.checkIn;
@@ -53,7 +61,9 @@ const roomSlice = createSlice({
       state.baby = action.payload.baby;
     },
     setRoomData: (state, action) => {
-      state.filePath = action.payload[0].filePath;
+      state.filePath = Array.isArray(action.payload)
+        ? action.payload[0]?.filePath
+        : action.payload.filePath;
       state.attachmentFilePaths = action.payload.attachmentFilePaths;
     },
     setStayReservationDate: (state, action) => {
