@@ -164,7 +164,6 @@ public class HostController {
     @PostMapping("modifyMySpace")
     public int modifyMySpace(SpaceVo spaceVo, @RequestParam List<String> features){
         int result = service.modifyMySpace(spaceVo,features);
-        System.out.println("result = " + result);
         return result;
     }
 
@@ -188,7 +187,14 @@ public class HostController {
     @PostMapping("modifyMyStay")
     public int modifyMyStay(StayVo stayVo){
         int result = service.modifyMyStay(stayVo);
-        System.out.println("result = " + result);
+        return result;
+    }
+
+    //내 숙소 입점삭제
+    @PostMapping("deleteMyStay")
+    public int deleteMyStay(@RequestBody String stayNum){
+        String stayNo = stayNum.replace("\"", "");
+        int result = service.deleteMyStay(stayNo);
         return result;
     }
 
@@ -202,6 +208,20 @@ public class HostController {
     @PostMapping("modifyMyRoom")
     public int modifyMyRoom(RoomVo roomVo,  @RequestParam List<String> features){
         int result = service.modifyMyRoom(roomVo,features);
+        return result;
+    }
+
+    //공간 입점 등록 요청 취소
+    @PostMapping("cancelEnrollSpace")
+    public int cancelEnrollSpace(@RequestParam String spaceNo){
+        int result = service.cancelEnrollSpace(spaceNo);
+        return result;
+    }
+
+    //숙소 입점 등록 요청 취소
+    @PostMapping("cancelEnrollStay")
+    public int cancelEnrollStay(@RequestParam String stayNo){
+        int result = service.cancelEnrollStay(stayNo);
         return result;
     }
 }

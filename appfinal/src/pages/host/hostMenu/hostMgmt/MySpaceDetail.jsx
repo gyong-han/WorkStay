@@ -118,7 +118,6 @@ const DataSelect = styled.select`
 `;
 
 const Hr = styled.hr`
-  margin-top: 60px;
   margin-bottom: 30px;
   background-color: #d9d9d9;
 `;
@@ -142,6 +141,15 @@ const Span = styled.span`
   font-size: 25px;
   margin-left: 20px;
   margin-right: 20px;
+  color: ${(props) => props.color};
+`;
+
+const Span2 = styled.span`
+  font-size: 20px;
+  color: red;
+  margin-left: 970px;
+  width: 110px;
+  cursor: pointer;
 `;
 
 const BtnArea = styled.div`
@@ -285,12 +293,23 @@ const MySpaceDetail = () => {
         "content-type": "application/json",
       },
       body: JSON.stringify(spaceNum),
-    });
+    })
+      .then((resp) => resp.text())
+      .then((data) => {
+        if (data > 0) {
+          navigate("/hostMenu/hostMgmtMenu/mySpaceMgmt");
+        }
+      });
   };
 
   const formatBrn = (brn) => {
     brn = String(brn);
     return brn.replace(/(\d{3})(\d{2})(\d{5})/, "$1-$2-$3");
+  };
+
+  const moveList = () => {
+    navigate("/hostMenu/hostMgmtMenu/mySpaceMgmt");
+    window.scrollTo(0, 0);
   };
 
   return (
@@ -309,6 +328,7 @@ const MySpaceDetail = () => {
               >
                 내 공간 관리
               </HeaderDiv>
+              <Span2 onClick={deleteSpace}>입점 삭제하기</Span2>
               <Hr />
             </div>
             <SpaceDiv>
@@ -576,20 +596,19 @@ const MySpaceDetail = () => {
                 height="50px"
                 font="25px"
                 backColor="#2B8C44"
-                str="수정하기"
+                str="목록가기"
                 color="white"
-                f={editSpace}
+                f={moveList}
               />
               <HostBtn
                 width="300px"
                 height="50px"
                 font="25px"
                 backColor="white"
-                str="삭제하기"
+                str="수정하기"
                 color="black"
-                f={deleteSpace}
+                f={editSpace}
               />
-              <div></div>
             </BtnArea>
           </MainDiv>
         </HomeDiv>
