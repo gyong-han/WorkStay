@@ -411,4 +411,21 @@ public interface AdminMapper {
             AND STATUS_NO = '1' 
             """)
     int companionEditRoom(String roomNo);
+
+    @Select("""
+            SELECT M.NAME AS HOST_NAME,M.PHONE,S.NAME,TO_CHAR(S.MODIFY_DATE, 'YYYY.MM.DD') AS MODIFY_DATE
+            FROM SPACE S
+            JOIN MEMBER M ON (S.HOST_NO = M.NO)
+            WHERE S.STATUS_NO = '7'
+            """)
+    List<SpaceVo> getDeleteSpaceList();
+
+    @Select("""
+            SELECT M.NAME AS HOST_NAME,M.PHONE,S.NAME,TO_CHAR(S.MODIFY_DATE, 'YYYY.MM.DD') AS MODIFY_DATE
+            FROM STAY S
+            JOIN MEMBER M ON (S.HOST_NO = M.NO)
+            WHERE S.STATUS_NO = '7'            
+            """)
+    List<StayVo> getDeleteStayList();
+
 }

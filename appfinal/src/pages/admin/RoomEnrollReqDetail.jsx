@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import EnrollReqRoom from "./adminComponents/EnrollReqRoom";
 import styled from "styled-components";
 import HostBtn from "../host/hostComponents/HostBtn";
+import { jwtDecode } from "jwt-decode";
 
 const HomeDiv = styled.div`
   display: grid;
@@ -11,7 +12,7 @@ const HomeDiv = styled.div`
 
 const MainDiv = styled.div`
   display: grid;
-  grid-template-rows: 150px auto 200px 150px;
+  grid-template-rows: 150px auto 250px 150px;
 `;
 
 const HeaderDiv = styled.div`
@@ -35,7 +36,7 @@ const HeaderDiv = styled.div`
 `;
 
 const BtnArea = styled.div`
-  margin-top: 60px;
+  margin-top: 80px;
   margin-bottom: 60px;
   display: grid;
   grid-template-columns: 0.5fr 1fr 1fr 0.5fr;
@@ -56,6 +57,20 @@ const RoomEnrollReqDetail = () => {
   const [roomThumbNailArr, setRoomThumbNailArr] = useState([]);
   const [roomAttachArr, setRoomAttachArr] = useState([]);
   const navigate = useNavigate();
+  const [role, setRole] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        setRole(decodedToken.pageNick);
+      } catch (error) {
+        console.error("토큰 디코딩 실패:", error);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const fd = new FormData();
@@ -109,6 +124,27 @@ const RoomEnrollReqDetail = () => {
       });
   };
 
+  const cancelEnroll = () => {
+    const fd = new FormData();
+    fd.append("stayNo", enrollReqNo);
+    fetch("http://127.0.0.1:8080/api/host/cancelEnrollStay", {
+      method: "POST",
+      body: fd,
+    })
+      .then((resp) => resp.text())
+      .then((data) => {
+        if (data > 0) {
+          navigate("/hostMenu/hostMgmtMenu/stayApprovalMgmt");
+          window.scrollTo(0, 0);
+        }
+      });
+  };
+
+  const moveMenu = () => {
+    navigate("/hostMenu/hostMgmtMenu/stayApprovalMgmt");
+    window.scrollTo(0, 0);
+  };
+
   return (
     <>
       <HomeDiv>
@@ -145,26 +181,53 @@ const RoomEnrollReqDetail = () => {
           </div>
           <BtnArea>
             <div></div>
-            <HostBtn
-              width="300px"
-              height="50px"
-              font="25px"
-              top="100px"
-              backColor="#2B8C44"
-              str="승인하기"
-              color="white"
-              f={approve}
-            />
-            <HostBtn
-              width="300px"
-              height="50px"
-              font="25px"
-              top="100px"
-              backColor="white"
-              str="반려하기"
-              color="black"
-              f={companion}
-            />
+            {role === "HOST" ? (
+              <>
+                <HostBtn
+                  top="90px"
+                  width="300px"
+                  height="60px"
+                  font="25px"
+                  backColor="#2B8C44"
+                  str="목록가기"
+                  color="white"
+                  f={moveMenu}
+                />
+                <HostBtn
+                  top="90px"
+                  width="300px"
+                  height="60px"
+                  font="25px"
+                  backColor="white"
+                  str="입점 철회하기"
+                  color="black"
+                  f={cancelEnroll}
+                />
+              </>
+            ) : (
+              <>
+                <HostBtn
+                  top="90px"
+                  width="300px"
+                  height="50px"
+                  font="25px"
+                  backColor="#2B8C44"
+                  str="승인하기"
+                  color="white"
+                  f={approve}
+                />
+                <HostBtn
+                  top="90px"
+                  width="300px"
+                  height="50px"
+                  font="25px"
+                  backColor="white"
+                  str="반려하기"
+                  color="black"
+                  f={companion}
+                />
+              </>
+            )}
             <div></div>
           </BtnArea>
         </MainDiv>

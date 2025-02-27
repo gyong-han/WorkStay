@@ -209,4 +209,13 @@ public class AdminService {
     public int companionEditRoom(String roomNo) {
         return mapper.companionEditRoom(roomNo);
     }
+
+    public List<SpaceVo> getDeleteSpaceList() {
+        List<SpaceVo> spaceList = mapper.getDeleteSpaceList();
+        return spaceList;
+    }
+
+    public List<StayVo> deleteStayList() {
+        return mapper.getDeleteStayList();
+    }
 }
