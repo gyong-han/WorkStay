@@ -168,6 +168,7 @@ public class GuestService {
     }
 
 
-
-
+    public SlogListVo slogList(String memberNo) {
+        return mapper.slogList(memberNo);
+    }
 }//class
