@@ -4,6 +4,7 @@ import HostBtn from "../host/hostComponents/HostBtn";
 import EnrollReqRoom from "./adminComponents/EnrollReqRoom";
 import styled from "styled-components";
 import EditReqRoom from "./adminComponents/EditReqRoom";
+import Alert from "../../components/Alert";
 
 const HomeDiv = styled.div`
   display: grid;
@@ -49,6 +50,19 @@ const Hr = styled.hr`
   background-color: #d9d9d9;
 `;
 
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
+
 const RoomEditReqDetail = () => {
   const { roomNum } = useParams();
   const [roomVoArr, setRoomVoArr] = useState([]);
@@ -57,6 +71,8 @@ const RoomEditReqDetail = () => {
   const [roomThumbNailArr, setRoomThumbNailArr] = useState([]);
   const [roomAttachArr, setRoomAttachArr] = useState([]);
   const navigate = useNavigate();
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [isAlertOpen2, setIsAlertOpen2] = useState(false);
 
   useEffect(() => {
     const fd = new FormData();
@@ -89,9 +105,15 @@ const RoomEditReqDetail = () => {
       .then((resp) => resp.text())
       .then((data) => {
         if (data > 0) {
-          navigate("/adminMenu/roomEditReq");
+          setIsAlertOpen(true);
         }
       });
+  };
+
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
+    navigate("/adminMenu/roomEditReq");
+    window.scrollTo(0, 0);
   };
 
   const companion = () => {
@@ -105,9 +127,15 @@ const RoomEditReqDetail = () => {
       .then((resp) => resp.text())
       .then((data) => {
         if (data > 0) {
-          navigate("/adminMenu/roomEditReq");
+          setIsAlertOpen2(true);
         }
       });
+  };
+
+  const handleAlertClose2 = () => {
+    setIsAlertOpen2(false);
+    navigate("/adminMenu/roomEditReq");
+    window.scrollTo(0, 0);
   };
 
   return (
@@ -138,24 +166,26 @@ const RoomEditReqDetail = () => {
           <BtnArea>
             <div></div>
             <HostBtn
+              border="none"
               width="300px"
               height="50px"
               font="25px"
               top="100px"
               backColor="#2B8C44"
-              str="승인하기"
+              str="반려하기"
               color="white"
-              f={approve}
+              f={companion}
             />
             <HostBtn
+              border="1px solid #2B8C44"
               width="300px"
               height="50px"
               font="25px"
               top="100px"
               backColor="white"
-              str="반려하기"
+              str="승인하기"
               color="black"
-              f={companion}
+              f={approve}
             />
             <div></div>
           </BtnArea>
@@ -163,6 +193,30 @@ const RoomEditReqDetail = () => {
 
         <div></div>
       </HomeDiv>
+      {isAlertOpen && (
+        <Backdrop>
+          <Alert
+            title="독채 수정 승인"
+            titleColor="#049dd9"
+            message="수정 승인되었습니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose}
+          />
+        </Backdrop>
+      )}
+      {isAlertOpen2 && (
+        <Backdrop>
+          <Alert
+            title="독채 수정 반려"
+            titleColor="#049dd9"
+            message="수정 반려되었습니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose2}
+          />
+        </Backdrop>
+      )}
     </>
   );
 };

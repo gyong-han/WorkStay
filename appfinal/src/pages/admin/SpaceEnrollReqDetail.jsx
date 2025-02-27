@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import HostBtn from "../host/hostComponents/HostBtn";
 import { jwtDecode } from "jwt-decode";
+import Alert from "../../components/Alert";
 
 const HomeDiv = styled.div`
   display: grid;
@@ -174,6 +175,19 @@ const TextDiv = styled.div`
   margin-right: ${(props) => props.right};
 `;
 
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
+
 const SpaceEnrollReqDetail = () => {
   const { enrollReqNo } = useParams();
   const [hostVo, setHostvo] = useState({});
@@ -184,6 +198,8 @@ const SpaceEnrollReqDetail = () => {
   const [spaceAttachList, setSpaceAttachList] = useState([]);
   const navigate = useNavigate();
   const [role, setRole] = useState("");
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [isAlertOpen2, setIsAlertOpen2] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -227,10 +243,16 @@ const SpaceEnrollReqDetail = () => {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        if (data === 1) {
-          navigate("/adminMenu");
+        if (data > 0) {
+          setIsAlertOpen(true);
         }
       });
+  };
+
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
+    navigate("/adminMenu/spaceEnrollReq");
+    window.scrollTo(0, 0);
   };
 
   const companion = () => {
@@ -242,10 +264,16 @@ const SpaceEnrollReqDetail = () => {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        if (data === 1) {
-          navigate("/adminMenu");
+        if (data > 0) {
+          setIsAlertOpen2(true);
         }
       });
+  };
+
+  const handleAlertClose2 = () => {
+    setIsAlertOpen2(false);
+    navigate("/adminMenu/spaceEnrollReq");
+    window.scrollTo(0, 0);
   };
 
   const cancelEnroll = () => {
@@ -538,6 +566,7 @@ const SpaceEnrollReqDetail = () => {
                 {role === "HOST" ? (
                   <>
                     <HostBtn
+                      border="none"
                       width="300px"
                       height="50px"
                       font="25px"
@@ -547,6 +576,7 @@ const SpaceEnrollReqDetail = () => {
                       f={moveMenu}
                     />
                     <HostBtn
+                      border="1px solid #2B8C44"
                       width="300px"
                       height="50px"
                       font="25px"
@@ -559,22 +589,24 @@ const SpaceEnrollReqDetail = () => {
                 ) : (
                   <>
                     <HostBtn
+                      border="none"
                       width="300px"
                       height="50px"
                       font="25px"
                       backColor="#2B8C44"
-                      str="승인하기"
+                      str="반려하기"
                       color="white"
-                      f={approve}
+                      f={companion}
                     />
                     <HostBtn
+                      border="1px solid #2B8C44"
                       width="300px"
                       height="50px"
                       font="25px"
                       backColor="white"
-                      str="반려하기"
+                      str="승인하기"
                       color="black"
-                      f={companion}
+                      f={approve}
                     />
                   </>
                 )}
@@ -584,6 +616,30 @@ const SpaceEnrollReqDetail = () => {
             </MainDiv>
           </HomeDiv>
         </form>
+        {isAlertOpen && (
+          <Backdrop>
+            <Alert
+              title="공간 입점 승인"
+              titleColor="#049dd9"
+              message="입점 승인되었습니다."
+              buttonText="확인"
+              buttonColor="#049dd9"
+              onClose={handleAlertClose}
+            />
+          </Backdrop>
+        )}
+        {isAlertOpen2 && (
+          <Backdrop>
+            <Alert
+              title="공간 입점 반려"
+              titleColor="#049dd9"
+              message="입점 반려되었습니다."
+              buttonText="확인"
+              buttonColor="#049dd9"
+              onClose={handleAlertClose2}
+            />
+          </Backdrop>
+        )}
       </>
     </>
   );
