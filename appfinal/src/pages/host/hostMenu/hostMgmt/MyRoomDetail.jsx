@@ -104,7 +104,7 @@ const MyRoomDetail = () => {
   };
 
   const moveList = () => {
-    navigate("/hostMenu/hostMgmtMenu/");
+    navigate("/hostMenu/hostMgmtMenu/myStayMgmt");
     window.scrollTo(0, 0);
   };
 
@@ -151,9 +151,9 @@ const MyRoomDetail = () => {
               font="25px"
               top="100px"
               backColor="#2B8C44"
-              str="수정하기"
+              str="목록가기"
               color="white"
-              f={editRoom}
+              f={moveList}
             />
             <HostBtn
               width="300px"
@@ -161,9 +161,9 @@ const MyRoomDetail = () => {
               font="25px"
               top="100px"
               backColor="white"
-              str="목록가기"
+              str="수정하기"
               color="black"
-              f={moveList}
+              f={editRoom}
             />
             <div></div>
           </BtnArea>

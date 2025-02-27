@@ -65,7 +65,6 @@ const DataInput = styled.input`
 `;
 
 const Hr = styled.hr`
-  margin-top: 40px;
   background-color: #d9d9d9;
   margin-bottom: 30px;
 `;
@@ -158,6 +157,14 @@ const RadioArea = styled.div`
   grid-template-columns: repeat(4, 1fr);
 `;
 
+const Span2 = styled.span`
+  font-size: 20px;
+  color: red;
+  margin-left: 970px;
+  width: 110px;
+  cursor: pointer;
+`;
+
 const MyStayDetail = () => {
   const [phone, setPhone] = useState("");
   const [formData, setFormData] = useState({
@@ -232,6 +239,22 @@ const MyStayDetail = () => {
     return brn.replace(/(\d{3})(\d{2})(\d{5})/, "$1-$2-$3");
   };
 
+  const deleteSpace = () => {
+    fetch("http://127.0.0.1:8080/api/host/deleteMyStay", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(stayNum),
+    })
+      .then((resp) => resp.text())
+      .then((data) => {
+        if (data > 0) {
+          navigate("/hostMenu/hostMgmtMenu/myStayMgmt");
+        }
+      });
+  };
+
   return (
     <>
       <HomeDiv>
@@ -247,6 +270,7 @@ const MyStayDetail = () => {
             >
               내 숙소 관리
             </HeaderDiv>
+            <Span2 onClick={deleteSpace}>입점 삭제하기</Span2>
           </div>
           <div>
             <Hr />
@@ -375,18 +399,18 @@ const MyStayDetail = () => {
               height="50px"
               font="25px"
               backColor="#2B8C44"
-              str="수정하기"
+              str="다음"
               color="white"
-              f={editStay}
+              f={moveRoomDetail}
             />
             <HostBtn
               width="300px"
               height="50px"
               font="25px"
               backColor="white"
-              str="다음"
+              str="수정하기"
               color="black"
-              f={moveRoomDetail}
+              f={editStay}
             />
             <div></div>
           </BtnArea>

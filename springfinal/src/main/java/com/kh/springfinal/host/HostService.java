@@ -186,6 +186,18 @@ public class HostService {
             result3 = mapper.insertMyRoomFeatures(roomVo,feature);
         }
         int result4 = mapper.insertMyRoomEdit(roomVo);
-        return 1;
+        return result1 * result2 * result3 * result4;
+    }
+
+    public int cancelEnrollSpace(String spaceNo) {
+        return mapper.cancelEnrollSpace(spaceNo);
+    }
+
+    public int cancelEnrollStay(String stayNo) {
+        return mapper.cancelEnrollStay(stayNo);
+    }
+
+    public int deleteMyStay(String stayNo) {
+        return mapper.deleteMyStay(stayNo);
     }
 }

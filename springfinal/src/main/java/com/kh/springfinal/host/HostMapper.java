@@ -184,7 +184,7 @@ public interface HostMapper {
             FROM SPACE S
             JOIN SPACE_ATTACHMENT SA ON (S.NO = SA.SPACE_NO)
             WHERE HOST_NO = #{hostNo}
-            AND (STATUS_NO = '2' OR STATUS_NO = '7')
+            AND STATUS_NO = '2'
             AND THUMBNAIL = 'Y'
             """)
     List<SpaceVo> getMySpaceList(String hostNo);
@@ -195,7 +195,7 @@ public interface HostMapper {
             JOIN ROOM R ON S.NO = R.STAY_NO
             JOIN ROOM_ATTACHMENT RA ON R.NO = RA.ROOM_NO
             WHERE HOST_NO = #{hostNo}
-            AND (STATUS_NO = '2' OR STATUS_NO = '7')
+            AND STATUS_NO = '2'
             AND THUMBNAIL = 'Y'
             GROUP BY S.NO, S.NAME, ADDRESS, S.ENROLL_DATE
             """)
@@ -338,7 +338,8 @@ public interface HostMapper {
 
     @Update("""
             UPDATE SPACE SET
-            STATUS_NO = '7'
+            STATUS_NO = '7',
+            MODIFY_DATE = SYSDATE
             WHERE NO = #{spaceNo}
             """)
     int deleteMySpace(String spaceNo);
@@ -443,4 +444,26 @@ public interface HostMapper {
             (SEQ_EDIT_ROOM.NEXTVAL,#{no},#{name},#{introduction})
             """)
     int insertMyRoomEdit(RoomVo roomVo);
+
+    @Update("""
+            UPDATE SPACE SET
+            STATUS_NO = '8'
+            WHERE NO = #{spaceNo}
+            """)
+    int cancelEnrollSpace(String spaceNo);
+
+    @Update("""
+            UPDATE STAY SET
+            STATUS_NO = '8'
+            WHERE NO = #{stayNo}            
+            """)
+    int cancelEnrollStay(String stayNo);
+
+    @Update("""
+            UPDATE STAY SET
+            STATUS_NO = '7',
+            MODIFY_DATE = SYSDATE
+            WHERE NO = #{stayNo}
+            """)
+    int deleteMyStay(String stayNo);
 }
