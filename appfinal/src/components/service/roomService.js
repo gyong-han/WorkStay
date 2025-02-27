@@ -52,4 +52,26 @@ const getRoomDetail = async (x) => {
   }
 };
 
-export { getRoomAttachmentList, getRoomListAll, getRoomDetail };
+const RoomReservation = async (x) => {
+  try {
+    const result = await fetch(`${BASE_URL}/reservation/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(x),
+    });
+    if (!result.ok) {
+      throw new Error(`HTTP error! Status: ${result.status}`);
+    }
+    const data = await result.json();
+    return data;
+  } catch (e) {
+    console.log("Room Reservation Error", e);
+  }
+};
+
+export {
+  getRoomAttachmentList,
+  getRoomListAll,
+  getRoomDetail,
+  RoomReservation,
+};

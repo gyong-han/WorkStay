@@ -75,15 +75,7 @@ const PackageContentDiv = styled.div`
     text-decoration: underline solid #fafafa;
   }
 `;
-const RoomDisplay = ({
-  img,
-  title,
-  standard,
-  max,
-  price,
-  titleHandler,
-  url,
-}) => {
+const RoomDisplay = ({ img, title, standard, max, price, url }) => {
   const priceWon = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
   return (
@@ -91,11 +83,7 @@ const RoomDisplay = ({
       <Layout>
         <div></div>
         <Link to={url}>
-          <PackageContentDiv
-            onClick={() => {
-              titleHandler();
-            }}
-          >
+          <PackageContentDiv onClick={() => {}}>
             <div>{title}</div>
             <div>
               기준 {standard}명/최대{max}명

@@ -17,7 +17,6 @@ public class RoomVo {
     private String delYn;
     private String enrollDate;
     private String modifyDate;
-    private String phone;
 
     private String checkIn;
     private String checkOut;
@@ -25,10 +24,13 @@ public class RoomVo {
     private String[] attachmentFilePaths;
     private List<String> features;
     private String hostName;
-  
+
     private String singleSize;
     private String doubleSize;
     private String queenSize;
 
     private String stayName;
+    private String[] useDay;
+    private String paymentName;
+
 }
