@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import HostApprovalCard from "../../hostComponents/HostApprovalCard";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const MainDiv = styled.div`
   display: grid;
@@ -19,9 +20,24 @@ const MyStayMgmt = () => {
   window.scrollTo(0, 0);
   const [dataArr, setDataArr] = useState([]);
   const navigate = useNavigate();
+  const [hostNo, setHostNo] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        setHostNo(decodedToken.no);
+      } catch (error) {
+        console.error("토큰 디코딩 실패:", error);
+      }
+    }
+  }, []);
+
   useEffect(() => {
     const fd = new FormData();
-    fd.append("hostNo", "1");
+    fd.append("hostNo", hostNo);
     fetch("http://127.0.0.1:8080/api/host/myStay", {
       method: "POST",
       body: fd,
@@ -30,7 +46,7 @@ const MyStayMgmt = () => {
       .then((data) => {
         setDataArr(data);
       });
-  }, []);
+  }, [hostNo]);
 
   const moveDetail = (stayNum) => {
     navigate(`myStayDetail/${stayNum}`);

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Address from "../../../components/address/Address";
 import HostBtn from "../hostComponents/HostBtn";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const HomeDiv = styled.div`
   display: grid;
@@ -168,6 +169,19 @@ const SecondEnrollStay = () => {
     business_type_no: "1",
   });
   const navigate = useNavigate();
+  const [hostNo, setHostNo] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        setHostNo(decodedToken.no);
+      } catch (error) {
+        console.error("토큰 디코딩 실패:", error);
+      }
+    }
+  }, []);
 
   const handleChange = (e) => {
     setFormData((prev) => {
@@ -217,7 +231,7 @@ const SecondEnrollStay = () => {
     fd.append("tagline", formData.tagline);
     fd.append("season", formData.season);
     fd.append("introduction", formData.introduction);
-    fd.append("hostNo", "1");
+    fd.append("hostNo", hostNo);
 
     fetch("http://127.0.0.1:8080/api/host/enroll/stay", {
       method: "POST",
@@ -225,7 +239,6 @@ const SecondEnrollStay = () => {
     })
       .then((resp) => resp.text())
       .then((data) => {
-        console.log("data::::", data);
         navigate(`/enroll/stay/third/${data}`);
         window.scrollTo(0, 0);
       });

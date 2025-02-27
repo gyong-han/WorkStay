@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const HomeDiv = styled.div`
@@ -59,7 +59,17 @@ const MenuDiv = styled.div`
 const HostLayout = ({ children }) => {
   const navigate = useNavigate();
   const [selectedMenu, setSelectedMenu] = useState("");
-  localStorage.setItem("selected", "");
+  const [url, setUrl] = useState("");
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    const lastPath = pathname.split("/").pop();
+    setUrl(lastPath);
+  }, []);
+
+  useEffect(() => {
+    setSelectedMenu(url);
+  }, [url]);
 
   function movePath(e) {
     setSelectedMenu(e.target.id);
@@ -86,7 +96,11 @@ const HostLayout = ({ children }) => {
         </div>
         <MainDiv>
           <MenuAreaDiv>
-            <MenuDiv id="" onClick={movePath} selected={selectedMenu === ""}>
+            <MenuDiv
+              id=""
+              onClick={movePath}
+              selected={selectedMenu === "" || selectedMenu === "hostMgmtMenu"}
+            >
               숙소 예약 관리
             </MenuDiv>
             <MenuDiv
