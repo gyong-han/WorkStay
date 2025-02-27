@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { setArea } from "../../redux/spaceSlice";
 import { setAddress } from "../../redux/staySlice";
+import { RiResetRightFill } from "react-icons/ri";
 
 const Overlay = styled.div`
   position: fixed;
@@ -125,8 +126,7 @@ const FooterDiv = styled.div`
     width: 60px;
     height: 60px;
     border: none;
-    background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTk-eoAWRZdo8KMKu65ebE8CvWkCFmsx9HqeQ&s);
-    background-size: cover;
+    cursor: pointer;
   }
   & > div > button:nth-child(2) {
     width: 145px;
@@ -280,7 +280,7 @@ const Area = ({ isOpen, onClose }) => {
         </SelectDivOuter>
         <FooterDiv>
           <div>
-            <button onClick={uncheckAllRadios}></button>
+            <RiResetRightFill onClick={uncheckAllRadios} size={30} />
             <button onClick={submitBtn}>Search</button>
           </div>
         </FooterDiv>

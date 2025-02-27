@@ -10,8 +10,6 @@ import CalendarTime from "./CalendalTime";
 import Calendar from "./Calendal";
 
 const LayoutDiv = styled.div`
-
-
   width: 100%;
   height: 60px;
   display: grid;
@@ -37,8 +35,7 @@ const BtnDiv = styled.div`
   border: 1px solid #049dd9;
   border-radius: 10px;
   color: #202020;
-  background-color: #F9F9F9;
-
+  background-color: #f9f9f9;
 
   & > div {
     width: 100%;
@@ -54,7 +51,7 @@ const BtnDiv = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #F9F9F9;
+    background-color: #f9f9f9;
   }
   & > div:nth-child(2) {
     display: flex;
@@ -67,7 +64,7 @@ const BtnDiv = styled.div`
   }
 `;
 
-const Display = ({isTimeMode}) => {
+const Display = ({ isTimeMode }) => {
   const [isModal1Open, setIsModal1Open] = useState(false);
   const [isModal2Open, setIsModal2Open] = useState(false);
 
@@ -76,11 +73,9 @@ const Display = ({isTimeMode}) => {
 
   const openModal2 = () => setIsModal2Open(true);
   const closeModal2 = () => setIsModal2Open(false);
-  
 
   return (
     <>
-      
       <LayoutDiv>
         <div></div>
         <BtnDiv>
@@ -93,15 +88,15 @@ const Display = ({isTimeMode}) => {
           </div>
           <div>
             {isTimeMode ? (
-              <CalendarTime type="button" setSelectDate={()=>{}}>
+              <CalendarTime type="button" setSelectDate={() => {}}>
                 <CiCalendar size={20} /> 일정
               </CalendarTime>
             ) : (
-              <Calendar type="button">
+              <Calendar w="170px" type="button">
                 <CiCalendar size={20} /> 일정
               </Calendar>
             )}
-            </div>
+          </div>
 
           <div>
             <button onClick={openModal2}>
