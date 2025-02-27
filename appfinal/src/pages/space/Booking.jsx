@@ -368,19 +368,19 @@ const Booking = () => {
   // fd.append("request",request);
   // fd.append("amount",priceData);
   // fd.append("useDay",spaceVo.reservationDate);
-  const fd = {
-    spaceNo: spaceVo.no,
-    memberNo: spaceVo.memberNo,
-    paymentNo: 1,
-    packageNo: packageNo,
-    adult: spaceVo.adult,
-    child: spaceVo.child,
-    baby: spaceVo.baby,
-    request: request,
-    amount: priceData,
-    useDay: spaceVo.reservationDate,
-    name : spaceVo.name,
-};
+    const fd = {
+      spaceNo: spaceVo.no,
+      memberNo: spaceVo.memberNo,
+      paymentNo: 1,
+      packageNo: packageNo,
+      adult: spaceVo.adult,
+      child: spaceVo.child,
+      baby: spaceVo.baby,
+      request: request,
+      amount: priceData,
+      useDay: spaceVo.reservationDate,
+      name : spaceVo.name,
+  };
 
 // 이제 `fd` 객체는 로컬스토리지에 저장할 수 있습니다.
 
@@ -497,10 +497,7 @@ const fdData = {
           <div>
             <RadioBtn checked name="kakao" />
             <Info>카카오페이</Info>
-            <RadioBtn checked name="kakao" />
-            <Info>계좌이체</Info>
-            
-            
+
           </div>
         </ReservationDiv>
         <ReservationLine />
