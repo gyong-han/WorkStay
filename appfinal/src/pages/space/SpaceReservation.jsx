@@ -133,7 +133,7 @@ const SpaceReservation = () => {
     Reservation ();
   },[])
 
-  const cleaned = memberInfo.phone.replace(/\D/g, '');
+  const cleaned = memberInfo.phone?.replace(/\D/g, '') || ''; 
   const formattedPhoneNumber = cleaned.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
 
 

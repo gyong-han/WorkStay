@@ -38,7 +38,7 @@ public interface SpaceMapper {
             S.INTRODUCTION,
             S.DEL_YN,
             S.ENROLL_DATE,
-            S.MODIFIY_DATE,
+            S.MODIFY_DATE,
             S.BRN,
             SA.FILE_PATH
             FROM SPACE S

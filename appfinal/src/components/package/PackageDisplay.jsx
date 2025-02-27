@@ -1,6 +1,5 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Layout = styled.div`
@@ -77,16 +76,18 @@ const PackageContentDiv = styled.div`
 `;
 const PackageDisplay = ({img,title,standard,max,price,titleHandler,url}) => {
 
-
+  const token = localStorage.getItem("token");
   const priceWon = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  
-
+  const callback = ()=>{
+    alert("로그인 후 이용해주세요.")
+  }
+  const moveUrl = token?url:"/login";
 
   return (
     <BackImgDiv img={img}>
       <Layout>
         <div></div>
-        <Link to={url}><PackageContentDiv onClick={()=>{titleHandler();
+        <Link to={moveUrl}><PackageContentDiv onClick={()=>{token?titleHandler():callback();
         }}>
           <div>{title}</div>
           <div>기준 {standard}명/최대{max}명</div>
