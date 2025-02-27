@@ -1,5 +1,6 @@
 package com.kh.springfinal.space;
 
+import com.kh.springfinal.guest.GuestVo;
 import com.kh.springfinal.reservation.SpaceReservVo;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
@@ -134,4 +135,10 @@ public interface SpaceMapper {
     int getbookmark(SpaceReservVo vo);
 
     List<SpaceVo> spaceGetListPopular(String area, String people, String date, String title, String sort);
+
+    @Select("""
+            SELECT NO, IMAGE, NAME, NICK, PWD, EMAIL, PHONE, BIRTH_DATE, ADDRESS, ENROLL_DATE, HOST_PERMISSION FROM MEMBER
+            WHERE NO =#{no}
+            """)
+    GuestVo getMemberInfo(String no);
 }

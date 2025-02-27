@@ -1,5 +1,6 @@
 package com.kh.springfinal.space;
 
+import com.kh.springfinal.guest.GuestVo;
 import com.kh.springfinal.reservation.SpaceReservVo;
 import com.kh.springfinal.slog.SlogVo;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class SpaceController {
 //        System.out.println("area"+area);
 //        System.out.println("people"+people);
 //        System.out.println("date"+date);
-        System.out.println("sort:::"+sort);
+//        System.out.println("sort:::"+sort);
         if(title.equals("undefined")){
             title = null;
         }
@@ -52,7 +53,7 @@ public class SpaceController {
         String formattedDate = date.replaceAll("-", "");
         vo.setUseDay(formattedDate);
         int result = service.reservation(vo);
-        System.out.println("result ==="+result);
+//        System.out.println("result ==="+result);
 
         return result;
 
@@ -103,5 +104,10 @@ public class SpaceController {
         }
 
     }
+    @PostMapping("memberInfo")
+    public GuestVo getmemberInfo(@RequestBody String no){
+        GuestVo vo = service.getMemberInfo(no);
+        return vo;
+    };
 
-}
+}//clasee

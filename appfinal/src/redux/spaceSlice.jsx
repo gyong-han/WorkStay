@@ -4,6 +4,7 @@ const spaceSlice = createSlice({
   name: 'space', // slice 이름
   initialState:{
     no :'',
+    memberNo:'',
     address: '서울 강남구 태헤란로 130',
     brn : '',
     businessTypeNo:'',
@@ -126,6 +127,9 @@ const spaceSlice = createSlice({
       state.reservationDone= '';
       state.titleData = '';
       state.sort= ''
+    },
+    setLoginMemberNo : (state,action)=>{
+      state.memberNo = Number(action.payload);
     }
     
     
@@ -133,5 +137,5 @@ const spaceSlice = createSlice({
 });
 
 
-export const { setSpaceVo,setPackageType,setreservationDate,setMemberCnt,setArea,setReset,setReservationDone,setReservationInfo,setRequest,setTitleSearch,setOrderByStandard,setResetSearch } = spaceSlice.actions;
+export const { setSpaceVo,setPackageType,setreservationDate,setMemberCnt,setArea,setReset,setReservationDone,setReservationInfo,setRequest,setTitleSearch,setOrderByStandard,setResetSearch,setLoginMemberNo } = spaceSlice.actions;
 export default spaceSlice.reducer;

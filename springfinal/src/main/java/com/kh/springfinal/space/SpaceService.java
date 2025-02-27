@@ -1,5 +1,6 @@
 package com.kh.springfinal.space;
 
+import com.kh.springfinal.guest.GuestVo;
 import com.kh.springfinal.reservation.SpaceReservVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ public class SpaceService {
 
     private final SpaceMapper mapper;
     public List<SpaceVo> spaceGetListAll(String area,String people,String date,String title,String sort) {
-        System.out.println("sort 22222222:::"+sort);
+//        System.out.println("sort 22222222:::"+sort);
         if(sort.equals("popular")){
             return mapper.spaceGetListPopular(area,people,date,title,sort);
         }else{
@@ -92,5 +93,9 @@ public class SpaceService {
 
     public int getbookmark(SpaceReservVo vo) {
         return mapper.getbookmark(vo);
+    }
+
+    public GuestVo getMemberInfo(String no) {
+        return mapper.getMemberInfo(no);
     }
 }

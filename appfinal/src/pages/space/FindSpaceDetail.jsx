@@ -173,7 +173,7 @@ const InfoDiv = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr 1fr 1fr 25px 25px 1fr;
-  z-index: 1000;
+  z-index: 999;
   margin-right: 950px;
   margin-bottom: 200px;
   position: absolute;
@@ -239,7 +239,7 @@ const FindSpaceDetail = () => {
  
   const bookmarkdata = async ()=>{
     const dataObj = {
-      memberNo : 1,                          //로그인 정보 가져오자
+      memberNo : spaceVo.memberNo,                          //로그인 정보 가져오자
       spaceNo : x,
     }
     const data = await getBookmarkInfo(dataObj);
@@ -261,7 +261,7 @@ const FindSpaceDetail = () => {
     })
     .then((resp)=>resp.json())
     .then((data)=>{
-      console.log("디테일 데이터 시점  ::: ",data);
+      // console.log("디테일 데이터 시점  ::: ",data);
       dispatch(setSpaceVo(data));
     })
     bookmarkdata();
@@ -273,7 +273,7 @@ const FindSpaceDetail = () => {
       body:x,
     }).then((resp)=>resp.json())
     .then((data)=>{
-      console.log("DATA111::",data);
+      // console.log("DATA111::",data);
       dispatch(setReservationDone(data));
     })
   },[x]);
@@ -290,7 +290,7 @@ const FindSpaceDetail = () => {
       body:fd,
     }).then((resp)=>resp.json())
     .then((data)=>{
-      console.log("DATA222::",data);
+      // console.log("DATA222::",data);
       setPackageNo(data.packageNo);
     })
   },[x,spaceVo]);
@@ -301,7 +301,7 @@ const FindSpaceDetail = () => {
   /////////////////////////////////////////////////////클릭함수
   const bookmarkInsert = ()=>{
     const dataObj = {
-      memberNo : 1,                          //로그인 정보 가져오자
+      memberNo : spaceVo.memberNo,                          //로그인 정보 가져오자
       spaceNo : spaceVo.no,
     }
     if(bookMark === true){
