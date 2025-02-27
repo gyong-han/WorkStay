@@ -76,22 +76,50 @@ const ReservationGuide = ({ rooms, stay }) => {
               </tr>
             </thead>
             <tbody>
-              {rooms.map((room) => (
+              {!rooms ? (
                 <tr>
-                  <td>{room.name}</td>
-                  <td>
-                    {room.standardGuest} / {room.maxGuest}
-                  </td>
-                  <td>₩{room.price}</td>
+                  <td colSpan="3">객실 정보 없음</td>{" "}
+                  {/* 🔥 데이터 없을 때 메시지 표시 */}
                 </tr>
-              ))}
+              ) : Array.isArray(rooms) ? (
+                rooms.map((room) => (
+                  <tr key={room.id || room.name}>
+                    <td>{room.name}</td>
+                    <td>
+                      {room.standardGuest} / {room.maxGuest}
+                    </td>
+                    <td>₩{room.price}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td>{rooms.name}</td>
+                  <td>
+                    {rooms.standardGuest} / {rooms.maxGuest}
+                  </td>
+                  <td>₩{rooms.price}</td>
+                </tr>
+              )}
             </tbody>
           </TableTag>
           <UlWrapper>
             <ul>
               <li>
-                기준인원 {rooms[0].standardGuest}명이며, 최대인원
-                {rooms[0].maxGuest}명(영유아 미포함)까지 이용 가능한 숙소입니다.
+                {rooms ? (
+                  <>
+                    기준인원{" "}
+                    {Array.isArray(rooms)
+                      ? rooms[0]?.standardGuest
+                      : rooms?.standardGuest}
+                    명이며, 최대인원{" "}
+                    {Array.isArray(rooms)
+                      ? rooms[0]?.maxGuest
+                      : rooms?.maxGuest}
+                    명(영유아 미포함) 까지 이용 가능한 숙소입니다.
+                  </>
+                ) : (
+                  "숙소 정보 없음"
+                )}
               </li>
               <li>
                 기준인원 초과 시 1인 1박 당 3만원의 추가 요금이 발생합니다.

@@ -76,11 +76,11 @@ const ReservationCard = ({ data, hideDate, moveDetail }) => {
           <div></div>
           <PriceDiv>
             {!hideDate && (
-              <TextDiv onClick={moveDetail} size="15px">
+              <TextDiv onClick={movePath} size="15px">
                 예약 상세 확인
               </TextDiv>
             )}
-            <TextDiv size="20px">₩{data.amount}</TextDiv>
+            <TextDiv size="20px">₩{data.price}</TextDiv>
           </PriceDiv>
         </DataArea>
         <ImgTag src={data.filePath} alt="숙소 이미지" />

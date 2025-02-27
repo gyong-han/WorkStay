@@ -8,13 +8,16 @@ import { useEffect, useState } from "react";
 import Calendar from "../../components/FilterBar/Calendal";
 import { useDispatch, useSelector } from "react-redux";
 import { setStayData, setStayVo } from "../../redux/staySlice";
-import { setRoomData, setRoomVo } from "../../redux/roomSlice";
+import {
+  setRoomData,
+  setRoomVo,
+  setStayReservationDate,
+} from "../../redux/roomSlice";
 import { getStayDetail } from "../../components/service/stayService";
 import { getRoomListAll } from "../../components/service/roomService";
 import Notification from "./stayComponent/noti/Notification";
 import RoomSlider from "../room/roomComponent/RoomSlider";
 import BookmarkIcon from "../../components/bookmark/BookmarkIcon";
-import CalendarDate from "./stayComponent/CalendarDate";
 import { FaAngleDown } from "react-icons/fa6";
 
 const Layout = styled.div`
@@ -168,6 +171,7 @@ const FindStayDetail = () => {
   const stayVo = useSelector((state) => state.stay);
   const roomVoList = useSelector((state) => state.room.rooms);
   const roomVo = useSelector((state) => state.room);
+  const reservationDate = useSelector((state) => state.room.reservationDate);
   const dispatch = useDispatch();
 
   const StayDetail = async () => {
@@ -187,23 +191,16 @@ const FindStayDetail = () => {
     [x]
   );
 
-  // useEffect(() => {
-  //   const url = "http://localhost:8080/stay/detail";
-  //   const option = {
-  //     method: "POST",
-  //     headers: {
-  //       "content-type": "application/json",
-  //     },
-  //     body: JSON.stringify(x),
-  //   };
-  //   fetch(url, option)
-  //     .then((resp) => resp.json())
-  //     .then((data) => {
-  //       // console.log("data :: ", data);
-  //       dispatch(setStayVo(data));
-  //       dispatch(setRoomVo(data));
-  //     });
-  // }, [x, dispatch]);
+  const handleDateChange = (selectedDate) => {
+    if (
+      !reservationDate ||
+      reservationDate[0] !== selectedDate[0] ||
+      reservationDate[1] !== selectedDate[1]
+    ) {
+      console.log("📌 변경된 날짜:", selectedDate);
+      dispatch(setStayReservationDate(selectedDate)); // Redux 저장
+    }
+  };
 
   const park = "4";
   let parking = "";
@@ -250,14 +247,13 @@ const FindStayDetail = () => {
         <div>
           <div></div>
           <DateDiv>
-            {!stayVo.reservationDate ? (
-              <CalendarDate type={"text"}>날짜를 입력해주세요.</CalendarDate>
-            ) : (
-              <CalendarDate type={"text"}>
-                {stayVo.reservationDate}
-                <FaAngleDown />
-              </CalendarDate>
-            )}
+            <Calendar type="text" setDateRange={handleDateChange}>
+              <span>
+                {reservationDate[0] && reservationDate[1]
+                  ? `${reservationDate[0]} ~ ${reservationDate[1]}`
+                  : "날짜를 선택해주세요."}
+              </span>
+            </Calendar>
           </DateDiv>
           <div></div>
         </div>

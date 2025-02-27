@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FaAngleDown } from "react-icons/fa6";
 import Btn from "../../components/Btn";
@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Accordion from "./stayComponent/Accordion";
 import Calendar from "../../components/FilterBar/Calendal";
 import SelectPerson from "./stayComponent/SelectPerson";
+import { useDispatch, useSelector } from "react-redux";
 
 const Layout = styled.div`
   display: grid;
@@ -346,6 +347,13 @@ const BookingStay = () => {
 
   // 날짜 선택
   const [dateRange, setDateRange] = useState([null, null]);
+  const roomVo = useSelector((state) => state.room);
+  const reservationDate = useSelector((state) => state.room.rezservationDate);
+  const dispatch = useDispatch();
+
+  const Booking = () => {};
+
+  useEffect(() => {}, []);
 
   return (
     <Layout>
@@ -353,8 +361,8 @@ const BookingStay = () => {
       <DateWrapper>
         <Calendar type="button" setDateRange={setDateRange}>
           <DateSpan>
-            {dateRange[0] && dateRange[1]
-              ? `${dateRange[0].toLocaleDateString()} ~ ${dateRange[1].toLocaleDateString()}`
+            {reservationDate[0] && reservationDate[1]
+              ? `${reservationDate[0]} ~ ${reservationDate[1]}`
               : "날짜를 선택해주세요."}
             <FaAngleDown />
           </DateSpan>
@@ -366,21 +374,23 @@ const BookingStay = () => {
       <ReservationWrapper>
         <ReservationDiv>
           <InfoText>예약 스테이</InfoText>
-          <Info>온숲 / Room A1</Info>
+          <Info>
+            {roomVo.stayName} / {roomVo.name}
+          </Info>
         </ReservationDiv>
         <ReservationLine />
         <ReservationDiv>
           <InfoText>예약일</InfoText>
           <Info>
-            {dateRange[0] && dateRange[1]
-              ? `${dateRange[0].toLocaleDateString()} ~ ${dateRange[1].toLocaleDateString()}`
+            {reservationDate[0] && reservationDate[1]
+              ? `${reservationDate[0]} ~ ${reservationDate[1]}`
               : "날짜를 선택해주세요."}
           </Info>
         </ReservationDiv>
         <ReservationLine />
         <ReservationDiv>
           <InfoText>이름</InfoText>
-          <Info>홍길동</Info>
+          <Info>dd</Info>
         </ReservationDiv>
         <ReservationLine />
         <ReservationDiv>
@@ -396,7 +406,11 @@ const BookingStay = () => {
         <ReservationDiv>
           <InfoText>인원</InfoText>
           <Info>
-            <SelectPerson maxAdults={4} maxChildren={4} maxInfant={4} />
+            <SelectPerson
+              maxAdults={roomVo.maxGuest}
+              maxChildren={4}
+              maxInfant={4}
+            />
           </Info>
         </ReservationDiv>
         <ReservationLine />

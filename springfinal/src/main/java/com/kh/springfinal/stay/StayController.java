@@ -44,6 +44,7 @@ public class StayController {
             return stayService.sortByList(sort, people, area, date);
         }catch (Exception e){
             log.warn(e.getMessage());
+            System.out.println(e.getMessage());
             throw new IllegalStateException("[STAY-ERROR-03]STAY SORT-LIST FAIL");
         }
     }

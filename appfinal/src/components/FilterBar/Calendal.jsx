@@ -5,7 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import Form from "react-bootstrap/Form";
 import { format } from "date-fns";
 
-const Calendar = ({ children, type, setDateRange }) => {
+const Calendar = ({ children, type, setDateRange = () => {}, w }) => {
   const [dateRange, setLocalDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
 
@@ -14,9 +14,10 @@ const Calendar = ({ children, type, setDateRange }) => {
       const formattedDates = dateRange.map((date) =>
         format(date, "yyyy-MM-dd")
       );
-      console.log(formattedDates);
+      console.log("선택한 날짜:", formattedDates);
+      setDateRange(formattedDates); // Redux 또는 부모 컴포넌트 업데이트
     }
-  }, [dateRange]);
+  }, [dateRange, setDateRange]);
 
   return (
     <DatePicker
@@ -25,17 +26,14 @@ const Calendar = ({ children, type, setDateRange }) => {
       startDate={startDate}
       minDate={new Date()}
       endDate={endDate}
-      onChange={(update) => {
-        setLocalDateRange(update);
-        setDateRange(update);
-      }}
+      onChange={(update) => setLocalDateRange(update)}
       monthsShown={2}
       withPortal
       customInput={
         <Form.Control
           as={type}
           style={{
-            width: "300px",
+            width: w || "500px",
             height: "50px",
             border: "none",
             backgroundColor: "#F9F9F9",
