@@ -309,6 +309,7 @@ const StayEnrollReqDetail = () => {
           </StayDiv>
           <BtnArea>
             <HostBtn
+              border="none"
               width="400px"
               height="50px"
               font="25px"
