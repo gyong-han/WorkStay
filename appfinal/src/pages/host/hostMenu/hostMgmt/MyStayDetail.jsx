@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import HostBtn from "../../hostComponents/HostBtn";
+import { jwtDecode } from "jwt-decode";
+import Alert from "../../../../components/Alert";
 
 const HomeDiv = styled.div`
   display: grid;
@@ -165,13 +167,40 @@ const Span2 = styled.span`
   cursor: pointer;
 `;
 
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
+
 const MyStayDetail = () => {
-  const [phone, setPhone] = useState("");
   const [formData, setFormData] = useState({
     business_type_no: "1",
   });
   const navigate = useNavigate();
   const { stayNum } = useParams();
+  const [hostNo, setHostNo] = useState("");
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [isAlertOpen2, setIsAlertOpen2] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        setHostNo(decodedToken.no);
+      } catch (error) {
+        console.error("토큰 디코딩 실패:", error);
+      }
+    }
+  }, []);
 
   const handleChange = (e) => {
     setFormData((prev) => {
@@ -208,7 +237,7 @@ const MyStayDetail = () => {
   // fetch함수;
   const editStay = () => {
     const fd = new FormData();
-    fd.append("hostNo", "1");
+    fd.append("hostNo", hostNo);
     fd.append("no", stayNum);
     fd.append("phone", formData.phone);
     fd.append("sns", formData.sns);
@@ -223,10 +252,21 @@ const MyStayDetail = () => {
       .then((resp) => resp.text())
       .then((data) => {
         if (data > 0) {
-          //수정 성공 알림창 띄우기
-          alert("성공!");
+          setIsAlertOpen(true);
         }
       });
+  };
+
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
+    navigate("/hostMenu/hostMgmtMenu/myStayMgmt");
+    window.scrollTo(0, 0);
+  };
+
+  const handleAlertClose2 = () => {
+    setIsAlertOpen(false);
+    navigate("/hostMenu/hostMgmtMenu/myStayMgmt");
+    window.scrollTo(0, 0);
   };
 
   const moveRoomDetail = () => {
@@ -250,7 +290,7 @@ const MyStayDetail = () => {
       .then((resp) => resp.text())
       .then((data) => {
         if (data > 0) {
-          navigate("/hostMenu/hostMgmtMenu/myStayMgmt");
+          setIsAlertOpen2(true);
         }
       });
   };
@@ -417,6 +457,32 @@ const MyStayDetail = () => {
         </MainDiv>
         <div></div>
       </HomeDiv>
+
+      {isAlertOpen && (
+        <Backdrop>
+          <Alert
+            title="내 숙소 수정"
+            titleColor="#049dd9"
+            message="수정 요청되었습니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose}
+          />
+        </Backdrop>
+      )}
+
+      {isAlertOpen2 && (
+        <Backdrop>
+          <Alert
+            title="내 숙소 입점삭제"
+            titleColor="#049dd9"
+            message="입점 삭제되었습니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose2}
+          />
+        </Backdrop>
+      )}
     </>
   );
 };

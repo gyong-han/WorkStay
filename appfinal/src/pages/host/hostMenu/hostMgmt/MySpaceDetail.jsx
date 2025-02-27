@@ -3,6 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import HostBtn from "../../hostComponents/HostBtn";
 import AttachmentUpload from "../../hostComponents/AttachmentUpload";
+import { jwtDecode } from "jwt-decode";
+import Alert from "../../../../components/Alert";
 
 const HomeDiv = styled.div`
   display: grid;
@@ -211,6 +213,19 @@ const CheckDiv = styled.div`
   }
 `;
 
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
+
 const MySpaceDetail = () => {
   const { spaceNum } = useParams();
   const [formData, setFormData] = useState({
@@ -219,6 +234,21 @@ const MySpaceDetail = () => {
   const [featuresArr, setFeaturesArr] = useState([]);
   const [fileData, setFileData] = useState({});
   const navigate = useNavigate();
+  const [hostNo, setHostNo] = useState("");
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [isAlertOpen2, setIsAlertOpen2] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        setHostNo(decodedToken.no);
+      } catch (error) {
+        console.error("토큰 디코딩 실패:", error);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     fetch("http://127.0.0.1:8080/api/host/mySpaceDetail", {
@@ -254,11 +284,10 @@ const MySpaceDetail = () => {
       }
     });
   };
-  const editSpace = () => {
-    console.log(fileData);
 
+  const editSpace = () => {
     const fd = new FormData();
-    fd.append("hostNo", "1");
+    fd.append("hostNo", hostNo);
     fd.append("no", spaceNum);
     fd.append("phone", formData.phone);
     fd.append("sns", formData.sns);
@@ -281,7 +310,7 @@ const MySpaceDetail = () => {
       .then((data) => {
         console.log(data);
         if (data > 0) {
-          navigate("/hostMenu/hostMgmtMenu");
+          setIsAlertOpen(true);
         }
       });
   };
@@ -297,7 +326,7 @@ const MySpaceDetail = () => {
       .then((resp) => resp.text())
       .then((data) => {
         if (data > 0) {
-          navigate("/hostMenu/hostMgmtMenu/mySpaceMgmt");
+          setIsAlertOpen2(true);
         }
       });
   };
@@ -308,6 +337,18 @@ const MySpaceDetail = () => {
   };
 
   const moveList = () => {
+    navigate("/hostMenu/hostMgmtMenu/mySpaceMgmt");
+    window.scrollTo(0, 0);
+  };
+
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
+    navigate("/hostMenu/hostMgmtMenu/mySpaceMgmt");
+    window.scrollTo(0, 0);
+  };
+
+  const handleAlertClose2 = () => {
+    setIsAlertOpen(false);
     navigate("/hostMenu/hostMgmtMenu/mySpaceMgmt");
     window.scrollTo(0, 0);
   };
@@ -613,6 +654,31 @@ const MySpaceDetail = () => {
           </MainDiv>
         </HomeDiv>
       </form>
+      {isAlertOpen && (
+        <Backdrop>
+          <Alert
+            title="내 공간 수정"
+            titleColor="#049dd9"
+            message="수정 요청되었습니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose}
+          />
+        </Backdrop>
+      )}
+
+      {isAlertOpen2 && (
+        <Backdrop>
+          <Alert
+            title="내 공간 입점삭제"
+            titleColor="#049dd9"
+            message="입점 삭제되었습니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose2}
+          />
+        </Backdrop>
+      )}
     </>
   );
 };
