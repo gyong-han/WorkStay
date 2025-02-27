@@ -1,4 +1,6 @@
-import React from "react";
+import { jwtDecode } from "jwt-decode";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const MainDiv = styled.div`
@@ -60,33 +62,66 @@ const TagDiv = styled.div`
 `;
 
 const SlogMgmt = () => {
+  const navi = useNavigate();
+  const [slogListVo, setSlogListVo] = useState({});
+  const [dataArr, setDataArr] = useState([]);
+
+  const token = localStorage.getItem("token");
+
+  //토큰 정보 없으면 로그인 페이지로 보내기
+  useEffect(() => {
+    if (!token) {
+      navi("/login");
+    }
+  });
+
+  useEffect(() => {
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      setSlogListVo((prev) => ({
+        ...prev,
+        no: decodedToken.no,
+      }));
+
+      fetch(
+        `http://127.0.0.1:8080/api/guest/slogList?memberNo=${decodedToken.no}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+        .then((resp) => resp.json())
+        .then((data) => {
+          setSlogListVo(data);
+          setDataArr(data);
+        })
+        .catch((err) => console.error("회원 정보 불러오기 실패:", err));
+    }
+  }, [token]);
+
   return (
     <>
       <MainDiv>
         <MainSpanDiv>S-Log 관리</MainSpanDiv>
       </MainDiv>
       <MainWrapper>
-        <SlogDiv>
-          <ImgTag src="https://images.stayfolio.com/system/pictures/images/000/252/923/original/a382efa6de1474b3b499af1b8d61f3e1f3711e93.jpg?1737082206" />
-          <TitleDiv>감각의 여정을 따라: 고유한 스테이 경험 탐험</TitleDiv>
-          <NameDiv>스테이 아레</NameDiv>
-          <AddressDiv>강원</AddressDiv>
-          <TagDiv>일과 영감이 머무는 공간, 워케이션의 새로운 기준</TagDiv>
-        </SlogDiv>
-        <SlogDiv>
-          <ImgTag src="https://images.stayfolio.com/system/pictures/images/000/252/923/original/a382efa6de1474b3b499af1b8d61f3e1f3711e93.jpg?1737082206" />
-          <TitleDiv>감각의 여정을 따라: 고유한 스테이 경험 탐험</TitleDiv>
-          <NameDiv>스테이 아레</NameDiv>
-          <AddressDiv>강원</AddressDiv>
-          <TagDiv>일과 영감이 머무는 공간, 워케이션의 새로운 기준</TagDiv>
-        </SlogDiv>
-        <SlogDiv>
-          <ImgTag src="https://images.stayfolio.com/system/pictures/images/000/252/923/original/a382efa6de1474b3b499af1b8d61f3e1f3711e93.jpg?1737082206" />
-          <TitleDiv>감각의 여정을 따라: 고유한 스테이 경험 탐험</TitleDiv>
-          <NameDiv>스테이 아레</NameDiv>
-          <AddressDiv>강원</AddressDiv>
-          <TagDiv>일과 영감이 머무는 공간, 워케이션의 새로운 기준</TagDiv>
-        </SlogDiv>
+        {dataArr.length > 0 ? (
+          dataArr.map((slogListVo) => (
+            <>
+              <SlogDiv>
+                <ImgTag src={slogListVo.titleFileUrl} />
+                <TitleDiv>{slogListVo.title}</TitleDiv>
+                <NameDiv>{slogListVo.name}</NameDiv>
+                <AddressDiv>{slogListVo.address}</AddressDiv>
+                <TagDiv>{slogListVo.tagline}</TagDiv>
+              </SlogDiv>
+            </>
+          ))
+        ) : (
+          <p>리뷰 작성 내역이 없습니다.</p>
+        )}
       </MainWrapper>
     </>
   );

@@ -382,6 +382,6 @@ public interface GuestMapper {
             LEFT OUTER JOIN STAY S ON (S.NO = R.STAY_NO)
             WHERE L.MEMBER_NO =#{memberNo}
             """)
-    SlogListVo slogList(String memberNo);
+    List<SlogListVo> slogList(String memberNo);
 
 }//class

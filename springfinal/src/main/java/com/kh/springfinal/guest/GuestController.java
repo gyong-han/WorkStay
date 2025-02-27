@@ -168,8 +168,8 @@ public class GuestController {
 
     //s-log 불러오기
     @GetMapping("slogList")
-    public SlogListVo slogList(@RequestParam String memberNo){
-        SlogListVo result = service.slogList(memberNo);
+    public List<SlogListVo> slogList(@RequestParam String memberNo){
+        List<SlogListVo> result = service.slogList(memberNo);
         return result;
     }
 

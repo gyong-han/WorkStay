@@ -108,7 +108,7 @@ const LayoutDiv = styled.div`
 
 const StayDetail = () => {
   const navi = useNavigate();
-  const location = useLocation(); // 현재 경로 가져오기
+  const location = useLocation();
   const [selectedMenu, setSelectedMenu] = useState("");
   const [params, setParams] = useState({ reno: "" });
   const [data, setData] = useState("");
