@@ -14,6 +14,8 @@ public interface SlogMapper {
             (
             NO
             ,TITLE
+            ,RESERVATION_NO
+            ,MEMBER_NO
             ,CONTENT
             ,TAGLINE
             ,FILE_URL
@@ -24,6 +26,8 @@ public interface SlogMapper {
             (
             SEQ_SLOG.NEXTVAL
             ,#{title}
+            ,#{reno}
+            ,#{memberNo}
             ,#{content}
             ,#{tagline}
             ,#{fileUrl}

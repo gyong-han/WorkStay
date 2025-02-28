@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 const HomeDiv = styled.div`
@@ -60,6 +60,17 @@ const MenuDiv = styled.div`
 const AdminLayOut = ({ children }) => {
   const navigate = useNavigate();
   const [selectedMenu, setSelectedMenu] = useState("");
+  const [url, setUrl] = useState("");
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    const lastPath = pathname.split("/").pop();
+    setUrl(lastPath);
+  }, []);
+
+  useEffect(() => {
+    setSelectedMenu(url);
+  }, [url]);
 
   function movePath(e) {
     setSelectedMenu(e.target.id);
@@ -86,7 +97,11 @@ const AdminLayOut = ({ children }) => {
         </div>
         <MainDiv>
           <MenuAreaDiv>
-            <MenuDiv id="" onClick={movePath} selected={selectedMenu === ""}>
+            <MenuDiv
+              id=""
+              onClick={movePath}
+              selected={selectedMenu === "" || selectedMenu === "adminMenu"}
+            >
               호스트 조회
             </MenuDiv>
             <MenuDiv

@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import HostBtn from "../hostComponents/HostBtn";
 import Address from "../../../components/address/Address";
 import AttachmentUpload from "../hostComponents/AttachmentUpload";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import Alert from "../../../components/Alert";
 
 const HomeDiv = styled.div`
   display: grid;
@@ -194,6 +196,19 @@ const CheckDiv = styled.div`
   }
 `;
 
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
+
 const SecondEnrollSpace = () => {
   const [phone, setPhone] = useState("");
   const [brn, setbrn] = useState("");
@@ -203,6 +218,20 @@ const SecondEnrollSpace = () => {
   const [featuresArr, setFeaturesArr] = useState([]);
   const [fileData, setFileData] = useState({});
   const navigate = useNavigate();
+  const [hostNo, setHostNo] = useState("");
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        setHostNo(decodedToken.no);
+      } catch (error) {
+        console.error("토큰 디코딩 실패:", error);
+      }
+    }
+  }, []);
 
   const handleChange = (e) => {
     setFormData((prev) => {
@@ -242,40 +271,42 @@ const SecondEnrollSpace = () => {
   };
 
   const enrollSpace = () => {
-    console.log(fileData);
+    const fd = new FormData();
+    fd.append("hostNo", hostNo);
+    fd.append("name", formData.name);
+    fd.append("address", formData.address);
+    fd.append("phone", formData.phone);
+    fd.append("sns", formData.sns);
+    fd.append("businessTypeNo", formData.business_type_no);
+    fd.append("brn", formData.brn);
+    fd.append("tagline", formData.tagline);
+    fd.append("introduction", formData.introduction);
+    fd.append("standardGuest", formData.standard_guest);
+    fd.append("maxGuest", formData.max_guest);
+    fd.append("daytimePrice", formData.daytime_price);
+    fd.append("nightPrice", formData.night_price);
+    fd.append("features", featuresArr);
+    fd.append("space_floor_plan", fileData.space_floor_plan);
+    fd.append("thumbnail", fileData.thumbnail);
+    fileData.attachment.map((file) => fd.append("attachment", file));
 
-    // const fd = new FormData();
-    // fd.append("hostNo", "1");
-    // fd.append("name", formData.name);
-    // fd.append("address", formData.address);
-    // fd.append("phone", formData.phone);
-    // fd.append("sns", formData.sns);
-    // fd.append("businessTypeNo", formData.business_type_no);
-    // fd.append("brn", formData.brn);
-    // fd.append("tagline", formData.tagline);
-    // fd.append("introduction", formData.introduction);
-    // fd.append("standardGuest", formData.standard_guest);
-    // fd.append("maxGuest", formData.max_guest);
-    // fd.append("daytimePrice", formData.daytime_price);
-    // fd.append("nightPrice", formData.night_price);
-    // fd.append("features", featuresArr);
-    // fd.append("space_floor_plan", fileData.space_floor_plan);
-    // fd.append("thumbnail", fileData.thumbnail);
-    // fileData.attachment.map((file) => fd.append("attachment", file));
+    fetch("http://127.0.0.1:8080/api/host/enroll/space", {
+      method: "POST",
+      headers: {},
+      body: fd,
+    })
+      .then((resp) => resp.text())
+      .then((data) => {
+        if (data > 0) {
+          setIsAlertOpen(true);
+        }
+      });
+  };
 
-    // fetch("http://127.0.0.1:8080/api/host/enroll/space", {
-    //   method: "POST",
-    //   headers: {},
-    //   body: fd,
-    // })
-    //   .then((resp) => resp.text())
-    //   .then((data) => {
-    //     console.log(data);
-    //     if (data === "1") {
-    //       navigate("/hostMenu/hostMgmtMenu/spaceApprovalMgmt");
-    //       window.scrollTo(0, 0);
-    //     }
-    //   });
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
+    navigate("/hostMenu/hostMgmtMenu/spaceApprovalMgmt");
+    window.scrollTo(0, 0);
   };
 
   return (
@@ -572,6 +603,7 @@ const SecondEnrollSpace = () => {
             </SpaceDiv>
             <BtnArea>
               <HostBtn
+                border="none"
                 width="400px"
                 height="50px"
                 font="25px"
@@ -584,6 +616,18 @@ const SecondEnrollSpace = () => {
           </MainDiv>
         </HomeDiv>
       </form>
+      {isAlertOpen && (
+        <Backdrop>
+          <Alert
+            title="내 공간 입점신청"
+            titleColor="#049dd9"
+            message="입점 신청되었습니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose}
+          />
+        </Backdrop>
+      )}
     </>
   );
 };

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import HostBtn from "../host/hostComponents/HostBtn";
+import Alert from "../../components/Alert";
 
 const HomeDiv = styled.div`
   display: grid;
@@ -175,6 +176,19 @@ const TextDiv = styled.div`
   margin-right: ${(props) => props.right};
 `;
 
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
+
 const SpaceEditReqDetail = () => {
   const { spaceNum } = useParams();
   const [hostVo, setHostvo] = useState({});
@@ -185,6 +199,8 @@ const SpaceEditReqDetail = () => {
   const [spaceThumbNail, setSpaceThumbNail] = useState({});
   const [spaceAttachList, setSpaceAttachList] = useState([]);
   const navigate = useNavigate();
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [isAlertOpen2, setIsAlertOpen2] = useState(false);
 
   useEffect(() => {
     fetch("http://127.0.0.1:8080/api/admin/spaceEditReqDetail", {
@@ -232,8 +248,14 @@ const SpaceEditReqDetail = () => {
     })
       .then((resp) => resp.text())
       .then((data) => {
-        navigate("/adminMenu/spaceEditReq");
+        setIsAlertOpen(true);
       });
+  };
+
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
+    navigate("/adminMenu/spaceEditReq");
+    window.scrollTo(0, 0);
   };
 
   const companion = () => {
@@ -246,8 +268,16 @@ const SpaceEditReqDetail = () => {
     })
       .then((resp) => resp.text())
       .then((data) => {
-        navigate("/adminMenu/spaceEditReq");
+        if (data > 0) {
+          setIsAlertOpen2(true);
+        }
       });
+  };
+
+  const handleAlertClose2 = () => {
+    setIsAlertOpen2(false);
+    navigate("/adminMenu/spaceEditReq");
+    window.scrollTo(0, 0);
   };
 
   return (
@@ -504,28 +534,54 @@ const SpaceEditReqDetail = () => {
             <BtnArea>
               <div></div>
               <HostBtn
+                border="none"
                 width="300px"
                 height="50px"
                 font="25px"
                 backColor="#2B8C44"
-                str="승인하기"
+                str="반려하기"
                 color="white"
-                f={approve}
+                f={companion}
               />
               <HostBtn
                 width="300px"
                 height="50px"
                 font="25px"
                 backColor="white"
-                str="반려하기"
+                str="수정하기"
                 color="black"
-                f={companion}
+                border="1px solid #2B8C44"
+                f={approve}
               />
               <div></div>
             </BtnArea>
           </MainDiv>
         </HomeDiv>
       </form>
+      {isAlertOpen && (
+        <Backdrop>
+          <Alert
+            title="공간 수정 승인"
+            titleColor="#049dd9"
+            message="수정 승인되었습니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose}
+          />
+        </Backdrop>
+      )}
+      {isAlertOpen2 && (
+        <Backdrop>
+          <Alert
+            title="공간 수정 반려"
+            titleColor="#049dd9"
+            message="수정 반려되었습니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose2}
+          />
+        </Backdrop>
+      )}
     </>
   );
 };

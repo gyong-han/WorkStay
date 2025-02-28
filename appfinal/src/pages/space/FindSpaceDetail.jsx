@@ -228,6 +228,7 @@ const FindSpaceDetail = () => {
   const spaceVo = useSelector((state) => state.space);
   const [packageNo,setPackageNo] = useState("");
   const [modalStatus, setModalStatus] = useState('');
+  const token = localStorage.getItem("token");
 
     //Gallery Modal 관련
     const openModal = () => {
@@ -261,7 +262,7 @@ const FindSpaceDetail = () => {
     })
     .then((resp)=>resp.json())
     .then((data)=>{
-      // console.log("디테일 데이터 시점  ::: ",data);
+      console.log("디테일 데이터 시점  ::: ",data);
       dispatch(setSpaceVo(data));
     })
     bookmarkdata();
@@ -359,13 +360,14 @@ const FindSpaceDetail = () => {
     <>
     <ShareModal closeModal={closeModal} modalStatus={modalStatus} no={x}/>
     <Layout>
+      
       <TitleDiv>
         <div>
           <h1>{spaceVo.name}</h1>
           <span>{spaceVo.address}</span>
         </div>
         <div></div>
-        <InconTitleDiv>
+        {token ? <><InconTitleDiv>
           <div><BiMessageAltDetail /></div>
           <div onClick={openModal}><RxShare2 /></div>
           
@@ -375,7 +377,7 @@ const FindSpaceDetail = () => {
           <div>메세지</div>
           <div onClick={openModal}>공유하기</div>
           <div onClick={bookmarkInsert}>북마크</div>
-        </InconTitleDiv>
+        </InconTitleDiv></>:<div></div>}
         </TitleDiv>
       <div>
         <PictureSlide w={'1500'} h={'500'} 
