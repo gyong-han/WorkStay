@@ -6,6 +6,7 @@ import com.kh.springfinal.host.TableVo;
 import com.kh.springfinal.room.RoomVo;
 import com.kh.springfinal.space.SpaceVo;
 import com.kh.springfinal.stay.StayVo;
+import com.kh.springfinal.util.PageVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,16 +24,22 @@ import java.util.Map;
 public class AdminService {
     private final AdminMapper mapper;
 
-    public List<TableVo> getStayEnrollReqList() {
-        return mapper.getStayEnrollReqList();
+    public List<TableVo> getStayEnrollReqList(PageVo pageVo) {
+        int limit = pageVo.getBoardLimit();
+        int offset = pageVo.getOffset();
+        return mapper.getStayEnrollReqList(limit,offset);
     }
 
-    public List<TableVo> getSpaceEnrollReqList() {
-        return mapper.getSpaceEnrollReqList();
+    public List<TableVo> getSpaceEnrollReqList(PageVo pageVo) {
+        int limit = pageVo.getBoardLimit();
+        int offset = pageVo.getOffset();
+        return mapper.getSpaceEnrollReqList(limit,offset);
     }
 
-    public List<TableVo> getHostList() {
-        return mapper.getHostList();
+    public List<TableVo> getHostList(PageVo pageVo) {
+        int limit = pageVo.getBoardLimit();
+        int offset = pageVo.getOffset();
+        return mapper.getHostList(offset,limit);
     }
 
     public Map<String, Object> getHostDetail(String hostNo) {
@@ -113,8 +120,10 @@ public class AdminService {
         return mapper.companionStay(stayNo);
     }
 
-    public List<SpaceVo> getSpaceEditList() {
-        List<SpaceVo> spaceList =  mapper.getSpaceEditList();
+    public List<SpaceVo> getSpaceEditList(PageVo pageVo) {
+        int limit = pageVo.getBoardLimit();
+        int offset = pageVo.getOffset();
+        List<SpaceVo> spaceList =  mapper.getSpaceEditList(limit,offset);
         return spaceList;
     }
 
@@ -134,13 +143,17 @@ public class AdminService {
         return editReqDetail;
     }
 
-    public List<StayVo> getStayEditList() {
-        List<StayVo> stayList = mapper.getStayEditList();
+    public List<StayVo> getStayEditList(PageVo pageVo) {
+        int limit = pageVo.getBoardLimit();
+        int offset = pageVo.getOffset();
+        List<StayVo> stayList = mapper.getStayEditList(limit,offset);
         return stayList;
     }
 
-    public List<RoomVo> getRoomEditList() {
-        List<RoomVo> roomList = mapper.getRoomEditList();
+    public List<StayVo> getRoomEditList(PageVo pageVo) {
+        int limit = pageVo.getBoardLimit();
+        int offset = pageVo.getOffset();
+        List<StayVo> roomList = mapper.getRoomEditList(limit,offset);
         return roomList;
     }
 
@@ -210,12 +223,48 @@ public class AdminService {
         return mapper.companionEditRoom(roomNo);
     }
 
-    public List<SpaceVo> getDeleteSpaceList() {
-        List<SpaceVo> spaceList = mapper.getDeleteSpaceList();
+    public List<SpaceVo> getDeleteSpaceList(PageVo pageVo) {
+        int limit = pageVo.getBoardLimit();
+        int offset = pageVo.getOffset();
+        List<SpaceVo> spaceList = mapper.getDeleteSpaceList(limit,offset);
         return spaceList;
     }
 
-    public List<StayVo> deleteStayList() {
-        return mapper.getDeleteStayList();
+    public List<StayVo> deleteStayList(PageVo pageVo) {
+        int limit = pageVo.getBoardLimit();
+        int offset = pageVo.getOffset();
+        return mapper.getDeleteStayList(limit,offset);
+    }
+
+    public int getHostListCount() {
+        return mapper.getHostListCount();
+    }
+
+    public int getStayEnrollReqListCount() {
+        return mapper.getStayEnrollReqListCount();
+    }
+
+    public int getSpaceEnrollReqListCount() {
+        return mapper.getSpaceEnrollReqListCount();
+    }
+
+    public int getStayEditReqCount() {
+        return mapper.getStayEditReqCount();
+    }
+
+    public int getRoomEditReqCount() {
+        return mapper.getRoomEditReqCount();
+    }
+
+    public int getSpaceEditReqCount() {
+        return mapper.getSpaceEditReqCount();
+    }
+
+    public int getStayDeleteReqListCount() {
+        return mapper.getStayDeleteReqListCount();
+    }
+
+    public int getSpaceDeleteReqListCount() {
+        return mapper.getSpaceDeleteReqListCount();
     }
 }

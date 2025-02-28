@@ -1,13 +1,14 @@
 package com.kh.springfinal.admin;
 
 import com.kh.springfinal.host.TableVo;
-import com.kh.springfinal.room.RoomVo;
 import com.kh.springfinal.space.SpaceVo;
 import com.kh.springfinal.stay.StayVo;
+import com.kh.springfinal.util.PageVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,22 +22,44 @@ public class AdminController {
 
     //숙소 입점 요청 리스트 가져오기
     @PostMapping("stayEnrollReqList")
-    public List<TableVo> getStayEnrollReqList(){
-        List<TableVo> voList = service.getStayEnrollReqList();
-        return voList;
+    public Map<String, Object> getStayEnrollReqList(@RequestParam(defaultValue = "1") int pno){
+        int listCnt = service.getStayEnrollReqListCount();
+        int pageLimit = 5;
+        int boardLimit = 10;
+        PageVo pageVo = new PageVo(listCnt,pno,pageLimit,boardLimit);
+        Map<String,Object> map = new HashMap<>();
+        List<TableVo> voList = service.getStayEnrollReqList(pageVo);
+        map.put("voList",voList);
+        map.put("pageVo",pageVo);
+        return map;
     }
+
     //공간 입점 요청 리스트 가져오기
     @PostMapping("spaceEnrollReqList")
-    public List<TableVo> getSpaceEnrollReqList(){
-        List<TableVo> voList = service.getSpaceEnrollReqList();
-        return voList;
+    public Map<String, Object> getSpaceEnrollReqList(@RequestParam(defaultValue = "1") int pno){
+        int listCnt = service.getSpaceEnrollReqListCount();
+        int pageLimit = 5;
+        int boardLimit = 10;
+        PageVo pageVo = new PageVo(listCnt,pno,pageLimit,boardLimit);
+        Map<String,Object> map = new HashMap<>();
+        List<TableVo> voList = service.getSpaceEnrollReqList(pageVo);
+        map.put("voList",voList);
+        map.put("pageVo",pageVo);
+        return map;
     }
 
     //호스트 리스트 가져오기
     @PostMapping("hostList")
-    public List<TableVo> getHostList(){
-        List<TableVo> voList = service.getHostList();
-        return voList;
+    public Map<String, Object> getHostList(@RequestParam(defaultValue = "1") int pno){
+        int listCnt = service.getHostListCount();
+        int pageLimit = 5;
+        int boardLimit = 10;
+        PageVo pageVo = new PageVo(listCnt,pno,pageLimit,boardLimit);
+        Map<String,Object> hostMap = new HashMap<>();
+        List<TableVo> voList = service.getHostList(pageVo);
+        hostMap.put("voList",voList);
+        hostMap.put("pageVo",pageVo);
+        return hostMap;
     }
 
     //호스트 상세조회 정보 가져오기
@@ -90,20 +113,44 @@ public class AdminController {
 
     //공간 수정요청 목록조회
     @PostMapping("spaceEditReq")
-    public List<SpaceVo> getSpaceEditReqList(){
-        return service.getSpaceEditList();
+    public Map<String, Object> getSpaceEditReqList(@RequestParam(defaultValue = "1") int pno){
+        int listCnt = service.getSpaceEditReqCount();
+        int pageLimit = 5;
+        int boardLimit = 10;
+        PageVo pageVo = new PageVo(listCnt,pno,pageLimit,boardLimit);
+        Map<String,Object> map = new HashMap<>();
+        List<SpaceVo> voList = service.getSpaceEditList(pageVo);
+        map.put("voList",voList);
+        map.put("pageVo",pageVo);
+        return map;
     }
 
     //숙소 수정요청 목록조회
     @PostMapping("stayEditReq")
-    public List<StayVo> getStayEditReqList(){
-        return service.getStayEditList();
+    public Map<String, Object> getStayEditReqList(@RequestParam(defaultValue = "1") int pno){
+        int listCnt = service.getStayEditReqCount();
+        int pageLimit = 5;
+        int boardLimit = 10;
+        PageVo pageVo = new PageVo(listCnt,pno,pageLimit,boardLimit);
+        Map<String,Object> map = new HashMap<>();
+        List<StayVo> voList = service.getStayEditList(pageVo);
+        map.put("voList",voList);
+        map.put("pageVo",pageVo);
+        return map;
     }
 
     //독채 수정요청 목록조회
     @PostMapping("roomEditReq")
-    public List<RoomVo> getRoomEditReqList(){
-        return service.getRoomEditList();
+    public Map<String, Object> getRoomEditReqList(@RequestParam(defaultValue = "1") int pno){
+        int listCnt = service.getRoomEditReqCount();
+        int pageLimit = 5;
+        int boardLimit = 10;
+        PageVo pageVo = new PageVo(listCnt,pno,pageLimit,boardLimit);
+        Map<String,Object> map = new HashMap<>();
+        List<StayVo> voList = service.getRoomEditList(pageVo);
+        map.put("voList",voList);
+        map.put("pageVo",pageVo);
+        return map;
     }
 
     //공간 수정요청 상세조회
@@ -171,13 +218,29 @@ public class AdminController {
 
     //공간 삭제 목록조회
     @PostMapping("deleteSpaceList")
-    public List<SpaceVo> deleteSpaceList(){
-        return service.getDeleteSpaceList();
+    public Map<String, Object> deleteSpaceList(@RequestParam(defaultValue = "1") int pno){
+        int listCnt = service.getSpaceDeleteReqListCount();
+        int pageLimit = 5;
+        int boardLimit = 10;
+        PageVo pageVo = new PageVo(listCnt,pno,pageLimit,boardLimit);
+        Map<String,Object> map = new HashMap<>();
+        List<SpaceVo> voList =  service.getDeleteSpaceList(pageVo);
+        map.put("voList",voList);
+        map.put("pageVo",pageVo);
+        return map;
     }
 
     //숙소 삭제 목록조회
     @PostMapping("deleteStayList")
-    public List<StayVo> deleteStayList(){
-        return service.deleteStayList();
+    public Map<String, Object> deleteStayList(@RequestParam(defaultValue = "1") int pno){
+        int listCnt = service.getStayDeleteReqListCount();
+        int pageLimit = 5;
+        int boardLimit = 10;
+        PageVo pageVo = new PageVo(listCnt,pno,pageLimit,boardLimit);
+        Map<String,Object> map = new HashMap<>();
+        List<StayVo> voList = service.deleteStayList(pageVo);
+        map.put("voList",voList);
+        map.put("pageVo",pageVo);
+        return map;
     }
 }

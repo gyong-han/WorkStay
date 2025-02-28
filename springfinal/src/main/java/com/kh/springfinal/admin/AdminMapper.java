@@ -21,8 +21,9 @@ public interface AdminMapper {
             JOIN MEMBER M ON(S.HOST_NO = M.NO)
             WHERE S.STATUS_NO= '1'
             ORDER BY S.ENROLL_DATE DESC
+            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
             """)
-    List<TableVo> getStayEnrollReqList();
+    List<TableVo> getStayEnrollReqList(int limit, int offset);
 
     @Select("""
             SELECT S.NO AS NO,M.NAME AS HOST_NAME,M.EMAIL,S.NAME AS NAME,M.PHONE 
@@ -30,8 +31,9 @@ public interface AdminMapper {
             JOIN MEMBER M ON(S.HOST_NO = M.NO)
             WHERE S.STATUS_NO= '1'
             ORDER BY S.ENROLL_DATE DESC
+            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
             """)
-    List<TableVo> getSpaceEnrollReqList();
+    List<TableVo> getSpaceEnrollReqList(int limit, int offset);
 
     @Select("""
             SELECT M.NO, M.NAME AS HOSTNAME, M.EMAIL, M.PHONE,
@@ -40,8 +42,9 @@ public interface AdminMapper {
             FROM MEMBER M
             WHERE M.HOST_PERMISSION = 'Y'
             ORDER BY M.NO
+            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
             """)
-    List<TableVo> getHostList();
+    List<TableVo> getHostList(int offset, int limit);
 
     @Select("""
             SELECT NO,NAME AS HOSTNAME,EMAIL,PHONE
@@ -230,8 +233,9 @@ public interface AdminMapper {
             JOIN MEMBER M ON (S.HOST_NO = M.NO)
             WHERE ES.STATUS_NO = '1' 
             ORDER BY MODIFY_DATE
+            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
             """)
-    List<SpaceVo> getSpaceEditList();
+    List<SpaceVo> getSpaceEditList(int limit, int offset);
 
     @Select("""
             SELECT S.NO,M.NAME AS HOST_NAME,S.NAME,M.PHONE,TO_CHAR(ES.MODIFY_DATE, 'YYYY.MM.DD') AS MODIFY_DATE
@@ -240,8 +244,9 @@ public interface AdminMapper {
             JOIN MEMBER M ON (S.HOST_NO = M.NO)
             WHERE ES.STATUS_NO = '1'
             ORDER BY MODIFY_DATE
+            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
             """)
-    List<StayVo> getStayEditList();
+    List<StayVo> getStayEditList(int limit, int offset);
 
     @Select("""
             SELECT R.NO,M.NAME AS HOST_NAME,R.NAME,M.PHONE,TO_CHAR(ER.MODIFY_DATE, 'YYYY.MM.DD') AS MODIFY_DATE
@@ -251,8 +256,9 @@ public interface AdminMapper {
             JOIN MEMBER M ON (S.HOST_NO = M.NO)
             WHERE ER.STATUS_NO = '1'
             ORDER BY ER.MODIFY_DATE
+            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
             """)
-    List<RoomVo> getRoomEditList();
+    List<StayVo> getRoomEditList(int limit, int offset);
 
     @Select("""
             SELECT S.NAME,ADDRESS,PHONE,SNS,BT.NAME AS BUSINESS_TYPE_NAME,BRN,TAGLINE,
@@ -417,15 +423,74 @@ public interface AdminMapper {
             FROM SPACE S
             JOIN MEMBER M ON (S.HOST_NO = M.NO)
             WHERE S.STATUS_NO = '7'
+            ORDER BY MODIFY_DATE DESC
+            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
             """)
-    List<SpaceVo> getDeleteSpaceList();
+    List<SpaceVo> getDeleteSpaceList(int limit, int offset);
 
     @Select("""
             SELECT M.NAME AS HOST_NAME,M.PHONE,S.NAME,TO_CHAR(S.MODIFY_DATE, 'YYYY.MM.DD') AS MODIFY_DATE
             FROM STAY S
             JOIN MEMBER M ON (S.HOST_NO = M.NO)
             WHERE S.STATUS_NO = '7'            
+            ORDER BY MODIFY_DATE DESC
+            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
             """)
-    List<StayVo> getDeleteStayList();
+    List<StayVo> getDeleteStayList(int limit, int offset);
 
+    @Select("""
+            SELECT COUNT(NO)
+            FROM MEMBER
+            WHERE HOST_PERMISSION = 'Y'
+            """)
+    int getHostListCount();
+
+    @Select("""
+            SELECT COUNT(NO)
+            FROM STAY
+            WHERE STATUS_NO = '1'
+            """)
+    int getStayEnrollReqListCount();
+
+    @Select("""
+            SELECT COUNT(NO)
+            FROM SPACE
+            WHERE STATUS_NO = '1'
+            """)
+    int getSpaceEnrollReqListCount();
+
+    @Select("""
+            SELECT COUNT(NO)
+            FROM EDIT_STAY
+            WHERE STATUS_NO = '1'
+            """)
+    int getStayEditReqCount();
+
+    @Select("""
+            SELECT COUNT(NO)
+            FROM EDIT_ROOM
+            WHERE STATUS_NO = '1'
+            """)
+    int getRoomEditReqCount();
+
+    @Select("""
+            SELECT COUNT(NO)
+            FROM EDIT_SPACE
+            WHERE STATUS_NO = '1'            
+            """)
+    int getSpaceEditReqCount();
+
+    @Select("""
+            SELECT COUNT(NO)
+            FROM STAY
+            WHERE STATUS_NO = '7'   
+            """)
+    int getStayDeleteReqListCount();
+
+    @Select("""            
+            SELECT COUNT(NO)
+            FROM SPACE
+            WHERE STATUS_NO = '7'   
+            """)
+    int getSpaceDeleteReqListCount();
 }

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Table from "../../../components/table/Table";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import PagingDiv from "../../../components/paging/PagingDiv";
+import PagingFooter from "../../../components/paging/PagingFooter";
 
 const MainDiv = styled.div`
   display: grid;
@@ -19,15 +21,24 @@ const StayEnrollReq = () => {
   window.scrollTo(0, 0);
   const [dataArr, setDataArr] = useState([]);
   const navigate = useNavigate();
+  const [pageVo, setPageVo] = useState({});
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  let pno = queryParams.get("pno");
+  if (pno === null) {
+    pno = 1;
+  }
+
   useEffect(() => {
-    fetch("http://127.0.0.1:8080/api/admin/stayEnrollReqList", {
+    fetch(`http://127.0.0.1:8080/api/admin/stayEnrollReqList?pno=${pno}`, {
       method: "POST",
     })
       .then((resp) => resp.json())
       .then((data) => {
-        setDataArr(data);
+        setDataArr(data.voList);
+        setPageVo(data.pageVo);
       });
-  }, []);
+  }, [pno]);
 
   const moveDetail = (no) => {
     navigate(`/adminMenu/stayEnrollReqDetail/${no}`);
@@ -50,6 +61,11 @@ const StayEnrollReq = () => {
           />
         </div>
       </MainDiv>
+      <PagingDiv>
+        <div></div>
+        <PagingFooter pageVo={pageVo} url="/adminMenu/stayEnrollReq" />
+        <div></div>
+      </PagingDiv>
     </>
   );
 };

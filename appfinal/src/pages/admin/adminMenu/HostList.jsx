@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Table from "../../../components/table/Table";
+import PagingFooter from "../../../components/paging/PagingFooter";
+import PagingDiv from "../../../components/paging/PagingDiv";
 
 const MainDiv = styled.div`
   display: grid;
@@ -58,6 +59,13 @@ const HostList = () => {
   window.scrollTo(0, 0);
   const navigate = useNavigate();
   const [dataArr, setDataArr] = useState([]);
+  const [pageVo, setPageVo] = useState({});
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  let pno = queryParams.get("pno");
+  if (pno === null) {
+    pno = 1;
+  }
 
   const hostDetail = (no) => {
     navigate(`/adminMenu/hostDetail/${no}`);
@@ -65,14 +73,15 @@ const HostList = () => {
   };
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8080/api/admin/hostList", {
+    fetch(`http://127.0.0.1:8080/api/admin/hostList?pno=${pno}`, {
       method: "POST",
     })
       .then((resp) => resp.json())
       .then((data) => {
-        setDataArr(data);
+        setDataArr(data.voList);
+        setPageVo(data.pageVo);
       });
-  }, []);
+  }, [pno]);
 
   const formatPhoneNumber = (phone) => {
     return phone.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
@@ -111,6 +120,11 @@ const HostList = () => {
           </StyledTable>
         </div>
       </MainDiv>
+      <PagingDiv>
+        <div></div>
+        <PagingFooter pageVo={pageVo} url="/adminMenu" />
+        <div></div>
+      </PagingDiv>
     </>
   );
 };
