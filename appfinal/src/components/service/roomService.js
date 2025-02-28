@@ -52,12 +52,12 @@ const getRoomDetail = async (x) => {
   }
 };
 
-const RoomReservation = async (x) => {
+const RoomReservation = async (rData) => {
   try {
-    const result = await fetch(`${BASE_URL}/reservation/`, {
+    const result = await fetch(`${BASE_URL}/reservation`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(x),
+      body: JSON.stringify(rData),
     });
     if (!result.ok) {
       throw new Error(`HTTP error! Status: ${result.status}`);
@@ -69,9 +69,60 @@ const RoomReservation = async (x) => {
   }
 };
 
+const getReservationInfo = async (rd) => {
+  try {
+    const result = await fetch(`${BASE_URL}/reservation/getReservationInfo`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(rd),
+    });
+    if (!result.ok) {
+      throw new Error(`HTTP error! Status: ${result.status}`);
+    }
+    const data = await result.json();
+  } catch (e) {
+    console.log("Room Reservation Info ERROR", e);
+  }
+};
+
+const getMemberNo = async (no) => {
+  try {
+    const result = await fetch(`${BASE_URL}/room/getmemberno`, {
+      method: "POST",
+      body: no,
+    });
+    if (!result.ok) {
+      throw new Error(`HTTP error! Status: ${result.status}`);
+    }
+    const data = await result.json();
+    return data;
+  } catch (e) {
+    console.log("getMemberNo ERROR", e);
+  }
+};
+
+const isAvailable = async (x) => {
+  try {
+    const result = await fetch(`${BASE_URL}/room/isAvailable`, {
+      method: "POST",
+      body: x,
+    });
+    if (!result.ok) {
+      throw new Error(`HTTP error! Status: ${result.status}`);
+    }
+    const data = await result.json();
+    return data;
+  } catch (e) {
+    console.log("isAvailable ERROR", e);
+  }
+};
+
 export {
   getRoomAttachmentList,
   getRoomListAll,
   getRoomDetail,
   RoomReservation,
+  getReservationInfo,
+  getMemberNo,
+  isAvailable,
 };
