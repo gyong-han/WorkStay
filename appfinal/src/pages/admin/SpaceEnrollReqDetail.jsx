@@ -313,6 +313,7 @@ const SpaceEnrollReqDetail = () => {
     return brn.replace(/(\d{3})(\d{2})(\d{5})/, "$1-$2-$3");
   };
 
+  const statusNo = spaceVo.statusNo;
   return (
     <>
       <>
@@ -566,9 +567,10 @@ const SpaceEnrollReqDetail = () => {
                 {role === "HOST" ? (
                   <>
                     <HostBtn
+                      top="90px"
                       border="none"
                       width="300px"
-                      height="50px"
+                      height="60px"
                       font="25px"
                       backColor="#2B8C44"
                       str="목록가기"
@@ -577,22 +579,24 @@ const SpaceEnrollReqDetail = () => {
                     />
                     <HostBtn
                       border="1px solid #2B8C44"
+                      top="90px"
                       width="300px"
-                      height="50px"
+                      height="60px"
                       font="25px"
                       backColor="white"
                       str="입점 철회하기"
-                      color="black"
-                      f={cancelEnroll}
+                      color={statusNo === 3 ? "gray" : "black"}
+                      f={statusNo === 3 ? undefined : cancelEnroll}
                     />
                   </>
                 ) : (
                   <>
                     <HostBtn
-                      border="none"
+                      top="90px"
                       width="300px"
                       height="50px"
                       font="25px"
+                      border="none"
                       backColor="#2B8C44"
                       str="반려하기"
                       color="white"
@@ -600,6 +604,7 @@ const SpaceEnrollReqDetail = () => {
                     />
                     <HostBtn
                       border="1px solid #2B8C44"
+                      top="90px"
                       width="300px"
                       height="50px"
                       font="25px"

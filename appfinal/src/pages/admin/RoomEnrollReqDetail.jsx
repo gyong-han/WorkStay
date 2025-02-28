@@ -178,6 +178,8 @@ const RoomEnrollReqDetail = () => {
     navigate("/hostMenu/hostMgmtMenu/stayApprovalMgmt");
     window.scrollTo(0, 0);
   };
+
+  const statusNo = roomVoArr.length > 0 ? roomVoArr[0].statusNo : null;
   return (
     <>
       <HomeDiv>
@@ -217,8 +219,8 @@ const RoomEnrollReqDetail = () => {
             {role === "HOST" ? (
               <>
                 <HostBtn
-                  border="none"
                   top="90px"
+                  border="none"
                   width="300px"
                   height="60px"
                   font="25px"
@@ -235,18 +237,18 @@ const RoomEnrollReqDetail = () => {
                   font="25px"
                   backColor="white"
                   str="입점 철회하기"
-                  color="black"
-                  f={cancelEnroll}
+                  color={statusNo === "3" ? "gray" : "black"} // 🔥 statusNo가 3이면 "gray" 아니면 "black"
+                  f={statusNo === "3" ? undefined : cancelEnroll} // 🔥 statusNo가 3이면 버튼 비활성화
                 />
               </>
             ) : (
               <>
                 <HostBtn
-                  border="none"
                   top="90px"
                   width="300px"
                   height="50px"
                   font="25px"
+                  border="none"
                   backColor="#2B8C44"
                   str="반려하기"
                   color="white"

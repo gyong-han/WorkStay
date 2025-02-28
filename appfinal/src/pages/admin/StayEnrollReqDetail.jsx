@@ -177,6 +177,7 @@ const StayEnrollReqDetail = () => {
   const moveRoomDetail = () => {
     navigate(`/adminMenu/roomEnrollReqDetail/${stayVo.no}`);
   };
+
   return (
     <>
       <HomeDiv>
