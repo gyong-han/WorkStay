@@ -4,6 +4,7 @@ import EnrollReqRoom from "./adminComponents/EnrollReqRoom";
 import styled from "styled-components";
 import HostBtn from "../host/hostComponents/HostBtn";
 import { jwtDecode } from "jwt-decode";
+import Alert from "../../components/Alert";
 
 const HomeDiv = styled.div`
   display: grid;
@@ -49,6 +50,19 @@ const Hr = styled.hr`
   background-color: #d9d9d9;
 `;
 
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
+
 const RoomEnrollReqDetail = () => {
   const { enrollReqNo } = useParams();
   const [roomVoArr, setRoomVoArr] = useState([]);
@@ -58,6 +72,9 @@ const RoomEnrollReqDetail = () => {
   const [roomAttachArr, setRoomAttachArr] = useState([]);
   const navigate = useNavigate();
   const [role, setRole] = useState("");
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [isAlertOpen2, setIsAlertOpen2] = useState(false);
+  const [isAlertOpen3, setIsAlertOpen3] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -103,10 +120,16 @@ const RoomEnrollReqDetail = () => {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        if (data === 1) {
-          navigate("/adminMenu");
+        if (data > 0) {
+          setIsAlertOpen(true);
         }
       });
+  };
+
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
+    navigate("/adminMenu/stayEnrollReq");
+    window.scrollTo(0, 0);
   };
 
   const companion = () => {
@@ -118,10 +141,16 @@ const RoomEnrollReqDetail = () => {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        if (data === 1) {
-          navigate("/adminMenu");
+        if (data > 0) {
+          setIsAlertOpen2(true);
         }
       });
+  };
+
+  const handleAlertClose2 = () => {
+    setIsAlertOpen2(false);
+    navigate("/adminMenu/stayEnrollReq");
+    window.scrollTo(0, 0);
   };
 
   const cancelEnroll = () => {
@@ -134,10 +163,15 @@ const RoomEnrollReqDetail = () => {
       .then((resp) => resp.text())
       .then((data) => {
         if (data > 0) {
-          navigate("/hostMenu/hostMgmtMenu/stayApprovalMgmt");
-          window.scrollTo(0, 0);
+          setIsAlertOpen3(true);
         }
       });
+  };
+
+  const handleAlertClose3 = () => {
+    setIsAlertOpen3(false);
+    navigate("/hostMenu/hostMgmtMenu/stayApprovalMgmt");
+    window.scrollTo(0, 0);
   };
 
   const moveMenu = () => {
@@ -145,6 +179,7 @@ const RoomEnrollReqDetail = () => {
     window.scrollTo(0, 0);
   };
 
+  const statusNo = roomVoArr.length > 0 ? roomVoArr[0].statusNo : null;
   return (
     <>
       <HomeDiv>
@@ -185,6 +220,7 @@ const RoomEnrollReqDetail = () => {
               <>
                 <HostBtn
                   top="90px"
+                  border="none"
                   width="300px"
                   height="60px"
                   font="25px"
@@ -194,14 +230,15 @@ const RoomEnrollReqDetail = () => {
                   f={moveMenu}
                 />
                 <HostBtn
+                  border="1px solid #2B8C44"
                   top="90px"
                   width="300px"
                   height="60px"
                   font="25px"
                   backColor="white"
                   str="입점 철회하기"
-                  color="black"
-                  f={cancelEnroll}
+                  color={statusNo === "3" ? "gray" : "black"} // 🔥 statusNo가 3이면 "gray" 아니면 "black"
+                  f={statusNo === "3" ? undefined : cancelEnroll} // 🔥 statusNo가 3이면 버튼 비활성화
                 />
               </>
             ) : (
@@ -211,29 +248,68 @@ const RoomEnrollReqDetail = () => {
                   width="300px"
                   height="50px"
                   font="25px"
+                  border="none"
                   backColor="#2B8C44"
-                  str="승인하기"
+                  str="반려하기"
                   color="white"
-                  f={approve}
+                  f={companion}
                 />
                 <HostBtn
+                  border="1px solid #2B8C44"
                   top="90px"
                   width="300px"
                   height="50px"
                   font="25px"
                   backColor="white"
-                  str="반려하기"
+                  str="승인하기"
                   color="black"
-                  f={companion}
+                  f={approve}
                 />
               </>
             )}
+
             <div></div>
           </BtnArea>
         </MainDiv>
 
         <div></div>
       </HomeDiv>
+      {isAlertOpen && (
+        <Backdrop>
+          <Alert
+            title="숙소 입점 승인"
+            titleColor="#049dd9"
+            message="입점 승인되었습니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose}
+          />
+        </Backdrop>
+      )}
+      {isAlertOpen2 && (
+        <Backdrop>
+          <Alert
+            title="숙소 입점 반려"
+            titleColor="#049dd9"
+            message="입점 반려되었습니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose2}
+          />
+        </Backdrop>
+      )}
+      {isAlertOpen3 && (
+        <Backdrop>
+          <Alert
+            title="숙소 입점 철회"
+            titleColor="#049dd9"
+            message="입점 철회되었습니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose3}
+          />
+        </Backdrop>
+      )}
     </>
   );
 };

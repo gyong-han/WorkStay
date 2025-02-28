@@ -357,34 +357,26 @@ const Booking = () => {
   const navi = useNavigate();
   
 
-  // const fd = new FormData();
-  // fd.append("spaceNo",spaceVo.no);
-  // fd.append("memberNo",1);
-  // fd.append("paymentNo",1);
-  // fd.append("packageNo",packageNo);
-  // fd.append("adult",spaceVo.adult);
-  // fd.append("child",spaceVo.child);
-  // fd.append("baby",spaceVo.baby);
-  // fd.append("request",request);
-  // fd.append("amount",priceData);
-  // fd.append("useDay",spaceVo.reservationDate);
-  const fd = {
-    spaceNo: spaceVo.no,
-    memberNo: spaceVo.memberNo,
-    paymentNo: 1,
-    packageNo: packageNo,
-    adult: spaceVo.adult,
-    child: spaceVo.child,
-    baby: spaceVo.baby,
-    request: request,
-    amount: priceData,
-    useDay: spaceVo.reservationDate,
-    name : spaceVo.name,
-};
+
+  //localstorge용 데이터 뭉치기
+    const fd = {
+      spaceNo: spaceVo.no,
+      memberNo: spaceVo.memberNo,
+      paymentNo: 1,
+      packageNo: packageNo,
+      adult: spaceVo.adult,
+      child: spaceVo.child,
+      baby: spaceVo.baby,
+      request: request,
+      amount: priceData,
+      useDay: spaceVo.reservationDate,
+      name : spaceVo.name,
+  };
 
 // 이제 `fd` 객체는 로컬스토리지에 저장할 수 있습니다.
+  localStorage.setItem("fd", JSON.stringify(fd));
 
-localStorage.setItem("fd", JSON.stringify(fd));
+
 
 
 const fdData = {
@@ -394,14 +386,6 @@ const fdData = {
   price: priceData,
 };
   
-  
-
-  
-
-// AMOUNT
-// USE_DAY
-
-
   
   return (
     <Layout>
@@ -497,10 +481,7 @@ const fdData = {
           <div>
             <RadioBtn checked name="kakao" />
             <Info>카카오페이</Info>
-            <RadioBtn checked name="kakao" />
-            <Info>계좌이체</Info>
-            
-            
+
           </div>
         </ReservationDiv>
         <ReservationLine />

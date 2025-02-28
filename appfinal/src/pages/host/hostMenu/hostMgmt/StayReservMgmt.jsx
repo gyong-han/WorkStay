@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { jwtDecode } from "jwt-decode";
 
 const MainDiv = styled.div`
   display: grid;
@@ -60,6 +61,20 @@ const StayReservMgmt = () => {
   const [status, setStatus] = useState("5");
   const [dataArr, setDataArr] = useState([]);
   const navigate = useNavigate();
+  const [hostNo, setHostNo] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        setHostNo(decodedToken.no);
+      } catch (error) {
+        console.error("토큰 디코딩 실패:", error);
+      }
+    }
+  }, []);
 
   const handleStatus = (e) => {
     setStatus(e.target.id);
@@ -71,8 +86,9 @@ const StayReservMgmt = () => {
   };
 
   useEffect(() => {
+    if (!hostNo) return;
     const fd = new FormData();
-    fd.append("hostNo", "1");
+    fd.append("hostNo", hostNo);
     fd.append("status", status);
     fetch("http://127.0.0.1:8080/api/host/room/reservList", {
       method: "POST",
@@ -83,7 +99,7 @@ const StayReservMgmt = () => {
       .then((data) => {
         setDataArr(data);
       });
-  }, [status]);
+  }, [hostNo, status]);
 
   const formatPhoneNumber = (phone) => {
     return phone.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");

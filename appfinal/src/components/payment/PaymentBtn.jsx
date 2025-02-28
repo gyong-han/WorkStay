@@ -31,6 +31,30 @@ const PaymentBtn = ({reservationData}) => {
 
   // 결제 준비를 위한 API 호출
   const handlePayment = async () => {
+    const fd1 = localStorage.getItem("fd");
+    const fdData = JSON.parse(fd1);  
+    
+  // 필수 값 검증 (비어 있으면 경고창 띄우기)
+      if (!fdData.spaceNo) {
+        alert("잘못된 경로입니다.");
+        return;
+      }
+      if (!fdData.request.trim()) {
+        alert("요청사항을 작성해주세요.");
+        return;
+      }
+      if (!fdData.amount) {
+        alert("결제 금액이 없습니다. 다시 시도 해주세요.");
+        return;
+      }
+      if (!fdData.useDay) {
+        alert("예약 날짜를 선택해주세요.");
+        return;
+      }
+      if ((fdData.adult+fdData.baby+fdData.child)<=0){
+        alert("인원수를 선택 해주세요.");
+        return;
+      }
     try {
       const response = await fetch("http://localhost:8080/payment/ready", {
         method: "POST",

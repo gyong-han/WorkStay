@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import EnrollReqRoom from "../../../admin/adminComponents/EnrollReqRoom";
 import HostBtn from "../../hostComponents/HostBtn";
 import RoomDetail from "../../hostComponents/RoomDetail";
+import Alert from "../../../../components/Alert";
 
 const HomeDiv = styled.div`
   display: grid;
@@ -49,11 +50,25 @@ const Hr = styled.hr`
   background-color: #d9d9d9;
 `;
 
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
+
 const MyRoomDetail = () => {
   const { stayNum } = useParams();
   const [formDataArr, setFormDataArr] = useState([]);
   const [featuresArr, setFeaturesArr] = useState([]);
   const [fileData, setFileData] = useState([]);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -97,10 +112,14 @@ const MyRoomDetail = () => {
         body: fd,
       });
       const data = await resp.text();
-      const result = (data) => {
-        console.log(data);
-      };
     }
+    setIsAlertOpen(true);
+  };
+
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
+    navigate("/hostMenu/hostMgmtMenu/myStayMgmt");
+    window.scrollTo(0, 0);
   };
 
   const moveList = () => {
@@ -146,6 +165,7 @@ const MyRoomDetail = () => {
           <BtnArea>
             <div></div>
             <HostBtn
+              border="none"
               width="300px"
               height="50px"
               font="25px"
@@ -156,6 +176,7 @@ const MyRoomDetail = () => {
               f={moveList}
             />
             <HostBtn
+              border="1px solid #2B8C44"
               width="300px"
               height="50px"
               font="25px"
@@ -168,9 +189,20 @@ const MyRoomDetail = () => {
             <div></div>
           </BtnArea>
         </MainDiv>
-
         <div></div>
       </HomeDiv>
+      {isAlertOpen && (
+        <Backdrop>
+          <Alert
+            title="내 독채 수정"
+            titleColor="#049dd9"
+            message="수정 요청되었습니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose}
+          />
+        </Backdrop>
+      )}
     </>
   );
 };
