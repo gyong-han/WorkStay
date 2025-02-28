@@ -5,8 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { logout } from "../../../redux/memberSlice";
-import Alert from "../../../components/Alert";
-import { BASE_URL } from "../../../components/service/config";
 
 // const MainDiv = styled.div`
 //   display: flex;
@@ -98,19 +96,6 @@ const SpanTag = styled.span`
   color: #049dd9;
 `;
 
-const Backdrop = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-`;
-
 const BtnTag = styled.button`
   display: grid;
   /* justify-self: center; */
@@ -147,7 +132,6 @@ const GuestEdit = () => {
   const dispatch = useDispatch();
   const navi = useNavigate();
   const [memberVo, setMemberVo] = useState({});
-  const [isAlertOpen, setIsAlertOpen] = useState(false);
   const guest = useSelector((state) => state.guest); // Redux에서 값 가져오기
 
   const token = localStorage.getItem("token");
@@ -166,12 +150,16 @@ const GuestEdit = () => {
         email: decodedToken.email, // 토큰에서 이메일 가져와서 저장
       }));
 
-      fetch(`${BASE_URL}/api/guest/mypage?email=${decodedToken.email}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      // 🔹 2. 회원 정보 가져오기 (프론트에서 직접 이메일 보냄)
+      fetch(
+        `http://127.0.0.1:8080/api/guest/mypage?email=${decodedToken.email}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
         .then((res) => res.json())
         .then((data) => {
           setMemberVo(data);
@@ -180,19 +168,22 @@ const GuestEdit = () => {
     }
   }, [token]);
 
+  // 3. 입력 값 변경 핸들러
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setMemberVo((prev) => ({ ...prev, [name]: value }));
   };
 
+  // 4. 회원 정보 저장 요청 (토큰에서 이메일을 직접 넣어 보냄)
   const handleSave = async (e) => {
     e.preventDefault();
+    // 🔹 undefined 대신 빈 문자열을 사용하여 전송
     const updatedData = {
       ...memberVo,
       pwd: password.length > 0 ? password : "",
     };
 
-    const response = await fetch(`${BASE_URL}/api/guest/editMember`, {
+    const response = await fetch("http://127.0.0.1:8080/api/guest/editMember", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -202,16 +193,11 @@ const GuestEdit = () => {
     });
 
     if (response.ok) {
-      setIsAlertOpen(true);
+      alert("회원 정보가 수정되었습니다.");
       navi("/hostMenu/editHost");
     } else {
       alert("수정 실패. 다시 시도해주세요.");
     }
-  };
-
-  const handleAlertClose = () => {
-    setIsAlertOpen(false);
-    navi("/hostMenu/editHost");
   };
 
   // 비밀번호 조건 검사 함수
@@ -228,24 +214,20 @@ const GuestEdit = () => {
 
   const memberquit = async (e) => {
     e.preventDefault();
-
-    const isConfirmed = window.confirm("정말 탈퇴하시겠습니까?");
-    if (!isConfirmed) return; // 사용자가 "취소"를 눌렀다면 탈퇴 중단
-
+    // 🔹 undefined 대신 빈 문자열을 사용하여 전송
     const updatedData = {
       ...memberVo,
       pwd: password.length > 0 ? password : "",
     };
 
-    const response = await fetch(`${BASE_URL}/api/guest/memberQuit`, {
+    const response = await fetch("http://127.0.0.1:8080/api/guest/memberQuit", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(updatedData),
+      body: JSON.stringify(updatedData), // 토큰에서 추출한 이메일 포함
     });
-
     if (response.ok) {
       alert("회원 탈퇴 되었습니다.");
       localStorage.removeItem("token");
@@ -255,7 +237,6 @@ const GuestEdit = () => {
       alert("탈퇴 실패. 다시 시도해주세요.");
     }
   };
-
   return (
     <>
       <MainWrapper>
@@ -351,19 +332,6 @@ const GuestEdit = () => {
         </form>
         <OutBtnTag onClick={memberquit}>회원탈퇴</OutBtnTag>
       </MainWrapper>
-
-      {isAlertOpen && (
-        <Backdrop>
-          <Alert
-            title="회원수정"
-            titleColor="#049dd9"
-            message="회원수정 되었습니다."
-            buttonText="확인"
-            buttonColor="#049dd9"
-            onClose={handleAlertClose}
-          />
-        </Backdrop>
-      )}
     </>
   );
 };

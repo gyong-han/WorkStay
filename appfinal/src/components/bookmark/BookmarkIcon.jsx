@@ -3,7 +3,6 @@ import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 import styled from "styled-components";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import { BASE_URL } from "../service/config";
 
 const BookmarkBtn = styled.div`
   display: grid;
@@ -13,10 +12,9 @@ const BookmarkBtn = styled.div`
   cursor: pointer;
 `;
 
-const BookmarkIcon = ({ type, targetNo, onToggle }) => {
-  const [bookmarked, setBookmarked] = useState(true);
+const BookmarkIcon = ({ type, targetNo }) => {
+  const [bookmarked, setBookmarked] = useState(false);
   const token = localStorage.getItem("token");
-  const navi = useNavigate();
   let no = null;
 
   if (token) {
@@ -29,28 +27,24 @@ const BookmarkIcon = ({ type, targetNo, onToggle }) => {
   }
 
   const toggleBookmark = () => {
-    if (!token) {
+    if (!no) {
       alert("로그인이 필요합니다.");
-      navi("/login");
       return;
     }
 
-    const url = `${BASE_URL}/api/guest/${type}/${no}/${targetNo}`;
+    const url = `http://127.0.0.1:8080/api/guest/${type}/${no}/${targetNo}`;
 
     fetch(url, {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
     })
-      .then(() => {
-        setBookmarked(!bookmarked);
-        if (onToggle) onToggle(targetNo, type);
-      })
+      .then(() => setBookmarked(!bookmarked))
       .catch((error) => console.error("북마크 변경 실패:", error));
   };
 
   return (
     <BookmarkBtn onClick={toggleBookmark}>
-      {bookmarked ? <FaBookmark /> : <FaRegBookmark />}
+      {bookmarked ? <FaRegBookmark /> : <FaBookmark />}
     </BookmarkBtn>
   );
 };

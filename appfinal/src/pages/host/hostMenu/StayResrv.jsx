@@ -3,7 +3,6 @@ import styled from "styled-components";
 import ReservationCard from "../../../components/reservationInfo/ReservationCard";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode"; // jwtDecode 추가
-import { BASE_URL } from "../../../components/service/config";
 
 const MainDiv = styled.div`
   display: grid;
@@ -48,7 +47,7 @@ const StayResrv = () => {
   useEffect(() => {
     if (!email) return; // email이 없으면 요청하지 않음
 
-    fetch(`${BASE_URL}/api/guest/stayReserv`, {
+    fetch("http://127.0.0.1:8080/api/guest/stayReserv", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

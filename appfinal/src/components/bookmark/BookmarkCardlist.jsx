@@ -55,17 +55,17 @@ const TaglineDiv = styled.div`
   padding-left: 15px;
 `;
 
-const BookmarkCardlist = ({ data, type, onToggle, f }) => {
+const BookmarkCardlist = ({ data, type }) => {
   return (
     <>
-      <MainCardDiv onClick={f}>
+      <MainCardDiv>
         <ImgDIv>
           <Img src={data.filePath} alt="thumbnail" />
         </ImgDIv>
         <TopDiv>
           <TitleDiv>{data.name}</TitleDiv>
           <Share />
-          <BookmarkIcon type={type} targetNo={data.no} onToggle={onToggle} />
+          <BookmarkIcon type={type} targetNo={data.no} />
         </TopDiv>
         <MiddleDiv>
           <AddressDiv>{data.address}</AddressDiv>

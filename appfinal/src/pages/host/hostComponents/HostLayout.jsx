@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { BASE_URL } from "../../../components/service/config";
 
 const HomeDiv = styled.div`
   display: grid;
@@ -93,12 +92,15 @@ const HostLayout = ({ children }) => {
       }));
 
       // 🔹 2. 회원 정보 가져오기 (프론트에서 직접 이메일 보냄)
-      fetch(`${BASE_URL}/api/guest/mypage?email=${decodedToken.email}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      fetch(
+        `http://127.0.0.1:8080/api/guest/mypage?email=${decodedToken.email}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
         .then((res) => res.json())
         .then((data) => {
           setMemberVo(data);

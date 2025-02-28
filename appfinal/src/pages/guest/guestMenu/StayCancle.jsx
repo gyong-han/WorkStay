@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import HostBtn from "../../host/hostComponents/HostBtn";
 import { useLocation, useNavigate } from "react-router-dom";
-import { BASE_URL } from "../../../components/service/config";
 
 const MainDiv = styled.div`
   display: flex;
@@ -112,7 +111,7 @@ const StayCancle = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    fetch(`${BASE_URL}/api/guest/stayCancle?no=${no}&reno=${reno}`, {
+    fetch(`http://127.0.0.1:8080/api/guest/stayCancle?no=${no}&reno=${reno}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
