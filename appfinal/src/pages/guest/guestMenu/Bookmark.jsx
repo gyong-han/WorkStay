@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import BookmarkCardlist from "../../../components/bookmark/BookmarkCardlist";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../../components/service/config";
 
 const MainDiv = styled.div`
   display: flex;
@@ -25,6 +27,7 @@ const MainWrapper = styled.div`
 `;
 
 const Bookmark = () => {
+  const navi = useNavigate();
   const [bookmarkedData, setBookmarkedData] = useState({
     stays: [],
     spaces: [],
@@ -51,14 +54,34 @@ const Bookmark = () => {
   useEffect(() => {
     if (!no) return; // no 없으면 fetch 실행 안 함.
 
-    fetch(`http://127.0.0.1:8080/api/guest/bookmarks/${no}`)
+    fetch(`${BASE_URL}/api/guest/bookmarks/${no}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log("🔹 북마크 데이터:", data);
         setBookmarkedData(data);
       })
       .catch((error) => console.error("북마크 데이터 불러오기 실패:", error));
   }, [no]);
+
+  const handleToggleBookmark = (targetNo, type) => {
+    setBookmarkedData((prev) => ({
+      stays:
+        type === "stay"
+          ? prev.stays.filter((item) => item.no !== targetNo)
+          : prev.stays,
+      spaces:
+        type === "space"
+          ? prev.spaces.filter((item) => item.no !== targetNo)
+          : prev.spaces,
+    }));
+  };
+
+  const stayClick = (stayNo) => {
+    navi(`/findstay/detail/${stayNo}`);
+  };
+
+  const spaceClick = (spaceNo) => {
+    navi(`/findspace/detail/${spaceNo}`);
+  };
 
   return (
     <>
@@ -67,13 +90,25 @@ const Bookmark = () => {
       </MainDiv>
       <MainWrapper>
         {bookmarkedData.stays?.map((stay) => (
-          <BookmarkCardlist key={`stay-${stay.no}`} data={stay} type="stay" />
+          <BookmarkCardlist
+            key={`stay-${stay.no}`}
+            data={stay}
+            type="stay"
+            onToggle={handleToggleBookmark}
+            f={() => {
+              stayClick(stay.no);
+            }}
+          />
         ))}
         {bookmarkedData.spaces?.map((space) => (
           <BookmarkCardlist
             key={`space-${space.no}`}
             data={space}
             type="space"
+            onToggle={handleToggleBookmark}
+            f={() => {
+              spaceClick(space.no);
+            }}
           />
         ))}
       </MainWrapper>

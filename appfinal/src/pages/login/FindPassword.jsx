@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { useFormData } from "../../utils/useFormData";
 import { getPayload } from "../../utils/jwtUtil";
 import { findpwd } from "../../redux/memberSlice";
+import { BASE_URL } from "../../components/service/config";
 
 const MainDiv = styled.div`
   display: grid;
@@ -92,7 +93,7 @@ const FindPassword = () => {
   };
 
   const submitCallBack = (formData) => {
-    const url = "http://127.0.0.1:8080/api/guest/findpwd";
+    const url = `${BASE_URL}/api/guest/findpwd`;
     const option = {
       method: "POST",
       headers: {
