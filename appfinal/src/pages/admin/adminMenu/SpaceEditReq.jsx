@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import PagingDiv from "../../../components/paging/PagingDiv";
+import PagingFooter from "../../../components/paging/PagingFooter";
 
 const MainDiv = styled.div`
   display: grid;
@@ -52,15 +54,24 @@ const StyledTable = styled.table`
 const SpaceEditReq = () => {
   const [formData, setFormData] = useState([]);
   const navigate = useNavigate();
+  const [pageVo, setPageVo] = useState({});
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  let pno = queryParams.get("pno");
+  if (pno === null) {
+    pno = 1;
+  }
+
   useEffect(() => {
-    fetch("http://127.0.0.1:8080/api/admin/spaceEditReq", {
+    fetch(`http://127.0.0.1:8080/api/admin/spaceEditReq?pno=${pno}`, {
       method: "POST",
     })
       .then((resp) => resp.json())
       .then((data) => {
-        setFormData(data);
+        setFormData(data.voList);
+        setPageVo(data.pageVo);
       });
-  }, []);
+  }, [pno]);
 
   const formatPhoneNumber = (phone) => {
     return phone.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
@@ -108,6 +119,11 @@ const SpaceEditReq = () => {
           </StyledTable>
         </div>
       </MainDiv>
+      <PagingDiv>
+        <div></div>
+        <PagingFooter pageVo={pageVo} url="/adminMenu/spaceEditReq" />
+        <div></div>
+      </PagingDiv>
     </>
   );
 };

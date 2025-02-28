@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import PagingDiv from "../../../components/paging/PagingDiv";
+import PagingFooter from "../../../components/paging/PagingFooter";
 
 const MainDiv = styled.div`
   display: grid;
@@ -49,16 +51,24 @@ const StyledTable = styled.table`
 const StayDelReq = () => {
   const [formData, setFormData] = useState([]);
   const navigate = useNavigate();
+  const [pageVo, setPageVo] = useState({});
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  let pno = queryParams.get("pno");
+  if (pno === null) {
+    pno = 1;
+  }
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8080/api/admin/deleteStayList", {
+    fetch(`http://127.0.0.1:8080/api/admin/deleteStayList?pno=${pno}`, {
       method: "POST",
     })
       .then((resp) => resp.json())
       .then((data) => {
-        setFormData(data);
+        setFormData(data.voList);
+        setPageVo(data.pageVo);
       });
-  }, []);
+  }, [pno]);
 
   const formatPhoneNumber = (phone) => {
     phone = String(phone);
@@ -95,6 +105,11 @@ const StayDelReq = () => {
           </StyledTable>
         </div>
       </MainDiv>
+      <PagingDiv>
+        <div></div>
+        <PagingFooter pageVo={pageVo} url="/adminMenu/stayDelReq" />
+        <div></div>
+      </PagingDiv>
     </>
   );
 };

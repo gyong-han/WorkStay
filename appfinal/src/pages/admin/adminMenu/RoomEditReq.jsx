@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import PagingFooter from "../../../components/paging/PagingFooter";
+import PagingDiv from "../../../components/paging/PagingDiv";
 
 const MainDiv = styled.div`
   display: grid;
@@ -51,15 +53,24 @@ const StyledTable = styled.table`
 const RoomEditReq = () => {
   const [formData, setFormData] = useState([]);
   const navigate = useNavigate();
+  const [pageVo, setPageVo] = useState({});
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  let pno = queryParams.get("pno");
+  if (pno === null) {
+    pno = 1;
+  }
+
   useEffect(() => {
-    fetch("http://127.0.0.1:8080/api/admin/roomEditReq", {
+    fetch(`http://127.0.0.1:8080/api/admin/roomEditReq?pno=${pno}`, {
       method: "POST",
     })
       .then((resp) => resp.json())
       .then((data) => {
-        setFormData(data);
+        setFormData(data.voList);
+        setPageVo(data.pageVo);
       });
-  }, []);
+  }, [pno]);
 
   const formatPhoneNumber = (phone) => {
     phone = String(phone);
@@ -107,6 +118,11 @@ const RoomEditReq = () => {
           </StyledTable>
         </div>
       </MainDiv>
+      <PagingDiv>
+        <div></div>
+        <PagingFooter pageVo={pageVo} url="/adminMenu/roomEditReq" />
+        <div></div>
+      </PagingDiv>
     </>
   );
 };
