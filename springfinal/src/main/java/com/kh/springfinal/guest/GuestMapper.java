@@ -232,6 +232,7 @@ public interface GuestMapper {
     @Select("""
             SELECT
                 S.NAME,
+                S.NO roomNo,
                 S.ADDRESS,
                 S.PHONE,
                 RE.NO AS reno,

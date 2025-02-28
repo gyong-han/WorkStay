@@ -106,6 +106,18 @@ const LayoutDiv = styled.div`
   padding-bottom: 50px;
 `;
 
+const Btn = styled.button`
+  width: 250px;
+  height: 50px;
+  background-color: #fafafa;
+  margin-top: 100px;
+  border: 1px solid #049dd9;
+  border-radius: 5px;
+  font-size: 20px;
+  color: #202020;
+  cursor: pointer;
+`;
+
 const StayDetail = () => {
   const navi = useNavigate();
   const location = useLocation();
@@ -176,6 +188,13 @@ const StayDetail = () => {
         "/",
         "staycancle"
       );
+
+    navi(newPath);
+  }
+
+  //이용 안내 및 환불 규정 이동
+  function moveDetail(stayNo) {
+    const newPath = `/findstay/staybooking/${stayNo}/refund-policy`;
 
     navi(newPath);
   }
@@ -349,16 +368,9 @@ const StayDetail = () => {
               />
             </div>
             <div>
-              <HostBtn
-                width="250px"
-                height="50px"
-                font="20px"
-                backColor="#FAFAFA"
-                color="#202020"
-                str="이용 안내 및 환불 규정"
-                top="100px"
-                border="1px solid #049DD9"
-              />
+              <Btn onClick={() => moveDetail(data.roomNo)}>
+                이용 안내 및 환불 규정
+              </Btn>
             </div>
           </BtnDiv>
         </DataArea>
