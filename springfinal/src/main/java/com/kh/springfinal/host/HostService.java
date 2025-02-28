@@ -6,6 +6,7 @@ import com.kh.springfinal.reservation.StayReservVo;
 import com.kh.springfinal.space.SpaceVo;
 import com.kh.springfinal.room.RoomVo;
 import com.kh.springfinal.stay.StayVo;
+import com.kh.springfinal.util.PageVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -80,12 +81,16 @@ public class HostService {
         return mapper.getMyStayList(hostNo);
     }
 
-    public List<TableVo> getSpaceReservList(String status, String hostNo) {
-        return mapper.getSpaceReservList(status,hostNo);
+    public List<TableVo> getSpaceReservList(String status, String hostNo, PageVo pageVo) {
+        int limit = pageVo.getBoardLimit();
+        int offset = pageVo.getOffset();
+        return mapper.getSpaceReservList(status,hostNo,limit,offset);
     }
 
-    public List<TableVo> getRoomReservList(String status, String hostNo) {
-        return mapper.getRoomReservList(status,hostNo);
+    public List<TableVo> getRoomReservList(String status, String hostNo, PageVo pageVo) {
+        int limit = pageVo.getBoardLimit();
+        int offset = pageVo.getOffset();
+        return mapper.getRoomReservList(status,hostNo,limit,offset);
     }
 
     public Map<String, Object> getSpaceReservDetail(String spaceReservNo) {
@@ -199,5 +204,13 @@ public class HostService {
 
     public int deleteMyStay(String stayNo) {
         return mapper.deleteMyStay(stayNo);
+    }
+
+    public int getRoomReservCount(String hostNo, String status) {
+        return mapper.getRoomReservCount(hostNo,status);
+    }
+
+    public int getSpaceReservCount(String hostNo, String status) {
+        return mapper.getSpaceReservCount(hostNo,status);
     }
 }

@@ -1,7 +1,10 @@
 import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import PagingFooter from "../../../../components/paging/PagingFooter";
+import PagingDiv from "../../../../components/paging/PagingDiv";
+import { BASE_URL } from "../../../../components/service/config";
 
 const MainDiv = styled.div`
   display: grid;
@@ -62,6 +65,13 @@ const SpaceReservMgmt = () => {
   const [dataArr, setDataArr] = useState([]);
   const navigate = useNavigate();
   const [hostNo, setHostNo] = useState("");
+  const [pageVo, setPageVo] = useState({});
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  let pno = queryParams.get("pno");
+  if (pno === null) {
+    pno = 1;
+  }
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -86,19 +96,23 @@ const SpaceReservMgmt = () => {
   };
 
   useEffect(() => {
+    pno = 1;
+  }, [status]);
+
+  useEffect(() => {
     const fd = new FormData();
     fd.append("hostNo", hostNo);
     fd.append("status", status);
-    fetch("http://127.0.0.1:8080/api/host/space/reservList", {
+    fetch(`${BASE_URL}/api/host/space/reservList?pno=${pno}`, {
       method: "POST",
-      headers: {},
       body: fd,
     })
       .then((resp) => resp.json())
       .then((data) => {
-        setDataArr(data);
+        setDataArr(data.voList);
+        setPageVo(data.pageVo);
       });
-  }, [hostNo, status]);
+  }, [hostNo, status, pno]);
 
   const formatPhoneNumber = (phone) => {
     return phone.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
@@ -160,6 +174,14 @@ const SpaceReservMgmt = () => {
           </StyledTable>
         </div>
       </MainDiv>
+      <PagingDiv>
+        <div></div>
+        <PagingFooter
+          pageVo={pageVo}
+          url="/hostMenu/hostMgmtMenu/spaceReservMgmt"
+        />
+        <div></div>
+      </PagingDiv>
     </>
   );
 };

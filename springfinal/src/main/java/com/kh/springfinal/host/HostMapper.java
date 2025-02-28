@@ -209,8 +209,10 @@ public interface HostMapper {
             JOIN PACKAGE P ON (SR.PACKAGE_NO = P.NO)
             WHERE S.HOST_NO = #{hostNo}
             AND SR.STATUS_NO = #{status}
+            ORDER BY USE_DAY DESC
+            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
             """)
-    List<TableVo> getSpaceReservList(String status, String hostNo);
+    List<TableVo> getSpaceReservList(String status, String hostNo, int limit, int offset);
 
     @Select("""
             
@@ -222,8 +224,10 @@ public interface HostMapper {
             JOIN STAY S ON(R.STAY_NO = S.NO)
             WHERE S.HOST_NO = #{hostNo}
             AND RS.STATUS_NO = #{status}
+            ORDER BY USE_DAY DESC
+            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
             """)
-    List<TableVo> getRoomReservList(String status, String hostNo);
+    List<TableVo> getRoomReservList(String status, String hostNo, int limit, int offset);
 
 
     @Select("""
@@ -466,4 +470,25 @@ public interface HostMapper {
             WHERE NO = #{stayNo}
             """)
     int deleteMyStay(String stayNo);
+
+    @Select("""
+            SELECT COUNT(RR.NO)
+            FROM ROOM_RESERVATION RR
+            JOIN MEMBER M ON(RR.MEMBER_NO = M.NO)
+            JOIN ROOM R ON(RR.ROOM_NO = R.NO)
+            JOIN STAY S ON(R.STAY_NO = S.NO)
+            WHERE RR.STATUS_NO = #{status}
+            AND S.HOST_NO = #{hostNo}
+            """)
+    int getRoomReservCount(String hostNo, String status);
+
+    @Select("""
+            SELECT COUNT(SR.NO)
+            FROM SPACE_RESERVATION SR
+            JOIN SPACE S ON(SR.SPACE_NO = S.NO)
+            JOIN MEMBER M ON (M.NO = S.HOST_NO)
+            WHERE SR.STATUS_NO = #{status}
+            AND S.HOST_NO = #{hostNo}
+            """)
+    int getSpaceReservCount(String hostNo, String status);
 }
