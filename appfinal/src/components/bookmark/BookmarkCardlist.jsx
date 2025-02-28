@@ -11,6 +11,7 @@ const MainCardDiv = styled.div`
   width: 330px;
   height: 380px;
   margin-bottom: 50px;
+  cursor: pointer;
 `;
 
 const ImgDIv = styled.div`
