@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Footer from "../components/Footer";
 import Main from "../components/Main";
 import Middle from "../components/Middle";
+import HomeMainSlide from "../components/home/HomeMainSlide";
 
 const HomeContainer = styled.div`
   display: flex;
@@ -15,12 +16,13 @@ const Content = styled.div`
   background-color: #f9f9f9;
 `;
 
+
 const Home = () => {
   return (
     <HomeContainer>
       <Content>
         <Middle />
-        <Main />
+        <Main/>
       </Content>
     </HomeContainer>
   );
