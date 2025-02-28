@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 import styled from "styled-components";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 const BookmarkBtn = styled.div`
   display: grid;
