@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import Alert from "../../components/Alert";
 import { useLocation, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { BASE_URL } from "../../components/service/config";
 
 const MainDiv = styled.div`
   display: grid;
@@ -104,7 +105,7 @@ const NewPassword = () => {
   }
 
   const handleSubmits = async (data) => {
-    const url = "http://127.0.0.1:8080/api/guest/newpwd";
+    const url = `${BASE_URL}/api/guest/newpwd`;
     const requestBody = {
       email: email,
       pwd: data.password,

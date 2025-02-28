@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { useFormData } from "../../utils/useFormData";
 import { getPayload } from "../../utils/jwtUtil";
 import { login } from "../../redux/memberSlice";
+import { ABC, BASE_URL } from "../../components/service/config";
 
 const MainDiv = styled.div`
   display: grid;
@@ -133,7 +134,9 @@ const MainLogin = () => {
   };
 
   const submitCallBack = (formData) => {
-    const url = "http://127.0.0.1:8080/api/guest/login";
+    const url = `${BASE_URL}/api/guest/login`;
+    console.log("BASE_URL : ", url);
+
     const option = {
       method: "POST",
       headers: {

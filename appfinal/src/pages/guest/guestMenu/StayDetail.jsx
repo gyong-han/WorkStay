@@ -4,6 +4,7 @@ import { data, useLocation, useNavigate, useParams } from "react-router-dom";
 import HostBtn from "../../host/hostComponents/HostBtn";
 import DataCard from "../../admin/adminComponents/DataCard";
 import { jwtDecode } from "jwt-decode";
+import { BASE_URL } from "../../../components/service/config";
 
 const MainDiv = styled.div`
   display: grid;
@@ -155,15 +156,12 @@ const StayDetail = () => {
 
     console.log("API 요청 실행:", { ...params });
 
-    fetch(
-      `http://127.0.0.1:8080/api/guest/stayDetailReserv?reno=${params.reno}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
+    fetch(`${BASE_URL}/api/guest/stayDetailReserv?reno=${params.reno}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
       .then((resp) => {
         if (!resp.ok) {
           throw new Error(`서버 응답 오류: ${resp.status}`);

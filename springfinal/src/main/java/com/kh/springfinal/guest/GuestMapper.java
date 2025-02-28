@@ -330,6 +330,7 @@ public interface GuestMapper {
     SELECT 
             COUNT(*) AS bookmarkCount,
             SP.NAME AS name,
+            SP.NO AS no,
             SP.ADDRESS AS address,
             SP.TAGLINE AS tagline,
             (SELECT MIN(FILE_PATH) FROM SPACE_ATTACHMENT SA 

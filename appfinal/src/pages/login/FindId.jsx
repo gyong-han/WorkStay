@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Alert from "../../components/Alert";
 import { useFormData } from "../../utils/useFormData";
 import { useDispatch } from "react-redux";
+import { BASE_URL } from "../../components/service/config";
 
 const MainDiv = styled.div`
   display: grid;
@@ -125,7 +126,7 @@ const FindId = () => {
   const dispatch = useDispatch();
 
   const callback = (formData) => {
-    const url = "http://127.0.0.1:8080/api/guest/findid";
+    const url = `${BASE_URL}/api/guest/findid`;
     const option = {
       method: "POST",
       headers: {
