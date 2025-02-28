@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -8,6 +8,7 @@ const Container = styled.div`
   height: 600px;
   flex-direction: column;
   color: #333;
+  text-align: start;
 
   & > h4 {
     color: gray;
@@ -27,8 +28,10 @@ const SlogCard = ({ vo }) => {
         src={firstImage}
         // alt={vo.title}
       />
-      <h3>{vo.title}</h3>
+      <h2>{vo.title}</h2>
+      <h3>{vo.name}</h3>
       <h4>{vo.tagline}</h4>
+      <h5>by.{vo.nick}</h5>
     </Container>
   );
 };

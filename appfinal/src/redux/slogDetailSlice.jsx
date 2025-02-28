@@ -10,6 +10,9 @@ const slogDetailSlice = createSlice({
     fileUrl: "",
     originalName: "",
     titleFileUrl: "",
+    memberNo: "",
+    nick: "",
+    enrollDate: "",
   },
   reducers: {
     setSlogVo: (state, action) => {
@@ -20,6 +23,9 @@ const slogDetailSlice = createSlice({
       state.fileUrl = action.payload.fileUrl;
       state.originalName = action.payload.originalName;
       state.titleFileUrl = action.payload.titleFileUrl;
+      state.memberNo = action.payload.memberNo;
+      state.nick = action.payload.nick;
+      state.enrollDate = action.payload.enrollDate;
     },
   },
 });

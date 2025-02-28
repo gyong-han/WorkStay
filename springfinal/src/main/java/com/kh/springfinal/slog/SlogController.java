@@ -81,6 +81,7 @@ public class SlogController {
 
     @PostMapping("insert")
     public List<String> insert(@ModelAttribute SlogVo vo) {
+        
         slogService.insert(vo);
 
         return List.of("Success");
@@ -104,7 +105,7 @@ public class SlogController {
     @GetMapping("{no}")
     public SlogVo getSlogVo (@PathVariable String no){
 
-//        System.out.println("Controller ::: no = " + no);
+        System.out.println("Controller ::: no = " + no);
 
         try{
             return slogService.getSlogVo(no);

@@ -288,6 +288,8 @@ const SlogWrite = () => {
     files: "",
     fileUrl: "",
     originalName: "",
+    memberNo: "",
+    reno: "",
   });
   const [fontStyle, setFontStyle] = useState("Pretendard-Regular");
   const [fontSize, setFontSize] = useState("16px");
@@ -337,6 +339,18 @@ const SlogWrite = () => {
         });
       });
   };
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const reno = params.get("reno");
+    const memberNo = params.get("memberNo");
+    setFormData((prev) => {
+      return { ...prev, reno: reno, memberNo: memberNo };
+    });
+
+    console.log("reno:", reno);
+    console.log("memberNo:", memberNo);
+  }, []);
 
   const handleTitleFileChange = (e) => {
     if (!e.target.files || e.target.files.length === 0) {
@@ -401,9 +415,9 @@ const SlogWrite = () => {
     fd1.append("tagline", formData.tagline);
 
     contentFileUrls.forEach((fileUrl) => fd1.append("fileUrl", fileUrl));
-    console.log("url####", url);
     fd1.append("titleFileUrl", titleUrls);
-    console.log("#####", titleUrls);
+    fd1.append("reno", formData.reno);
+    fd1.append("memberNo", formData.memberNo);
     fd1.append("originalName", originalNames.join(","));
 
     const fd2 = new FormData();
@@ -424,7 +438,7 @@ const SlogWrite = () => {
         .then((resp) => resp.text())
         .then((data) => {
           console.log("수정한 데이터 ::: ", data);
-          navigate("/slog/list");
+          navigate("/slog");
         });
     } else {
       fetch("http://127.0.0.1:8080/api/slog/insert", {
@@ -434,7 +448,7 @@ const SlogWrite = () => {
         .then((resp) => resp.text())
         .then((data) => {
           dispatch(addSlogVoList(data));
-          navigate("/slog/list");
+          navigate("/slog");
           console.log("발행한 데이터 ::: ", data);
         });
     }
