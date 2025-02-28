@@ -1,236 +1,120 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import HomeMainSlide from "./home/HomeMainSlide";
 
-const MainWrapper = styled.main`
-  display: grid;
-`;
-
-const MainContainer = styled.main`
-  display: grid;
-  gap: 40px;
-  justify-items: center;
-  padding: 15px;
-`;
-
-const SlideContainer = styled.div`
-  display: grid;
-  grid-template-rows: auto;
-  gap: 40px;
+const Layout = styled.div`
   width: 100%;
-  justify-items: center;
-`;
-
-const SlideSection = styled.div`
+  height: 100%;
   display: grid;
-  grid-template-rows: auto auto;
-  gap: 10px;
+  grid-template-columns: 1fr;
+  grid-template-rows: 50px 40px 380px 50px 40px 380px 50px 40px 380px 50px 40px 380px;
 `;
 
-const SectionTitle = styled.div`
-  font-size: 18px;
-  font-weight: bold;
-  /* color: #202020; */
-  text-align: left;
+const TitleDiv = styled.div`
+  display: flex;
+  align-items: end;
+  font-size: 30px;
+  font-weight: 600;
 `;
 
-const CardList = styled.div`
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 10px;
-`;
-
-const Arrow = styled.div`
-  font-size: 24px;
-  /* color: #202020; */
-  cursor: pointer;
-  user-select: none;
-`;
-
-const Cards = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  overflow: hidden;
-  height: 380px;
-`;
-
-const ImgCard = styled.div`
-  width: 380px;
-  padding: 10px;
-  text-align: start;
-
-  img {
-    width: 100%;
-    height: 270px;
-    object-fit: cover;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-  }
-`;
-
-const TextCard = styled.div`
-  width: 380px;
-  height: 130px;
-  border-bottom: 1px solid #d9d9d9;
-  border-left: 1px solid #d9d9d9;
-  border-right: 1px solid #d9d9d9;
-
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-
-  .info {
-    margin-top: 10px;
-  }
-
-  .subinfo {
-    font-size: 10px;
-    color: gray;
-  }
-
-  .price {
-    font-size: 16px;
-    margin-top: 5px;
-  }
+const SubTitleDiv=styled.div`
+  color: 202020;
+  display: flex;
+  align-items: start;
+  font-size: 20px;
 `;
 
 const Main = () => {
-  const seasons = [
-    {
-      title: "봄: 봄의 따뜻한 감성이 묻어나는 워케이션",
-      cards: [
-        {
-          title: "성수동",
-          price: "₩120,000 / 박",
-          subtitle: "서울 / 서대문구 | 2 ~ 4명",
-          image:
-            "https://news.airbnb.com/wp-content/uploads/sites/4/2021/01/LakeviewLodgeFeatureImage.jpeg?fit=2500%2C1875",
-        },
-        {
-          title: "성수동",
-          price: "₩120,000 / 박",
-          subtitle: "서울 / 서대문구 | 2 ~ 4명",
-          image:
-            "https://news.airbnb.com/wp-content/uploads/sites/4/2021/01/LakeviewLodgeFeatureImage.jpeg?fit=2500%2C1875",
-        },
-        {
-          title: "성수동",
-          price: "₩120,000 / 박",
-          subtitle: "서울 / 서대문구 | 2 ~ 4명",
-          image:
-            "https://news.airbnb.com/wp-content/uploads/sites/4/2021/01/LakeviewLodgeFeatureImage.jpeg?fit=2500%2C1875",
-        },
-      ],
-    },
-    {
-      title: "여름: 시원한 공간에서의 워케이션",
-      cards: [
-        {
-          title: "성수동",
-          price: "₩120,000 / 박",
-          subtitle: "서울 / 서대문구 | 2 ~ 4명",
-          image:
-            "https://news.airbnb.com/wp-content/uploads/sites/4/2021/01/LakeviewLodgeFeatureImage.jpeg?fit=2500%2C1875",
-        },
-        {
-          title: "성수동",
-          price: "₩120,000 / 박",
-          subtitle: "서울 / 서대문구 | 2 ~ 4명",
-          image:
-            "https://news.airbnb.com/wp-content/uploads/sites/4/2021/01/LakeviewLodgeFeatureImage.jpeg?fit=2500%2C1875",
-        },
-        {
-          title: "성수동",
-          price: "₩120,000 / 박",
-          subtitle: "서울 / 서대문구 | 2 ~ 4명",
-          image:
-            "https://news.airbnb.com/wp-content/uploads/sites/4/2021/01/LakeviewLodgeFeatureImage.jpeg?fit=2500%2C1875",
-        },
-      ],
-    },
-    {
-      title: "가을: 단풍이 어우러진 공간",
-      cards: [
-        {
-          title: "성수동",
-          price: "₩120,000 / 박",
-          subtitle: "서울 / 서대문구 | 2 ~ 4명",
-          image:
-            "https://news.airbnb.com/wp-content/uploads/sites/4/2021/01/LakeviewLodgeFeatureImage.jpeg?fit=2500%2C1875",
-        },
-        {
-          title: "성수동",
-          price: "₩120,000 / 박",
-          subtitle: "서울 / 서대문구 | 2 ~ 4명",
-          image:
-            "https://news.airbnb.com/wp-content/uploads/sites/4/2021/01/LakeviewLodgeFeatureImage.jpeg?fit=2500%2C1875",
-        },
-        {
-          title: "성수동",
-          price: "₩120,000 / 박",
-          subtitle: "서울 / 서대문구 | 2 ~ 4명",
-          image:
-            "https://news.airbnb.com/wp-content/uploads/sites/4/2021/01/LakeviewLodgeFeatureImage.jpeg?fit=2500%2C1875",
-        },
-      ],
-    },
-    {
-      title: "겨울: 따뜻한 실내에서의 워케이션",
-      cards: [
-        {
-          title: "성수동",
-          price: "₩120,000 / 박",
-          subtitle: "서울 / 서대문구 | 2 ~ 4명",
-          image:
-            "https://news.airbnb.com/wp-content/uploads/sites/4/2021/01/LakeviewLodgeFeatureImage.jpeg?fit=2500%2C1875",
-        },
-        {
-          title: "성수동",
-          price: "₩120,000 / 박",
-          subtitle: "서울 / 서대문구 | 2 ~ 4명",
-          image:
-            "https://news.airbnb.com/wp-content/uploads/sites/4/2021/01/LakeviewLodgeFeatureImage.jpeg?fit=2500%2C1875",
-        },
-        {
-          title: "성수동",
-          price: "₩120,000 / 박",
-          subtitle: "서울 / 서대문구 | 2 ~ 4명",
-          image:
-            "https://news.airbnb.com/wp-content/uploads/sites/4/2021/01/LakeviewLodgeFeatureImage.jpeg?fit=2500%2C1875",
-        },
-      ],
-    },
-  ];
+  const[homeSpringSlide,setHomeSpringSlide]=useState([]);
+  const[homeSummerSlide,setHomeSummerSlide]=useState([]);
+  const[homeAutumnSlide,setHomeAutumnSlide]=useState([]);
+  const[homeWinterSlide,setHomeWinterSlide]=useState([]);
+  
+  useEffect(()=>{
+    fetch("http://localhost:8080/home/spring")
+    .then((resp)=>resp.json())
+    .then((data)=>{
+      console.log("봄 숙소 :: ",data);
+      const fileArr = data.map((vo)=>vo.filePath);
+    
+      if(fileArr.length <=1){
+        setHomeSpringSlide((prev)=>{return[...prev,data[0].filePath]});
+      }else{
+        setHomeSpringSlide(fileArr);
+      }
+      
+    })
+  },[])
+  useEffect(()=>{
+    fetch("http://localhost:8080/home/summer")
+    .then((resp)=>resp.json())
+    .then((data)=>{
+      console.log("여름 숙소 :: ",data);
+      const fileArr = data.map((vo)=>vo.filePath);
+    
+      if(fileArr.length <=1){
+        setHomeSummerSlide((prev)=>{return[...prev,data[0].filePath]});
+      }else{
+        setHomeSummerSlide(fileArr);
+      }
+ 
+      
+      })
+  },[])
+  useEffect(()=>{
+    fetch("http://localhost:8080/home/autumn")
+    .then((resp)=>resp.json())
+    .then((data)=>{
+      console.log("가을 숙소 :: ",data);
+      const fileArr = data.map((vo)=>vo.filePath);
+   
+      if(fileArr.length <=1){
+        setHomeAutumnSlide((prev)=>{return[...prev,data[0].filePath]});
+      }else{
+        setHomeAutumnSlide(fileArr);
+      }
 
+    })
+  },[])
+  useEffect(()=>{
+    fetch("http://localhost:8080/home/winter")
+    .then((resp)=>resp.json())
+    .then((data)=>{
+      console.log("겨울 숙소 :: ",data);
+      const fileArr = data.map((vo)=>vo.filePath);
+      if(!fileArr.length === 0){
+        if(fileArr.length <=1){
+          setHomeWinterSlide((prev)=>{return[...prev,data[0].filePath]});
+        }else{
+          setHomeWinterSlide(fileArr);
+        }
+      }
+      
+    })
+  },[])
   return (
-    <MainContainer>
-      {/* <LeftBlank /> */}
-      <SlideContainer>
-        {seasons.map((season, index) => (
-          <SlideSection key={index}>
-            <SectionTitle>{season.title}</SectionTitle>
-            <CardList>
-              <Arrow>{"<"}</Arrow>
-              <Cards>
-                {season.cards.map((card, idx) => (
-                  <ImgCard></ImgCard>
-                  // <ImgCard key={idx}>
-                  //   <img src={card.image} alt={card.title} />
-                  // </ImgCard>
-                  // <TextCard>
-                  //   <div className="info">{card.title}</div>
-                  //   <div className="subinfo">{card.subtitle}</div>
-                  //   <div className="price">{card.price}</div>
-                  // </TextCard>
-                ))}
-              </Cards>
-              <Arrow>{">"}</Arrow>
-            </CardList>
-          </SlideSection>
-        ))}
-      </SlideContainer>
-      {/* <RightBlank /> */}
-    </MainContainer>
+    <Layout>
+          <TitleDiv>봄 : 꽃이 만개한 자연 속에서 영감을 얻는 워케이션</TitleDiv>
+          <SubTitleDiv>“계절의 시작, 자연이 전하는 에너지를 느끼며 새로운 아이디어를 발견하세요.”</SubTitleDiv>
+          <div>
+          <HomeMainSlide w={1700} h={380} main={false}imgPaths={homeSpringSlide}></HomeMainSlide>
+          </div>
+          <TitleDiv>여름 : 물가에서 시원하게 몰입할 수 있는 리프레시 워케이션</TitleDiv>
+          <SubTitleDiv>“계절의 시작, 자연이 전하는 에너지를 느끼며 새로운 아이디어를 발견하세요.”</SubTitleDiv>
+          <div>
+         <HomeMainSlide w={1700} h={380} main={false}imgPaths={homeSummerSlide}></HomeMainSlide>
+          </div>
+          <TitleDiv>가을 : 단풍 아래에서 사색과 창의력을 키우는 워케이션</TitleDiv>
+          <SubTitleDiv>“계절의 시작, 자연이 전하는 에너지를 느끼며 새로운 아이디어를 발견하세요.”</SubTitleDiv>
+          <div>
+          <HomeMainSlide w={1700} h={380} main={false}imgPaths={homeAutumnSlide}></HomeMainSlide>
+          </div>
+          <TitleDiv>겨울 : 따뜻한 공간에서 집중과 휴식을 동시에 하는 워케이션</TitleDiv>
+          <SubTitleDiv>“계절의 시작, 자연이 전하는 에너지를 느끼며 새로운 아이디어를 발견하세요.”</SubTitleDiv>
+          <div>
+          <HomeMainSlide w={1700} h={380} main={false}imgPaths={homeWinterSlide}></HomeMainSlide>
+          </div>
+    </Layout>
   );
 };
 
