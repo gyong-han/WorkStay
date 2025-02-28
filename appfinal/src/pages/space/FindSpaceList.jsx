@@ -11,6 +11,7 @@ import { setLoginMemberNo, setReset, setResetSearch, setTitleSearch } from "../.
 import { getAttachmentAll, getSpaceListAll } from "../../components/service/spaceServcie";
 import SortDropdownSpace from "../../components/listcomponents/SortDropdownSpace";
 import { jwtDecode } from'jwt-decode'
+import { useLocation } from "react-router-dom";
 
 
 
@@ -83,10 +84,14 @@ const FilterTextMD = styled.span`
 const FindSpaceList = () => {
 
   const dispatch = useDispatch();
-    // if (window.location.href&&document.referrer !== window.location.href) {
-    //   console.log("이전페이지 ",document.referrer);
-    //     dispatch(setResetSearch())
-    // } 
+  const location = useLocation();
+
+  console.log("위치는",location.pathname);
+  if(location.pathname){
+    localStorage.removeItem("fd");
+  }
+  
+  
   
   const spaceVo = useSelector((state)=>state.space);
   const [formData, setFormData] = useState();
