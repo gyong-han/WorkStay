@@ -2,6 +2,7 @@ import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { BASE_URL } from "../../../components/service/config";
 
 const MainDiv = styled.div`
   display: flex;
@@ -83,15 +84,12 @@ const SlogMgmt = () => {
         no: decodedToken.no,
       }));
 
-      fetch(
-        `http://127.0.0.1:8080/api/guest/slogList?memberNo=${decodedToken.no}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      fetch(`${BASE_URL}/api/guest/slogList?memberNo=${decodedToken.no}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
         .then((resp) => resp.json())
         .then((data) => {
           setSlogListVo(data);
