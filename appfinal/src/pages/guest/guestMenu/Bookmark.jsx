@@ -29,7 +29,7 @@ const Bookmark = () => {
     stays: [],
     spaces: [],
   });
-  const [no, setNo] = useState(null); // 🔹 no 상태 추가
+  const [no, setNo] = useState(null); // no 상태 추가
 
   useEffect(() => {
     const token = localStorage.getItem("token");

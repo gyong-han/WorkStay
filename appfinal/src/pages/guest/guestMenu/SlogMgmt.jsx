@@ -101,6 +101,10 @@ const SlogMgmt = () => {
     }
   }, [token]);
 
+  const handleClick = (slogNo) => {
+    navi(`/slog/detail/${slogNo}`);
+  };
+
   return (
     <>
       <MainDiv>
@@ -110,7 +114,10 @@ const SlogMgmt = () => {
         {dataArr.length > 0 ? (
           dataArr.map((slogListVo) => (
             <>
-              <SlogDiv>
+              <SlogDiv
+                onClick={() => handleClick(slogListVo.no)}
+                style={{ cursor: "pointer" }}
+              >
                 <ImgTag src={slogListVo.titleFileUrl} />
                 <TitleDiv>{slogListVo.title}</TitleDiv>
                 <NameDiv>{slogListVo.name}</NameDiv>
