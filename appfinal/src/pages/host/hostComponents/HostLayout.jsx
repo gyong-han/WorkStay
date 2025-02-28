@@ -1,5 +1,7 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const HomeDiv = styled.div`
@@ -59,19 +61,64 @@ const MenuDiv = styled.div`
 const HostLayout = ({ children }) => {
   const navigate = useNavigate();
   const [selectedMenu, setSelectedMenu] = useState("");
-  localStorage.setItem("selected", "");
+  const [url, setUrl] = useState("");
+  const { pathname } = useLocation();
+  const [memberVo, setMemberVo] = useState({});
+
+  useEffect(() => {
+    const lastPath = pathname.split("/").pop();
+    setUrl(lastPath);
+  }, []);
+
+  useEffect(() => {
+    setSelectedMenu(url);
+  }, [url]);
 
   function movePath(e) {
     setSelectedMenu(e.target.id);
     navigate(`/hostMenu/hostMgmtMenu/${e.target.id}`);
   }
 
+  const token = localStorage.getItem("token");
+
+  //토큰 정보 있으면 화면에 보여주기
+  useEffect(() => {
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      setMemberVo((prev) => ({
+        ...prev,
+        email: decodedToken.email,
+        pageNick: decodedToken.pageNick,
+      }));
+
+      // 🔹 2. 회원 정보 가져오기 (프론트에서 직접 이메일 보냄)
+      fetch(
+        `http://127.0.0.1:8080/api/guest/mypage?email=${decodedToken.email}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setMemberVo(data);
+        })
+        .catch((err) => console.error("회원 정보 불러오기 실패:", err));
+    }
+  }, [token]);
+
+  const pageNick = useSelector((state) => {
+    return state.member.pageNick;
+  });
+
   return (
     <>
       <HomeDiv>
         <div>
           <HeaderDiv size="40px" color="#2B8C44" margin="70px" weight="400">
-            HOST
+            {memberVo.pageNick}
           </HeaderDiv>
           <HeaderDiv
             size="50px"
@@ -80,13 +127,17 @@ const HostLayout = ({ children }) => {
             margin="10px"
             marginBot="70px"
           >
-            이예은님 반가워요!
+            {memberVo.name}님 반가워요!
           </HeaderDiv>
           <Hr />
         </div>
         <MainDiv>
           <MenuAreaDiv>
-            <MenuDiv id="" onClick={movePath} selected={selectedMenu === ""}>
+            <MenuDiv
+              id=""
+              onClick={movePath}
+              selected={selectedMenu === "" || selectedMenu === "hostMgmtMenu"}
+            >
               숙소 예약 관리
             </MenuDiv>
             <MenuDiv

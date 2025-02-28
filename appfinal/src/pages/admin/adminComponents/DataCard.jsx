@@ -48,7 +48,7 @@ const formatPhoneNumber = (phone) => {
   }
 };
 
-const DataCard = ({ title, address, phone, sns, img }) => {
+const DataCard = ({ title, address, phone, sns, img, click }) => {
   return (
     <>
       <DataDiv>

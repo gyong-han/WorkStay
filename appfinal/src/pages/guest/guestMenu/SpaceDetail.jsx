@@ -180,6 +180,13 @@ const SpaceDetail = () => {
     navi(newPath);
   }
 
+  //이용 안내 및 환불 규정 이동
+  function moveDetail(spaceNo) {
+    const newPath = `/findspace/spacebooking/${spaceNo}`;
+
+    navi(newPath);
+  }
+
   return (
     <>
       <MainDiv>
@@ -359,6 +366,9 @@ const SpaceDetail = () => {
                 str="이용 안내 및 환불 규정"
                 border="1px solid #049DD9"
                 top="100px"
+                f={() => {
+                  moveDetail(data.roomNo);
+                }}
               />
             </div>
           </BtnDiv>
