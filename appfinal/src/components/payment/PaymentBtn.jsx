@@ -26,7 +26,7 @@ const Button = styled.button`
 `;
 
 
-const PaymentBtn = ({reservationData}) => {
+const PaymentBtn = ({reservationData,checkInfo}) => {
   const [paymentUrl, setPaymentUrl] = useState("");
 
   // 결제 준비를 위한 API 호출
@@ -53,6 +53,10 @@ const PaymentBtn = ({reservationData}) => {
       }
       if ((fdData.adult+fdData.baby+fdData.child)<=0){
         alert("인원수를 선택 해주세요.");
+        return;
+      }
+      if (!checkInfo) {
+        alert("사용자 전체 약관 동의해주세요.");
         return;
       }
     try {
