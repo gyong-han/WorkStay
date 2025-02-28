@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FaAngleDown } from "react-icons/fa6";
-import { Accordion } from "react-bootstrap";
 import CalendarTime from "../../components/FilterBar/CalendalTime";
 import { useSelector } from "react-redux";
 import SelectPeople from "./spaceComponents/SelectPeople";
 import { useNavigate } from "react-router-dom";
 import PaymentBtn from "../../components/payment/PaymentBtn";
+import SpaceAccordion from "./spaceComponents/SpaceAccordion";
+import { getMemberInfo } from "../../components/service/spaceServcie";
+import { jwtDecode } from'jwt-decode'
 
 
 const Layout = styled.div`
@@ -233,24 +235,45 @@ const Ptag = styled.p`
 `;
 
 const Booking = () => {
+
+  const spaceVo = useSelector((state)=>state.space);
+   const [loginMember,setLoginMember] = useState({});
+   const [phoneNumber,setPhoneNumber] = useState();
+   const [check,setCheck] = useState();
+   const token = localStorage.getItem("token");
+   const decodedToken = jwtDecode(token);
+   
+
+   useEffect(()=>{
+  
+    const memberInfomation = async ()=>{
+      const memberObj = await getMemberInfo(decodedToken.no);
+      setLoginMember(memberObj);
+      const cleaned = memberObj.phone?.replace(/\D/g, '') || ''; 
+      const formattedPhoneNumber = cleaned.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+      setPhoneNumber(formattedPhoneNumber);      
+     }   
+     memberInfomation();
+   },[])
+
   
   const termsData = [
     {
       id: 1,
       text: "(필수) 개인정보 제 3자 제공 동의",
-      details: (hotelName) => (
+      details:(
         <div>
           <p>
             (주)워크스테이는 예약 시스템 제공 과정에서 예약자 동의 하에 서비스
             이용을 위한 예약자 개인정보를 수집하며, 수집된 개인정보는 제휴
-            판매자(숙소)에게 제공됩니다. 정보 주체는 개인정보의 수집 및 이용
+            판매자(공간)에게 제공됩니다. 정보 주체는 개인정보의 수집 및 이용
             동의를 거부할 권리가 있으나, 이 경우 상품 및 서비스 예약이
             제한됩니다.
           </p>
           <ul>
-            <li>제공받는자 : {hotelName}</li>
+            <li>제공받는자 : {spaceVo.name}</li>
             <li>
-              제공 목적: 제휴 판매자(숙소)와 이용자(회원)의 예약에 대한 서비스
+              제공 목적: 제휴 판매자(공간)와 이용자(회원)의 예약에 대한 서비스
               제공, 계약의 이행(예약확인, 이용자 확인), 민원 처리 등 소비자 분쟁
               해결을 위한 기록 보존
             </li>
@@ -265,28 +288,6 @@ const Booking = () => {
     },
     {
       id: 2,
-      text: "(필수) 미성년자(청소년) 투숙 기준 동의",
-      details: (
-        <div>
-          <Ptag>스테이 소재지 : 대한민국</Ptag>
-          <UlTag>
-            <li>
-              만 19세 미만 미성년자(청소년)의 경우 예약 및 투숙이 불가합니다.
-            </li>
-            <li>
-              만 19세 미만 미성년자(청소년)가 투숙을 원하는 경우
-              보호자(법정대리인)가 필수 동행해야 합니다.
-            </li>
-            <li>
-              이용일 당일 미성년자(청소년) 투숙 기준 위반이 확인되는 경우
-              환불없이 퇴실 조치됩니다.
-            </li>
-          </UlTag>
-        </div>
-      ),
-    },
-    {
-      id: 3,
       text: "(필수) 환불 규정에 동의",
       details: (
         <TableWrapper>
@@ -324,39 +325,53 @@ const Booking = () => {
         </TableWrapper>
       ),
     },
+    
   ];
   const [checkedItems, setCheckedItems] = useState([]);
 
-  // 전체 체크박스 클릭 시
-  const handleAllCheck = (checked) => {
-    if (checked) {
-      setCheckedItems(termsData.map((item) => item.id));
-    } else {
-      setCheckedItems([]);
-    }
-  };
+ // 개별 체크박스 클릭 시
+const handleSingleCheck = (checked, id) => {
+  if (checked) {
+    setCheckedItems((prev) => [...prev, id]);
+  } else {
+    setCheckedItems((prev) => prev.filter((item) => item !== id));
+  }
+};
 
-  // 개별 체크박스 클릭 시
-  const handleSingleCheck = (checked, id) => {
-    if (checked) {
-      setCheckedItems((prev) => [...prev, id]);
-    } else {
-      setCheckedItems((prev) => prev.filter((item) => item !== id));
-    }
-  };
+// 전체 체크박스 클릭 시
+const handleAllCheck = (checked) => {
+  if (checked) {
+    setCheckedItems(termsData.map((item) => item.id));
+    setCheck(checked);
+  } else {
+    setCheckedItems([]);
+    setCheck(checked);
+  }
+};
+
+// 개별 체크박스를 체크할 때 전체 체크 상태 업데이트
+useEffect(() => {
+  if (checkedItems.length === termsData.length) {
+    // 모든 체크박스가 체크되면 전체 체크박스도 체크됨
+    setCheck(true);
+  } else {
+    setCheck(false);
+  }
+}, [checkedItems]);
 
   // const navi = useNavigate();
 
   // 날짜 선택
   const [selectDate,setSelectDate] = useState("");
   const [request,setRequest] = useState("");
-  const spaceVo = useSelector((state)=>state.space);
+  
   const priceData = spaceVo.packageType === '낮 패키지'?spaceVo.daytimePrice :spaceVo.nightPrice;
   const packageNo = spaceVo.packageType === '낮 패키지'?1:2;
   const price = priceData.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const navi = useNavigate();
   
 
+ 
 
   //localstorge용 데이터 뭉치기
     const fd = {
@@ -424,17 +439,17 @@ const fdData = {
         <ReservationLine />
         <ReservationDiv>
           <InfoText>이름</InfoText>
-          <Info>홍길동</Info>
+          <Info>{loginMember.name}</Info>
         </ReservationDiv>
         <ReservationLine />
         <ReservationDiv>
           <InfoText>휴대전화</InfoText>
-          <Info>010-1111-1111</Info>
+          <Info>{phoneNumber}</Info>
         </ReservationDiv>
         <ReservationLine />
         <ReservationDiv>
           <InfoText>이메일</InfoText>
-          <Info>gamza@naver.com</Info>
+          <Info>{loginMember.email}</Info>
         </ReservationDiv>
         <ReservationLine />
         <ReservationDiv>
@@ -481,7 +496,6 @@ const fdData = {
           <div>
             <RadioBtn checked name="kakao" />
             <Info>카카오페이</Info>
-
           </div>
         </ReservationDiv>
         <ReservationLine />
@@ -500,7 +514,7 @@ const fdData = {
         </AllAgree>
         <Agree>
           <div>
-            <Accordion
+            <SpaceAccordion
               termsData={termsData}
               checkedItems={checkedItems}
               handleSingleCheck={handleSingleCheck}
@@ -510,7 +524,7 @@ const fdData = {
       </UserAgreeWrapper>
       <PaddingDiv>
         {/* <Btn f={clickHandler} w={"500px"}>결제하기</Btn> */}
-        <PaymentBtn reservationData ={fdData}/>
+        <PaymentBtn reservationData ={fdData} checkInfo={check}/>
       </PaddingDiv>
       <ProvisionDiv>
         <ProvisionSpan>
