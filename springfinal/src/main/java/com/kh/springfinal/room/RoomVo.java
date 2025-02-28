@@ -33,4 +33,6 @@ public class RoomVo {
     private String[] useDay;
     private String paymentName;
 
+    private String statusNo;
+
 }
