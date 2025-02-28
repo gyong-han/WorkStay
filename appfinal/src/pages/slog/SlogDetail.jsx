@@ -7,6 +7,7 @@ import Map from "../../components/map/Map";
 import { setRecVo } from "../../redux/slogRecSlice";
 import MapRec from "../../components/map/MapRec";
 import KakaoShare from "./KakaoShare";
+import { jwtDecode } from "jwt-decode";
 
 const Container = styled.div`
   width: 100%;
@@ -18,10 +19,19 @@ const Title = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: white;
+  color: #fafafa;
   background-repeat: no-repeat;
   background-size: cover;
   min-height: 300px;
+  flex-direction: column;
+  position: relative;
+  font-weight: 900;
+
+  .nick {
+    font-size: 16px;
+    position: absolute;
+    bottom: 10px;
+  }
 `;
 
 const Main = styled.main`
@@ -149,7 +159,7 @@ const SlogDetail = () => {
   const recVo = useSelector((state) => state.slogRec.recPlaces) || [];
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [userNo, setUserNo] = useState(null);
   const [selectedPlace, setSelectedPlace] = useState(null);
 
   // 처음 로드될 때 첫 번째 장소를 자동으로 선택
@@ -176,6 +186,21 @@ const SlogDetail = () => {
         dispatch(setRecVo(data));
       });
   }, [no]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        setUserNo(decodedToken.no); // 상태 업데이트
+      } catch (error) {
+        console.error("토큰 디코딩 실패:", error);
+      }
+    }
+  }, []);
+
+  console.log("gdgdgdg", slogVo.memberNo);
 
   const handleButtonClick = (address, name) => {
     setSelectedPlace({ address, name });
@@ -232,7 +257,14 @@ const SlogDetail = () => {
           objectFit: "contain",
         }}
       >
-        {slogVo.title}
+        <div>{slogVo.title}</div>
+        <div className="nick">
+          {new Date(slogVo.enrollDate)
+            .toLocaleDateString("ko-KR")
+            .replace(/-/g, ".")}
+          <span style={{ marginRight: "20px" }}></span>
+          by.{slogVo.nick}{" "}
+        </div>
       </Title>
       <Main>
         <LeftBlank />
@@ -270,15 +302,20 @@ const SlogDetail = () => {
         <RightBlank />
       </Main>
       <EditDeleteBtn>
-        <button className="edit" onClick={handleEdit}>
-          수정하기
-        </button>
-        <button className="delete" onClick={handleRemove}>
-          삭제하기
-        </button>
-        <button className="share" onClick={openKakaoModal}>
-          트레블 공유하기
-        </button>
+        {userNo === slogVo?.memberNo ? (
+          <>
+            <button className="edit" onClick={handleEdit}>
+              수정하기
+            </button>
+            <button className="delete" onClick={handleRemove}>
+              삭제하기
+            </button>
+          </>
+        ) : (
+          <button className="share" onClick={openKakaoModal}>
+            트레블 공유하기
+          </button>
+        )}
       </EditDeleteBtn>
 
       <ModalContainer isOpen={isModalOpen}>

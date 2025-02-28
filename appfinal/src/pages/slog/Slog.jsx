@@ -34,15 +34,15 @@ const Slog = () => {
   return (
     <Container>
       <h1>S-LOG</h1>
-      {!hideNavBar && (
+      {/* {!hideNavBar && (
         <NavBar>
           <NavLink to="/slog/write">작성하기</NavLink>
           <NavLink to="/slog/list">리스트</NavLink>
         </NavBar>
-      )}
+      )} */}
       <Routes>
         <Route path="write" element={<SlogWrite />} />
-        <Route path="list" element={<SlogList />} />
+        <Route path="" element={<SlogList />} />
         <Route path="detail/:no" element={<SlogDetail />} />
         <Route path="edit/:no" element={<SlogWrite />} />
       </Routes>

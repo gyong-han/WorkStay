@@ -50,6 +50,7 @@ const SlogList = () => {
   const navigate = useNavigate();
 
   const { voList, pno, isLoading } = useSelector((state) => state.slog);
+  console.log("########### voList ::: ", voList);
 
   useEffect(() => {
     dispatch(resetPno());
@@ -86,6 +87,8 @@ const SlogList = () => {
       fetch(`http://127.0.0.1:8080/api/slog/list?pno=${pno}`)
         .then((resp) => resp.json())
         .then((data) => {
+          console.log("!!!!!!!!!!!!!! data : ", data);
+
           dispatch(addSlogVoList(data));
           dispatch(setLoading(false));
         });
@@ -98,7 +101,14 @@ const SlogList = () => {
         <LeftBlank />
         <CardContainer>
           {voList.map((vo) => (
-            <CardWrapper key={vo.no} onClick={() => showSlogDetail(vo.no)}>
+            <CardWrapper
+              key={vo.no}
+              onClick={() => {
+                console.log("############", vo);
+
+                showSlogDetail(vo.no);
+              }}
+            >
               <SlogCard vo={vo} />
             </CardWrapper>
           ))}
