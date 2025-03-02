@@ -237,6 +237,7 @@ const MySpaceDetail = () => {
   const [hostNo, setHostNo] = useState("");
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [isAlertOpen2, setIsAlertOpen2] = useState(false);
+  const [isAlertOpen3, setIsAlertOpen3] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -327,6 +328,8 @@ const MySpaceDetail = () => {
       .then((data) => {
         if (data > 0) {
           setIsAlertOpen2(true);
+        } else {
+          setIsAlertOpen3(true);
         }
       });
   };
@@ -348,6 +351,12 @@ const MySpaceDetail = () => {
   };
 
   const handleAlertClose2 = () => {
+    setIsAlertOpen(false);
+    navigate("/hostMenu/hostMgmtMenu/mySpaceMgmt");
+    window.scrollTo(0, 0);
+  };
+
+  const handleAlertClose3 = () => {
     setIsAlertOpen(false);
     navigate("/hostMenu/hostMgmtMenu/mySpaceMgmt");
     window.scrollTo(0, 0);
@@ -678,6 +687,19 @@ const MySpaceDetail = () => {
             buttonText="확인"
             buttonColor="#049dd9"
             onClose={handleAlertClose2}
+          />
+        </Backdrop>
+      )}
+
+      {isAlertOpen3 && (
+        <Backdrop>
+          <Alert
+            title="내 공간 입접삭제"
+            titleColor="red"
+            message="입점 삭제 불가능합니다. 이용 완료되지 않은 예약 내역이 있습니다."
+            buttonText="확인"
+            buttonColor="red"
+            onClose={handleAlertClose3}
           />
         </Backdrop>
       )}
