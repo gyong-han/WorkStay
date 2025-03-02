@@ -21,9 +21,8 @@ public interface AdminMapper {
             JOIN MEMBER M ON(S.HOST_NO = M.NO)
             WHERE S.STATUS_NO= '1'
             ORDER BY S.ENROLL_DATE DESC
-            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
             """)
-    List<TableVo> getStayEnrollReqList(int limit, int offset);
+    List<TableVo> getStayEnrollReqList();
 
     @Select("""
             SELECT S.NO AS NO,M.NAME AS HOST_NAME,M.EMAIL,S.NAME AS NAME,M.PHONE 
@@ -31,9 +30,8 @@ public interface AdminMapper {
             JOIN MEMBER M ON(S.HOST_NO = M.NO)
             WHERE S.STATUS_NO= '1'
             ORDER BY S.ENROLL_DATE DESC
-            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
             """)
-    List<TableVo> getSpaceEnrollReqList(int limit, int offset);
+    List<TableVo> getSpaceEnrollReqList();
 
     @Select("""
             SELECT M.NO, M.NAME AS HOSTNAME, M.EMAIL, M.PHONE,
@@ -42,9 +40,8 @@ public interface AdminMapper {
             FROM MEMBER M
             WHERE M.HOST_PERMISSION = 'Y'
             ORDER BY M.NO
-            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
             """)
-    List<TableVo> getHostList(int offset, int limit);
+    List<TableVo> getHostList();
 
     @Select("""
             SELECT NO,NAME AS HOSTNAME,EMAIL,PHONE
@@ -86,7 +83,7 @@ public interface AdminMapper {
 
     @Select("""
             SELECT S.NAME,ADDRESS,PHONE,SNS,BT.NAME AS BUSINESS_TYPE_NAME,BRN,TAGLINE,
-            INTRODUCTION,STANDARD_GUEST,MAX_GUEST,DAYTIME_PRICE,NIGHT_PRICE,S.STATUS_NO
+            INTRODUCTION,STANDARD_GUEST,MAX_GUEST,DAYTIME_PRICE,NIGHT_PRICE
             FROM SPACE S
             JOIN BUSINESS_TYPE BT ON (S.BUSINESS_TYPE_NO = BT.NO)
             WHERE S.NO = #{enrollReqNo}
@@ -134,7 +131,8 @@ public interface AdminMapper {
     @Update("""
             UPDATE MEMBER
             SET
-            HOST_PERMISSION = 'Y'
+            HOST_PERMISSION = 'Y',
+            PAGE_NICK = 'HOST'
             WHERE NO = #{hostNo}
             """)
     int changeHost(Long hostNo);
@@ -172,7 +170,7 @@ public interface AdminMapper {
     List<String> getRoomNoEnrollReq(Long stayNo);
 
     @Select("""
-            SELECT R.NAME,R.STANDARD_GUEST,R.MAX_GUEST,R.PRICE,R.SINGLE_SIZE,R.DOUBLE_SIZE,R.QUEEN_SIZE,R.INTRODUCTION,S.HOST_NO,S.STATUS_NO
+            SELECT R.NAME,R.STANDARD_GUEST,R.MAX_GUEST,R.PRICE,R.SINGLE_SIZE,R.DOUBLE_SIZE,R.QUEEN_SIZE,R.INTRODUCTION,S.HOST_NO
             FROM ROOM R
             JOIN STAY S ON (R.STAY_NO = S.NO)
             WHERE R.NO = #{roomNo}
@@ -225,272 +223,4 @@ public interface AdminMapper {
             WHERE NO = #{stayNo}
             """)
     int companionStay(Long stayNo);
-
-    @Select("""
-            SELECT S.NO,M.NAME AS HOST_NAME,S.NAME,M.PHONE,TO_CHAR(ES.MODIFY_DATE, 'YYYY.MM.DD') AS MODIFY_DATE
-            FROM EDIT_SPACE ES
-            JOIN SPACE S ON (ES.SPACE_NO = S.NO)
-            JOIN MEMBER M ON (S.HOST_NO = M.NO)
-            WHERE ES.STATUS_NO = '1' 
-            ORDER BY MODIFY_DATE
-            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
-            """)
-    List<SpaceVo> getSpaceEditList(int limit, int offset);
-
-    @Select("""
-            SELECT S.NO,M.NAME AS HOST_NAME,S.NAME,M.PHONE,TO_CHAR(ES.MODIFY_DATE, 'YYYY.MM.DD') AS MODIFY_DATE
-            FROM EDIT_STAY ES
-            JOIN STAY S ON (ES.STAY_NO = S.NO)
-            JOIN MEMBER M ON (S.HOST_NO = M.NO)
-            WHERE ES.STATUS_NO = '1'
-            ORDER BY MODIFY_DATE
-            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
-            """)
-    List<StayVo> getStayEditList(int limit, int offset);
-
-    @Select("""
-            SELECT R.NO,M.NAME AS HOST_NAME,R.NAME,M.PHONE,TO_CHAR(ER.MODIFY_DATE, 'YYYY.MM.DD') AS MODIFY_DATE
-            FROM EDIT_ROOM ER
-            JOIN ROOM R ON (ER.ROOM_NO = R.NO)
-            JOIN STAY S ON (R.STAY_NO = S.NO)
-            JOIN MEMBER M ON (S.HOST_NO = M.NO)
-            WHERE ER.STATUS_NO = '1'
-            ORDER BY ER.MODIFY_DATE
-            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
-            """)
-    List<StayVo> getRoomEditList(int limit, int offset);
-
-    @Select("""
-            SELECT S.NAME,ADDRESS,PHONE,SNS,BT.NAME AS BUSINESS_TYPE_NAME,BRN,TAGLINE,
-            INTRODUCTION,STANDARD_GUEST,MAX_GUEST,DAYTIME_PRICE,NIGHT_PRICE
-            FROM SPACE S
-            JOIN BUSINESS_TYPE BT ON (S.BUSINESS_TYPE_NO = BT.NO)
-            WHERE S.NO = #{spaceNo}
-            """)
-    SpaceVo getOriginSpace(String spaceNo);
-
-    @Select("""
-            SELECT M.NAME,M.PHONE,M.EMAIL
-            FROM MEMBER M
-            JOIN SPACE S ON(M.NO = S.HOST_NO)
-            WHERE S.NO = #{spaceNo}
-            """)
-    GuestVo getSpaceHostVo(String spaceNo);
-
-    @Select("""
-            SELECT FEATURES_NO
-            FROM SPACE_FEATURES
-            WHERE SPACE_NO = #{spaceNo}
-            """)
-    List<String> getSpaceFeaturesList(String spaceNo);
-
-    @Select("""
-            SELECT SNS,INTRODUCTION,TAGLINE
-            FROM EDIT_SPACE
-            WHERE SPACE_NO = #{spaceNo}
-            AND STATUS_NO = '1'
-            """)
-    SpaceVo getEditSpace(String spaceNo);
-
-    @Select("""
-            SELECT M.NAME,M.PHONE,M.EMAIL
-            FROM MEMBER M
-            JOIN STAY S ON(M.NO = S.HOST_NO)
-            WHERE S.NO = #{stayNo}
-            """)
-    GuestVo getStayHostVo(String stayNo);
-
-    @Select("""
-            SELECT S.NO,S.NAME,ADDRESS,PHONE,BT.NAME AS BUSINESS_TYPE_NAME,BRN,SEASON
-            FROM STAY S
-            JOIN BUSINESS_TYPE BT ON (S.BUSINESS_TYPE_NO = BT.NO)
-            WHERE S.NO = #{stayNo}
-            """)
-    StayVo getOriginStay(String stayNo);
-
-    @Select("""
-            SELECT SNS,INTRODUCTION,TAGLINE
-            FROM EDIT_STAY
-            WHERE STAY_NO = #{stayNo}
-            AND STATUS_NO = '1'
-            """)
-    StayVo getEditStay(String stayNo);
-
-    @Select("""
-            SELECT NAME,INTRODUCTION
-            FROM EDIT_ROOM
-            WHERE ROOM_NO = #{roomNo}
-            AND STATUS_NO = '1'
-            """)
-    SpaceVo getEditRoom(String roomNo);
-
-    @Select("""
-            SELECT RF.FEATURES_NO
-            FROM ROOM R
-            JOIN ROOM_FEATURES RF ON(R.NO = RF.ROOM_NO)
-            WHERE R.NO = #{roomNo}
-            """)
-    List<String> getRoomFeaturesList(String roomNo);
-
-    @Update("""
-            MERGE INTO SPACE S
-            USING EDIT_SPACE ES
-            ON (S.NO = ES.SPACE_NO AND ES.STATUS_NO ='1')
-            WHEN MATCHED THEN
-                UPDATE SET
-                    S.SNS = ES.SNS,
-                    S.TAGLINE = ES.TAGLINE,
-                    S.INTRODUCTION=ES.INTRODUCTION
-            WHERE ES.SPACE_NO = '1'
-            """)
-    int approveEditSpace(String spaceNo);
-
-    @Update("""
-            UPDATE EDIT_SPACE SET
-            STATUS_NO = '2'
-            WHERE SPACE_NO = #{spaceNo}
-            AND STATUS_NO = '1'
-            """)
-    int updateStaus(String spaceNo);
-
-    @Update("""
-            UPDATE EDIT_SPACE SET
-            STATUS_NO = '3'
-            WHERE SPACE_NO = #{spaceNo}
-            AND STATUS_NO = '1' 
-            """)
-    int companionEditSpace(String spaceNo);
-
-    @Update("""
-            MERGE INTO STAY S
-            USING EDIT_STAY ES
-            ON (S.NO = ES.STAY_NO AND ES.STATUS_NO ='1')
-            WHEN MATCHED THEN
-                UPDATE SET
-                    S.SNS = ES.SNS,
-                    S.TAGLINE = ES.TAGLINE,
-                    S.INTRODUCTION=ES.INTRODUCTION
-                WHERE ES.STAY_NO = #{stayNo}
-            """)
-    int approveEditStay(String stayNo);
-
-    @Update("""
-            UPDATE EDIT_STAY SET
-            STATUS_NO = '2'
-            WHERE STAY_NO = #{stayNo}
-            AND STATUS_NO = '1'
-            """)
-    int updateStayStaus(String stayNo);
-
-    @Update("""
-            UPDATE EDIT_STAY SET
-            STATUS_NO = '3'
-            WHERE STAY_NO = #{stayNo}
-            AND STATUS_NO = '1' 
-            """)
-    int companionEditStay(String stayNo);
-
-    @Update("""
-            MERGE INTO ROOM R
-            USING EDIT_ROOM ER
-            ON (R.NO = ER.ROOM_NO AND ER.STATUS_NO ='1')
-            WHEN MATCHED THEN
-                UPDATE SET
-                    R.NAME = ER.NAME,
-                    R.INTRODUCTION=ER.INTRODUCTION
-                WHERE ER.ROOM_NO = #{roomNo}
-            """)
-    int approveEditRoom(String roomNo);
-
-    @Update("""
-            UPDATE EDIT_ROOM SET
-            STATUS_NO = '2'
-            WHERE ROOM_NO = #{roomNo}
-            AND STATUS_NO = '1'
-            """)
-    int updateRoomStatus(String roomNo);
-
-    @Update("""
-            UPDATE EDIT_ROOM SET
-            STATUS_NO = '3'
-            WHERE ROOM_NO = #{roomNo}
-            AND STATUS_NO = '1' 
-            """)
-    int companionEditRoom(String roomNo);
-
-    @Select("""
-            SELECT M.NAME AS HOST_NAME,M.PHONE,S.NAME,TO_CHAR(S.MODIFY_DATE, 'YYYY.MM.DD') AS MODIFY_DATE
-            FROM SPACE S
-            JOIN MEMBER M ON (S.HOST_NO = M.NO)
-            WHERE S.STATUS_NO = '7'
-            ORDER BY MODIFY_DATE DESC
-            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
-            """)
-    List<SpaceVo> getDeleteSpaceList(int limit, int offset);
-
-    @Select("""
-            SELECT M.NAME AS HOST_NAME,M.PHONE,S.NAME,TO_CHAR(S.MODIFY_DATE, 'YYYY.MM.DD') AS MODIFY_DATE
-            FROM STAY S
-            JOIN MEMBER M ON (S.HOST_NO = M.NO)
-            WHERE S.STATUS_NO = '7'            
-            ORDER BY MODIFY_DATE DESC
-            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
-            """)
-    List<StayVo> getDeleteStayList(int limit, int offset);
-
-    @Select("""
-            SELECT COUNT(NO)
-            FROM MEMBER
-            WHERE HOST_PERMISSION = 'Y'
-            """)
-    int getHostListCount();
-
-    @Select("""
-            SELECT COUNT(NO)
-            FROM STAY
-            WHERE STATUS_NO = '1'
-            """)
-    int getStayEnrollReqListCount();
-
-    @Select("""
-            SELECT COUNT(NO)
-            FROM SPACE
-            WHERE STATUS_NO = '1'
-            """)
-    int getSpaceEnrollReqListCount();
-
-    @Select("""
-            SELECT COUNT(NO)
-            FROM EDIT_STAY
-            WHERE STATUS_NO = '1'
-            """)
-    int getStayEditReqCount();
-
-    @Select("""
-            SELECT COUNT(NO)
-            FROM EDIT_ROOM
-            WHERE STATUS_NO = '1'
-            """)
-    int getRoomEditReqCount();
-
-    @Select("""
-            SELECT COUNT(NO)
-            FROM EDIT_SPACE
-            WHERE STATUS_NO = '1'            
-            """)
-    int getSpaceEditReqCount();
-
-    @Select("""
-            SELECT COUNT(NO)
-            FROM STAY
-            WHERE STATUS_NO = '7'   
-            """)
-    int getStayDeleteReqListCount();
-
-    @Select("""            
-            SELECT COUNT(NO)
-            FROM SPACE
-            WHERE STATUS_NO = '7'   
-            """)
-    int getSpaceDeleteReqListCount();
 }
