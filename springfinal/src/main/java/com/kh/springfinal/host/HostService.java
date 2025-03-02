@@ -145,6 +145,10 @@ public class HostService {
     }
 
     public int deleteMySpace(String spaceNo) {
+        int cnt = mapper.countSpaceReservation(spaceNo);
+        if(cnt > 0){
+            return 0;
+        }
         int result = mapper.deleteMySpace(spaceNo);
         return result;
     }
@@ -203,6 +207,10 @@ public class HostService {
     }
 
     public int deleteMyStay(String stayNo) {
+        int cnt = mapper.countStayReservation(stayNo);
+        if(cnt > 0 ){
+            return 0;
+        }
         return mapper.deleteMyStay(stayNo);
     }
 

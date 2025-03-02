@@ -491,4 +491,23 @@ public interface HostMapper {
             AND S.HOST_NO = #{hostNo}
             """)
     int getSpaceReservCount(String hostNo, String status);
+
+    @Select("""
+            SELECT COUNT(SR.NO)
+            FROM SPACE_RESERVATION SR
+            JOIN SPACE S ON(SR.SPACE_NO = S.NO)
+            WHERE SR.SPACE_NO = #{spaceNo}
+            AND SR.STATUS_NO = '5'
+            """)
+    int countSpaceReservation(String stayNo);
+
+    @Select("""
+            SELECT COUNT(RR.NO)
+            FROM ROOM_RESERVATION RR
+            JOIN ROOM R ON (RR.ROOM_NO = R.NO)
+            JOIN STAY S ON (R.STAY_NO = S.NO)
+            WHERE S.NO = #{stayNo}
+            AND RR.STATUS_NO = '5'
+            """)
+    int countStayReservation(String stayNo);
 }
