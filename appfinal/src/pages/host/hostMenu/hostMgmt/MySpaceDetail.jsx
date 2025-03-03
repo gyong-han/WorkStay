@@ -261,6 +261,8 @@ const MySpaceDetail = () => {
     })
       .then((resp) => resp.json())
       .then((data) => {
+        console.log(data.attachMap);
+
         setFormData(data.spaceVo);
         setFeaturesArr(data.featuresList);
         setFileData(data.attachMap);
@@ -299,9 +301,12 @@ const MySpaceDetail = () => {
     fd.append("daytimePrice", formData.daytimePrice);
     fd.append("nightPrice", formData.nightPrice);
     fd.append("features", featuresArr);
-    fd.append("space_floor_plan", fileData.space_floor_plan);
-    fd.append("thumbnail", fileData.thumbnail);
-    fileData.attachment.map((file) => fd.append("attachment", file));
+    if (fileData.thumbnail instanceof File) {
+      fd.append("thumbnail", fileData.thumbnail);
+    }
+    fileData.attachment.forEach(
+      (file) => file instanceof File && fd.append("attachment", file)
+    );
     fetch("http://127.0.0.1:8080/api/host/modifyMySpace", {
       method: "POST",
       headers: {},
@@ -309,7 +314,6 @@ const MySpaceDetail = () => {
     })
       .then((resp) => resp.text())
       .then((data) => {
-        console.log(data);
         if (data > 0) {
           setIsAlertOpen(true);
         }
@@ -607,13 +611,18 @@ const MySpaceDetail = () => {
                   <span>정원</span>
                 </CheckDiv>
               </CheckBoxArea>
-              <DataTitle top="40px">스페이스 평면도 *</DataTitle>
+              <div>
+                <DataTitle top="40px">스페이스 평면도 *</DataTitle>
+              </div>
+
               <div>
                 <AttachmentUpload
                   fileData={fileData}
                   setFileData={setFileData}
                   name="space_floor_plan"
                   func="true"
+                  isDisabled="true"
+                  color="gray"
                 />
               </div>
               <DataTitle top="40px">스페이스 대표사진 *</DataTitle>

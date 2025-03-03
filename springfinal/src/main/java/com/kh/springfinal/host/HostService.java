@@ -133,7 +133,7 @@ public class HostService {
         return mySpaceDetail;
     }
 
-    public int modifyMySpace(SpaceVo spaceVo, List<String> features) {
+    public int modifyMySpace(SpaceVo spaceVo, List<String> features, AttachVo thumbnailVo, List<AttachVo> attachVoList) {
         int result1 = mapper.updateMySpace(spaceVo);
         int result2 = mapper.deleteMySpaceFeatures(spaceVo);
         int result3 = 0;
@@ -141,7 +141,23 @@ public class HostService {
             result3 = mapper.insertMySpaceFeatures(spaceVo,feature);
         }
         int result4 = mapper.insertMySpaceEdit(spaceVo);
-        return result1*result2*result3*result4;
+
+        int result5 = 0;
+        if(thumbnailVo.getFilePath() == null){
+            result5 = 1;
+        }else{
+            result5 = mapper.insertMySpaceThumbnailEdit(thumbnailVo,spaceVo);
+        }
+
+        int result6 = 0;
+        if(attachVoList.size() == 0 ){
+            result6 = 1;
+        }else{
+            for (AttachVo attachVo : attachVoList) {
+                result6 = mapper.insertMySpaceAttachEdit(spaceVo,attachVo);
+            }
+        }
+        return result1*result2*result3*result4*result5*result6;
     }
 
     public int deleteMySpace(String spaceNo) {
@@ -187,7 +203,7 @@ public class HostService {
         return myRoomDetail;
     }
 
-    public int modifyMyRoom(RoomVo roomVo, List<String> features) {
+    public int modifyMyRoom(RoomVo roomVo, List<String> features, AttachVo thumbnailVo, List<AttachVo> attachVoList) {
         int result1 = mapper.updateMyRoom(roomVo);
         int result2 = mapper.deleteMyRoomFeatures(roomVo);
         int result3 = 0;
@@ -195,6 +211,23 @@ public class HostService {
             result3 = mapper.insertMyRoomFeatures(roomVo,feature);
         }
         int result4 = mapper.insertMyRoomEdit(roomVo);
+
+        int result5 = 0;
+        if(thumbnailVo.getFilePath() == null){
+            result5 = 1;
+        }else{
+            result5 = mapper.insertMyRoomThumbnailEdit(thumbnailVo,roomVo);
+        }
+
+        int result6 = 0;
+        if(attachVoList.size() == 0 ){
+            result6 = 1;
+        }else{
+            for (AttachVo attachVo : attachVoList) {
+                result6 = mapper.insertMyRoomAttachEdit(roomVo,attachVo);
+            }
+        }
+
         return result1 * result2 * result3 * result4;
     }
 

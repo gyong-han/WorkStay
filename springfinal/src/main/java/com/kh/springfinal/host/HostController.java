@@ -176,8 +176,25 @@ public class HostController {
 
     //내 공간 수정요청
     @PostMapping("modifyMySpace")
-    public int modifyMySpace(SpaceVo spaceVo, @RequestParam List<String> features){
-        int result = service.modifyMySpace(spaceVo,features);
+    public int modifyMySpace(SpaceVo spaceVo, @RequestParam List<String> features,@RequestParam(required = false) MultipartFile thumbnail,
+                             @RequestParam(required = false) List<MultipartFile> attachment) throws IOException {
+        AttachVo thumbnailVo = new AttachVo();
+        if(thumbnail != null){
+            thumbnailVo.setFilePath(FileUtil.uploadFileToAws(thumbnail,s3,bucket));
+            thumbnailVo.setOriginName(thumbnail.getOriginalFilename());
+        }
+
+        List<AttachVo> attachVoList = new ArrayList<AttachVo>();
+        if(attachment != null){
+            for (MultipartFile file : attachment) {
+                AttachVo attachVo = new AttachVo();
+                attachVo.setFilePath(FileUtil.uploadFileToAws(file,s3,bucket));
+                attachVo.setOriginName(file.getOriginalFilename());
+                attachVoList.add(attachVo);
+            }
+        }
+
+        int result = service.modifyMySpace(spaceVo,features,thumbnailVo,attachVoList);
         return result;
     }
 
@@ -220,8 +237,26 @@ public class HostController {
 
     //내 독채 수정요청
     @PostMapping("modifyMyRoom")
-    public int modifyMyRoom(RoomVo roomVo,  @RequestParam List<String> features){
-        int result = service.modifyMyRoom(roomVo,features);
+    public int modifyMyRoom(RoomVo roomVo,  @RequestParam List<String> features,@RequestParam(required = false) MultipartFile thumbnail,
+                            @RequestParam(required = false) List<MultipartFile> attachment) throws IOException {
+        System.out.println("attachment = " + attachment);
+        AttachVo thumbnailVo = new AttachVo();
+        if(thumbnail != null){
+            thumbnailVo.setFilePath(FileUtil.uploadFileToAws(thumbnail,s3,bucket));
+            thumbnailVo.setOriginName(thumbnail.getOriginalFilename());
+        }
+
+        List<AttachVo> attachVoList = new ArrayList<AttachVo>();
+        if(attachment != null){
+            for (MultipartFile file : attachment) {
+                AttachVo attachVo = new AttachVo();
+                attachVo.setFilePath(FileUtil.uploadFileToAws(file,s3,bucket));
+                attachVo.setOriginName(file.getOriginalFilename());
+                attachVoList.add(attachVo);
+            }
+        }
+
+        int result = service.modifyMyRoom(roomVo,features,thumbnailVo,attachVoList);
         return result;
     }
 
