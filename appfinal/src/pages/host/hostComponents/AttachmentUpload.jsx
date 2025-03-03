@@ -15,6 +15,7 @@ const FileDiv = styled.div`
 const FileSpan = styled.span`
   margin-left: 10px;
   font-size: ${(props) => props.size};
+  color: ${(props) => props.color};
 `;
 
 const AttachmentUpload = ({
@@ -24,6 +25,8 @@ const AttachmentUpload = ({
   isMultiple,
   func,
   no,
+  isDisabled,
+  color,
 }) => {
   const handleFileChange = (event) => {
     const files =
@@ -67,12 +70,13 @@ const AttachmentUpload = ({
         style={{ display: "none" }}
         onChange={func == "true" ? handleFileChange : handleFileChange2}
         multiple={isMultiple === "true"}
+        disabled={isDisabled}
       />
 
       {func === "true" ? (
         <FileLabel htmlFor={no ? `${name}-${no}` : name}>
           <CirclePlus />
-          <FileSpan size="20px">
+          <FileSpan size="20px" color={color}>
             {fileData?.[name] &&
             (Array.isArray(fileData[name])
               ? fileData[name].length > 0
@@ -81,7 +85,7 @@ const AttachmentUpload = ({
               ? "파일 다시 선택"
               : "이미지 첨부파일 올리기"}
           </FileSpan>
-          <FileSpan size="15px">
+          <FileSpan size="15px" color={color}>
             {Array.isArray(fileData[name])
               ? fileData[name].map((file) => file.name).join(", ")
               : fileData[name]?.name}
@@ -90,11 +94,11 @@ const AttachmentUpload = ({
       ) : (
         <FileLabel htmlFor={no ? `${name}-${no}` : name}>
           <CirclePlus />
-          <FileSpan size="20px">
+          <FileSpan size="20px" color={color}>
             {fileData[no]?.[name] ? "파일 다시 선택" : "이미지 첨부파일 올리기"}
           </FileSpan>
           {fileData[no]?.[name] && (
-            <FileSpan size="15px">
+            <FileSpan size="15px" color={color}>
               {Array.isArray(fileData[no][name])
                 ? fileData[no][name].map((file) => file.name).join(", ")
                 : fileData[no][name].name}

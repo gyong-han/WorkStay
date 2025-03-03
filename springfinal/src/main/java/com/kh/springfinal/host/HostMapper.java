@@ -289,14 +289,14 @@ public interface HostMapper {
     List<String> getMySpaceFeaturesList(String spaceNo);
 
     @Select("""
-            SELECT ORIGIN_NAME AS NAME,FILE_PATH
+            SELECT ORIGIN_NAME AS NAME,FILE_PATH,NO
             FROM SPACE_FLOOR_PLAN
             WHERE SPACE_NO = #{spaceNo}
             """)
     AttachVo getMySpaceRoomFloorPlan(String spaceNo);
 
     @Select("""
-            SELECT ORIGIN_NAME AS NAME,FILE_PATH
+            SELECT ORIGIN_NAME AS NAME,FILE_PATH,NO
             FROM SPACE_ATTACHMENT
             WHERE SPACE_NO = #{spaceNo}
             AND THUMBNAIL = 'Y'
@@ -304,7 +304,7 @@ public interface HostMapper {
     AttachVo getMySpaceThumbNail(String spaceNo);
 
     @Select("""
-            SELECT ORIGIN_NAME AS NAME,FILE_PATH
+            SELECT ORIGIN_NAME AS NAME,FILE_PATH,NO
             FROM SPACE_ATTACHMENT
             WHERE SPACE_NO = #{spaceNo}
             AND THUMBNAIL = 'N'
@@ -374,6 +374,7 @@ public interface HostMapper {
             FROM ROOM R
             JOIN STAY S ON(R.STAY_NO = S.NO)
             WHERE R.STAY_NO = #{stayNum}   
+            ORDER BY R.NO
             """)
     List<String> getMyRoomNo(String stayNum);
 
@@ -394,14 +395,14 @@ public interface HostMapper {
     List<String> getMyRoomFeaturesList(String roomNo);
 
     @Select("""
-            SELECT ORIGIN_NAME AS NAME,FILE_PATH
+            SELECT ORIGIN_NAME AS NAME,FILE_PATH,NO
             FROM ROOM_FLOOR_PLAN
             WHERE ROOM_NO = #{roomNo}
             """)
     AttachVo getRoomFloorPlan(String roomNo);
 
     @Select("""
-            SELECT ORIGIN_NAME AS NAME,FILE_PATH
+            SELECT ORIGIN_NAME AS NAME,FILE_PATH,NO
             FROM ROOM_ATTACHMENT
             WHERE ROOM_NO = #{roomNo}
             AND THUMBNAIL = 'Y'
@@ -409,7 +410,7 @@ public interface HostMapper {
     AttachVo getRoomThumbNail(String roomNo);
 
     @Select("""
-            SELECT NO,ORIGIN_NAME AS NAME,FILE_PATH
+            SELECT NO,ORIGIN_NAME AS NAME,FILE_PATH,NO
             FROM ROOM_ATTACHMENT
             WHERE ROOM_NO = #{roomNo}
             AND THUMBNAIL = 'N'
@@ -510,4 +511,28 @@ public interface HostMapper {
             AND RR.STATUS_NO = '5'
             """)
     int countStayReservation(String stayNo);
+
+    @Insert("""
+            INSERT INTO EDIT_SPACE_ATTACHMENT (NO,SPACE_NO,ORIGIN_NAME,FILE_PATH,THUMBNAIL) 
+            VALUES (SEQ_EDIT_SPACE_ATTACHMENT.NEXTVAL,#{spaceVo.no},#{thumbnailVo.originName},#{thumbnailVo.filePath},'Y')
+            """)
+    int insertMySpaceThumbnailEdit(AttachVo thumbnailVo, SpaceVo spaceVo);
+
+    @Insert("""
+            INSERT INTO EDIT_SPACE_ATTACHMENT (NO,SPACE_NO,ORIGIN_NAME,FILE_PATH,THUMBNAIL) 
+            VALUES (SEQ_EDIT_SPACE_ATTACHMENT.NEXTVAL,#{spaceVo.no},#{attachVo.originName},#{attachVo.filePath},'N')            
+            """)
+    int insertMySpaceAttachEdit(SpaceVo spaceVo, AttachVo attachVo);
+
+    @Insert("""
+            INSERT INTO EDIT_ROOM_ATTACHMENT (NO,ROOM_NO,ORIGIN_NAME,FILE_PATH,THUMBNAIL) 
+            VALUES (SEQ_EDIT_ROOM_ATTACHMENT.NEXTVAL,#{roomVo.no},#{thumbnailVo.originName},#{thumbnailVo.filePath},'Y')
+            """)
+    int insertMyRoomThumbnailEdit(AttachVo thumbnailVo, RoomVo roomVo);
+
+    @Insert("""
+            INSERT INTO EDIT_ROOM_ATTACHMENT (NO,ROOM_NO,ORIGIN_NAME,FILE_PATH,THUMBNAIL) 
+            VALUES (SEQ_EDIT_ROOM_ATTACHMENT.NEXTVAL,#{roomVo.no},#{attachVo.originName},#{attachVo.filePath},'N')                        
+            """)
+    int insertMyRoomAttachEdit(RoomVo roomVo, AttachVo attachVo);
 }
