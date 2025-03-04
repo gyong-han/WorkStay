@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import GuestDropdown from "./listcomponents/GuestDropdown";
 import HostDropdown from "./listcomponents/HostDropdown";
 import AdminDropdown from "./listcomponents/AdminDropdown";
+import { jwtDecode } from "jwt-decode";
+import { BASE_URL } from "./service/config";
 
 const HeaderContainer = styled.header`
   display: grid;
@@ -92,9 +94,32 @@ const DropdownWrapper = styled.div`
 `;
 
 const Header = () => {
-  const pageNick = useSelector((state) => {
-    return state.member.pageNick;
-  });
+  // const pageNick = useSelector((state) => {
+  //   return state.member.pageNick;
+  // });
+  const [pageNick, setPageNick] = useState("");
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (token) {
+      const decodedToken = jwtDecode(token);
+
+      fetch(`${BASE_URL}/api/guest/mypage?email=${decodedToken.email}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setPageNick(data.pageNick);
+        })
+        .catch((err) => console.error("회원 정보 불러오기 실패:", err));
+    } else {
+      setPageNick("LOGIN");
+    }
+  }, [token, pageNick]);
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   return (
@@ -125,7 +150,7 @@ const Header = () => {
             </GuestButton>
             {isDropdownOpen && (
               <DropdownWrapper>
-                <GuestDropdown />
+                <GuestDropdown setIsDropdownOpen={setIsDropdownOpen} />
               </DropdownWrapper>
             )}
           </>
@@ -136,7 +161,7 @@ const Header = () => {
             </HostButton>
             {isDropdownOpen && (
               <DropdownWrapper>
-                <HostDropdown />
+                <HostDropdown setIsDropdownOpen={setIsDropdownOpen} />
               </DropdownWrapper>
             )}
           </>
@@ -147,7 +172,7 @@ const Header = () => {
             </AdminButton>
             {isDropdownOpen && (
               <DropdownWrapper>
-                <AdminDropdown />
+                <AdminDropdown setIsDropdownOpen={setIsDropdownOpen} />
               </DropdownWrapper>
             )}
           </>

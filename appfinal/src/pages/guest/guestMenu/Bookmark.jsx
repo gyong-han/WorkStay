@@ -43,7 +43,7 @@ const Bookmark = () => {
     if (pureToken) {
       try {
         const decoded = jwtDecode(pureToken);
-        console.log("🔹 디코딩된 토큰:", decoded);
+        console.log("디코딩된 토큰:", decoded);
         setNo(decoded.no);
       } catch (error) {
         console.error("토큰 디코딩 오류:", error);
