@@ -66,15 +66,18 @@ const KakaoShare = ({ no }) => {
     <button
       id="kakaotalk-sharing-btn"
       style={{
-        padding: "10px 20px",
-        background: "#FEE500",
+        backgroundImage:
+          'url("https://nimage.newsway.co.kr/photo/2024/07/18/20240718000073_0640.jpg")',
+        backgroundColor: "rgb(254, 229, 0)",
+        backgroundSize: "cover",
+        backgroundPosition: "center center",
+        width: "50px",
+        height: "50px",
         border: "none",
         borderRadius: "5px",
         cursor: "pointer",
       }}
-    >
-      카카오톡 공유하기
-    </button>
+    ></button>
   );
 };
 
