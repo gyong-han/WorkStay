@@ -10,8 +10,6 @@ const MiddleContainer = styled.section`
   height: 100%;
 `;
 
-
-
 const Middle = () => {
   const [homeSlide,setHomeSlide] = useState([]);
   useEffect(()=>{

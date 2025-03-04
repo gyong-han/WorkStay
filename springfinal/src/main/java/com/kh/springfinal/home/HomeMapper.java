@@ -1,6 +1,9 @@
 package com.kh.springfinal.home;
 
+import com.kh.springfinal.reservation.StayReservVo;
 import com.kh.springfinal.stay.StayVo;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -119,4 +122,29 @@ public interface HomeMapper {
             FETCH FIRST 5 ROWS ONLY
             """)
     List<StayVo> getBestHitStayByFive();
+
+    @Delete("""
+            DELETE FROM STAY_BOOKMARK
+            WHERE MEMBER_NO = #{memberNo} AND STAY_NO=#{no}
+            """)
+    int bookmarkdel(StayReservVo vo);
+
+    @Insert("""
+            INSERT INTO STAY_BOOKMARK(MEMBER_NO, STAY_NO)VALUES(#{memberNo},#{no})
+            """)
+    int bookmark(StayReservVo vo);
+
+
+    @Select("""
+                 SELECT CASE
+                                 WHEN EXISTS (  
+                                    SELECT 1
+                                    FROM STAY_BOOKMARK
+                                    WHERE MEMBER_NO = #{memberNo} AND STAY_NO = #{no}
+                                 ) THEN 1
+                                 ELSE 0
+                               END AS is_exist
+                        FROM DUAL
+            """)
+    int getbookmark(StayReservVo vo);
 }
