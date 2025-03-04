@@ -212,13 +212,15 @@ const SpaceEditReqDetail = () => {
     })
       .then((resp) => resp.json())
       .then((data) => {
+        console.log(data);
+
         setHostvo(data.hostVo);
         setSpaceVo(data.spaceVo);
         setFeaturesList(data.featuresList);
         setEditSpaceVo(data.editSpaceVo);
-        // setSpaceFloorPlan(data.spaceFloorPlan);
-        // setSpaceThumbNail(data.spaceThumbNail);
-        // setSpaceAttachList(data.spaceAttachList);
+        setSpaceFloorPlan(data.spaceFloorPlan);
+        setSpaceThumbNail(data.spaceThumbNail);
+        setSpaceAttachList(data.spaceAttachList);
       });
   }, []);
 
@@ -248,7 +250,9 @@ const SpaceEditReqDetail = () => {
     })
       .then((resp) => resp.text())
       .then((data) => {
-        setIsAlertOpen(true);
+        if (data > 0) {
+          setIsAlertOpen(true);
+        }
       });
   };
 
@@ -520,7 +524,7 @@ const SpaceEditReqDetail = () => {
               </div>
               <DataTitle top="40px">스페이스 대표사진 *</DataTitle>
               <div>
-                <StyledImg src={spaceThumbNail.filePath} alt="대표사진진" />
+                <StyledImg src={spaceThumbNail.filePath} alt="대표사진" />
               </div>
               <div>
                 <DataTitle top="40px">스페이스 사진 첨부파일 *</DataTitle>
@@ -548,7 +552,7 @@ const SpaceEditReqDetail = () => {
                 height="50px"
                 font="25px"
                 backColor="white"
-                str="수정하기"
+                str="승인하기"
                 color="black"
                 border="1px solid #2B8C44"
                 f={approve}
