@@ -216,7 +216,7 @@ const RoomEnrollReqDetail = () => {
           </div>
           <BtnArea>
             <div></div>
-            {role === "HOST" ? (
+            {role === "HOST" || role === "GUEST" ? (
               <>
                 <HostBtn
                   top="90px"
