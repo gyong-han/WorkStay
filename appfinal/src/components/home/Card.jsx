@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { IoBookmarkOutline } from "react-icons/io5";
 import { IoBookmark } from "react-icons/io5";
 import { jwtDecode } from'jwt-decode'
+import { useNavigate } from 'react-router-dom';
 
 const BlackDiv = styled.div`
   display: grid;
@@ -65,6 +66,7 @@ const Card = ({vo}) => {
   const [bookMark,setBookMark] = useState(false);
   const token = localStorage.getItem("token");
   const userData= jwtDecode(token);
+  const navi = useNavigate();
   console.log(userData.no);
   
   
@@ -140,9 +142,14 @@ const Card = ({vo}) => {
   return (
          <BlackDiv>
          <ImgDiv src={vo.filePath}></ImgDiv>
-          <SecondDiv>
+          <SecondDiv onClick={()=>{
+            navi(`/findstay/detail/${vo.no}`)
+          }}>
             <div>{vo.name}</div>
-            <div onClick={ClickHandler}>
+            <div onClick={(e) => {
+                e.stopPropagation();
+                ClickHandler();
+              }}>
               {!bookMark ? <IoBookmarkOutline/> : <IoBookmark/>}
             </div>
             <div>{vo.address}/{vo.standardGuest}~{vo.maxGuest}인</div>

@@ -59,9 +59,7 @@ public class HomeController {
 
     @PostMapping("getbookmarkInfo")
     public boolean getbookmark(@RequestBody StayReservVo vo){
-        System.out.println("vo = " + vo);
         int result = service.getbookmark(vo);
-        System.out.println(result);
         if(result >= 1){
             return true;
         }else{

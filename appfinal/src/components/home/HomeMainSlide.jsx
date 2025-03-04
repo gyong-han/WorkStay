@@ -27,7 +27,7 @@ const ArrowButton = styled.button`
   transform: translateY(-50%);
   font-size: 30px;
   background-color: rgba(0, 0, 0, 0);
-  color: red;
+  color: #202020;
   border: none;
   padding: 10px;
   cursor: pointer;
