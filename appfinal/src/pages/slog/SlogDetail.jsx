@@ -95,7 +95,7 @@ const EditDeleteBtn = styled.div`
     font-size: 20px;
     font-family: "Pretendard-Regular";
     background-color: #fafafa;
-    border-color: #049dd9;
+    /* border-color: #049dd9; */
     border-radius: 10px;
   }
 
@@ -149,6 +149,10 @@ const ModalContent = styled.div`
     border: none;
     font-size: 20px;
     cursor: pointer;
+  }
+
+  .share-btn {
+    background-image: url();
   }
 `;
 
