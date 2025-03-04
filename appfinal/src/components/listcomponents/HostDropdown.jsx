@@ -38,7 +38,7 @@ const LogoutButton = styled.button`
   }
 `;
 
-const HostDropdown = () => {
+const HostDropdown = ({ setIsDropdownOpen }) => {
   const dispatch = useDispatch();
   const navi = useNavigate();
 
@@ -55,7 +55,13 @@ const HostDropdown = () => {
   return (
     <DropdownContainer>
       {menuItems.map((item, index) => (
-        <DropdownItem key={index} to={item.path}>
+        <DropdownItem
+          key={index}
+          to={item.path}
+          onClick={() => {
+            setIsDropdownOpen(false);
+          }}
+        >
           {item.label}
         </DropdownItem>
       ))}

@@ -192,7 +192,7 @@ const MainLogin = () => {
     setPassword(value);
     setPasswordError(validatePassword(value));
   };
-
+  window.scrollTo(0, 0);
   return (
     <form onSubmit={handleSubmit}>
       <MainDiv>
