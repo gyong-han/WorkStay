@@ -93,13 +93,13 @@ const Main = () => {
       }
       console.log("겨울 숙소 :: ",data);
       const fileArr = data.map((vo)=>vo);
-      if(!fileArr.length === 0){
+      
         if(fileArr.length <=1){
           setHomeWinterVo(data);
         }else{
           setHomeWinterVo(fileArr);
         }
-      }
+      
       
     })
   },[])
