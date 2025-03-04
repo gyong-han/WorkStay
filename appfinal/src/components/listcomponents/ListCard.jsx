@@ -82,14 +82,22 @@ const BookMarkDiv = styled.div`
 const ListCard = (props) => {
   const [bookMark,setBookMark] = useState(false);
   const navigate = useNavigate();
+
   const token = localStorage.getItem("token");
-  const userData= jwtDecode(token);
+  let userData = '';
+  if(token){
+    userData= jwtDecode(token);  
+  }
+  
   
   const dataObjByGet = {
     memberNo : userData.no,
     spaceNo :props.no,
   }
     useEffect(()=>{
+      if(!token){
+        return;
+      }
       fetch(("http://localhost:8080/space/getbookmarkInfo"),{
         method :"POST",
         headers : {
@@ -110,6 +118,9 @@ const ListCard = (props) => {
   
   //클릭함수
   const ClickHandler = ()=>{
+    if(!token){
+      return;
+    }
     const dataObj = {
       memberNo : userData.no,
       spaceNo :props.no,
