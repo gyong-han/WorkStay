@@ -6,6 +6,7 @@ import AttachmentUpload from "../hostComponents/AttachmentUpload";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import Alert from "../../../components/Alert";
+import { BASE_URL } from "../../../components/service/config";
 
 const HomeDiv = styled.div`
   display: grid;
@@ -220,18 +221,31 @@ const SecondEnrollSpace = () => {
   const navigate = useNavigate();
   const [hostNo, setHostNo] = useState("");
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [hostVo, setHostVo] = useState({
+    name: "",
+    phone: "",
+    email: "",
+  });
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      try {
-        const decodedToken = jwtDecode(token);
-        setHostNo(decodedToken.no);
-      } catch (error) {
-        console.error("토큰 디코딩 실패:", error);
-      }
+      const decodedToken = jwtDecode(token);
+      const no = decodedToken.no;
+      setHostNo(decodedToken.no);
+      fetch(`${BASE_URL}/api/host/getHostVo`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(no),
+      })
+        .then((resp) => resp.json())
+        .then((data) => {
+          setHostVo(data);
+        });
     }
-  }, []);
+  }, [hostNo]);
 
   const handleChange = (e) => {
     setFormData((prev) => {
@@ -309,6 +323,11 @@ const SecondEnrollSpace = () => {
     window.scrollTo(0, 0);
   };
 
+  const formatPhoneNumber = (phone) => {
+    phone = String(phone);
+    return phone.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
+  };
+
   return (
     <>
       <form>
@@ -334,19 +353,19 @@ const SecondEnrollSpace = () => {
               <div></div>
               <DataTitle>호스트 성함 *</DataTitle>
               <div>
-                <DataInput type="text" value={"홍길동"} readOnly />
+                <DataInput type="text" value={hostVo.name} readOnly />
               </div>
               <DataTitle>호스트 전화번호 *</DataTitle>
               <div>
-                <DataInput type="number" value={"01011112222"} readOnly />
+                <DataInput
+                  type="text"
+                  value={formatPhoneNumber(hostVo.phone)}
+                  readOnly
+                />
               </div>
               <DataTitle>호스트 이메일 *</DataTitle>
               <div>
-                <DataInput
-                  type="email"
-                  value={"khAcademy362@kh.co.kr"}
-                  readOnly
-                />
+                <DataInput type="email" value={hostVo.email} readOnly />
               </div>
             </UserDiv>
             <div>

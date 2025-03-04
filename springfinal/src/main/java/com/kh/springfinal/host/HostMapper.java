@@ -535,4 +535,11 @@ public interface HostMapper {
             VALUES (SEQ_EDIT_ROOM_ATTACHMENT.NEXTVAL,#{roomVo.no},#{attachVo.originName},#{attachVo.filePath},'N')                        
             """)
     int insertMyRoomAttachEdit(RoomVo roomVo, AttachVo attachVo);
+
+    @Select("""
+            SELECT NAME,EMAIL,PHONE
+            FROM MEMBER
+            WHERE NO = #{hostNo}
+            """)
+    GuestVo getHostVo(String hostNo);
 }

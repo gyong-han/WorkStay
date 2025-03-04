@@ -254,4 +254,9 @@ public class HostService {
     public int getSpaceReservCount(String hostNo, String status) {
         return mapper.getSpaceReservCount(hostNo,status);
     }
+
+    public GuestVo getHostVo(String hostNo) {
+        GuestVo hostVo = mapper.getHostVo(hostNo);
+        return hostVo;
+    }
 }
