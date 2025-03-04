@@ -1,6 +1,10 @@
 import PictureSlide from './PictureSlide';
 import styled from 'styled-components';
 import { useNavigate } from "react-router-dom";
+import { IoBookmarkOutline } from "react-icons/io5";
+import { IoBookmark } from "react-icons/io5";
+import { useEffect, useState } from 'react';
+import { jwtDecode } from 'jwt-decode';
 
 const Layout = styled.div`
   width: 616px;
@@ -15,6 +19,12 @@ const InerDiv =styled.div`
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 50px 25px 1fr 1fr 10px 1fr 1fr;
+`;
+const TitleArea = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 30px;
+  grid-template-rows: 1fr;
+
 `;
 const TitleDiv = styled.div`
   width: 100%;
@@ -58,11 +68,88 @@ const ReservationDiv = styled.div`
   text-decoration: underline solid #000000;
   
 `;
+const BookMarkDiv = styled.div`
+  margin-top: 5px;
+  width: 30px;
+  height: 30px;
+  &>svg{
+    width: 30px;
+    height: 30px;
+  }
+`;
 
 
 const ListCard = (props) => {
-
+  const [bookMark,setBookMark] = useState(false);
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  const userData= jwtDecode(token);
+  
+  const dataObjByGet = {
+    memberNo : userData.no,
+    spaceNo :props.no,
+  }
+    useEffect(()=>{
+      fetch(("http://localhost:8080/space/getbookmarkInfo"),{
+        method :"POST",
+        headers : {
+          "content-type" : "application/json",
+        },
+        body : JSON.stringify(dataObjByGet),
+        
+      })
+      .then((resp)=>resp.text())
+      .then((data)=>{
+        if(data=="true"){
+          setBookMark(true);
+        }else{
+          setBookMark(false)
+        }
+      })
+    },[bookMark])
+  
+  //클릭함수
+  const ClickHandler = ()=>{
+    const dataObj = {
+      memberNo : userData.no,
+      spaceNo :props.no,
+
+    }
+
+    if(bookMark === true){
+      setBookMark(false);
+      fetch(("http://localhost:8080/space/bookmarkdel"),{
+        method :"POST",
+        headers : {
+          "content-type" : "application/json",
+        },
+        body : JSON.stringify(dataObj),
+        
+      })
+      .then((resp)=>resp.text())
+      .then((data)=>{
+        // console.log("삭제된데이터수:",data);
+      })
+      
+      alert("북마크가 해지되었습니다.")
+    }else{
+      setBookMark(true);
+      fetch(("http://localhost:8080/space/bookmark"),{
+        method :"POST",
+        headers : {
+          "content-type" : "application/json",
+        },
+        body : JSON.stringify(dataObj),
+        
+      })
+      .then((resp)=>resp.text())
+      .then((data)=>{
+        // console.log(data);
+    
+      });
+      alert("마이페이지 찜목록에 저장되었습니다.");
+    }
+  }
 
    const clickHandler = ()=>{
       navigate(`/${props.url}/detail/${props.no}`)
@@ -74,7 +161,13 @@ const ListCard = (props) => {
   return (
     <Layout no={props.no}>
       <InerDiv  onClick={clickHandler}>
+      <TitleArea>
         <TitleDiv>{props.title}</TitleDiv>
+        <BookMarkDiv onClick={(e) => {
+                e.stopPropagation();
+                ClickHandler();
+              }}>{!bookMark ? <IoBookmarkOutline/> : <IoBookmark/>}</BookMarkDiv>
+        </TitleArea>
         <div></div>
         <AreaDiv>{props.address}</AreaDiv>
         <PeopleDiv>기준 {props.min}명 (최대 {props.max}명)</PeopleDiv>
