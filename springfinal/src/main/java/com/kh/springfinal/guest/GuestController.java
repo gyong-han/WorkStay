@@ -31,6 +31,19 @@ public class GuestController {
         }
     }
 
+    // 이메일 중복 체크
+    @GetMapping("/check-email")
+    public boolean checkEmail(@RequestParam String email) {
+        return service.isEmailDuplicate(email);
+    }
+
+    // 전화번호 중복 체크
+    @GetMapping("/check-phone")
+    public boolean checkPhone(@RequestParam String phone) {
+        return service.isPhoneDuplicate(phone);
+    }
+
+
     //로그인
     @PostMapping("login")
     public String login(@RequestBody GuestVo vo){
@@ -79,6 +92,15 @@ public class GuestController {
     public GuestVo editMember(@RequestBody GuestVo vo){
         GuestVo result = service.editMember(vo);
         return result;
+    }
+
+    //비밀번호 확인
+    @PostMapping("/verify-password")
+    public boolean verifyPassword(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        String password = request.get("password");
+
+        return service.verifyPassword(email, password);
     }
 
 

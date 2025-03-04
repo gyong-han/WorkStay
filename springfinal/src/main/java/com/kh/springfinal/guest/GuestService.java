@@ -30,6 +30,16 @@ public class GuestService {
         return vo;
     }
 
+    // 이메일 중복 체크 서비스 로직
+    public boolean isEmailDuplicate(String email) {
+        return mapper.checkEmail(email) > 0; // 1 이상이면 이미 존재하는 이메일
+    }
+
+    // 전화번호 중복 체크 서비스 로직
+    public boolean isPhoneDuplicate(String phone) {
+        return mapper.checkPhone(phone) > 0; // 1 이상이면 이미 존재하는 전화번호
+    }
+
     public String login(GuestVo vo) {
         GuestVo dbVo = mapper.loginEmail(vo);
         if (dbVo == null) {
@@ -90,6 +100,16 @@ public class GuestService {
         }
         int result = mapper.editMember(vo);
         return vo;
+    }
+
+    public boolean verifyPassword(String email, String password) {
+        GuestVo dbVo = mapper.getMemberByEmail(email);
+
+        if (dbVo == null) {
+            throw new IllegalStateException("존재하지 않는 회원입니다.");
+        }
+
+        return encoder.matches(password, dbVo.getPwd());
     }
 
     public List<MypageVo> stayReserv(MypageVo vo) {

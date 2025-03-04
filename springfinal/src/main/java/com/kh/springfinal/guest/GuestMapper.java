@@ -12,6 +12,12 @@ public interface GuestMapper {
             """)
     int join(GuestVo vo);
 
+    @Select("SELECT COUNT(*) FROM MEMBER WHERE EMAIL = #{email}")
+    int checkEmail(@Param("email") String email);
+
+    @Select("SELECT COUNT(*) FROM MEMBER WHERE PHONE = #{phone}")
+    int checkPhone(@Param("phone") String phone);
+
 
     @Select("""
             SELECT NO , EMAIL, PWD , PAGE_NICK
@@ -55,6 +61,9 @@ public interface GuestMapper {
     GuestVo mypage(String email);
 
     int editMember(GuestVo vo);
+
+    @Select("SELECT * FROM MEMBER WHERE EMAIL = #{email}")
+    GuestVo getMemberByEmail(@Param("email") String email);
 
     @Select("""
             SELECT
