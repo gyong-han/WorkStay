@@ -1,5 +1,7 @@
 package com.kh.springfinal.home;
 
+import com.kh.springfinal.reservation.SpaceReservVo;
+import com.kh.springfinal.reservation.StayReservVo;
 import com.kh.springfinal.stay.StayVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,5 +30,17 @@ public class HomeService {
 
     public List<StayVo> getBestHitStayByFive() {
         return mapper.getBestHitStayByFive();
+    }
+
+    public int bookmarkdel(StayReservVo vo) {
+        return mapper.bookmarkdel(vo);
+    }
+
+    public int getbookmark(StayReservVo vo) {
+        return mapper.getbookmark(vo);
+    }
+
+    public int bookmark(StayReservVo vo) {
+        return mapper.bookmark(vo);
     }
 }
