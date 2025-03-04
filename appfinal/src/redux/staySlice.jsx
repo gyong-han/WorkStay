@@ -5,6 +5,7 @@ const staySlice = createSlice({
   initialState: {
     no: "",
     hostNo: "",
+    memberNo: "",
     name: "",
     phone: "",
     address: "",
@@ -51,6 +52,12 @@ const staySlice = createSlice({
     },
     setSort: (state, action) => {
       state.sort = action.payload;
+    },
+    setSearch: (state, action) => {
+      state.titleData = action.payload;
+    },
+    setStayLoginMemberNo: (state, action) => {
+      state.memberNo = Number(action.payload);
     },
   },
 });

@@ -101,18 +101,6 @@ const FindStayList = () => {
     });
   };
 
-  // 날짜 변경 핸들러
-  const handleDateChange = (selectedDate) => {
-    if (
-      !reservationDate ||
-      reservationDate[0] !== selectedDate[0] ||
-      reservationDate[1] !== selectedDate[1]
-    ) {
-      console.log("📌 변경된 날짜:", selectedDate);
-      dispatch(setStayReservationDate(selectedDate)); // Redux 저장
-    }
-  };
-
   const queryParams = new URLSearchParams({
     datedata: stayVo.reservationDate || "", // undefined 방지
     people: (roomVo.adult || 0) + (roomVo.child || 0) + (roomVo.baby || 0), // undefined 방지
@@ -178,11 +166,7 @@ const FindStayList = () => {
     <>
       <Layout>
         <h1>FIND STAY</h1>
-        <Display
-          isTimeMode={false}
-          dateRange={reservationDate}
-          setDateRange={handleDateChange}
-        ></Display>
+        <Display isTimeMode={false} dateRange={reservationDate}></Display>
         <SearchWrapper>
           <form onSubmit={handleSubmit}>
             <SearchInput

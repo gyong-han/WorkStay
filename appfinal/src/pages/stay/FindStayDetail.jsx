@@ -12,13 +12,25 @@ import {
   setRoomData,
   setRoomVo,
   setStayReservationDate,
+  setStayReservationDone,
 } from "../../redux/roomSlice";
-import { getStayDetail } from "../../components/service/stayService";
-import { getRoomListAll } from "../../components/service/roomService";
+import {
+  delBookmark,
+  getBookmark,
+  getStayDetail,
+  setBookmarkInsert,
+} from "../../components/service/stayService";
+import {
+  getRoomListAll,
+  isAvailable,
+} from "../../components/service/roomService";
 import Notification from "./stayComponent/noti/Notification";
 import RoomSlider from "../room/roomComponent/RoomSlider";
 import BookmarkIcon from "../../components/bookmark/BookmarkIcon";
 import { FaAngleDown } from "react-icons/fa6";
+import { IoBookmarkOutline } from "react-icons/io5";
+import { IoBookmark } from "react-icons/io5";
+import { jwtDecode } from "jwt-decode";
 
 const Layout = styled.div`
   width: 100%;
@@ -166,6 +178,8 @@ const PictureWrapper = styled.div`
 `;
 
 const FindStayDetail = () => {
+  const [bookMark, setBookMark] = useState(false);
+  const [no, setNo] = useState({});
   const [result, setResult] = useState([]);
   const { x } = useParams();
   const stayVo = useSelector((state) => state.stay);
@@ -173,6 +187,20 @@ const FindStayDetail = () => {
   const roomVo = useSelector((state) => state.room);
   const reservationDate = useSelector((state) => state.room.reservationDate);
   const dispatch = useDispatch();
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    //토큰 정보 없으면 로그인 페이지로 보내기
+
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        setNo(decodedToken.no); // 상태 업데이트
+      } catch (error) {
+        console.error("토큰 디코딩 실패:", error);
+      }
+    }
+  }, []);
 
   const StayDetail = async () => {
     const stayDetail = await getStayDetail(x);
@@ -184,12 +212,44 @@ const FindStayDetail = () => {
     dispatch(setRoomData(roomListData));
   };
 
+  const bookmarkData = async () => {
+    const dataObj = { memberNo: no, stayVo: x };
+    const data = await getBookmark(dataObj);
+    setBookMark(data);
+  };
+
+  const available = async () => {
+    const checkAvailable = await isAvailable(x);
+    dispatch(setStayReservationDone(checkAvailable));
+  };
+
+  const bookmarkInsert = () => {
+    const dataObj = {
+      memberNo: no,
+      stayNo: stayVo.no,
+    };
+    console.log("dataObj :: ", dataObj);
+
+    if (bookMark == true) {
+      setBookMark(false);
+      delBookmark(dataObj);
+    } else {
+      setBookMark(true);
+      setBookmarkInsert(dataObj);
+    }
+  };
+
   useEffect(
     (x) => {
       StayDetail();
+      available();
     },
     [x]
   );
+
+  useEffect(() => {
+    bookmarkData();
+  }, []);
 
   const handleDateChange = (selectedDate) => {
     if (
@@ -230,7 +290,9 @@ const FindStayDetail = () => {
             <div>
               <RxShare2 />
             </div>
-            <BookmarkIcon />
+            <div onClick={bookmarkInsert}>
+              {!bookMark ? <IoBookmarkOutline /> : <IoBookmark />}
+            </div>
             <div>메세지</div>
             <div>공유하기</div>
             <div>북마크</div>

@@ -1,5 +1,8 @@
 package com.kh.springfinal.stay;
 
+import com.kh.springfinal.roomReservation.RoomReservationVo;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -53,4 +56,31 @@ public interface StayMapper {
             AND DEL_YN = 'N'
             """)
     List<StayAttachmentVo> getAttachmentByNo(Long no);
+
+    @Insert("""
+            INSERT INTO STAY_BOOKMARK
+            (MEMBER_NO, STAY_NO)
+            VALUES
+            (#{memberNo}, #{stayNo})
+            """)
+    int bookmark(RoomReservationVo vo);
+
+    @Delete("""
+            DELETE FROM STAY_BOOKMARK
+            WHERE MEMBER_NO=#{memberNo} AND STAY_NO=#{stayNo}
+            """)
+    int bookmarkDel(RoomReservationVo vo);
+
+    @Select("""
+            SELECT CASE
+                     WHEN EXISTS (
+                        SELECT 1
+                        FROM STAY_BOOKMARK
+                        WHERE MEMBER_NO = #{memberNo} AND STAY_NO = #{stayNo}
+                     ) THEN 1
+                     ELSE 0
+                   END AS is_exist
+            FROM DUAL
+            """)
+    int bookmarkInfo(RoomReservationVo vo);
 }

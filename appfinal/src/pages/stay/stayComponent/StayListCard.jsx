@@ -89,9 +89,6 @@ const StayListCard = (props) => {
       <TextWrapper>
         <InerDiv onClick={clickHandler}>
           <TitleDiv>{props.title}</TitleDiv>
-          <BookmarkDiv>
-            <BookmarkIcon />
-          </BookmarkDiv>
           <div></div>
           <div></div>
           <AreaDiv>{props.address}</AreaDiv>
