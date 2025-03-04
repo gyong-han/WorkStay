@@ -1,5 +1,6 @@
 package com.kh.springfinal.stay;
 
+import com.kh.springfinal.roomReservation.RoomReservationVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -56,8 +57,44 @@ public class StayController {
             return stayVo;
         }catch (Exception e){
             log.warn(e.getMessage());
-            System.out.println("error :: "+ e.getMessage());
+//            System.out.println("error :: "+ e.getMessage());
             throw new IllegalStateException("[STAY-ERROR-03]STAY DETAIL FAIL");
+        }
+    }
+
+    @PostMapping("bookmark")
+    public int bookmark(@RequestBody RoomReservationVo vo){
+        try{
+            int result = stayService.bookmark(vo);
+            return result;
+        }catch(Exception e) {
+            log.warn(e.getMessage());
+            throw new IllegalStateException("[STAY-ERROR-04]STAY BOOKMARK FAIL");
+        }
+    }
+    @PostMapping("bookmarkdel")
+    public int bookmarkDel(@RequestBody RoomReservationVo vo){
+        try{
+            int result = stayService.bookmarkDel(vo);
+            return result;
+        }catch(Exception e){
+            log.warn(e.getMessage());
+            throw new IllegalStateException("[STAY-ERROR-05]STAY BOOKMARK_DEL FAIL");
+        }
+    }
+
+    @PostMapping("bookmarkInfo")
+    public boolean bookmarkInfo(@RequestBody RoomReservationVo vo){
+        try{
+            int result = stayService.getBookmarkInfo(vo);
+            if(result >= 1){
+                return true;
+            }else{
+                return false;
+            }
+        }catch (Exception e){
+            log.warn(e.getMessage());
+            throw new IllegalStateException("[STAY-ERROR-06]STAY BOOKMARK_INFO FAIL");
         }
     }
 }

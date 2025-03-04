@@ -7,6 +7,9 @@ import Accordion from "./stayComponent/Accordion";
 import Calendar from "../../components/FilterBar/Calendal";
 import SelectPerson from "./stayComponent/SelectPerson";
 import { useDispatch, useSelector } from "react-redux";
+import { eachDayOfInterval, format } from "date-fns";
+import { setStayReservationDate } from "../../redux/roomSlice";
+import PaymentBtn from "../../components/payment/PaymentBtn";
 
 const Layout = styled.div`
   display: grid;
@@ -350,23 +353,65 @@ const BookingStay = () => {
   const roomVo = useSelector((state) => state.room);
   const reservationDate = useSelector((state) => state.room.rezservationDate);
   const dispatch = useDispatch();
+  const [request, setRequest] = useState("");
 
-  const Booking = () => {};
+  const priceWon = roomVo.price
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
   useEffect(() => {}, []);
+
+  const dates = roomVo.reservationDate;
+
+  const date1 = new Date(dates[0]);
+  const date2 = new Date(dates[1]);
+
+  const diffInTime = date2.getTime() - date1.getTime();
+  const diffInDays = diffInTime / (1000 * 60 * 60 * 24);
+
+  const totalPrice = (roomVo.price * diffInDays)
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+  const rd = {
+    roomNo: roomVo.no,
+    memberNo: roomVo.memberNo,
+    stayNo: roomVo.stayNo,
+    stayName: roomVo.stayName,
+    paymentNo: 1,
+    adult: roomVo.adult,
+    child: roomVo.child,
+    baby: roomVo.baby,
+    request: request,
+    amount: totalPrice,
+    checkIn: roomVo.reservationDate[0],
+    checkOut: roomVo.reservationDate[1],
+    useDay: roomVo.reservationDate,
+    name: roomVo.name,
+    filePath: roomVo.filePath,
+  };
+
+  const rData = {
+    no: roomVo.no,
+    name: roomVo.name,
+    price: roomVo.price * diffInDays,
+  };
+
+  localStorage.setItem("roomdata", JSON.stringify(rd));
 
   return (
     <Layout>
       <BookingText>BOOKING</BookingText>
       <DateWrapper>
-        <Calendar type="button" setDateRange={setDateRange}>
-          <DateSpan>
-            {reservationDate[0] && reservationDate[1]
-              ? `${reservationDate[0]} ~ ${reservationDate[1]}`
-              : "날짜를 선택해주세요."}
-            <FaAngleDown />
-          </DateSpan>
-        </Calendar>
+        <DateSpan>
+          {!roomVo.reservationDate ? (
+            <Calendar type={"text"}>날짜를 입력해주세요.</Calendar>
+          ) : (
+            <Calendar
+              type={"text"}
+            >{`${roomVo.reservationDate[0]}~${roomVo.reservationDate[1]}`}</Calendar>
+          )}
+        </DateSpan>
       </DateWrapper>
       <LineDiv />
       <ReservationText>Reservations</ReservationText>
@@ -381,11 +426,18 @@ const BookingStay = () => {
         <ReservationLine />
         <ReservationDiv>
           <InfoText>예약일</InfoText>
-          <Info>
-            {reservationDate[0] && reservationDate[1]
-              ? `${reservationDate[0]} ~ ${reservationDate[1]}`
-              : "날짜를 선택해주세요."}
-          </Info>
+          <div>
+            <Info>
+              {!roomVo.reservationDate ? (
+                <Calendar type={"text"}>날짜를 입력해주세요.</Calendar>
+              ) : (
+                <Calendar
+                  type={"text"}
+                  position={true}
+                >{`${roomVo.reservationDate[0]}~${roomVo.reservationDate[1]}`}</Calendar>
+              )}
+            </Info>
+          </div>
         </ReservationDiv>
         <ReservationLine />
         <ReservationDiv>
@@ -417,6 +469,9 @@ const BookingStay = () => {
         <ReservationDiv>
           <InfoText>요청사항</InfoText>
           <Request
+            onChange={(e) => {
+              setRequest(e.target.value);
+            }}
             placeholder="사전에 협의되지 않은 상업 사진 및 영상 촬영은 불가합니다.
 상업적 용도의 촬영은 별도 대관료를 책정하여 운영하고 있습니다."
           />
@@ -429,22 +484,14 @@ const BookingStay = () => {
           <div>
             <ChargeText>
               <span>객실요금</span>
-              <span>₩180,000</span>
+              <span>₩{priceWon}</span>
             </ChargeText>
-            <ChargeDate>
-              <span>2025-01-20</span>
-              <span>₩180,000</span>
-            </ChargeDate>
-            <ChargeDate>
-              <span>2025-01-20</span>
-              <span>₩180,000</span>
-            </ChargeDate>
             <ChargeLine />
           </div>
           <div></div>
           <ChargeText>
             <span></span>
-            <span>₩180,000</span>
+            <span>₩{totalPrice}</span>
           </ChargeText>
         </ReservationDiv>
         <ReservationLine />
@@ -452,7 +499,7 @@ const BookingStay = () => {
           <InfoText>결제방법 선택</InfoText>
           <div>
             <RadioBtn checked name="payment" />
-            <Info>결제 방식 선택</Info>
+            <Info>카카오페이</Info>
           </div>
         </ReservationDiv>
         <ReservationLine />
@@ -480,7 +527,7 @@ const BookingStay = () => {
         </Agree>
       </UserAgreeWrapper>
       <PaddingDiv>
-        <Btn w={"500px"}>결제하기</Btn>
+        <PaymentBtn reservationData={rData} />
       </PaddingDiv>
       <ProvisionDiv>
         <ProvisionSpan>

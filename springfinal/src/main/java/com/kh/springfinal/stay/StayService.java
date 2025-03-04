@@ -1,6 +1,6 @@
 package com.kh.springfinal.stay;
 
-import com.kh.springfinal.room.RoomAttachmentVo;
+import com.kh.springfinal.roomReservation.RoomReservationVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,12 +57,16 @@ public class StayService {
         return stayVo;
         }
 
-//    public void findStayByName(String name) {
-//        return stayMapper.findStayByName(name);
-//    }
+    public int bookmark(RoomReservationVo vo) {
+        return stayMapper.bookmark(vo);
+    }
 
 
-//    public StayVo getFindStayByNo(Long no) {
-//
-//    }
+    public int bookmarkDel(RoomReservationVo vo) {
+        return stayMapper.bookmarkDel(vo);
+    }
+
+    public int getBookmarkInfo(RoomReservationVo vo) {
+        return stayMapper.bookmarkInfo(vo);
+    }
 }
