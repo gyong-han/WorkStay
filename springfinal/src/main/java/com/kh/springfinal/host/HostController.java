@@ -1,6 +1,7 @@
 package com.kh.springfinal.host;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.kh.springfinal.guest.GuestVo;
 import com.kh.springfinal.room.RoomVo;
 import com.kh.springfinal.space.SpaceVo;
 import com.kh.springfinal.stay.StayVo;
@@ -239,7 +240,6 @@ public class HostController {
     @PostMapping("modifyMyRoom")
     public int modifyMyRoom(RoomVo roomVo,  @RequestParam List<String> features,@RequestParam(required = false) MultipartFile thumbnail,
                             @RequestParam(required = false) List<MultipartFile> attachment) throws IOException {
-        System.out.println("attachment = " + attachment);
         AttachVo thumbnailVo = new AttachVo();
         if(thumbnail != null){
             thumbnailVo.setFilePath(FileUtil.uploadFileToAws(thumbnail,s3,bucket));
@@ -272,5 +272,12 @@ public class HostController {
     public int cancelEnrollStay(@RequestParam String stayNo){
         int result = service.cancelEnrollStay(stayNo);
         return result;
+    }
+
+    //hostVo 가져오기
+    @PostMapping("getHostVo")
+    public GuestVo getHostVo(@RequestBody String no){
+        String hostNo = no.replace("\"","");
+        return service.getHostVo(hostNo);
     }
 }
