@@ -19,5 +19,5 @@ private String amount;
 private String reservationDate;
 
 private String useDay;
-
+private Long stayNo;
 }

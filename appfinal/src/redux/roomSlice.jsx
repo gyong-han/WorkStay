@@ -72,6 +72,23 @@ const roomSlice = createSlice({
     setStayReservationDone: (state, action) => {
       state.reservationDone = action.payload;
     },
+    setStayReservationInfo: (state, action) => {
+      state.reservationNo = action.payload.no;
+      state.reservationDate = action.payload.reservationDate;
+    },
+    setRoomLoginMemberInfo: (state, action) => {
+      state.memberNo = action.payload.memberNo;
+    },
+    setResetFilter: (state) => {
+      state.reservationDate = "";
+      state.adult = 0;
+      state.child = 0;
+      state.baby = 0;
+      state.area = "";
+      state.reservationDone = "";
+      state.titleData = "";
+      state.sort = "";
+    },
   },
 });
 
@@ -83,6 +100,9 @@ export const {
   setRoomData,
   setStayReservationDate,
   setStayReservationDone,
+  setStayReservationInfo,
+  setRoomLoginMemberInfo,
+  setResetFilter,
 } = roomSlice.actions;
 
 export default roomSlice.reducer;

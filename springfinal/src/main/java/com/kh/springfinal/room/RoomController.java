@@ -1,5 +1,6 @@
 package com.kh.springfinal.room;
 
+import com.kh.springfinal.guest.GuestVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -47,11 +48,24 @@ public class RoomController {
     }
 
     @PostMapping("isAvailable")
-    public void isAvailable(){
+    public String[] isAvailable(@RequestBody Long no){
         try{
-
+            String[] date = roomService.isAvailable(no);
+            return date;
         }catch(Exception e){
+            log.warn(e.getMessage());
+            throw new IllegalStateException("[ROOM-ERROR-01]ROOM-IS AVAILABLE FAIL");
+        }
+    }
 
+    @PostMapping("memberInfo")
+    public GuestVo memberInfo(@RequestBody Long no){
+        try{
+            GuestVo guestVo = roomService.memberInfo(no);
+            return guestVo;
+        }catch(Exception e){
+            log.warn(e.getMessage());
+            throw new IllegalStateException("[ROOM-ERROR-01]ROOM-MEMBER INFO FAIL");
         }
     }
 
