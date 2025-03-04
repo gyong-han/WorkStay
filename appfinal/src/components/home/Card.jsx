@@ -65,7 +65,10 @@ const SecondDiv = styled.div`
 const Card = ({vo}) => {
   const [bookMark,setBookMark] = useState(false);
   const token = localStorage.getItem("token");
-  const userData= jwtDecode(token);
+  let userData ='';
+  if(token){
+    userData= jwtDecode(token);
+  }
   const navi = useNavigate();
   console.log(userData.no);
   
@@ -75,6 +78,9 @@ const Card = ({vo}) => {
     no :vo.no,
   }
   useEffect(()=>{
+    if(!token){
+      return;
+    }
     fetch(("http://localhost:8080/home/getbookmarkInfo"),{
       method :"POST",
       headers : {
@@ -96,6 +102,9 @@ const Card = ({vo}) => {
   },[bookMark])
   
   const ClickHandler = ()=>{
+    if(!token){
+      return;
+    }
 
     const dataObj = {
       memberNo : userData.no,
