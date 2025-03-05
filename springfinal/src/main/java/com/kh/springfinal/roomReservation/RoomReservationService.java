@@ -10,7 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class RoomReservationService {
     private final RoomReservationMapper reservationMapper;
 
-//    public RoomReservationVo reservation(Long no) {
-//        return reservationMapper.reservation(no);
-//    }
+    public int reservation(RoomReservationVo vo) {
+        return reservationMapper.reservation(vo);
+    }
+
+    public RoomReservationVo getReservationInfo(RoomReservationVo vo) {
+        return reservationMapper.getReservationInfo(vo);
+    }
 }

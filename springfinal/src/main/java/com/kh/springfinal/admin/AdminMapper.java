@@ -6,9 +6,7 @@ import com.kh.springfinal.host.TableVo;
 import com.kh.springfinal.room.RoomVo;
 import com.kh.springfinal.space.SpaceVo;
 import com.kh.springfinal.stay.StayVo;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -134,7 +132,8 @@ public interface AdminMapper {
     @Update("""
             UPDATE MEMBER
             SET
-            HOST_PERMISSION = 'Y'
+            HOST_PERMISSION = 'Y',
+            PAGE_NICK = 'HOST'
             WHERE NO = #{hostNo}
             """)
     int changeHost(Long hostNo);
@@ -225,6 +224,7 @@ public interface AdminMapper {
             WHERE NO = #{stayNo}
             """)
     int companionStay(Long stayNo);
+
 
     @Select("""
             SELECT S.NO,M.NAME AS HOST_NAME,S.NAME,M.PHONE,TO_CHAR(ES.MODIFY_DATE, 'YYYY.MM.DD') AS MODIFY_DATE
@@ -341,7 +341,7 @@ public interface AdminMapper {
                     S.SNS = ES.SNS,
                     S.TAGLINE = ES.TAGLINE,
                     S.INTRODUCTION=ES.INTRODUCTION
-            WHERE ES.SPACE_NO = '1'
+            WHERE ES.SPACE_NO = #{spaceNo}
             """)
     int approveEditSpace(String spaceNo);
 
@@ -493,4 +493,212 @@ public interface AdminMapper {
             WHERE STATUS_NO = '7'   
             """)
     int getSpaceDeleteReqListCount();
+
+    @Select("""
+            SELECT ORIGIN_NAME AS NAME,FILE_PATH,NO
+            FROM SPACE_FLOOR_PLAN
+            WHERE SPACE_NO = #{spaceNo}
+            """)
+    AttachVo getSpaceFloorPlan(String spaceNo);
+
+    @Select("""
+            SELECT ORIGIN_NAME AS NAME,FILE_PATH,NO
+            FROM EDIT_SPACE_ATTACHMENT
+            WHERE SPACE_NO = #{spaceNo}
+            AND THUMBNAIL = 'Y'
+            AND STATUS_NO = '1'
+            """)
+    AttachVo getEditSpaceThumbNail(String spaceNo);
+
+    @Select("""
+            SELECT ORIGIN_NAME AS NAME,FILE_PATH,NO
+            FROM SPACE_ATTACHMENT
+            WHERE SPACE_NO = #{spaceNo}
+            AND THUMBNAIL = 'Y'
+            """)
+    AttachVo getOriginSpaceThumbNail(String spaceNo);
+
+    @Select("""
+            SELECT ORIGIN_NAME AS NAME,FILE_PATH,NO
+            FROM EDIT_SPACE_ATTACHMENT
+            WHERE SPACE_NO = #{spaceNo}
+            AND THUMBNAIL = 'N'
+            AND STATUS_NO = '1'
+            """)
+    List<AttachVo> getEditSpaceAttach(String spaceNo);
+
+    @Select("""
+            SELECT ORIGIN_NAME AS NAME,FILE_PATH,NO
+            FROM SPACE_ATTACHMENT
+            WHERE SPACE_NO = #{spaceNo}
+            AND THUMBNAIL = 'N'          
+            """)
+    List<AttachVo> getOriginSpaceAttach(String spaceNo);
+
+    @Select("""
+            SELECT ORIGIN_NAME AS NAME,FILE_PATH,NO
+            FROM ROOM_FLOOR_PLAN
+            WHERE ROOM_NO = #{roomNo}
+            """)
+    AttachVo getRoomFloorPlan(String roomNo);
+
+    @Select("""
+            SELECT ORIGIN_NAME AS NAME,FILE_PATH,NO
+            FROM EDIT_ROOM_ATTACHMENT
+            WHERE ROOM_NO = #{roomNo}
+            AND THUMBNAIL = 'Y'
+            AND STATUS_NO = '1'            
+            """)
+    AttachVo getEditRoomThumbNail(String roomNo);
+
+    @Select("""
+            SELECT ORIGIN_NAME AS NAME,FILE_PATH,NO
+            FROM ROOM_ATTACHMENT
+            WHERE ROOM_NO = #{spaceNo}
+            AND THUMBNAIL = 'Y'            
+            """)
+    AttachVo getOriginRoomThumbNail(String roomNo);
+
+    @Select("""
+            SELECT ORIGIN_NAME AS NAME,FILE_PATH,NO
+            FROM EDIT_ROOM_ATTACHMENT
+            WHERE ROOM_NO = #{roomNo}
+            AND THUMBNAIL = 'N'
+            AND STATUS_NO = '1'            
+            """)
+    List<AttachVo> getEditRoomAttach(String roomNo);
+
+    @Select("""
+            SELECT ORIGIN_NAME AS NAME,FILE_PATH,NO
+            FROM ROOM_ATTACHMENT
+            WHERE ROOM_NO = #{roomNo}
+            AND THUMBNAIL = 'N'          
+            """)
+    List<AttachVo> getOriginRoomAttach(String roomNo);
+
+    @Update("""
+            UPDATE EDIT_ROOM_ATTACHMENT SET
+            STATUS_NO = '3'
+            WHERE ROOM_NO = #{roomNo}
+            """)
+    int companionEditRoomAttach(String roomNo);
+
+    @Delete("""
+            DELETE FROM ROOM_ATTACHMENT
+            WHERE ROOM_NO = #{roomNo}
+            AND THUMBNAIL = 'Y'
+            """)
+    int deleteOriginRoomThumbnail(String roomNo);
+
+    @Update("""
+            UPDATE EDIT_ROOM_ATTACHMENT SET
+            STATUS_NO = '2'
+            WHERE ROOM_NO = #{roomNo}
+            AND THUMBNAIL = 'Y'
+            """)
+    int updateEditRoomThumbnail(String roomNo);
+
+    @Insert("""
+            INSERT INTO ROOM_ATTACHMENT(NO,ROOM_NO,ORIGIN_NAME,FILE_PATH,THUMBNAIL)
+            SELECT SEQ_ROOM_ATTACHMENT.NEXTVAL,ROOM_NO,ORIGIN_NAME,FILE_PATH,THUMBNAIL FROM EDIT_ROOM_ATTACHMENT
+            WHERE EDIT_ROOM_ATTACHMENT.ROOM_NO= #{roomNo}
+            AND EDIT_ROOM_ATTACHMENT.THUMBNAIL = 'Y'
+            AND EDIT_ROOM_ATTACHMENT.STATUS_NO = '1'
+            """)
+    int insertNewRoomThumbnail(String roomNo);
+
+    @Delete("""
+            DELETE FROM ROOM_ATTACHMENT
+            WHERE ROOM_NO = #{roomNo}
+            AND THUMBNAIL = 'N'
+            """)
+    int deleteOriginRoomAttach(String roomNo);
+
+    @Insert("""
+            INSERT INTO ROOM_ATTACHMENT(NO,ROOM_NO,ORIGIN_NAME,FILE_PATH,THUMBNAIL)
+            SELECT SEQ_ROOM_ATTACHMENT.NEXTVAL,ROOM_NO,ORIGIN_NAME,FILE_PATH,THUMBNAIL FROM EDIT_ROOM_ATTACHMENT
+            WHERE EDIT_ROOM_ATTACHMENT.ROOM_NO= #{roomNo}
+            AND EDIT_ROOM_ATTACHMENT.THUMBNAIL = 'N'
+            AND EDIT_ROOM_ATTACHMENT.STATUS_NO = '1'
+            """)
+    int insertNewRoomAttach(String roomNo);
+
+    @Update("""
+            UPDATE EDIT_ROOM_ATTACHMENT SET
+            STATUS_NO = '2'
+            WHERE ROOM_NO = #{roomNo}
+            AND THUMBNAIL = 'N'
+            """)
+    void updateEditRoomAttach(String roomNo);
+
+    @Update("""
+            UPDATE EDIT_SPACE_ATTACHMENT SET
+            STATUS_NO = '3'
+            WHERE SPACE_NO = #{spaceNo}
+            """)
+    int companionEditSpaceAttach(String spaceNo);
+
+    @Delete("""
+            DELETE FROM SPACE_ATTACHMENT
+            WHERE SPACE_NO = #{spaceNo}
+            AND THUMBNAIL = 'Y'
+            """)
+    int deleteOriginSpaceThumbnail(String spaceNo);
+
+    @Insert("""
+            INSERT INTO SPACE_ATTACHMENT(NO,SPACE_NO,ORIGIN_NAME,FILE_PATH,THUMBNAIL)
+            SELECT SEQ_SPACE_ATTACHMENT.NEXTVAL,SPACE_NO,ORIGIN_NAME,FILE_PATH,THUMBNAIL FROM EDIT_SPACE_ATTACHMENT
+            WHERE EDIT_SPACE_ATTACHMENT.SPACE_NO= #{spaceNo}
+            AND EDIT_SPACE_ATTACHMENT.THUMBNAIL = 'Y'
+            AND EDIT_SPACE_ATTACHMENT.STATUS_NO = '1' 
+            """)
+    int insertNewSpaceThumbnail(String spaceNo);
+
+    @Update("""
+            UPDATE EDIT_SPACE_ATTACHMENT SET
+            STATUS_NO = '2'
+            WHERE SPACE_NO = #{spaceNo}
+            AND THUMBNAIL = 'Y'
+            """)
+    void updateEditSpaceThumbnail(String spaceNo);
+
+    @Delete("""
+           DELETE FROM SPACE_ATTACHMENT
+            WHERE SPACE_NO = #{spaceNo}
+            AND THUMBNAIL = 'N' 
+            """)
+    int deleteOriginSpaceAttach(String spaceNo);
+
+    @Insert("""
+            INSERT INTO SPACE_ATTACHMENT(NO,SPACE_NO,ORIGIN_NAME,FILE_PATH,THUMBNAIL)
+            SELECT SEQ_SPACE_ATTACHMENT.NEXTVAL,SPACE_NO,ORIGIN_NAME,FILE_PATH,THUMBNAIL FROM EDIT_SPACE_ATTACHMENT
+            WHERE EDIT_SPACE_ATTACHMENT.SPACE_NO= #{spaceNo}
+            AND EDIT_SPACE_ATTACHMENT.THUMBNAIL = 'N'
+            AND EDIT_SPACE_ATTACHMENT.STATUS_NO = '1'
+            """)
+    int insertNewSpaceAttach(String spaceNo);
+
+    @Update("""
+            UPDATE EDIT_SPACE_ATTACHMENT SET
+            STATUS_NO = '2'
+            WHERE SPACE_NO = #{spaceNo}
+            AND THUMBNAIL = 'N'
+            """)
+    void updateEditSpaceAttach(String spaceNo);
+
+    @Select("""
+            SELECT COUNT(NO)
+            FROM EDIT_ROOM_ATTACHMENT
+            WHERE ROOM_NO = #{roomNo}
+            AND STATUS_NO = '1'            
+            """)
+    int getEditRoomAttachList(String roomNo);
+
+    @Select("""
+            SELECT COUNT(NO)
+            FROM EDIT_SPACE_ATTACHMENT
+            WHERE SPACE_NO = #{spaceNo}
+            AND STATUS_NO = '1'         
+            """)
+    int getEditSpaceAttachList(String spaceNo);
 }

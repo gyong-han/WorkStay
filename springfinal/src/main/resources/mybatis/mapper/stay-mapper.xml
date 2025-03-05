@@ -5,11 +5,10 @@
 
 <mapper namespace="com.kh.springfinal.stay.StayMapper">
     <select id="findAllByOrderByCreatedAtDesc">
-        SELECT  S.HOST_NO,S.NO,S.NAME,S.ADDRESS,SA.FILE_PATH,R.PRICE,R.MAX_GUEST,R.STANDARD_GUEST
+        SELECT  S.HOST_NO,S.NO,S.NAME,RA.FILE_PATH,S.ADDRESS,R.PRICE,R.MAX_GUEST,R.STANDARD_GUEST
         FROM STAY S
-        JOIN STAY_ATTACHMENT SA ON (S.NO = SA.STAY_NO)
         JOIN (
-        SELECT STAY_NO, PRICE, STANDARD_GUEST, MAX_GUEST
+        SELECT STAY_NO, NO, PRICE, STANDARD_GUEST, MAX_GUEST
         FROM ROOM
         WHERE NO = (
         SELECT MIN(NO)
@@ -17,8 +16,9 @@
         WHERE R2.STAY_NO = ROOM.STAY_NO
         )
         ) R ON S.NO = R.STAY_NO
+        JOIN ROOM_ATTACHMENT RA ON (R.NO = RA.ROOM_NO)
         WHERE STATUS_NO = '2'
-        AND SA.THUMBNAIL = 'Y'
+        AND RA.THUMBNAIL = 'Y'
         <if test="area != null and area !='' ">
             AND S.ADDRESS LIKE CONCAT(#{area}, '%')
         </if>
@@ -39,11 +39,10 @@
     </select>
 
     <select id="findAllByOrderByPriceAsc">
-        SELECT  S.NO,S.NAME,ADDRESS,SA.FILE_PATH,R.PRICE,R.MAX_GUEST,R.STANDARD_GUEST
+        SELECT  S.HOST_NO,S.NO,S.NAME,RA.FILE_PATH,S.ADDRESS,R.PRICE,R.MAX_GUEST,R.STANDARD_GUEST
         FROM STAY S
-        JOIN STAY_ATTACHMENT SA ON (S.NO = SA.STAY_NO)
         JOIN (
-        SELECT STAY_NO, PRICE, STANDARD_GUEST, MAX_GUEST
+        SELECT STAY_NO, NO, PRICE, STANDARD_GUEST, MAX_GUEST
         FROM ROOM
         WHERE NO = (
         SELECT MIN(NO)
@@ -51,9 +50,9 @@
         WHERE R2.STAY_NO = ROOM.STAY_NO
         )
         ) R ON S.NO = R.STAY_NO
+        JOIN ROOM_ATTACHMENT RA ON (R.NO = RA.ROOM_NO)
         WHERE STATUS_NO = '2'
-        AND SA.THUMBNAIL = 'Y'
-        AND S.DEL_YN = 'N'
+        AND RA.THUMBNAIL = 'Y'
         <if test="area != null and area !='' ">
             AND S.ADDRESS LIKE CONCAT(#{area}, '%')
         </if>
@@ -63,7 +62,7 @@
         <if test="date != null and date !='' and date != '00000000' ">
             AND S.NO NOT IN(
             SELECT STAY_NO
-            FROM STAY_RESERVATION
+            FROM ROOM_RESERVATION
             WHERE USE_DAY = #{date}
             AND PACKAGE_NO IN (1, 2)
             GROUP BY STAY_NO
@@ -73,11 +72,10 @@
     </select>
 
     <select id="findAllByOrderByPriceDesc">
-        SELECT  S.HOST_NO,S.NO,S.NAME,ADDRESS,SA.FILE_PATH,R.PRICE,R.MAX_GUEST,R.STANDARD_GUEST
+        SELECT  S.HOST_NO,S.NO,S.NAME,RA.FILE_PATH,S.ADDRESS,R.PRICE,R.MAX_GUEST,R.STANDARD_GUEST
         FROM STAY S
-        JOIN STAY_ATTACHMENT SA ON (S.NO = SA.STAY_NO)
         JOIN (
-        SELECT STAY_NO, PRICE, STANDARD_GUEST, MAX_GUEST
+        SELECT STAY_NO, NO, PRICE, STANDARD_GUEST, MAX_GUEST
         FROM ROOM
         WHERE NO = (
         SELECT MIN(NO)
@@ -85,9 +83,9 @@
         WHERE R2.STAY_NO = ROOM.STAY_NO
         )
         ) R ON S.NO = R.STAY_NO
+        JOIN ROOM_ATTACHMENT RA ON (R.NO = RA.ROOM_NO)
         WHERE STATUS_NO = '2'
-        AND SA.THUMBNAIL = 'Y'
-        AND S.DEL_YN = 'N'
+        AND RA.THUMBNAIL = 'Y'
         <if test="area != null and area !='' ">
             AND S.ADDRESS LIKE CONCAT(#{area}, '%')
         </if>
@@ -107,21 +105,10 @@
     </select>
 
     <select id="findAllByOrderByBookmarksDesc">
-        SELECT
-        S.NO,
-        S.HOST_NO,
-        S.NAME,
-        S.ADDRESS,
-        R.PRICE,
-        R.STANDARD_GUEST,
-        R.MAX_GUEST,
-        M.HOST_PERMISSION,
-        A.THUMBNAIL,
-        A.FILE_PATH,
-        COUNT(B.STAY_NO) AS BOOKMARKS
+        SELECT  S.HOST_NO,S.NO,S.NAME,RA.FILE_PATH,S.ADDRESS,R.PRICE,R.MAX_GUEST,R.STANDARD_GUEST
         FROM STAY S
         JOIN (
-        SELECT STAY_NO, PRICE, STANDARD_GUEST, MAX_GUEST
+        SELECT STAY_NO, NO, PRICE, STANDARD_GUEST, MAX_GUEST
         FROM ROOM
         WHERE NO = (
         SELECT MIN(NO)
@@ -129,13 +116,9 @@
         WHERE R2.STAY_NO = ROOM.STAY_NO
         )
         ) R ON S.NO = R.STAY_NO
-        JOIN MEMBER M ON S.HOST_NO = M.NO
-        JOIN STAY_ATTACHMENT A ON S.NO = A.STAY_NO
-        LEFT JOIN STAY_BOOKMARK B ON S.NO = B.STAY_NO
-        WHERE M.HOST_PERMISSION = 'Y'
-        AND S.STATUS_NO = '2'
-        AND A.THUMBNAIL = 'Y'
-        AND S.DEL_YN = 'N'
+        JOIN ROOM_ATTACHMENT RA ON (R.NO = RA.ROOM_NO)
+        WHERE STATUS_NO = '2'
+        AND RA.THUMBNAIL = 'Y'
         <if test="area != null and area !='' ">
             AND S.ADDRESS LIKE CONCAT(#{area}, '%')
         </if>

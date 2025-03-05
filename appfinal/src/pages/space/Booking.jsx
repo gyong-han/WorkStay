@@ -375,6 +375,7 @@ useEffect(() => {
 
   //localstorge용 데이터 뭉치기
     const fd = {
+      filePath : spaceVo.filePath,
       spaceNo: spaceVo.no,
       memberNo: spaceVo.memberNo,
       paymentNo: 1,

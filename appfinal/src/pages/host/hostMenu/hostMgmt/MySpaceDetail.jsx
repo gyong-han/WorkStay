@@ -237,6 +237,7 @@ const MySpaceDetail = () => {
   const [hostNo, setHostNo] = useState("");
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [isAlertOpen2, setIsAlertOpen2] = useState(false);
+  const [isAlertOpen3, setIsAlertOpen3] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -260,6 +261,8 @@ const MySpaceDetail = () => {
     })
       .then((resp) => resp.json())
       .then((data) => {
+        console.log(data.attachMap);
+
         setFormData(data.spaceVo);
         setFeaturesArr(data.featuresList);
         setFileData(data.attachMap);
@@ -298,9 +301,12 @@ const MySpaceDetail = () => {
     fd.append("daytimePrice", formData.daytimePrice);
     fd.append("nightPrice", formData.nightPrice);
     fd.append("features", featuresArr);
-    fd.append("space_floor_plan", fileData.space_floor_plan);
-    fd.append("thumbnail", fileData.thumbnail);
-    fileData.attachment.map((file) => fd.append("attachment", file));
+    if (fileData.thumbnail instanceof File) {
+      fd.append("thumbnail", fileData.thumbnail);
+    }
+    fileData.attachment.forEach(
+      (file) => file instanceof File && fd.append("attachment", file)
+    );
     fetch("http://127.0.0.1:8080/api/host/modifyMySpace", {
       method: "POST",
       headers: {},
@@ -308,7 +314,6 @@ const MySpaceDetail = () => {
     })
       .then((resp) => resp.text())
       .then((data) => {
-        console.log(data);
         if (data > 0) {
           setIsAlertOpen(true);
         }
@@ -327,6 +332,8 @@ const MySpaceDetail = () => {
       .then((data) => {
         if (data > 0) {
           setIsAlertOpen2(true);
+        } else {
+          setIsAlertOpen3(true);
         }
       });
   };
@@ -348,6 +355,12 @@ const MySpaceDetail = () => {
   };
 
   const handleAlertClose2 = () => {
+    setIsAlertOpen(false);
+    navigate("/hostMenu/hostMgmtMenu/mySpaceMgmt");
+    window.scrollTo(0, 0);
+  };
+
+  const handleAlertClose3 = () => {
     setIsAlertOpen(false);
     navigate("/hostMenu/hostMgmtMenu/mySpaceMgmt");
     window.scrollTo(0, 0);
@@ -598,13 +611,18 @@ const MySpaceDetail = () => {
                   <span>정원</span>
                 </CheckDiv>
               </CheckBoxArea>
-              <DataTitle top="40px">스페이스 평면도 *</DataTitle>
+              <div>
+                <DataTitle top="40px">스페이스 평면도 *</DataTitle>
+              </div>
+
               <div>
                 <AttachmentUpload
                   fileData={fileData}
                   setFileData={setFileData}
                   name="space_floor_plan"
                   func="true"
+                  isDisabled="true"
+                  color="gray"
                 />
               </div>
               <DataTitle top="40px">스페이스 대표사진 *</DataTitle>
@@ -678,6 +696,19 @@ const MySpaceDetail = () => {
             buttonText="확인"
             buttonColor="#049dd9"
             onClose={handleAlertClose2}
+          />
+        </Backdrop>
+      )}
+
+      {isAlertOpen3 && (
+        <Backdrop>
+          <Alert
+            title="내 공간 입접삭제"
+            titleColor="red"
+            message="입점 삭제 불가능합니다. 이용 완료되지 않은 예약 내역이 있습니다."
+            buttonText="확인"
+            buttonColor="red"
+            onClose={handleAlertClose3}
           />
         </Backdrop>
       )}

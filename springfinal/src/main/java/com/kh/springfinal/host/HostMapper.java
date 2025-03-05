@@ -209,8 +209,10 @@ public interface HostMapper {
             JOIN PACKAGE P ON (SR.PACKAGE_NO = P.NO)
             WHERE S.HOST_NO = #{hostNo}
             AND SR.STATUS_NO = #{status}
+            ORDER BY USE_DAY DESC
+            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
             """)
-    List<TableVo> getSpaceReservList(String status, String hostNo);
+    List<TableVo> getSpaceReservList(String status, String hostNo, int limit, int offset);
 
     @Select("""
             
@@ -222,8 +224,10 @@ public interface HostMapper {
             JOIN STAY S ON(R.STAY_NO = S.NO)
             WHERE S.HOST_NO = #{hostNo}
             AND RS.STATUS_NO = #{status}
+            ORDER BY USE_DAY DESC
+            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
             """)
-    List<TableVo> getRoomReservList(String status, String hostNo);
+    List<TableVo> getRoomReservList(String status, String hostNo, int limit, int offset);
 
 
     @Select("""
@@ -285,14 +289,14 @@ public interface HostMapper {
     List<String> getMySpaceFeaturesList(String spaceNo);
 
     @Select("""
-            SELECT ORIGIN_NAME AS NAME,FILE_PATH
+            SELECT ORIGIN_NAME AS NAME,FILE_PATH,NO
             FROM SPACE_FLOOR_PLAN
             WHERE SPACE_NO = #{spaceNo}
             """)
     AttachVo getMySpaceRoomFloorPlan(String spaceNo);
 
     @Select("""
-            SELECT ORIGIN_NAME AS NAME,FILE_PATH
+            SELECT ORIGIN_NAME AS NAME,FILE_PATH,NO
             FROM SPACE_ATTACHMENT
             WHERE SPACE_NO = #{spaceNo}
             AND THUMBNAIL = 'Y'
@@ -300,7 +304,7 @@ public interface HostMapper {
     AttachVo getMySpaceThumbNail(String spaceNo);
 
     @Select("""
-            SELECT ORIGIN_NAME AS NAME,FILE_PATH
+            SELECT ORIGIN_NAME AS NAME,FILE_PATH,NO
             FROM SPACE_ATTACHMENT
             WHERE SPACE_NO = #{spaceNo}
             AND THUMBNAIL = 'N'
@@ -370,6 +374,7 @@ public interface HostMapper {
             FROM ROOM R
             JOIN STAY S ON(R.STAY_NO = S.NO)
             WHERE R.STAY_NO = #{stayNum}   
+            ORDER BY R.NO
             """)
     List<String> getMyRoomNo(String stayNum);
 
@@ -390,14 +395,14 @@ public interface HostMapper {
     List<String> getMyRoomFeaturesList(String roomNo);
 
     @Select("""
-            SELECT ORIGIN_NAME AS NAME,FILE_PATH
+            SELECT ORIGIN_NAME AS NAME,FILE_PATH,NO
             FROM ROOM_FLOOR_PLAN
             WHERE ROOM_NO = #{roomNo}
             """)
     AttachVo getRoomFloorPlan(String roomNo);
 
     @Select("""
-            SELECT ORIGIN_NAME AS NAME,FILE_PATH
+            SELECT ORIGIN_NAME AS NAME,FILE_PATH,NO
             FROM ROOM_ATTACHMENT
             WHERE ROOM_NO = #{roomNo}
             AND THUMBNAIL = 'Y'
@@ -405,7 +410,7 @@ public interface HostMapper {
     AttachVo getRoomThumbNail(String roomNo);
 
     @Select("""
-            SELECT NO,ORIGIN_NAME AS NAME,FILE_PATH
+            SELECT NO,ORIGIN_NAME AS NAME,FILE_PATH,NO
             FROM ROOM_ATTACHMENT
             WHERE ROOM_NO = #{roomNo}
             AND THUMBNAIL = 'N'
@@ -466,4 +471,75 @@ public interface HostMapper {
             WHERE NO = #{stayNo}
             """)
     int deleteMyStay(String stayNo);
+
+    @Select("""
+            SELECT COUNT(RR.NO)
+            FROM ROOM_RESERVATION RR
+            JOIN MEMBER M ON(RR.MEMBER_NO = M.NO)
+            JOIN ROOM R ON(RR.ROOM_NO = R.NO)
+            JOIN STAY S ON(R.STAY_NO = S.NO)
+            WHERE RR.STATUS_NO = #{status}
+            AND S.HOST_NO = #{hostNo}
+            """)
+    int getRoomReservCount(String hostNo, String status);
+
+    @Select("""
+            SELECT COUNT(SR.NO)
+            FROM SPACE_RESERVATION SR
+            JOIN SPACE S ON(SR.SPACE_NO = S.NO)
+            JOIN MEMBER M ON (M.NO = S.HOST_NO)
+            WHERE SR.STATUS_NO = #{status}
+            AND S.HOST_NO = #{hostNo}
+            """)
+    int getSpaceReservCount(String hostNo, String status);
+
+    @Select("""
+            SELECT COUNT(SR.NO)
+            FROM SPACE_RESERVATION SR
+            JOIN SPACE S ON(SR.SPACE_NO = S.NO)
+            WHERE SR.SPACE_NO = #{spaceNo}
+            AND SR.STATUS_NO = '5'
+            """)
+    int countSpaceReservation(String stayNo);
+
+    @Select("""
+            SELECT COUNT(RR.NO)
+            FROM ROOM_RESERVATION RR
+            JOIN ROOM R ON (RR.ROOM_NO = R.NO)
+            JOIN STAY S ON (R.STAY_NO = S.NO)
+            WHERE S.NO = #{stayNo}
+            AND RR.STATUS_NO = '5'
+            """)
+    int countStayReservation(String stayNo);
+
+    @Insert("""
+            INSERT INTO EDIT_SPACE_ATTACHMENT (NO,SPACE_NO,ORIGIN_NAME,FILE_PATH,THUMBNAIL) 
+            VALUES (SEQ_EDIT_SPACE_ATTACHMENT.NEXTVAL,#{spaceVo.no},#{thumbnailVo.originName},#{thumbnailVo.filePath},'Y')
+            """)
+    int insertMySpaceThumbnailEdit(AttachVo thumbnailVo, SpaceVo spaceVo);
+
+    @Insert("""
+            INSERT INTO EDIT_SPACE_ATTACHMENT (NO,SPACE_NO,ORIGIN_NAME,FILE_PATH,THUMBNAIL) 
+            VALUES (SEQ_EDIT_SPACE_ATTACHMENT.NEXTVAL,#{spaceVo.no},#{attachVo.originName},#{attachVo.filePath},'N')            
+            """)
+    int insertMySpaceAttachEdit(SpaceVo spaceVo, AttachVo attachVo);
+
+    @Insert("""
+            INSERT INTO EDIT_ROOM_ATTACHMENT (NO,ROOM_NO,ORIGIN_NAME,FILE_PATH,THUMBNAIL) 
+            VALUES (SEQ_EDIT_ROOM_ATTACHMENT.NEXTVAL,#{roomVo.no},#{thumbnailVo.originName},#{thumbnailVo.filePath},'Y')
+            """)
+    int insertMyRoomThumbnailEdit(AttachVo thumbnailVo, RoomVo roomVo);
+
+    @Insert("""
+            INSERT INTO EDIT_ROOM_ATTACHMENT (NO,ROOM_NO,ORIGIN_NAME,FILE_PATH,THUMBNAIL) 
+            VALUES (SEQ_EDIT_ROOM_ATTACHMENT.NEXTVAL,#{roomVo.no},#{attachVo.originName},#{attachVo.filePath},'N')                        
+            """)
+    int insertMyRoomAttachEdit(RoomVo roomVo, AttachVo attachVo);
+
+    @Select("""
+            SELECT NAME,EMAIL,PHONE
+            FROM MEMBER
+            WHERE NO = #{hostNo}
+            """)
+    GuestVo getHostVo(String hostNo);
 }

@@ -65,11 +65,11 @@ const Backdrop = styled.div`
 
 const RoomEditReqDetail = () => {
   const { roomNum } = useParams();
-  const [roomVoArr, setRoomVoArr] = useState([]);
+  const [roomVo, setRoomVo] = useState({});
   const [featuresArr, setFeaturesArr] = useState([]);
-  const [roomFloorPlanArr, setRoomFloorPlanArr] = useState([]);
-  const [roomThumbNailArr, setRoomThumbNailArr] = useState([]);
-  const [roomAttachArr, setRoomAttachArr] = useState([]);
+  const [roomFloorPlan, setRoomFloorPlan] = useState({});
+  const [roomThumbNail, setRoomThumbNail] = useState({});
+  const [roomAttachList, setRoomAttachList] = useState([]);
   const navigate = useNavigate();
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [isAlertOpen2, setIsAlertOpen2] = useState(false);
@@ -86,11 +86,11 @@ const RoomEditReqDetail = () => {
       .then((resp) => resp.json())
       .then((data) => {
         console.log(data);
-        setRoomVoArr(data.roomVo);
+        setRoomVo(data.roomVo);
         setFeaturesArr(data.featuresList);
-        setRoomFloorPlanArr(data.roomFloorPlan);
-        setRoomThumbNailArr(data.roomThumbNail);
-        setRoomAttachArr(data.roomAttachList);
+        setRoomFloorPlan(data.roomFloorPlan);
+        setRoomThumbNail(data.roomThumbNail);
+        setRoomAttachList(data.roomAttachList);
       });
   }, []);
 
@@ -156,11 +156,11 @@ const RoomEditReqDetail = () => {
           </div>
           <div>
             <EditReqRoom
-              roomVo={roomVoArr}
+              roomVo={roomVo}
               featuresArr={featuresArr}
-              roomFloorPlanArr={roomFloorPlanArr}
-              roomThumbNailArr={roomThumbNailArr}
-              roomAttachArr={roomAttachArr}
+              roomFloorPlan={roomFloorPlan}
+              roomThumbNail={roomThumbNail}
+              roomAttachList={roomAttachList}
             />
           </div>
           <BtnArea>

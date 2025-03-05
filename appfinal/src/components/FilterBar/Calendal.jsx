@@ -4,20 +4,23 @@ import { ko } from "date-fns/locale";
 import "react-datepicker/dist/react-datepicker.css";
 import Form from "react-bootstrap/Form";
 import { format } from "date-fns";
+import { useDispatch } from "react-redux";
+import { setStayReservationDate } from "../../redux/roomSlice";
 
-const Calendar = ({ children, type, setDateRange = () => {}, w }) => {
+const Calendar = ({ children, type, w, position }) => {
   const [dateRange, setLocalDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (dateRange[0] !== null && dateRange[1] !== null) {
       const formattedDates = dateRange.map((date) =>
         format(date, "yyyy-MM-dd")
       );
-      console.log("선택한 날짜:", formattedDates);
-      setDateRange(formattedDates); // Redux 또는 부모 컴포넌트 업데이트
+      console.log(formattedDates);
+      dispatch(setStayReservationDate(formattedDates));
     }
-  }, [dateRange, setDateRange]);
+  }, [dateRange]);
 
   return (
     <DatePicker
@@ -26,7 +29,9 @@ const Calendar = ({ children, type, setDateRange = () => {}, w }) => {
       startDate={startDate}
       minDate={new Date()}
       endDate={endDate}
-      onChange={(update) => setLocalDateRange(update)}
+      onChange={(update) => {
+        setLocalDateRange(update);
+      }}
       monthsShown={2}
       withPortal
       customInput={
@@ -40,6 +45,7 @@ const Calendar = ({ children, type, setDateRange = () => {}, w }) => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            justifyContent: position ? "start" : "center",
           }}
           inline
         >

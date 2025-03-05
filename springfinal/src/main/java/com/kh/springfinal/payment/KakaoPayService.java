@@ -37,6 +37,30 @@ public class KakaoPayService {
                 "https://kapi.kakao.com/v1/payment/ready", requestEntity, KakaoPayVo.class);
     }
 
+    public KakaoPayVo kakaoPayReadyRoom(KakaoPayReadyVo vo) {
+        // 결제 준비를 위한 파라미터 설정
+        MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
+        parameters.add("cid", cid);
+        parameters.add("partner_order_id", "order12345");
+        parameters.add("partner_user_id", "user123");
+        parameters.add("item_name", vo.getName());
+        parameters.add("quantity", "1");
+        parameters.add("total_amount", vo.getPrice());  // 총 금액
+        parameters.add("vat_amount", "1000");     // 부가세
+        parameters.add("tax_free_amount", "0");   // 비과세 금액
+        parameters.add("approval_url", "http://localhost:3000/findstay/successbooking/"+vo.getNo()); // 성공 URL
+        parameters.add("cancel_url", "http://localhost:8080/payment/cancel");   // 취소 URL
+        parameters.add("fail_url", "http://localhost:8080/payment/fail");      // 실패 URL
+
+        // HTTP 요청을 위한 HttpEntity 설정
+        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(parameters, getHeaders());
+
+        // RestTemplate을 사용하여 카카오 API로 요청
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.postForObject(
+                "https://kapi.kakao.com/v1/payment/ready", requestEntity, KakaoPayVo.class);
+    }
+
     private HttpHeaders getHeaders() {
         HttpHeaders headers = new HttpHeaders();
         String auth = "KakaoAK " + adminKey;

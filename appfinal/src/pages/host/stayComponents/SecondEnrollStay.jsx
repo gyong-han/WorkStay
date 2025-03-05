@@ -4,6 +4,7 @@ import Address from "../../../components/address/Address";
 import HostBtn from "../hostComponents/HostBtn";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { BASE_URL } from "../../../components/service/config";
 
 const HomeDiv = styled.div`
   display: grid;
@@ -170,18 +171,31 @@ const SecondEnrollStay = () => {
   });
   const navigate = useNavigate();
   const [hostNo, setHostNo] = useState("");
+  const [hostVo, setHostVo] = useState({
+    name: "",
+    phone: "",
+    email: "",
+  });
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      try {
-        const decodedToken = jwtDecode(token);
-        setHostNo(decodedToken.no);
-      } catch (error) {
-        console.error("토큰 디코딩 실패:", error);
-      }
+      const decodedToken = jwtDecode(token);
+      const no = decodedToken.no;
+      setHostNo(decodedToken.no);
+      fetch(`${BASE_URL}/api/host/getHostVo`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(no),
+      })
+        .then((resp) => resp.json())
+        .then((data) => {
+          setHostVo(data);
+        });
     }
-  }, []);
+  }, [hostNo]);
 
   const handleChange = (e) => {
     setFormData((prev) => {
@@ -244,6 +258,11 @@ const SecondEnrollStay = () => {
       });
   };
 
+  const formatPhoneNumber = (phone) => {
+    phone = String(phone);
+    return phone.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
+  };
+
   return (
     <>
       <HomeDiv>
@@ -268,13 +287,13 @@ const SecondEnrollStay = () => {
             <div></div>
             <DataTitle>호스트 성함 *</DataTitle>
             <div>
-              <DataInput type="text" value={"홍길동"} readOnly />
+              <DataInput type="text" value={hostVo.name} readOnly />
             </div>
             <DataTitle top="15px">호스트 전화번호 *</DataTitle>
             <div>
               <DataInput
-                type="number"
-                value={"01011112222"}
+                type="text"
+                value={formatPhoneNumber(hostVo.phone)}
                 top="15px"
                 readOnly
               />
@@ -283,7 +302,7 @@ const SecondEnrollStay = () => {
             <div>
               <DataInput
                 type="email"
-                value={"khAcademy362@kh.co.kr"}
+                value={hostVo.email}
                 top="20px"
                 readOnly
               />

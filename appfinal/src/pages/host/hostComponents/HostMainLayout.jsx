@@ -66,11 +66,11 @@ const HostMainLayout = ({ children }) => {
   const [memberVo, setMemberVo] = useState({});
   const [url, setUrl] = useState("");
   const { pathname } = useLocation();
+  const lastPath = pathname.split("/").pop();
 
   useEffect(() => {
-    const lastPath = pathname.split("/").pop();
     setUrl(lastPath);
-  }, []);
+  }, [lastPath]);
 
   useEffect(() => {
     setSelectedMenu(url);
@@ -92,7 +92,7 @@ const HostMainLayout = ({ children }) => {
         pageNick: decodedToken.pageNick,
       }));
 
-      // 🔹 2. 회원 정보 가져오기 (프론트에서 직접 이메일 보냄)
+      //  2. 회원 정보 가져오기 (프론트에서 직접 이메일 보냄)
       fetch(`${BASE_URL}/api/guest/mypage?email=${decodedToken.email}`, {
         method: "GET",
         headers: {

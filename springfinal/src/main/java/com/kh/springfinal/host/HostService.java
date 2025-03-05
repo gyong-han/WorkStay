@@ -6,6 +6,7 @@ import com.kh.springfinal.reservation.StayReservVo;
 import com.kh.springfinal.space.SpaceVo;
 import com.kh.springfinal.room.RoomVo;
 import com.kh.springfinal.stay.StayVo;
+import com.kh.springfinal.util.PageVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -80,12 +81,16 @@ public class HostService {
         return mapper.getMyStayList(hostNo);
     }
 
-    public List<TableVo> getSpaceReservList(String status, String hostNo) {
-        return mapper.getSpaceReservList(status,hostNo);
+    public List<TableVo> getSpaceReservList(String status, String hostNo, PageVo pageVo) {
+        int limit = pageVo.getBoardLimit();
+        int offset = pageVo.getOffset();
+        return mapper.getSpaceReservList(status,hostNo,limit,offset);
     }
 
-    public List<TableVo> getRoomReservList(String status, String hostNo) {
-        return mapper.getRoomReservList(status,hostNo);
+    public List<TableVo> getRoomReservList(String status, String hostNo, PageVo pageVo) {
+        int limit = pageVo.getBoardLimit();
+        int offset = pageVo.getOffset();
+        return mapper.getRoomReservList(status,hostNo,limit,offset);
     }
 
     public Map<String, Object> getSpaceReservDetail(String spaceReservNo) {
@@ -128,7 +133,7 @@ public class HostService {
         return mySpaceDetail;
     }
 
-    public int modifyMySpace(SpaceVo spaceVo, List<String> features) {
+    public int modifyMySpace(SpaceVo spaceVo, List<String> features, AttachVo thumbnailVo, List<AttachVo> attachVoList) {
         int result1 = mapper.updateMySpace(spaceVo);
         int result2 = mapper.deleteMySpaceFeatures(spaceVo);
         int result3 = 0;
@@ -136,10 +141,30 @@ public class HostService {
             result3 = mapper.insertMySpaceFeatures(spaceVo,feature);
         }
         int result4 = mapper.insertMySpaceEdit(spaceVo);
-        return result1*result2*result3*result4;
+
+        int result5 = 0;
+        if(thumbnailVo.getFilePath() == null){
+            result5 = 1;
+        }else{
+            result5 = mapper.insertMySpaceThumbnailEdit(thumbnailVo,spaceVo);
+        }
+
+        int result6 = 0;
+        if(attachVoList.size() == 0 ){
+            result6 = 1;
+        }else{
+            for (AttachVo attachVo : attachVoList) {
+                result6 = mapper.insertMySpaceAttachEdit(spaceVo,attachVo);
+            }
+        }
+        return result1*result2*result3*result4*result5*result6;
     }
 
     public int deleteMySpace(String spaceNo) {
+        int cnt = mapper.countSpaceReservation(spaceNo);
+        if(cnt > 0){
+            return 0;
+        }
         int result = mapper.deleteMySpace(spaceNo);
         return result;
     }
@@ -178,7 +203,7 @@ public class HostService {
         return myRoomDetail;
     }
 
-    public int modifyMyRoom(RoomVo roomVo, List<String> features) {
+    public int modifyMyRoom(RoomVo roomVo, List<String> features, AttachVo thumbnailVo, List<AttachVo> attachVoList) {
         int result1 = mapper.updateMyRoom(roomVo);
         int result2 = mapper.deleteMyRoomFeatures(roomVo);
         int result3 = 0;
@@ -186,6 +211,23 @@ public class HostService {
             result3 = mapper.insertMyRoomFeatures(roomVo,feature);
         }
         int result4 = mapper.insertMyRoomEdit(roomVo);
+
+        int result5 = 0;
+        if(thumbnailVo.getFilePath() == null){
+            result5 = 1;
+        }else{
+            result5 = mapper.insertMyRoomThumbnailEdit(thumbnailVo,roomVo);
+        }
+
+        int result6 = 0;
+        if(attachVoList.size() == 0 ){
+            result6 = 1;
+        }else{
+            for (AttachVo attachVo : attachVoList) {
+                result6 = mapper.insertMyRoomAttachEdit(roomVo,attachVo);
+            }
+        }
+
         return result1 * result2 * result3 * result4;
     }
 
@@ -198,6 +240,23 @@ public class HostService {
     }
 
     public int deleteMyStay(String stayNo) {
+        int cnt = mapper.countStayReservation(stayNo);
+        if(cnt > 0 ){
+            return 0;
+        }
         return mapper.deleteMyStay(stayNo);
+    }
+
+    public int getRoomReservCount(String hostNo, String status) {
+        return mapper.getRoomReservCount(hostNo,status);
+    }
+
+    public int getSpaceReservCount(String hostNo, String status) {
+        return mapper.getSpaceReservCount(hostNo,status);
+    }
+
+    public GuestVo getHostVo(String hostNo) {
+        GuestVo hostVo = mapper.getHostVo(hostNo);
+        return hostVo;
     }
 }

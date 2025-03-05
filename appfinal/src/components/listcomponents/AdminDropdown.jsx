@@ -38,7 +38,7 @@ const LogoutButton = styled.button`
   }
 `;
 
-const AdminDropdown = () => {
+const AdminDropdown = ({ setIsDropdownOpen }) => {
   const dispatch = useDispatch();
   const navi = useNavigate();
 
@@ -47,7 +47,13 @@ const AdminDropdown = () => {
   return (
     <DropdownContainer>
       {menuItems.map((item, index) => (
-        <DropdownItem key={index} to={item.path}>
+        <DropdownItem
+          key={index}
+          to={item.path}
+          onClick={() => {
+            setIsDropdownOpen(false);
+          }}
+        >
           {item.label}
         </DropdownItem>
       ))}

@@ -11,4 +11,6 @@ private String changeName;
 private String filePath;
 private String delYn;
 private String thumbnail;
+
+private String sno;
 }

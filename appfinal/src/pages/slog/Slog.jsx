@@ -6,7 +6,10 @@ import SlogList from "./SlogList";
 import SlogDetail from "./SlogDetail";
 
 const Container = styled.div`
-  text-align: center;
+  /* text-align: center; */
+  h1 {
+    text-align: center;
+  }
 `;
 
 const NavBar = styled.nav`

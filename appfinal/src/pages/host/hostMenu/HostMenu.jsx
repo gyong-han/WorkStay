@@ -14,6 +14,7 @@ import StayDetail from "../../guest/guestMenu/StayDetail";
 import SpaceCancle from "../../guest/guestMenu/SpaceCancle";
 import SpaceCancleResrv from "./SpaceCancleResrv";
 import StayCancleResrv from "./StayCancleResrv";
+import Chatbot from "../../guest/guestMenu/Chatbot";
 
 const HostMenu = () => {
   return (
@@ -79,7 +80,8 @@ const HostMenu = () => {
           path="/message/*"
           element={
             <HostMainLayout>
-              <Message />
+              {/* <Message /> */}
+              <Chatbot />
             </HostMainLayout>
           }
         />

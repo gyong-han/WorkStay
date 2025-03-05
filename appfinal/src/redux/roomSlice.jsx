@@ -57,7 +57,7 @@ const roomSlice = createSlice({
     },
     setMemberCount: (state, action) => {
       state.adult = action.payload.adult;
-      state.child = action.payload.kids;
+      state.child = action.payload.child;
       state.baby = action.payload.baby;
     },
     setRoomData: (state, action) => {
@@ -72,6 +72,23 @@ const roomSlice = createSlice({
     setStayReservationDone: (state, action) => {
       state.reservationDone = action.payload;
     },
+    setStayReservationInfo: (state, action) => {
+      state.reservationNo = action.payload.no;
+      state.payDay = action.payload.reservationDate;
+    },
+    setRoomLoginMemberInfo: (state, action) => {
+      state.memberNo = Number(action.payload);
+    },
+    setResetFilter: (state) => {
+      state.reservationDate = "";
+      state.adult = 0;
+      state.child = 0;
+      state.baby = 0;
+      state.area = "";
+      state.reservationDone = "";
+      state.titleData = "";
+      state.sort = "";
+    },
   },
 });
 
@@ -83,6 +100,9 @@ export const {
   setRoomData,
   setStayReservationDate,
   setStayReservationDone,
+  setStayReservationInfo,
+  setRoomLoginMemberInfo,
+  setResetFilter,
 } = roomSlice.actions;
 
 export default roomSlice.reducer;

@@ -133,13 +133,22 @@ public class AdminService {
         SpaceVo originSpaceVo = mapper.getOriginSpace(spaceNo);
         SpaceVo editSpaceVo = mapper.getEditSpace(spaceNo);
         List<String> featuresList = mapper.getSpaceFeaturesList(spaceNo);
-//        AttachVo spaceFloorPlan = mapper.getSpaceFloorPlan(spaceNo);
-//        AttachVo spaceThumbNail = mapper.getSpaceThumbNailEnrollReq(spaceNo);
-//        List<AttachVo> spaceAttachList = mapper.getSpaceAttachEnrollReq(spaceNo);
+        AttachVo spaceFloorPlan = mapper.getSpaceFloorPlan(spaceNo);
+        AttachVo spaceThumbNail = mapper.getEditSpaceThumbNail(spaceNo);
+        if(spaceThumbNail == null){
+            spaceThumbNail = mapper.getOriginSpaceThumbNail(spaceNo);
+        }
+        List<AttachVo> spaceAttachList = mapper.getEditSpaceAttach(spaceNo);
+        if(spaceAttachList.isEmpty()){
+            spaceAttachList = mapper.getOriginSpaceAttach(spaceNo);
+        }
         editReqDetail.put("hostVo",hostVo);
         editReqDetail.put("spaceVo",originSpaceVo);
         editReqDetail.put("editSpaceVo",editSpaceVo);
         editReqDetail.put("featuresList",featuresList);
+        editReqDetail.put("spaceFloorPlan",spaceFloorPlan);
+        editReqDetail.put("spaceThumbNail",spaceThumbNail);
+        editReqDetail.put("spaceAttachList",spaceAttachList);
         return editReqDetail;
     }
 
@@ -175,11 +184,23 @@ public class AdminService {
         originRoomVo.setName(editRoomVo.getName());
         originRoomVo.setIntroduction(editRoomVo.getIntroduction());
         List<String> featuresList = mapper.getRoomFeaturesList(roomNo);
-//        AttachVo spaceFloorPlan = mapper.getSpaceFloorPlan(roomNo);
-//        AttachVo spaceThumbNail = mapper.getSpaceThumbNailEnrollReq(roomNo);
-//        List<AttachVo> spaceAttachList = mapper.getSpaceAttachEnrollReq(roomNo);
+        AttachVo roomFloorPlan = mapper.getRoomFloorPlan(roomNo);
+
+        AttachVo roomThumbNail = mapper.getEditRoomThumbNail(roomNo);
+        if(roomThumbNail == null){
+            roomThumbNail = mapper.getOriginRoomThumbNail(roomNo);
+        }
+
+        List<AttachVo> roomAttachList = mapper.getEditRoomAttach(roomNo);
+        if(roomAttachList.isEmpty()){
+            roomAttachList = mapper.getOriginRoomAttach(roomNo);
+        }
+
         editReqDetail.put("roomVo",originRoomVo);
         editReqDetail.put("featuresList",featuresList);
+        editReqDetail.put("roomFloorPlan",roomFloorPlan);
+        editReqDetail.put("roomThumbNail",roomThumbNail);
+        editReqDetail.put("roomAttachList",roomAttachList);
 
         return editReqDetail;
     }
@@ -187,14 +208,46 @@ public class AdminService {
     public int approveEditSpace(String spaceNo) {
         int result1 = mapper.approveEditSpace(spaceNo);
         int result2 = 0;
-        if(result1 > 0){
+        if(result1 > 0) {
             result2 = mapper.updateStaus(spaceNo);
         }
-        return result1 * result2;
+
+        int result3 = 0;
+        AttachVo spaceThumbNail = mapper.getEditSpaceThumbNail(spaceNo);
+        if(spaceThumbNail != null){
+            int res = mapper.deleteOriginSpaceThumbnail(spaceNo);
+            if(res > 0 ){
+                result3 = mapper.insertNewSpaceThumbnail(spaceNo);
+                mapper.updateEditSpaceThumbnail(spaceNo);
+            }
+        }else{
+            result3 = 1;
+        }
+
+        List<AttachVo> spaceAttachList = mapper.getEditSpaceAttach(spaceNo);
+        int result4= 0;
+        if(spaceAttachList.isEmpty()) {
+            result4 = 1;
+        }else{
+            int res = mapper.deleteOriginSpaceAttach(spaceNo);
+            if(res > 0){
+                result4 = mapper.insertNewSpaceAttach(spaceNo);
+                mapper.updateEditSpaceAttach(spaceNo);
+            }
+        }
+        return result1 * result2 * result3 * result4;
     }
 
     public int companionEditSpace(String spaceNo) {
-        return mapper.companionEditSpace(spaceNo);
+        int result1 = mapper.companionEditSpace(spaceNo);
+        int result2 = 0;
+        int count = mapper.getEditSpaceAttachList(spaceNo);
+        if(count == 0){
+            result2 = 1;
+        }else{
+            result2 = mapper.companionEditSpaceAttach(spaceNo);
+        }
+        return result1 * result2;
     }
 
     public int approveEditStay(String stayNo) {
@@ -216,11 +269,43 @@ public class AdminService {
         if(result1 > 0){
             result2 = mapper.updateRoomStatus(roomNo);
         }
-        return result1 * result2;
+
+        int result3 = 0;
+        AttachVo roomThumbNail = mapper.getEditRoomThumbNail(roomNo);
+        if(roomThumbNail != null){
+            int res = mapper.deleteOriginRoomThumbnail(roomNo);
+            if(res > 0 ){
+                    result3 = mapper.insertNewRoomThumbnail(roomNo);
+                    mapper.updateEditRoomThumbnail(roomNo);
+            }
+        }else{
+            result3 = 1;
+        }
+
+        List<AttachVo> roomAttachList = mapper.getEditRoomAttach(roomNo);
+        int result4= 0;
+        if(roomAttachList.isEmpty()) {
+           result4 = 1;
+        }else{
+            int res = mapper.deleteOriginRoomAttach(roomNo);
+            if(res > 0){
+                result4 = mapper.insertNewRoomAttach(roomNo);
+                mapper.updateEditRoomAttach(roomNo);
+            }
+        }
+            return result1 * result2 * result3 * result4;
     }
 
     public int companionEditRoom(String roomNo) {
-        return mapper.companionEditRoom(roomNo);
+        int result1 = mapper.companionEditRoom(roomNo);
+        int result2 = 0;
+        int count = mapper.getEditRoomAttachList(roomNo);
+        if(count == 0){
+            result2 = 1;
+        }else{
+            result2 = mapper.companionEditRoomAttach(roomNo);
+        }
+        return result1 * result2;
     }
 
     public List<SpaceVo> getDeleteSpaceList(PageVo pageVo) {

@@ -175,10 +175,24 @@ const Join = () => {
     return "";
   };
 
-  const handleEmailChange = (e) => {
+  const handleEmailChange = async (e) => {
     const value = e.target.value;
     setEmail(value);
     setEmailError(validateEmail(value));
+
+    if (validateEmail(value) === "") {
+      try {
+        const response = await fetch(
+          `${BASE_URL}/api/guest/check-email?email=${value}`
+        );
+        const isDuplicate = await response.json();
+        if (isDuplicate) {
+          setEmailError("이미 사용 중인 이메일입니다.");
+        }
+      } catch (error) {
+        console.error("이메일 중복 확인 오류:", error);
+      }
+    }
   };
 
   const validateName = (value) => {
@@ -194,11 +208,26 @@ const Join = () => {
     return "";
   };
 
-  const handleNumberChange = (e) => {
+  const handleNumberChange = async (e) => {
     const value = e.target.value;
     setNumber(value);
     setNumberError(validateNumber(value));
+
+    if (validateNumber(value) === "") {
+      try {
+        const response = await fetch(
+          `${BASE_URL}/api/guest/check-phone?phone=${value}`
+        );
+        const isDuplicate = await response.json();
+        if (isDuplicate) {
+          setNumberError("이미 사용 중인 전화번호입니다.");
+        }
+      } catch (error) {
+        console.error("전화번호 중복 확인 오류:", error);
+      }
+    }
   };
+
   const handleNameChange = (e) => {
     const value = e.target.value;
     setName(value);

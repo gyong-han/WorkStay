@@ -34,6 +34,13 @@ const CalendarTime = ({children,type,position}) => {
       selectsRange={false}
       minDate={new Date()}
       filterDate={(date) => !isBlockedDate(date)}
+      dayClassName={(date) => {
+        // 막힌 날짜이면서 주말인 경우
+        if (isBlockedDate(date) && (date.getDay() === 0 || date.getDay() === 6)) {
+          return "blocked-weekend"; 
+        }
+        return ""; 
+      }}
       onChange={(update) => {
         
         

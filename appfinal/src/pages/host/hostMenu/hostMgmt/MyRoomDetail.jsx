@@ -80,7 +80,6 @@ const MyRoomDetail = () => {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        console.log(data);
         data.map((data) => {
           setFormDataArr((prev) => [...prev, data.roomVo]);
           setFeaturesArr((prev) => [...prev, data.featuresList]);
@@ -103,9 +102,14 @@ const MyRoomDetail = () => {
       fd.append("doubleSize", formDataArr[idx].doubleSize);
       fd.append("queenSize", formDataArr[idx].queenSize);
       fd.append("features", featuresArr[idx]);
-      // fd.append("thumbnail", fileData[idx].thumbnail);
-      // fd.append("room_floor_plan", fileData[idx].room_floor_plan);
+      if (fileData[idx].thumbnail instanceof File) {
+        fd.append("thumbnail", fileData[idx].thumbnail);
+      }
       // fileData[idx].attachment.map((file) => fd.append("attachment", file));
+
+      fileData[idx].attachment.forEach(
+        (file) => file instanceof File && fd.append("attachment", file)
+      );
 
       const resp = await fetch(url, {
         method: "POST",

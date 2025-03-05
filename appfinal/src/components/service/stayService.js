@@ -41,4 +41,66 @@ const getStayDetail = async (x) => {
   }
 };
 
-export { getAttachment, getStayListAll, getStayDetail };
+const getBookmark = async (dataObj) => {
+  console.log("zzzzzzzzzzzzzzzzz :::::::::::: ", dataObj);
+
+  try {
+    const result = await fetch(`${BASE_URL}/stay/bookmarkInfo`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dataObj),
+    });
+    if (!result.ok) {
+      throw new Error(`HTTP error! Status: ${result.status}`);
+    }
+    const data = await result.text();
+    console.log("data :::::::::: ", data);
+
+    return data;
+  } catch (e) {
+    console.log("getBookmark ERROR", e);
+  }
+};
+
+const setBookmarkInsert = async (dataObj) => {
+  try {
+    const result = await fetch(`${BASE_URL}/stay/bookmark`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dataObj),
+    });
+    if (!result.ok) {
+      throw new Error(`HTTP error! Status: ${result.status}`);
+    }
+    const data = await result.text();
+    return data;
+  } catch (e) {
+    console.log("getBookmark ERROR", e);
+  }
+};
+
+const delBookmark = async (dataObj) => {
+  try {
+    const result = await fetch(`${BASE_URL}/stay/bookmarkdel`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dataObj),
+    });
+    if (!result.ok) {
+      throw new Error(`HTTP error! Status: ${result.status}`);
+    }
+    const data = await result.text();
+    return data;
+  } catch (e) {
+    console.log("getBookmark ERROR", e);
+  }
+};
+
+export {
+  getAttachment,
+  getStayListAll,
+  getStayDetail,
+  getBookmark,
+  delBookmark,
+  setBookmarkInsert,
+};

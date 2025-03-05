@@ -34,6 +34,9 @@ const MySpaceMgmt = () => {
   }, []);
 
   useEffect(() => {
+    if (hostNo == "") {
+      return;
+    }
     const fd = new FormData();
     fd.append("hostNo", hostNo);
     fetch("http://127.0.0.1:8080/api/host/mySpace", {

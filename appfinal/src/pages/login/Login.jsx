@@ -68,6 +68,7 @@ const BtnTagPwD = styled(Link)`
 `;
 
 const Login = () => {
+  window.scrollTo(0, 0);
   return (
     <>
       <MainDiv>

@@ -189,6 +189,7 @@ const MyStayDetail = () => {
   const [hostNo, setHostNo] = useState("");
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [isAlertOpen2, setIsAlertOpen2] = useState(false);
+  const [isAlertOpen3, setIsAlertOpen3] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -253,6 +254,7 @@ const MyStayDetail = () => {
       .then((data) => {
         if (data > 0) {
           setIsAlertOpen(true);
+        } else {
         }
       });
   };
@@ -264,6 +266,12 @@ const MyStayDetail = () => {
   };
 
   const handleAlertClose2 = () => {
+    setIsAlertOpen(false);
+    navigate("/hostMenu/hostMgmtMenu/myStayMgmt");
+    window.scrollTo(0, 0);
+  };
+
+  const handleAlertClose3 = () => {
     setIsAlertOpen(false);
     navigate("/hostMenu/hostMgmtMenu/myStayMgmt");
     window.scrollTo(0, 0);
@@ -291,6 +299,8 @@ const MyStayDetail = () => {
       .then((data) => {
         if (data > 0) {
           setIsAlertOpen2(true);
+        } else {
+          setIsAlertOpen3(true);
         }
       });
   };
@@ -482,6 +492,19 @@ const MyStayDetail = () => {
             buttonText="확인"
             buttonColor="#049dd9"
             onClose={handleAlertClose2}
+          />
+        </Backdrop>
+      )}
+
+      {isAlertOpen3 && (
+        <Backdrop>
+          <Alert
+            title="내 숙소 입점삭제"
+            titleColor="red"
+            message="입점 삭제 불가능합니다. 이용 완료되지 않은 예약 내역이 있습니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose3}
           />
         </Backdrop>
       )}

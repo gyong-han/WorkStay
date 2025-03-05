@@ -20,8 +20,10 @@ const Slide = styled.div`
 const SlideImage = styled.img`
   width: ${(props) => props.w || "400"}px;
   height: ${(props) => props.h || "230"}px;
-  object-fit: cover;
-  border-radius: 5px;
+
+  object-fit: fill;
+  
+
 `;
 
 const ArrowButton = styled.button`

@@ -4,6 +4,7 @@ import Btn from "../../components/Btn";
 import { useDispatch, useSelector } from "react-redux";
 import { setReservationInfo } from "../../redux/spaceSlice";
 import { getInfomation, getMemberInfo, inputReservation } from "../../components/service/spaceServcie";
+import { useNavigate } from "react-router-dom";
 
 const Wrapper = styled.div`
   display: grid;
@@ -77,9 +78,11 @@ const SubTitle = styled.div`
 const Img = styled.div`
   width: 400px;
   height: 250px;
-  background-image: url(https://images.stayfolio.com/system/pictures/images/000/144/470/original/017d972b55f43f2bfd9cb3a91ec9641020e2f6f3.jpg?1663912019);
+  background-image: url(${(props)=>props.urls?props.urls:"https://images.stayfolio.com/system/pictures/images/000/144/470/original/017d972b55f43f2bfd9cb3a91ec9641020e2f6f3.jpg?1663912019"});
   background-size: cover;
-`;
+  background-position: center;
+  background-repeat: no-repeat;
+  `;
 
 const Info = styled.div`
   font-size: 1.2rem;
@@ -103,6 +106,7 @@ const SpaceReservation = () => {
 
   const fd1 = localStorage.getItem("fd");
   const fdData = JSON.parse(fd1);  
+  
 
   const fd = new FormData();
   const [memberInfo,setMemberInfo] = useState({});
@@ -135,6 +139,13 @@ const SpaceReservation = () => {
 
   const cleaned = memberInfo.phone?.replace(/\D/g, '') || ''; 
   const formattedPhoneNumber = cleaned.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+  const navi = useNavigate();
+  const clickHandle = ()=>{
+    navi(`/hostMenu/spaceReserv/spacedetail?reno=${spaceVo.reservationNo}`);
+  }
+  const clickHandler = ()=>{
+    navi(`/hostMenu/spaceReserv/spacedetail/spacecancle?no=${fdData.memberNo}&reno=${spaceVo.reservationNo}`);
+  }
 
 
   return (
@@ -151,7 +162,7 @@ const SpaceReservation = () => {
             <Cost>₩{priceWon}</Cost>
             <Info>예약 확정({spaceVo.payDay})</Info>
           </InfoWrapper>
-          <Img></Img>
+          <Img urls={fdData.filePath}></Img>
         </ReservationWrapper>
         <LineDiv />
         <UserInfoWrapper>
@@ -168,9 +179,9 @@ const SpaceReservation = () => {
         </UserWrapper>
         <LineDiv />
         <ButtonWrapper>
-          <Btn b="none">예약상세보기</Btn>
+          <Btn b="none" f={clickHandle}>예약상세보기</Btn>
           <div></div>
-          <Btn bg="#fafafa" c="#202020">
+          <Btn bg="#fafafa" c="#202020" f={clickHandler}>
             예약 취소
           </Btn>
         </ButtonWrapper>

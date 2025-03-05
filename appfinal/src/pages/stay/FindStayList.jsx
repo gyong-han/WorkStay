@@ -10,9 +10,16 @@ import {
   getAttachment,
   getStayListAll,
 } from "../../components/service/stayService";
-import { setSort, setStayData } from "../../redux/staySlice";
+import {
+  setReset,
+  setSort,
+  setStayData,
+  setStayLoginMemberNo,
+} from "../../redux/staySlice";
 import { useDispatch, useSelector } from "react-redux";
-import { setStayReservationDate } from "../../redux/roomSlice";
+import { setResetFilter, setStayReservationDate } from "../../redux/roomSlice";
+import { useLocation } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const Layout = styled.div`
   width: 100%;
@@ -91,6 +98,13 @@ const FindStayList = () => {
   const roomVo = useSelector((state) => state.room);
   const reservationDate = useSelector((state) => state.room.reservationDate);
   const dispatch = useDispatch();
+  const token = localStorage.getItem("token");
+
+  const location = useLocation();
+
+  if (location.pathname) {
+    localStorage.removeItem("roomdata");
+  }
 
   const handleChange = (e) => {
     setFormData((prev) => {
@@ -99,18 +113,6 @@ const FindStayList = () => {
         [e.target.name]: e.target.value,
       };
     });
-  };
-
-  // 날짜 변경 핸들러
-  const handleDateChange = (selectedDate) => {
-    if (
-      !reservationDate ||
-      reservationDate[0] !== selectedDate[0] ||
-      reservationDate[1] !== selectedDate[1]
-    ) {
-      console.log("📌 변경된 날짜:", selectedDate);
-      dispatch(setStayReservationDate(selectedDate)); // Redux 저장
-    }
   };
 
   const queryParams = new URLSearchParams({
@@ -123,7 +125,7 @@ const FindStayList = () => {
 
   const AttachmentData = async () => {
     const attachmentData = await getAttachment();
-    // console.log("먼저 가져와야할 데이터::",attachmentData);
+    // console.log("먼저 가져와야할 데이터::", attachmentData);
     const listData = await getStayListAll(queryParams);
     // console.log(
     //   "보내는 요청 URL: ",
@@ -131,14 +133,14 @@ const FindStayList = () => {
     // );
     // console.log("queryParams :: ", queryParams);
     // console.log("sort 값 확인: ", stayVo.sort);
-    // console.log("꺼내온 데이터 ::", listData);
+    console.log("꺼내온 데이터 ::", listData);
     setStayVoList(listData);
     dispatch(setStayData(listData));
 
     //
     const arr = listData.map((vo) => {
       const matchingAttachments = attachmentData.filter(
-        (att) => att.stayNo === vo.no
+        (att) => att.sno === vo.no
       );
       // console.log("matchingAttachments::", matchingAttachments);
       // console.log(vo.filePath);
@@ -178,11 +180,7 @@ const FindStayList = () => {
     <>
       <Layout>
         <h1>FIND STAY</h1>
-        <Display
-          isTimeMode={false}
-          dateRange={reservationDate}
-          setDateRange={handleDateChange}
-        ></Display>
+        <Display isTimeMode={false} dateRange={reservationDate}></Display>
         <SearchWrapper>
           <form onSubmit={handleSubmit}>
             <SearchInput
@@ -207,7 +205,14 @@ const FindStayList = () => {
           <div>
             <Btn>
               <RiResetRightFill size={18} />
-              <FilterText>초기화</FilterText>
+              <FilterText
+                onClick={() => {
+                  dispatch(setReset());
+                  dispatch(setResetFilter());
+                }}
+              >
+                초기화
+              </FilterText>
             </Btn>
           </div>
         </FilterWrapper>

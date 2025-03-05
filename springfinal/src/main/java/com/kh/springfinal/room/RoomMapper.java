@@ -1,5 +1,6 @@
 package com.kh.springfinal.room;
 
+import com.kh.springfinal.guest.GuestVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -62,4 +63,22 @@ public interface RoomMapper {
             AND DEL_YN = 'N'
             """)
     List<RoomAttachmentVo> attachmentList();
+
+    @Select("""
+            SELECT DISTINCT CHECK_OUT
+            FROM ROOM_RESERVATION
+            WHERE ROOM_NO = #{no}
+                AND CHECK_OUT IN (
+                            SELECT CHECK_OUT
+                            FROM ROOM_RESERVATION
+                            WHERE ROOM_NO = #{no}
+                        )
+            """)
+    String[] getIsAvailable(Long no);
+
+    @Select("""
+            SELECT NO, IMAGE, NAME, NICK, PWD, EMAIL, PHONE, BIRTH_DATE, ADDRESS, ENROLL_DATE, HOST_PERMISSION FROM MEMBER
+            WHERE NO =#{no}
+            """)
+    GuestVo memberInfo(Long no);
 }

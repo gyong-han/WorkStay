@@ -94,6 +94,7 @@ const Header = () => {
   // const pageNick = useSelector((state) => {
   //   return state.member.pageNick;
   // });
+
   const [selectedMenu, setSelectedMenu] = useState("");
   const [pageNick, setPageNick] = useState("");
   const token = localStorage.getItem("token");
@@ -108,6 +109,7 @@ const Header = () => {
   useEffect(() => {
     setSelectedMenu(url);
   }, [url]);
+
 
   useEffect(() => {
     if (token) {

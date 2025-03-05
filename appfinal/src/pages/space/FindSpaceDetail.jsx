@@ -17,7 +17,19 @@ import { getBookmarkInfo } from '../../components/service/spaceServcie';
 import ShareModal from '../../components/modal/ShareModal';
 import { RiInstagramLine } from "react-icons/ri";
 import { SiNaver } from "react-icons/si";
+import Alert from '../../components/Alert';
 
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
 const Layout =styled.div`
 width: 100%;
 height: 100%;
@@ -126,6 +138,9 @@ const InconTitleDiv = styled.div`
   justify-content: center;
   font-size: 35px;
 }
+&>div:nth-child(3){
+  color: #049dd9;
+}
 & > div:nth-child(4), 
 & > div:nth-child(5),
 & > div:nth-child(6){
@@ -229,6 +244,16 @@ const FindSpaceDetail = () => {
   const [packageNo,setPackageNo] = useState("");
   const [modalStatus, setModalStatus] = useState('');
   const token = localStorage.getItem("token");
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [isAlertOpen2, setIsAlertOpen2] = useState(false);
+
+//알림창
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
+  };
+  const handleAlertClose2 = () => {
+    setIsAlertOpen2(false);
+  };
 
     //Gallery Modal 관련
     const openModal = () => {
@@ -317,8 +342,9 @@ const FindSpaceDetail = () => {
       })
       .then((resp)=>resp.text())
       .then((data)=>{
+        setIsAlertOpen2(true);
         // console.log("삭제된데이터수:",data);
-        alert("북마크가 해지되었습니다.")
+
       })
     }else{
       setBookMark(true);
@@ -333,7 +359,7 @@ const FindSpaceDetail = () => {
       .then((resp)=>resp.text())
       .then((data)=>{
         // console.log(data);
-        alert("마이페이지 찜목록에 저장되었습니다.")
+        setIsAlertOpen(true);
       })
     }
     
@@ -352,7 +378,8 @@ const FindSpaceDetail = () => {
 
   const cleaned = spaceVo.phone.replace(/\D/g, '');
   const formattedPhoneNumber = cleaned.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
-
+  const morningPrice = spaceVo.daytimePrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const nigthPrice = spaceVo.nightPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
 
 
@@ -447,7 +474,31 @@ const FindSpaceDetail = () => {
         </InfoDiv>
         <Map address={spaceVo.address} name={spaceVo.name}>space</Map></div>
       <div></div>
-      <Infomation morning={150000} night={820000} standard={10} max={20}></Infomation>
+      <Infomation morning={morningPrice} night={nigthPrice} standard={spaceVo.standardGuest} max={spaceVo.maxGuest}></Infomation>
+      {isAlertOpen && (
+        <Backdrop>
+          <Alert
+            title="북마크"
+            titleColor="#049dd9"
+            message="북마크가 등록되었습니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose}
+          />
+        </Backdrop>
+      )}
+      {isAlertOpen2 && (
+        <Backdrop>
+          <Alert
+            title="북마크"
+            titleColor="#049dd9"
+            message="북마크가 해지되었습니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose2}
+          />
+        </Backdrop>
+      )}
     </Layout>
     </>
   );

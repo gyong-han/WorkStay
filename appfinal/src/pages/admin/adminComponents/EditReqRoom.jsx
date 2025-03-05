@@ -163,9 +163,9 @@ const TextDiv = styled.div`
 const EditReqRoom = ({
   roomVo,
   featuresArr,
-  roomFloorPlanArr,
-  roomThumbNailArr,
-  roomAttachArr,
+  roomFloorPlan,
+  roomThumbNail,
+  roomAttachList,
   no,
 }) => {
   return (
@@ -359,12 +359,12 @@ const EditReqRoom = ({
 
         <DataTitle top="40px">독채 평면도 *</DataTitle>
         <div>
-          {/* <StyledImg src={roomFloorPlanArr.filePath} alt="평면도" /> */}
+          <StyledImg src={roomFloorPlan.filePath} alt="평면도" />
         </div>
 
         <DataTitle top="40px">독채 대표사진 *</DataTitle>
         <div>
-          {/* <StyledImg src={roomThumbNailArr.filePath} alt="평면도" /> */}
+          <StyledImg src={roomThumbNail.filePath} alt="평면도" />
         </div>
 
         <div>
@@ -372,9 +372,9 @@ const EditReqRoom = ({
           <DataTitle2>*최소 3장 이상</DataTitle2>
         </div>
         <div>
-          {/* {roomAttachArr.map((data, idx) => {
+          {roomAttachList.map((data, idx) => {
             return <StyledImg key={idx} src={data.filePath} alt="첨부파일" />;
-          })} */}
+          })}
         </div>
       </RoomDiv>
     </>

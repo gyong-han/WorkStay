@@ -180,7 +180,7 @@ const SpaceDetail = () => {
 
   //이용 안내 및 환불 규정 이동
   function moveDetail(spaceNo) {
-    const newPath = `/findspace/spacebooking/${spaceNo}`;
+    const newPath = `/findspace/detail/${spaceNo}`;
 
     navi(newPath);
   }

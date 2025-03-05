@@ -68,8 +68,11 @@ public class SlogController {
     @GetMapping("list")
     public ResponseEntity<Object> findAll(@RequestParam(defaultValue = "1") int pno){
 
+        System.out.println("pno = " + pno);
+        
         try{
             List<SlogVo> result = slogService.findAll(pno);
+            System.out.println("LIst ::::::::::::"+result);
             return ResponseEntity.ok().body(result);
 
         }catch(Exception e){
@@ -114,6 +117,21 @@ public class SlogController {
             throw new IllegalStateException("[DETAIL] FAIL........");
         }
     }
+
+    @GetMapping("stay/{no}")
+    public SlogVo getMapInfo (@PathVariable String no){
+
+        System.out.println("Controller ::: stay.no = " + no);
+
+        try{
+            return slogService.getMapInfo(no);
+        } catch(Exception e){
+            log.error(e.getMessage());
+            throw new IllegalStateException("[DETAIL] FAIL........");
+        }
+    }
+
+
 
 
 

@@ -13,6 +13,7 @@ const slogDetailSlice = createSlice({
     memberNo: "",
     nick: "",
     enrollDate: "",
+    address: "",
   },
   reducers: {
     setSlogVo: (state, action) => {
@@ -26,6 +27,7 @@ const slogDetailSlice = createSlice({
       state.memberNo = action.payload.memberNo;
       state.nick = action.payload.nick;
       state.enrollDate = action.payload.enrollDate;
+      state.address = action.payload.address;
     },
   },
 });

@@ -1,9 +1,12 @@
 package com.kh.springfinal.room;
 
+import com.kh.springfinal.guest.GuestVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -44,7 +47,22 @@ public class RoomService {
         return roomMapper.attachmentList();
     }
 
-//    public List<RoomAttachmentVo> attachmentList() {
-//        return roomMapper.getRoomAttachmentList();
-//    }
+    public String[] isAvailable(Long no) {
+        String[] data = roomMapper.getIsAvailable(no); // 원본 데이터 (yyyyMMdd 형식)
+        String[] result = new String[data.length]; // 변환된 값을 저장할 배열
+
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        for (int i = 0; i < data.length; i++) {
+            LocalDate date = LocalDate.parse(data[i], inputFormatter);
+            result[i] = date.format(outputFormatter); // 변환된 값 저장
+        }
+
+        return result; // 변환된 배열 반환
+    }
+
+    public GuestVo memberInfo(Long no) {
+        return roomMapper.memberInfo(no);
+    }
 }

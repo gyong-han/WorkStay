@@ -1,6 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Btn from "../../components/Btn";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getMemberNo,
+  getReservationInfo,
+  roomReservation,
+} from "../../components/service/roomService";
+import { setStayReservationInfo } from "../../redux/roomSlice";
+import { jwtDecode } from "jwt-decode";
 
 const Wrapper = styled.div`
   display: grid;
@@ -74,8 +82,9 @@ const SubTitle = styled.div`
 const Img = styled.div`
   width: 400px;
   height: 250px;
-  background-image: url(https://images.stayfolio.com/system/pictures/images/000/144/470/original/017d972b55f43f2bfd9cb3a91ec9641020e2f6f3.jpg?1663912019);
+  background-image: ${(props) => `url(${props.bgImage})`};
   background-size: cover;
+  background-repeat: no-repeat;
 `;
 
 const Info = styled.div`
@@ -98,6 +107,58 @@ const ButtonWrapper = styled.div`
 
 const Reservations = () => {
   // const [Info, setInfo] = useState({});
+  const rd1 = localStorage.getItem("roomdata");
+  const rData = JSON.parse(rd1);
+  const dispatch = useDispatch();
+  const token = localStorage.getItem("token");
+
+  const rd = new FormData();
+  const [memberInfo, setMemberInfo] = useState({});
+
+  rd.append("roomNo", rData.roomNo);
+  rd.append("roomName", rData.roomName);
+  rd.append("stayNo", rData.stayNo);
+  rd.append("stayName", rData.stayName);
+  rd.append("memberNo", rData.memberNo);
+  rd.append("adult", rData.adult);
+  rd.append("child", rData.child);
+  rd.append("baby", rData.baby);
+  rd.append("request", rData.request);
+  rd.append("checkIn", rData.checkIn);
+  rd.append("checkOut", rData.checkOut);
+  rd.append("filePath", rData.filePath);
+
+  const price = rData.amount;
+  const priceWon = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const roomVo = useSelector((state) => state.room);
+
+  const RoomReservation = async () => {
+    try {
+      const insertData = await roomReservation(rData);
+      console.log("rd :: ", rd);
+      const getInfo = await getReservationInfo(rd);
+      console.log("GET INFO :: ", getInfo);
+
+      dispatch(setStayReservationInfo(getInfo));
+
+      const getMemberInformation = await getMemberNo(rData.memberNo);
+
+      setMemberInfo(getMemberInformation);
+    } catch (error) {
+      console.error("Error fetching member information: ", error);
+    }
+  };
+
+  useEffect(() => {
+    RoomReservation();
+  }, []);
+
+  console.log();
+
+  const cleaned = memberInfo.phone ? memberInfo.phone.replace(/\D/g, "") : "";
+  const formattedPhoneNumber = cleaned
+    ? cleaned.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3")
+    : "번호 없음";
 
   return (
     <>
@@ -107,13 +168,18 @@ const Reservations = () => {
         <LineDiv />
         <ReservationWrapper>
           <InfoWrapper>
-            <Title>꿈속의나라</Title>
-            <Info>2025-01-20 ~ 2025-01-24</Info>
-            <Info>Room A1 / 성인 2명 / 아동 0명 / 유아 0명</Info>
-            <Cost>₩360,000</Cost>
-            <Info>예약 확정(2025-01-01 / 11:25)</Info>
+            <Title>{rData.stayName}</Title>
+            <Info>
+              {rData.checkIn}~{rData.checkOut}
+            </Info>
+            <Info>
+              {rData.name} / 성인 {rData.adult}명 / 아동 {rData.child}명 / 유아{" "}
+              {rData.baby}명
+            </Info>
+            <Cost>₩{priceWon}</Cost>
+            <Info>예약 확정({roomVo.payDay})</Info>
           </InfoWrapper>
-          <Img></Img>
+          <Img bgImage={rData.filePath}></Img>
         </ReservationWrapper>
         <LineDiv />
         <UserInfoWrapper>
@@ -123,10 +189,10 @@ const Reservations = () => {
           <SubTitle>이메일</SubTitle>
         </UserInfoWrapper>
         <UserWrapper>
-          <Info1>20250101</Info1>
-          <Info1>이예은</Info1>
-          <Info1>010-1234-5678</Info1>
-          <Info1>gamza@gamil.com</Info1>
+          <Info1>{roomVo.reservationNo}</Info1>
+          <Info1>{memberInfo.name}</Info1>
+          <Info1>{formattedPhoneNumber}</Info1>
+          <Info1>{memberInfo.email}</Info1>
         </UserWrapper>
         <LineDiv />
         <ButtonWrapper>

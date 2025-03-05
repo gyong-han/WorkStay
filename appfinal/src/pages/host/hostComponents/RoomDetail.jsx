@@ -442,6 +442,8 @@ const RoomDetail = ({
             name="roomFloorPlan"
             func="false"
             no={no}
+            isDisabled="true"
+            color="gray"
           />
         </div>
 

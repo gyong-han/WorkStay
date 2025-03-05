@@ -1,10 +1,12 @@
 package com.kh.springfinal.host;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.kh.springfinal.guest.GuestVo;
 import com.kh.springfinal.room.RoomVo;
 import com.kh.springfinal.space.SpaceVo;
 import com.kh.springfinal.stay.StayVo;
 import com.kh.springfinal.util.FileUtil;
+import com.kh.springfinal.util.PageVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -86,8 +89,6 @@ public class HostController {
             attachVo.setOriginName(file.getOriginalFilename());
             attachVoList.add(attachVo);
         }
-
-
         int result = service.enrollRoom(vo,features,thumbnailVo,roomFloorPlanVo,attachVoList);
 
         return 1;
@@ -123,16 +124,30 @@ public class HostController {
 
     //내 공간 예약 목록조회
     @PostMapping("space/reservList")
-    public List<TableVo> getSpaceReservList(@RequestParam String status, @RequestParam String hostNo){
-        List<TableVo> spaceResrvList = service.getSpaceReservList(status,hostNo);
-        return spaceResrvList;
+    public Map<String, Object> getSpaceReservList(@RequestParam String status, @RequestParam String hostNo, @RequestParam(defaultValue = "1") int pno){
+        int listCnt = service.getSpaceReservCount(hostNo,status);
+        int pageLimit = 5;
+        int boardLimit = 10;
+        PageVo pageVo = new PageVo(listCnt,pno,pageLimit,boardLimit);
+        Map<String,Object> map = new HashMap<>();
+        List<TableVo> voList = service.getSpaceReservList(status,hostNo,pageVo);
+        map.put("voList",voList);
+        map.put("pageVo",pageVo);
+        return map;
     }
 
     //내 독채 예약 목록조회
     @PostMapping("room/reservList")
-    public List<TableVo> getRoomReservList(@RequestParam String status, @RequestParam String hostNo){
-        List<TableVo> roomReservList = service.getRoomReservList(status,hostNo);
-       return roomReservList;
+    public Map<String, Object> getRoomReservList(@RequestParam String status, @RequestParam String hostNo, @RequestParam(defaultValue = "1") int pno){
+        int listCnt = service.getRoomReservCount(hostNo,status);
+        int pageLimit = 5;
+        int boardLimit = 10;
+        PageVo pageVo = new PageVo(listCnt,pno,pageLimit,boardLimit);
+        Map<String,Object> map = new HashMap<>();
+        List<TableVo> voList = service.getRoomReservList(status,hostNo,pageVo);
+        map.put("voList",voList);
+        map.put("pageVo",pageVo);
+        return map;
 
     }
 
@@ -162,8 +177,25 @@ public class HostController {
 
     //내 공간 수정요청
     @PostMapping("modifyMySpace")
-    public int modifyMySpace(SpaceVo spaceVo, @RequestParam List<String> features){
-        int result = service.modifyMySpace(spaceVo,features);
+    public int modifyMySpace(SpaceVo spaceVo, @RequestParam List<String> features,@RequestParam(required = false) MultipartFile thumbnail,
+                             @RequestParam(required = false) List<MultipartFile> attachment) throws IOException {
+        AttachVo thumbnailVo = new AttachVo();
+        if(thumbnail != null){
+            thumbnailVo.setFilePath(FileUtil.uploadFileToAws(thumbnail,s3,bucket));
+            thumbnailVo.setOriginName(thumbnail.getOriginalFilename());
+        }
+
+        List<AttachVo> attachVoList = new ArrayList<AttachVo>();
+        if(attachment != null){
+            for (MultipartFile file : attachment) {
+                AttachVo attachVo = new AttachVo();
+                attachVo.setFilePath(FileUtil.uploadFileToAws(file,s3,bucket));
+                attachVo.setOriginName(file.getOriginalFilename());
+                attachVoList.add(attachVo);
+            }
+        }
+
+        int result = service.modifyMySpace(spaceVo,features,thumbnailVo,attachVoList);
         return result;
     }
 
@@ -206,8 +238,25 @@ public class HostController {
 
     //내 독채 수정요청
     @PostMapping("modifyMyRoom")
-    public int modifyMyRoom(RoomVo roomVo,  @RequestParam List<String> features){
-        int result = service.modifyMyRoom(roomVo,features);
+    public int modifyMyRoom(RoomVo roomVo,  @RequestParam List<String> features,@RequestParam(required = false) MultipartFile thumbnail,
+                            @RequestParam(required = false) List<MultipartFile> attachment) throws IOException {
+        AttachVo thumbnailVo = new AttachVo();
+        if(thumbnail != null){
+            thumbnailVo.setFilePath(FileUtil.uploadFileToAws(thumbnail,s3,bucket));
+            thumbnailVo.setOriginName(thumbnail.getOriginalFilename());
+        }
+
+        List<AttachVo> attachVoList = new ArrayList<AttachVo>();
+        if(attachment != null){
+            for (MultipartFile file : attachment) {
+                AttachVo attachVo = new AttachVo();
+                attachVo.setFilePath(FileUtil.uploadFileToAws(file,s3,bucket));
+                attachVo.setOriginName(file.getOriginalFilename());
+                attachVoList.add(attachVo);
+            }
+        }
+
+        int result = service.modifyMyRoom(roomVo,features,thumbnailVo,attachVoList);
         return result;
     }
 
@@ -223,5 +272,12 @@ public class HostController {
     public int cancelEnrollStay(@RequestParam String stayNo){
         int result = service.cancelEnrollStay(stayNo);
         return result;
+    }
+
+    //hostVo 가져오기
+    @PostMapping("getHostVo")
+    public GuestVo getHostVo(@RequestBody String no){
+        String hostNo = no.replace("\"","");
+        return service.getHostVo(hostNo);
     }
 }

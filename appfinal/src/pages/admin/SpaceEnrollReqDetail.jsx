@@ -200,6 +200,7 @@ const SpaceEnrollReqDetail = () => {
   const [role, setRole] = useState("");
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [isAlertOpen2, setIsAlertOpen2] = useState(false);
+  const [isAlertOpen3, setIsAlertOpen3] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -286,10 +287,15 @@ const SpaceEnrollReqDetail = () => {
       .then((resp) => resp.text())
       .then((data) => {
         if (data > 0) {
-          navigate("/hostMenu/hostMgmtMenu/spaceApprovalMgmt");
-          window.scrollTo(0, 0);
+          setIsAlertOpen3(true);
         }
       });
+  };
+
+  const handleAlertClose3 = () => {
+    setIsAlertOpen3(false);
+    navigate("/hostMenu/hostMgmtMenu/spaceApprovalMgmt");
+    window.scrollTo(0, 0);
   };
 
   const moveMenu = () => {
@@ -642,6 +648,18 @@ const SpaceEnrollReqDetail = () => {
               buttonText="확인"
               buttonColor="#049dd9"
               onClose={handleAlertClose2}
+            />
+          </Backdrop>
+        )}
+        {isAlertOpen3 && (
+          <Backdrop>
+            <Alert
+              title="공간 입점 철회회"
+              titleColor="#049dd9"
+              message="입점 철회되었습니다."
+              buttonText="확인"
+              buttonColor="#049dd9"
+              onClose={handleAlertClose3}
             />
           </Backdrop>
         )}
