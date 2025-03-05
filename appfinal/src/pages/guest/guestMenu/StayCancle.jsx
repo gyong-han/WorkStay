@@ -3,6 +3,7 @@ import styled from "styled-components";
 import HostBtn from "../../host/hostComponents/HostBtn";
 import { useLocation, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../../components/service/config";
+import Alert from "../../../components/Alert";
 
 const MainDiv = styled.div`
   display: flex;
@@ -90,9 +91,23 @@ const BtnCancle = styled.button`
   cursor: pointer;
 `;
 
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
+
 const StayCancle = () => {
   const [showTextarea, setShowTextarea] = useState(false);
   const [params, setParams] = useState({ no: "", reno: "" });
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
 
   const navi = useNavigate();
   const location = useLocation();
@@ -124,9 +139,7 @@ const StayCancle = () => {
         return resp.json();
       })
       .then((data) => {
-        console.log("예약 취소 성공:", data);
-        alert("예약이 취소되었습니다.");
-        navi("/hostMenu");
+        setIsAlertOpen(true);
       })
       .catch((error) => {
         console.error("예약 취소 실패:", error);
@@ -134,71 +147,93 @@ const StayCancle = () => {
       });
   };
 
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
+    navi("/hostMenu");
+  };
+
   return (
-    <form onSubmit={handleSubmit}>
-      <MainDiv>
-        <MainSpanDiv>예약 취소 요청</MainSpanDiv>
-      </MainDiv>
-      <TitleDiv>취소사유</TitleDiv>
-      <QnaDiv>예약을 취소하려는 이유가 무엇인가요?</QnaDiv>
-      <RadioDiv>
-        <RadioInput
-          type="radio"
-          name="cancle"
-          value="canceled"
-          onChange={handleRadioChange}
-        />{" "}
-        여행이 취소되거나 미뤄졌어요.
-      </RadioDiv>
-      <RadioDiv>
-        <RadioInput
-          type="radio"
-          name="cancle"
-          value="stay"
-          onChange={handleRadioChange}
-        />{" "}
-        예약 정보(숙소, 일정, 결제수단 등)를 변경하고 싶어요.
-      </RadioDiv>
-      <RadioDiv>
-        <RadioInput
-          type="radio"
-          name="cancle"
-          value="host"
-          onChange={handleRadioChange}
-        />{" "}
-        호스트가 예약 취소를 원해요.
-      </RadioDiv>
-      <RadioDiv>
-        <RadioInput
-          type="radio"
-          name="cancle"
-          value="other"
-          onChange={handleRadioChange}
-        />{" "}
-        기타 (직접 입력)
-      </RadioDiv>
-      <RadioDiv>
-        <Textarea placeholder="취소 사유를 입력해주세요." show={showTextarea} />
-      </RadioDiv>
-      <BtnDiv>
-        <div>
-          <BtnCancle type="submit">예약취소</BtnCancle>
-        </div>
-        <div></div>
-        <div>
-          <HostBtn
-            width="250px"
-            height="50px"
-            font="20px"
-            backColor="#FAFAFA"
-            color="#202020"
-            str="이용 안내 및 환불 규정"
-            top="100px"
-            border="1px solid #049DD9"
+    <>
+      <form onSubmit={handleSubmit}>
+        <MainDiv>
+          <MainSpanDiv>예약 취소 요청</MainSpanDiv>
+        </MainDiv>
+        <TitleDiv>취소사유</TitleDiv>
+        <QnaDiv>예약을 취소하려는 이유가 무엇인가요?</QnaDiv>
+        <RadioDiv>
+          <RadioInput
+            type="radio"
+            name="cancle"
+            value="canceled"
+            onChange={handleRadioChange}
+          />{" "}
+          여행이 취소되거나 미뤄졌어요.
+        </RadioDiv>
+        <RadioDiv>
+          <RadioInput
+            type="radio"
+            name="cancle"
+            value="stay"
+            onChange={handleRadioChange}
+          />{" "}
+          예약 정보(숙소, 일정, 결제수단 등)를 변경하고 싶어요.
+        </RadioDiv>
+        <RadioDiv>
+          <RadioInput
+            type="radio"
+            name="cancle"
+            value="host"
+            onChange={handleRadioChange}
+          />{" "}
+          호스트가 예약 취소를 원해요.
+        </RadioDiv>
+        <RadioDiv>
+          <RadioInput
+            type="radio"
+            name="cancle"
+            value="other"
+            onChange={handleRadioChange}
+          />{" "}
+          기타 (직접 입력)
+        </RadioDiv>
+        <RadioDiv>
+          <Textarea
+            placeholder="취소 사유를 입력해주세요."
+            show={showTextarea}
           />
-        </div>
-      </BtnDiv>
-    </form>
+        </RadioDiv>
+        <BtnDiv>
+          <div>
+            <BtnCancle type="submit">예약취소</BtnCancle>
+          </div>
+          <div></div>
+          <div>
+            <HostBtn
+              width="250px"
+              height="50px"
+              font="20px"
+              backColor="#FAFAFA"
+              color="#202020"
+              str="이용 안내 및 환불 규정"
+              top="100px"
+              border="1px solid #049DD9"
+            />
+          </div>
+        </BtnDiv>
+      </form>
+      {isAlertOpen && (
+        <Backdrop>
+          <Alert
+            title="예약취소"
+            titleColor="#049dd9"
+            message="예약취소 되었습니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose}
+          />
+        </Backdrop>
+      )}
+    </>
   );
 };
 

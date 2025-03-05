@@ -288,17 +288,20 @@ public interface GuestMapper {
     // 숙소 북마크 목록 조회
     @Select("""
         SELECT 
-            S.NO AS no,
-            S.NAME AS name,
-            S.ADDRESS AS address,
-            S.TAGLINE AS tagline,
-            (SELECT MIN(FILE_PATH) FROM STAY_ATTACHMENT SA 
-             WHERE SA.STAY_NO = S.NO AND SA.DEL_YN = 'N') AS filePath
-        FROM STAY_BOOKMARK SB
-        JOIN STAY S ON SB.STAY_NO = S.NO
-        WHERE SB.MEMBER_NO = #{no}
-    """)
+                S.NO AS no,
+                S.NAME AS name,
+                S.ADDRESS AS address,
+                S.TAGLINE AS tagline,
+                (SELECT MIN(FILE_PATH) FROM ROOM_ATTACHMENT RA 
+                 JOIN ROOM R ON RA.ROOM_NO = R.NO
+                 WHERE R.STAY_NO = S.NO AND RA.DEL_YN = 'N' AND RA.THUMBNAIL ='Y') AS filePath
+            FROM STAY_BOOKMARK SB
+            JOIN STAY S ON SB.STAY_NO = S.NO
+            WHERE SB.MEMBER_NO = #{no}
+        """)
     List<StayBookmarkVo> getStayBookmarks(@Param("no") int no);
+
+
 
     // 공간 북마크 목록 조회
     @Select("""
@@ -318,19 +321,20 @@ public interface GuestMapper {
 
     // 숙소 북마크 확인 (숙소 정보 + 대표 이미지)
     @Select("""
-    SELECT 
-        COUNT(*) AS bookmark_count,
-        S.NO AS no,
-        S.NAME AS name,
-        S.ADDRESS AS address,
-        S.TAGLINE AS tagline,
-        (SELECT MIN(FILE_PATH) FROM STAY_ATTACHMENT SA 
-         WHERE SA.STAY_NO = S.NO AND SA.DEL_YN = 'N') AS filePath
-    FROM STAY_BOOKMARK SB
-    JOIN STAY S ON SB.STAY_NO = S.NO
-    WHERE SB.MEMBER_NO = #{no}
-    GROUP BY S.NO, S.NAME, S.ADDRESS, S.TAGLINE
-    """)
+        SELECT 
+                COUNT(*) AS bookmark_count,
+                S.NO AS no,
+                S.NAME AS name,
+                S.ADDRESS AS address,
+                S.TAGLINE AS tagline,
+                (SELECT MIN(FILE_PATH) FROM ROOM_ATTACHMENT RA 
+                 JOIN ROOM R ON RA.ROOM_NO = R.NO
+                 WHERE R.STAY_NO = S.NO AND RA.DEL_YN = 'N' AND RA.THUMBNAIL ='Y') AS filePath
+            FROM STAY_BOOKMARK SB
+            JOIN STAY S ON SB.STAY_NO = S.NO
+            WHERE SB.MEMBER_NO = #{no}
+            GROUP BY S.NO, S.NAME, S.ADDRESS, S.TAGLINE
+        """)
     List<StayBookmarkVo> checkStayBookmark(@Param("no") int no);
 
 
