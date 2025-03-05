@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import Card from './Card';
 
 const Layout = styled.div`
-width: 100%;
+margin-left: 50px;
 height: 100%;
 display: grid;
-grid-template-columns:100px 1fr 30px 1fr 30px 1fr;
+grid-template-columns:repeat(${(props)=>props.len},35px 500px 30px) ;
 grid-template-rows: 1fr;
 `;
 const BlackDiv = styled.div`
@@ -69,11 +69,12 @@ const HomeCard = ({imgPath}) => {
   
 
   return (
-    <Layout>
+    <Layout len ={imgPath.length}>
       {imgPath.map((vo)=>{
         return <>
           <div></div> 
           <Card vo ={vo}></Card>
+          <div></div>
          </>
       })}
 
