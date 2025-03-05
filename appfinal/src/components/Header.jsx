@@ -101,6 +101,7 @@ const Header = () => {
   const [url, setUrl] = useState("");
   const { pathname } = useLocation();
   const lastPath = pathname.split("/").pop();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
     setUrl(lastPath);
@@ -110,8 +111,8 @@ const Header = () => {
     setSelectedMenu(url);
   }, [url]);
 
-
   useEffect(() => {
+    setIsDropdownOpen(false);
     if (token) {
       const decodedToken = jwtDecode(token);
 
@@ -130,8 +131,6 @@ const Header = () => {
       setPageNick("LOGIN");
     }
   }, [token, pageNick]);
-
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   function changeSelected(e) {
     setSelectedMenu(e.target.id);
