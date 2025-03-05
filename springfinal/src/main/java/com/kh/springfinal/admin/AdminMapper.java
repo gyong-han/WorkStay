@@ -39,6 +39,7 @@ public interface AdminMapper {
             (SELECT COUNT(*) FROM SPACE SP WHERE SP.HOST_NO = M.NO AND SP.STATUS_NO = 2) AS SPACE_CNT
             FROM MEMBER M
             WHERE M.HOST_PERMISSION = 'Y'
+            AND M.DEL_YN = 'N' 
             ORDER BY M.NO
             OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
             """)
@@ -232,6 +233,7 @@ public interface AdminMapper {
             JOIN SPACE S ON (ES.SPACE_NO = S.NO)
             JOIN MEMBER M ON (S.HOST_NO = M.NO)
             WHERE ES.STATUS_NO = '1' 
+            AND M.DEL_YN = 'N'
             ORDER BY MODIFY_DATE
             OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
             """)
@@ -243,6 +245,7 @@ public interface AdminMapper {
             JOIN STAY S ON (ES.STAY_NO = S.NO)
             JOIN MEMBER M ON (S.HOST_NO = M.NO)
             WHERE ES.STATUS_NO = '1'
+            AND M.DEL_YN = 'N'
             ORDER BY MODIFY_DATE
             OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
             """)
@@ -255,6 +258,7 @@ public interface AdminMapper {
             JOIN STAY S ON (R.STAY_NO = S.NO)
             JOIN MEMBER M ON (S.HOST_NO = M.NO)
             WHERE ER.STATUS_NO = '1'
+            AND M.DEL_YN = 'N'
             ORDER BY ER.MODIFY_DATE
             OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
             """)
