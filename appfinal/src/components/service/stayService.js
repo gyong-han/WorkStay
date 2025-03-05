@@ -42,8 +42,6 @@ const getStayDetail = async (x) => {
 };
 
 const getBookmark = async (dataObj) => {
-  console.log("zzzzzzzzzzzzzzzzz :::::::::::: ", dataObj);
-
   try {
     const result = await fetch(`${BASE_URL}/stay/bookmarkInfo`, {
       method: "POST",
@@ -54,8 +52,6 @@ const getBookmark = async (dataObj) => {
       throw new Error(`HTTP error! Status: ${result.status}`);
     }
     const data = await result.text();
-    console.log("data :::::::::: ", data);
-
     return data;
   } catch (e) {
     console.log("getBookmark ERROR", e);
