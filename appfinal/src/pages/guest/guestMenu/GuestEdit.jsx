@@ -8,6 +8,7 @@ import { logout } from "../../../redux/memberSlice";
 import Alert from "../../../components/Alert";
 import { BASE_URL } from "../../../components/service/config";
 import PasswordModal from "./PasswordModal";
+import ConfirmModal from "../../../components/table/ConfirmModal";
 
 // const MainDiv = styled.div`
 //   display: flex;
@@ -149,8 +150,11 @@ const GuestEdit = () => {
   const navi = useNavigate();
   const [memberVo, setMemberVo] = useState({});
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [isAlertOpen2, setIsAlertOpen2] = useState(false);
   const guest = useSelector((state) => state.guest); // Redux에서 값 가져오기
   const [showPasswordModal, setShowPasswordModal] = useState(true); // 모달 초기 표시
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [isForQuit, setIsForQuit] = useState(false);
 
   const token = localStorage.getItem("token");
   useEffect(() => {
@@ -173,6 +177,9 @@ const GuestEdit = () => {
 
     if (isValid) {
       setShowPasswordModal(false);
+      if (isForQuit) {
+        handleMemberQuit(); // 회원 탈퇴 모드일 때만 실행
+      }
     } else {
       alert("비밀번호가 일치하지 않습니다.");
     }
@@ -235,6 +242,13 @@ const GuestEdit = () => {
     navi("/hostMenu/editHost");
   };
 
+  const handleAlertClose2 = () => {
+    setIsAlertOpen2(false);
+    localStorage.removeItem("token");
+    dispatch(logout());
+    navi("/");
+  };
+
   // 비밀번호 조건 검사 함수
   const checkPasswordConditions = (password) => {
     return {
@@ -247,38 +261,40 @@ const GuestEdit = () => {
 
   const passwordConditions = checkPasswordConditions(password);
 
-  const memberquit = async (e) => {
-    e.preventDefault();
-
-    const isConfirmed = window.confirm("정말 탈퇴하시겠습니까?");
-    if (!isConfirmed) return; // 사용자가 "취소"를 눌렀다면 탈퇴 중단
-
-    const updatedData = {
-      ...memberVo,
-      pwd: password.length > 0 ? password : "",
-    };
-
+  const handleMemberQuit = async () => {
     const response = await fetch(`${BASE_URL}/api/guest/memberQuit`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(updatedData),
+      body: JSON.stringify({ email: memberVo.email }),
     });
 
     if (response.ok) {
-      alert("회원 탈퇴 되었습니다.");
-      localStorage.removeItem("token");
-      dispatch(logout());
-      navi("/");
+      setIsAlertOpen2(true);
     } else {
       alert("탈퇴 실패. 다시 시도해주세요.");
     }
   };
 
+  const handleQuitRequest = () => {
+    setIsConfirmOpen(false);
+    setIsForQuit(true);
+    setShowPasswordModal(true);
+  };
+
   return (
     <>
+      {isConfirmOpen && (
+        <ConfirmModal
+          title="회원 탈퇴"
+          message="정말 탈퇴하시겠습니까?"
+          onConfirm={handleQuitRequest} // 변경된 함수 사용
+          onCancel={() => setIsConfirmOpen(false)}
+        />
+      )}
+
       {showPasswordModal && (
         <PasswordModal
           onVerify={handleVerifyPassword}
@@ -381,7 +397,7 @@ const GuestEdit = () => {
             </ListDiv>
             <BtnTag type="submit">저장하기</BtnTag>
           </form>
-          <OutBtnTag onClick={memberquit}>회원탈퇴</OutBtnTag>
+          <OutBtnTag onClick={() => setIsConfirmOpen(true)}>회원탈퇴</OutBtnTag>
         </MainWrapper>
       )}
 
@@ -394,6 +410,19 @@ const GuestEdit = () => {
             buttonText="확인"
             buttonColor="#049dd9"
             onClose={handleAlertClose}
+          />
+        </Backdrop>
+      )}
+
+      {isAlertOpen2 && (
+        <Backdrop>
+          <Alert
+            title="회원탈퇴"
+            titleColor="#049dd9"
+            message="회원탈퇴 되었습니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose2}
           />
         </Backdrop>
       )}
