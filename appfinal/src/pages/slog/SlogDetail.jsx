@@ -10,6 +10,7 @@ import KakaoShare from "./KakaoShare";
 import { jwtDecode } from "jwt-decode";
 import { SiNaver } from "react-icons/si";
 import { RiInstagramLine } from "react-icons/ri";
+import Alert from "../../components/Alert";
 
 const Container = styled.div`
   width: 100%;
@@ -215,6 +216,19 @@ const ModalContent = styled.div`
   }
 `;
 
+const AlertContent = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
+
 const InfoDiv = styled.div`
   width: 270px;
   height: 270px;
@@ -279,30 +293,7 @@ const SlogDetail = () => {
   const [selectedPlace, setSelectedPlace] = useState(null);
   const slogDetailVo = useSelector((state) => state.slog);
   const [stayData, setStayData] = useState(null);
-
-  // useEffect(() => {
-  //   const fetchStayInfo = async () => {
-  //     try {
-  //       const resp = await fetch(`http://127.0.0.1:8080/api/slog/stay/${no}`);
-
-  //       console.log("no::::", no);
-
-  //       if (!resp.ok) {
-  //         throw new Error(`HTTP error! Status: ${resp.status}`);
-  //       }
-
-  //       const text = await resp.text();
-  //       const data = text ? JSON.parse(text) : {};
-
-  //       console.log("data:::::", data);
-  //       setStayInfo(data);
-  //     } catch (error) {
-  //       setStayInfo({});
-  //     }
-  //   };
-
-  //   fetchStayInfo();
-  // }, [no]);
+  const [alertOpen, setAlertOpen] = useState(false);
 
   const filteredList = slogDetailVo.voList
     .filter((vo) => vo.no === no)
@@ -397,8 +388,7 @@ const SlogDetail = () => {
     );
 
     if (response.ok) {
-      alert("게시글이 삭제되었습니다.");
-      navigate("/slog");
+      setAlertOpen(true);
     } else {
       alert("게시글 삭제에 실패했습니다.");
     }
@@ -410,6 +400,11 @@ const SlogDetail = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  const closeAlertModal = () => {
+    setAlertOpen(false);
+    navigate("/slog");
   };
 
   return (
@@ -511,6 +506,19 @@ const SlogDetail = () => {
           </>
         )}
       </EditDeleteBtn>
+
+      {alertOpen && (
+        <AlertContent>
+          <Alert
+            title="S-LOG 삭제"
+            titleColor="#049dd9"
+            message="삭제되었습니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={closeAlertModal}
+          />
+        </AlertContent>
+      )}
 
       <ModalContainer isOpen={isModalOpen}>
         <ModalContent>
