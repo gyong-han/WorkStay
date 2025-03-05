@@ -240,7 +240,13 @@ public class AdminService {
 
     public int companionEditSpace(String spaceNo) {
         int result1 = mapper.companionEditSpace(spaceNo);
-        int result2 = mapper.companionEditSpaceAttach(spaceNo);
+        int result2 = 0;
+        int count = mapper.getEditSpaceAttachList(spaceNo);
+        if(count == 0){
+            result2 = 1;
+        }else{
+            result2 = mapper.companionEditSpaceAttach(spaceNo);
+        }
         return result1 * result2;
     }
 
@@ -292,7 +298,13 @@ public class AdminService {
 
     public int companionEditRoom(String roomNo) {
         int result1 = mapper.companionEditRoom(roomNo);
-        int result2 = mapper.companionEditRoomAttach(roomNo);
+        int result2 = 0;
+        int count = mapper.getEditRoomAttachList(roomNo);
+        if(count == 0){
+            result2 = 1;
+        }else{
+            result2 = mapper.companionEditRoomAttach(roomNo);
+        }
         return result1 * result2;
     }
 
