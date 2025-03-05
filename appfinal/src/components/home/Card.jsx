@@ -20,7 +20,8 @@ const BlackDiv = styled.div`
 `;
 
 const ImgDiv = styled.img`
-  border-radius: 5px;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
   width: 100%;
   height: 250px;
   background-position: center;
@@ -55,7 +56,7 @@ const SecondDiv = styled.div`
   }
   & > div:nth-child(5) {
     display: flex;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 700;
     padding-bottom: 20px;
   }
