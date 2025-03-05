@@ -352,7 +352,8 @@ const FindSpaceDetail = () => {
 
   const cleaned = spaceVo.phone.replace(/\D/g, '');
   const formattedPhoneNumber = cleaned.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
-
+  const morningPrice = spaceVo.daytimePrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const nigthPrice = spaceVo.nightPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
 
 
@@ -447,7 +448,7 @@ const FindSpaceDetail = () => {
         </InfoDiv>
         <Map address={spaceVo.address} name={spaceVo.name}>space</Map></div>
       <div></div>
-      <Infomation morning={150000} night={820000} standard={10} max={20}></Infomation>
+      <Infomation morning={morningPrice} night={nigthPrice} standard={spaceVo.standardGuest} max={spaceVo.maxGuest}></Infomation>
     </Layout>
     </>
   );
