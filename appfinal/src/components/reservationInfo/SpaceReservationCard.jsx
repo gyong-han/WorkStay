@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { data, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const DataDiv = styled.div`
@@ -18,7 +18,6 @@ const DataArea = styled.div`
   background-color: transparent;
   display: grid;
   grid-template-rows: 40px 30px 20px 20px 145px 45px;
-  color: black;
   align-items: center;
 `;
 
@@ -29,6 +28,7 @@ const TextDiv = styled.div`
   font-weight: ${(props) => {
     return props.weight;
   }};
+
   cursor: pointer;
 `;
 
@@ -50,7 +50,7 @@ const PriceDiv = styled.div`
   }
 `;
 
-const SpaceReservationCard = ({ hideDate }) => {
+const SpaceReservationCard = ({ data, hideDate, moveDetail }) => {
   const navi = useNavigate();
   const location = useLocation(); // 현재 경로 가져오기
 
@@ -73,23 +73,25 @@ const SpaceReservationCard = ({ hideDate }) => {
     <>
       <DataDiv>
         <DataArea>
-          <TextDiv size="15px">예약 확정</TextDiv>
+          <TextDiv size="15px">{data.progressState}</TextDiv>
           <TextDiv size="25px" weight="600">
-            우주오리
+            {data.name}
           </TextDiv>
-          <TextDiv size="15px">2025.02.18</TextDiv>
-          <TextDiv size="13px">낮패키지 / 성인 8명</TextDiv>
+          <TextDiv size="15px">{data.useDay}</TextDiv>
+          <TextDiv size="13px">
+            {data.packageName}패키지 / 성인 {data.adult}명
+          </TextDiv>
           <div></div>
           <PriceDiv>
             {!hideDate && (
-              <TextDiv onClick={movePath} size="15px">
+              <TextDiv onClick={moveDetail} size="15px">
                 예약 상세 확인
               </TextDiv>
             )}
-            <TextDiv size="20px">₩300,000</TextDiv>
+            <TextDiv size="20px">₩{data.amount}</TextDiv>
           </PriceDiv>
         </DataArea>
-        <ImgTag src="https://formeqly4682.edge.naverncp.com/service/167418209_a017e0caf9119cc47e6729799c0161ba.jpg?type=m&w=900&h=900&autorotate=true&quality=90" />
+        <ImgTag src={data.filePath} />
       </DataDiv>
     </>
   );

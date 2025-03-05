@@ -25,22 +25,25 @@ const SubTitleDiv=styled.div`
 `;
 
 const Main = () => {
-  const[homeSpringSlide,setHomeSpringSlide]=useState([]);
-  const[homeSummerSlide,setHomeSummerSlide]=useState([]);
-  const[homeAutumnSlide,setHomeAutumnSlide]=useState([]);
-  const[homeWinterSlide,setHomeWinterSlide]=useState([]);
+  const[homeSpringVo,setHomeSpringVo]=useState([]);
+  const[homeSummerVo,setHomeSummerVo]=useState([]);
+  const[homeAutumnVo,setHomeAutumnVo]=useState([]);
+  const[homeWinterVo,setHomeWinterVo]=useState([]);
   
   useEffect(()=>{
     fetch("http://localhost:8080/home/spring")
     .then((resp)=>resp.json())
     .then((data)=>{
+      if(!data){
+        return;
+      }
       console.log("봄 숙소 :: ",data);
-      const fileArr = data.map((vo)=>vo.filePath);
+      const fileArr = data.map((vo)=>vo);
     
       if(fileArr.length <=1){
-        setHomeSpringSlide((prev)=>{return[...prev,data[0].filePath]});
+        setHomeSpringVo(data);
       }else{
-        setHomeSpringSlide(fileArr);
+        setHomeSpringVo(fileArr);
       }
       
     })
@@ -50,12 +53,14 @@ const Main = () => {
     .then((resp)=>resp.json())
     .then((data)=>{
       console.log("여름 숙소 :: ",data);
-      const fileArr = data.map((vo)=>vo.filePath);
-    
+      if(!data){
+        return;
+      }
+      const fileArr = data.map((vo)=>vo);
       if(fileArr.length <=1){
-        setHomeSummerSlide((prev)=>{return[...prev,data[0].filePath]});
+        setHomeSummerVo(data);
       }else{
-        setHomeSummerSlide(fileArr);
+        setHomeSummerVo(fileArr);
       }
  
       
@@ -65,13 +70,16 @@ const Main = () => {
     fetch("http://localhost:8080/home/autumn")
     .then((resp)=>resp.json())
     .then((data)=>{
+      if(!data){
+        return;
+      }
       console.log("가을 숙소 :: ",data);
-      const fileArr = data.map((vo)=>vo.filePath);
+      const fileArr = data.map((vo)=>vo);
    
       if(fileArr.length <=1){
-        setHomeAutumnSlide((prev)=>{return[...prev,data[0].filePath]});
+        setHomeAutumnVo(data);
       }else{
-        setHomeAutumnSlide(fileArr);
+        setHomeAutumnVo(fileArr);
       }
 
     })
@@ -80,15 +88,18 @@ const Main = () => {
     fetch("http://localhost:8080/home/winter")
     .then((resp)=>resp.json())
     .then((data)=>{
-      console.log("겨울 숙소 :: ",data);
-      const fileArr = data.map((vo)=>vo.filePath);
-      if(!fileArr.length === 0){
-        if(fileArr.length <=1){
-          setHomeWinterSlide((prev)=>{return[...prev,data[0].filePath]});
-        }else{
-          setHomeWinterSlide(fileArr);
-        }
+      if(!data){
+        return;
       }
+      console.log("겨울 숙소 :: ",data);
+      const fileArr = data.map((vo)=>vo);
+      
+        if(fileArr.length <=1){
+          setHomeWinterVo(data);
+        }else{
+          setHomeWinterVo(fileArr);
+        }
+      
       
     })
   },[])
@@ -97,22 +108,22 @@ const Main = () => {
           <TitleDiv>봄 : 꽃이 만개한 자연 속에서 영감을 얻는 워케이션</TitleDiv>
           <SubTitleDiv>“계절의 시작, 자연이 전하는 에너지를 느끼며 새로운 아이디어를 발견하세요.”</SubTitleDiv>
           <div>
-          <HomeMainSlide w={1700} h={380} main={false}imgPaths={homeSpringSlide}></HomeMainSlide>
+          <HomeMainSlide w={1700} h={380} main={false}vo={homeSpringVo}></HomeMainSlide>
           </div>
           <TitleDiv>여름 : 물가에서 시원하게 몰입할 수 있는 리프레시 워케이션</TitleDiv>
           <SubTitleDiv>“계절의 시작, 자연이 전하는 에너지를 느끼며 새로운 아이디어를 발견하세요.”</SubTitleDiv>
           <div>
-         <HomeMainSlide w={1700} h={380} main={false}imgPaths={homeSummerSlide}></HomeMainSlide>
+         <HomeMainSlide w={1700} h={380} main={false}vo={homeSummerVo}></HomeMainSlide>
           </div>
           <TitleDiv>가을 : 단풍 아래에서 사색과 창의력을 키우는 워케이션</TitleDiv>
           <SubTitleDiv>“계절의 시작, 자연이 전하는 에너지를 느끼며 새로운 아이디어를 발견하세요.”</SubTitleDiv>
           <div>
-          <HomeMainSlide w={1700} h={380} main={false}imgPaths={homeAutumnSlide}></HomeMainSlide>
+          <HomeMainSlide w={1700} h={380} main={false}vo={homeAutumnVo}></HomeMainSlide>
           </div>
           <TitleDiv>겨울 : 따뜻한 공간에서 집중과 휴식을 동시에 하는 워케이션</TitleDiv>
           <SubTitleDiv>“계절의 시작, 자연이 전하는 에너지를 느끼며 새로운 아이디어를 발견하세요.”</SubTitleDiv>
           <div>
-          <HomeMainSlide w={1700} h={380} main={false}imgPaths={homeWinterSlide}></HomeMainSlide>
+          <HomeMainSlide w={1700} h={380} main={false}vo={homeWinterVo}></HomeMainSlide>
           </div>
     </Layout>
   );

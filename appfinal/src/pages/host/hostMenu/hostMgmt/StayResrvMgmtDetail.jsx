@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import HostBtn from "../../hostComponents/HostBtn";
 import { useParams } from "react-router-dom";
@@ -90,14 +90,31 @@ const AmountDiv = styled.div`
 `;
 
 const StayResrvMgmtDetail = () => {
-  //import하기
   const { stayReservNum } = useParams();
-
-  const stayName = "온숲";
+  const [guestVo, setGuestVo] = useState({});
+  const [stayVo, setStayVo] = useState({});
 
   const historyBack = () => {
     window.history.back();
   };
+
+  const formatPhoneNumber = (phone) => {
+    phone = String(phone);
+    return phone.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
+  };
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:8080/api/host/stay/reservDetail", {
+      method: "POST",
+      body: JSON.stringify(stayReservNum),
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        setGuestVo(data.guestVo);
+        setStayVo(data.stayVo);
+      });
+  }, []);
+
   return (
     <>
       <MainDiv>
@@ -107,7 +124,7 @@ const StayResrvMgmtDetail = () => {
               <StatusSpan size="15px" color="gray">
                 예약 상세 ❯
               </StatusSpan>
-              <StatusSpan size="15px"> {stayName}</StatusSpan>
+              <StatusSpan size="15px"> {stayVo.spaceName}</StatusSpan>
             </StyleDiv>
           </div>
           <div>
@@ -144,13 +161,13 @@ const StayResrvMgmtDetail = () => {
           <div></div>
           <div>
             <TitleDiv left="5px" bot="30px">
-              안예지
+              {guestVo.name}
             </TitleDiv>
             <TitleDiv left="5px" bot="30px">
-              01054897156
+              {formatPhoneNumber(guestVo.phone)}
             </TitleDiv>
             <TitleDiv left="5px" bot="30px">
-              yeji0714@naver.com
+              {guestVo.email}
             </TitleDiv>
           </div>
           <HrDiv>
@@ -184,19 +201,20 @@ const StayResrvMgmtDetail = () => {
           <div></div>
           <div>
             <TitleDiv left="5px" bot="30px">
-              20250101
+              {stayReservNum}
             </TitleDiv>
             <TitleDiv left="5px" bot="30px">
-              온숲 / Room A1
+              {stayVo.spaceName} / {stayVo.roomName}
             </TitleDiv>
             <TitleDiv left="5px" bot="30px">
-              총 2명 (성인 : 2명/ 아동 : 0명 / 영아 : 0명)
+              총 {stayVo.totalPerson}명 (성인 : {stayVo.adult}명/ 아동 :{" "}
+              {stayVo.child}명 / 영아 : {stayVo.baby}명)
             </TitleDiv>
             <TitleDiv left="5px" bot="30px">
-              2025-01-21 16:00
+              {stayVo.checkIn} 16:00
             </TitleDiv>
             <TitleDiv left="5px" bot="30px">
-              2025-01-22 11:00
+              {stayVo.checkOut} 11:00
             </TitleDiv>
           </div>
           <div></div>
@@ -208,7 +226,7 @@ const StayResrvMgmtDetail = () => {
             06. 요청사항
           </TitleDiv>
           <div></div>
-          <TextArea value={stayName} readOnly />
+          <TextArea value={stayVo.request} readOnly />
           <div></div>
           <div></div>
           <div>
@@ -256,7 +274,7 @@ const StayResrvMgmtDetail = () => {
               총 결제 금액
             </StatusSpan>
             <StatusSpan size="17px" right="10px">
-              ₩360,000
+              ₩{Number(stayVo.amount).toLocaleString()}
             </StatusSpan>
           </AmountDiv>
           <div></div>
@@ -267,16 +285,18 @@ const StayResrvMgmtDetail = () => {
           <TitleDiv left="40px">02. 결제 방법</TitleDiv>
           <div></div>
           <TitleDiv left="5px">
-            카드 결제 (결제 완료 : 2025-01-01 11:23)
+            {stayVo.paymentName} (결제 완료 : {stayVo.reservationDate})
           </TitleDiv>
           <div></div>
           <div></div>
           <div>
             <HostBtn
+              border="none"
               width="400px"
               height="50px"
               font="25px"
               backColor="#2B8C44"
+              color="white"
               str="목록가기"
               top="100px"
               f={historyBack}

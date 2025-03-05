@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import HostBtn from "../../hostComponents/HostBtn";
 import { useParams } from "react-router-dom";
@@ -90,14 +90,36 @@ const AmountDiv = styled.div`
 `;
 
 const SpaceResrvMgmtDetail = () => {
-  //import하기
   const { spaceReservNum } = useParams();
+  const [guestVo, setGuestVo] = useState({});
+  const [spaceVo, setSpaceVo] = useState({});
 
   const stayName = "온숲";
 
   const historyBack = () => {
     window.history.back();
   };
+
+  const formatPhoneNumber = (phone) => {
+    phone = String(phone);
+    return phone.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
+  };
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:8080/api/host/space/reservDetail", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(spaceReservNum),
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        setGuestVo(data.guestVo);
+        setSpaceVo(data.spaceVo);
+      });
+  }, []);
+
   return (
     <>
       <MainDiv>
@@ -107,7 +129,7 @@ const SpaceResrvMgmtDetail = () => {
               <StatusSpan size="15px" color="gray">
                 예약 상세 ❯
               </StatusSpan>
-              <StatusSpan size="15px"> {stayName}</StatusSpan>
+              <StatusSpan size="15px"> {spaceVo.spaceName}</StatusSpan>
             </StyleDiv>
           </div>
           <div>
@@ -144,13 +166,13 @@ const SpaceResrvMgmtDetail = () => {
           <div></div>
           <div>
             <TitleDiv left="5px" bot="30px">
-              안예지
+              {guestVo.name}
             </TitleDiv>
             <TitleDiv left="5px" bot="30px">
-              01054897156
+              {formatPhoneNumber(guestVo.phone)}
             </TitleDiv>
             <TitleDiv left="5px" bot="30px">
-              yeji0714@naver.com
+              {guestVo.email}
             </TitleDiv>
           </div>
           <HrDiv>
@@ -171,32 +193,33 @@ const SpaceResrvMgmtDetail = () => {
               01. 예약번호
             </TitleDiv>
             <TitleDiv left="40px" bot="30px">
-              02. 스테이 및 객실
+              02. 스페이스
             </TitleDiv>
             <TitleDiv left="40px" bot="30px">
               03. 예약 인원
             </TitleDiv>
             <TitleDiv left="40px" bot="30px">
-              04. 체크인
+              04. 예약일
             </TitleDiv>
-            <TitleDiv left="40px">05. 체크 아웃</TitleDiv>
+            <TitleDiv left="40px">05. 패키지</TitleDiv>
           </div>
           <div></div>
           <div>
             <TitleDiv left="5px" bot="30px">
-              20250101
+              {spaceReservNum}
             </TitleDiv>
             <TitleDiv left="5px" bot="30px">
-              온숲 / Room A1
+              {spaceVo.spaceName}
             </TitleDiv>
             <TitleDiv left="5px" bot="30px">
-              총 2명 (성인 : 2명/ 아동 : 0명 / 영아 : 0명)
+              총 {spaceVo.totalPerson}명 (성인 : {spaceVo.adult}명/ 아동 :{" "}
+              {spaceVo.child}명 / 영아 : {spaceVo.baby}명)
             </TitleDiv>
             <TitleDiv left="5px" bot="30px">
-              2025-01-21 16:00
+              {spaceVo.useDay}
             </TitleDiv>
             <TitleDiv left="5px" bot="30px">
-              2025-01-22 11:00
+              {spaceVo.packageName} 패키지
             </TitleDiv>
           </div>
           <div></div>
@@ -208,7 +231,7 @@ const SpaceResrvMgmtDetail = () => {
             06. 요청사항
           </TitleDiv>
           <div></div>
-          <TextArea value={stayName} readOnly />
+          <TextArea value={spaceVo.request} readOnly />
           <div></div>
           <div></div>
           <div>
@@ -256,7 +279,7 @@ const SpaceResrvMgmtDetail = () => {
               총 결제 금액
             </StatusSpan>
             <StatusSpan size="17px" right="10px">
-              ₩360,000
+              ₩{Number(spaceVo.amount).toLocaleString()}
             </StatusSpan>
           </AmountDiv>
           <div></div>
@@ -267,18 +290,20 @@ const SpaceResrvMgmtDetail = () => {
           <TitleDiv left="40px">02. 결제 방법</TitleDiv>
           <div></div>
           <TitleDiv left="5px">
-            카드 결제 (결제 완료 : 2025-01-01 11:23)
+            {spaceVo.paymentName} (결제 완료 : {spaceVo.reservationDate})
           </TitleDiv>
           <div></div>
           <div></div>
           <div>
             <HostBtn
+              border="none"
               width="400px"
               height="50px"
               font="25px"
               backColor="#2B8C44"
               str="목록가기"
               top="100px"
+              color="white"
               f={historyBack}
             />
           </div>

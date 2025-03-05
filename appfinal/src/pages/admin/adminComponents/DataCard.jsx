@@ -25,6 +25,11 @@ const TextDiv = styled.div`
   font-weight: ${(props) => {
     return props.weight;
   }};
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding-right: 10px;
+  letter-spacing: 1px;
 `;
 
 const ImgTag = styled.img`
@@ -32,7 +37,18 @@ const ImgTag = styled.img`
   height: 270px;
 `;
 
-const DataCard = ({ title, address, phone, email, img }) => {
+const formatPhoneNumber = (phone) => {
+  phone = String(phone);
+  if (phone.length > 10) {
+    return phone.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
+  } else if (phone.length > 9) {
+    return phone.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+  } else {
+    return phone.replace(/(\d{2})(\d{3})(\d{4})/, "$1-$2-$3");
+  }
+};
+
+const DataCard = ({ title, address, phone, sns, img, click }) => {
   return (
     <>
       <DataDiv>
@@ -45,8 +61,8 @@ const DataCard = ({ title, address, phone, email, img }) => {
           <TextDiv size="15px" weight="500">
             {address}
           </TextDiv>
-          <TextDiv size="13px">{phone}</TextDiv>
-          <TextDiv size="13px">{email}</TextDiv>
+          <TextDiv size="13px">{formatPhoneNumber(phone)}</TextDiv>
+          <TextDiv size="13px">{sns}</TextDiv>
           <div></div>
         </DataArea>
         <ImgTag src={img} />

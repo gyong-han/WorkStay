@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Address from "../../../components/address/Address";
 import HostBtn from "../hostComponents/HostBtn";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import { BASE_URL } from "../../../components/service/config";
 
 const HomeDiv = styled.div`
   display: grid;
@@ -81,7 +83,7 @@ const StayDiv = styled.div`
   grid-template-rows: (10, 1fr);
 `;
 
-const DataList = styled.input`
+const DataSelect = styled.select`
   border: 0.5px solid black;
   width: 150px;
   height: 30px;
@@ -89,7 +91,6 @@ const DataList = styled.input`
   font-weight: 400;
   margin-top: 37px;
   border-radius: 8px;
-  line-height: 3;
   text-align: center;
   appearance: none;
   background: url("https://cdn.iconscout.com/icon/premium/png-256-thumb/triangle-down-5065327-4219907.png?f=webp")
@@ -102,6 +103,8 @@ const TextArea = styled.textarea`
   margin-top: 35px;
   border-radius: 5px;
   resize: none;
+  font-family: "Pretendard-Regular";
+  font-size: 1.2rem;
 `;
 
 const BtnArea = styled.div`
@@ -155,11 +158,44 @@ const RadioDiv = styled.div`
   }
 `;
 
+const RadioArea = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+`;
+
 const SecondEnrollStay = () => {
   const [phone, setPhone] = useState("");
   const [brn, setbrn] = useState("");
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    business_type_no: "1",
+  });
   const navigate = useNavigate();
+  const [hostNo, setHostNo] = useState("");
+  const [hostVo, setHostVo] = useState({
+    name: "",
+    phone: "",
+    email: "",
+  });
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      const no = decodedToken.no;
+      setHostNo(decodedToken.no);
+      fetch(`${BASE_URL}/api/host/getHostVo`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(no),
+      })
+        .then((resp) => resp.json())
+        .then((data) => {
+          setHostVo(data);
+        });
+    }
+  }, [hostNo]);
 
   const handleChange = (e) => {
     setFormData((prev) => {
@@ -178,11 +214,6 @@ const SecondEnrollStay = () => {
       };
     });
   };
-
-  const RadioArea = styled.div`
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-  `;
 
   const changephone = (e) => {
     let inputValue = e.target.value;
@@ -206,7 +237,7 @@ const SecondEnrollStay = () => {
   const enrollStay = () => {
     const fd = new FormData();
     fd.append("name", formData.name);
-    fd.append("address", formData.name);
+    fd.append("address", formData.address);
     fd.append("phone", formData.phone);
     fd.append("sns", formData.sns);
     fd.append("businessTypeNo", formData.business_type_no);
@@ -214,7 +245,7 @@ const SecondEnrollStay = () => {
     fd.append("tagline", formData.tagline);
     fd.append("season", formData.season);
     fd.append("introduction", formData.introduction);
-    fd.append("hostNo", "1");
+    fd.append("hostNo", hostNo);
 
     fetch("http://127.0.0.1:8080/api/host/enroll/stay", {
       method: "POST",
@@ -222,10 +253,14 @@ const SecondEnrollStay = () => {
     })
       .then((resp) => resp.text())
       .then((data) => {
-        console.log("data::::", data);
         navigate(`/enroll/stay/third/${data}`);
         window.scrollTo(0, 0);
       });
+  };
+
+  const formatPhoneNumber = (phone) => {
+    phone = String(phone);
+    return phone.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
   };
 
   return (
@@ -252,13 +287,13 @@ const SecondEnrollStay = () => {
             <div></div>
             <DataTitle>호스트 성함 *</DataTitle>
             <div>
-              <DataInput type="text" value={"홍길동"} readOnly />
+              <DataInput type="text" value={hostVo.name} readOnly />
             </div>
             <DataTitle top="15px">호스트 전화번호 *</DataTitle>
             <div>
               <DataInput
-                type="number"
-                value={"01011112222"}
+                type="text"
+                value={formatPhoneNumber(hostVo.phone)}
                 top="15px"
                 readOnly
               />
@@ -267,7 +302,7 @@ const SecondEnrollStay = () => {
             <div>
               <DataInput
                 type="email"
-                value={"khAcademy362@kh.co.kr"}
+                value={hostVo.email}
                 top="20px"
                 readOnly
               />
@@ -277,7 +312,7 @@ const SecondEnrollStay = () => {
             <Hr />
           </div>
           <StayDiv>
-            <EnrollHeader>스페이스 정보</EnrollHeader>
+            <EnrollHeader>스테이 정보</EnrollHeader>
             <div></div>
             <DataTitle top="40px">스테이 이름 *</DataTitle>
             <DataInput
@@ -316,15 +351,10 @@ const SecondEnrollStay = () => {
             />
             <DataTitle top="40px">스테이 업종명 *</DataTitle>
             <div>
-              <DataList
-                list="business_type"
-                name="business_type_no"
-                onChange={handleChange}
-              />
-              <datalist id="business_type">
+              <DataSelect name="business_type_no" onChange={handleChange}>
                 <option value="1">숙박</option>
-                <option value="2">워케이션</option>
-              </datalist>
+                <option value="2">공간 대여</option>
+              </DataSelect>
             </div>
             <DataTitle top="40px">사업자 등록번호 *</DataTitle>
             <DataInput
@@ -355,50 +385,51 @@ const SecondEnrollStay = () => {
                 <input
                   type="radio"
                   name="season"
-                  id="spring"
+                  id="봄"
                   onChange={handleChange2}
-                  checked={formData.season === "spring"}
+                  checked={formData.season === "봄"}
                 />
-                <label for="spring" />
+                <label for="봄" />
                 <span>봄</span>
               </RadioDiv>
               <RadioDiv>
                 <input
                   type="radio"
                   name="season"
-                  id="summer"
+                  id="여름"
                   onChange={handleChange2}
-                  checked={formData.season === "summer"}
+                  checked={formData.season === "여름"}
                 />
-                <label for="summer" />
+                <label for="여름" />
                 <span>여름</span>
               </RadioDiv>
               <RadioDiv>
                 <input
                   type="radio"
                   name="season"
-                  id="fall"
+                  id="가을"
                   onChange={handleChange2}
-                  checked={formData.season === "fall"}
+                  checked={formData.season === "가을"}
                 />
-                <label for="fall" />
+                <label for="가을" />
                 <span>가을</span>
               </RadioDiv>
               <RadioDiv>
                 <input
                   type="radio"
                   name="season"
-                  id="winter"
+                  id="겨울"
                   onChange={handleChange2}
-                  checked={formData.season === "winter"}
+                  checked={formData.season === "겨울"}
                 />
-                <label for="winter" />
+                <label for="겨울" />
                 <span>겨울</span>
               </RadioDiv>
             </RadioArea>
           </StayDiv>
           <BtnArea>
             <HostBtn
+              border="none"
               width="400px"
               height="50px"
               font="25px"

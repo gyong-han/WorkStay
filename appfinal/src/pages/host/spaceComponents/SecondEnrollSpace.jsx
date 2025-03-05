@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import HostBtn from "../hostComponents/HostBtn";
 import Address from "../../../components/address/Address";
 import AttachmentUpload from "../hostComponents/AttachmentUpload";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import Alert from "../../../components/Alert";
+import { BASE_URL } from "../../../components/service/config";
 
 const HomeDiv = styled.div`
   display: grid;
@@ -95,7 +98,7 @@ const DataInput2 = styled.input`
   }};
 `;
 
-const DataList = styled.input`
+const DataSelect = styled.select`
   border: 0.5px solid black;
   width: 150px;
   height: 30px;
@@ -103,7 +106,6 @@ const DataList = styled.input`
   font-weight: 400;
   margin-top: 37px;
   border-radius: 8px;
-  line-height: 3;
   text-align: center;
   appearance: none;
   background: url("https://cdn.iconscout.com/icon/premium/png-256-thumb/triangle-down-5065327-4219907.png?f=webp")
@@ -126,6 +128,8 @@ const TextArea = styled.textarea`
   height: 150px;
   margin-top: 35px;
   border-radius: 5px;
+  font-family: "Pretendard-Regular";
+  font-size: 1.2rem;
   resize: none;
 `;
 
@@ -193,13 +197,55 @@ const CheckDiv = styled.div`
   }
 `;
 
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
+
 const SecondEnrollSpace = () => {
   const [phone, setPhone] = useState("");
   const [brn, setbrn] = useState("");
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    business_type_no: "1",
+  });
   const [featuresArr, setFeaturesArr] = useState([]);
   const [fileData, setFileData] = useState({});
   const navigate = useNavigate();
+  const [hostNo, setHostNo] = useState("");
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [hostVo, setHostVo] = useState({
+    name: "",
+    phone: "",
+    email: "",
+  });
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      const no = decodedToken.no;
+      setHostNo(decodedToken.no);
+      fetch(`${BASE_URL}/api/host/getHostVo`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(no),
+      })
+        .then((resp) => resp.json())
+        .then((data) => {
+          setHostVo(data);
+        });
+    }
+  }, [hostNo]);
 
   const handleChange = (e) => {
     setFormData((prev) => {
@@ -239,14 +285,8 @@ const SecondEnrollSpace = () => {
   };
 
   const enrollSpace = () => {
-    // console.log("formData ::: ", formData);
-    // console.log("featuresArr :::", featuresArr);
-    // console.log("fleData :::", fileData);
-
-    // console.log("-----------------------------------");
-
     const fd = new FormData();
-    fd.append("hostNo", "1");
+    fd.append("hostNo", hostNo);
     fd.append("name", formData.name);
     fd.append("address", formData.address);
     fd.append("phone", formData.phone);
@@ -271,12 +311,21 @@ const SecondEnrollSpace = () => {
     })
       .then((resp) => resp.text())
       .then((data) => {
-        console.log(data);
-        if (data === "1") {
-          navigate("/hostMenu/hostMgmtMenu/spaceApprovalMgmt");
-          window.scrollTo(0, 0);
+        if (data > 0) {
+          setIsAlertOpen(true);
         }
       });
+  };
+
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
+    navigate("/hostMenu/hostMgmtMenu/spaceApprovalMgmt");
+    window.scrollTo(0, 0);
+  };
+
+  const formatPhoneNumber = (phone) => {
+    phone = String(phone);
+    return phone.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
   };
 
   return (
@@ -304,19 +353,19 @@ const SecondEnrollSpace = () => {
               <div></div>
               <DataTitle>호스트 성함 *</DataTitle>
               <div>
-                <DataInput type="text" value={"홍길동"} readOnly />
+                <DataInput type="text" value={hostVo.name} readOnly />
               </div>
               <DataTitle>호스트 전화번호 *</DataTitle>
               <div>
-                <DataInput type="number" value={"01011112222"} readOnly />
+                <DataInput
+                  type="text"
+                  value={formatPhoneNumber(hostVo.phone)}
+                  readOnly
+                />
               </div>
               <DataTitle>호스트 이메일 *</DataTitle>
               <div>
-                <DataInput
-                  type="email"
-                  value={"khAcademy362@kh.co.kr"}
-                  readOnly
-                />
+                <DataInput type="email" value={hostVo.email} readOnly />
               </div>
             </UserDiv>
             <div>
@@ -362,15 +411,10 @@ const SecondEnrollSpace = () => {
               />
               <DataTitle top="40px">스페이스 업종명 *</DataTitle>
               <div>
-                <DataList
-                  list="business_type"
-                  name="business_type_no"
-                  onChange={handleChange}
-                />
-                <datalist id="business_type">
-                  <option value="1">스페이스1</option>
-                  <option value="2">스페이스2</option>
-                </datalist>
+                <DataSelect name="business_type_no" onChange={handleChange}>
+                  <option value="1">숙박</option>
+                  <option value="2">공간 대여</option>
+                </DataSelect>
               </div>
               <DataTitle top="40px">사업자 등록번호 *</DataTitle>
               <DataInput
@@ -578,6 +622,7 @@ const SecondEnrollSpace = () => {
             </SpaceDiv>
             <BtnArea>
               <HostBtn
+                border="none"
                 width="400px"
                 height="50px"
                 font="25px"
@@ -590,6 +635,18 @@ const SecondEnrollSpace = () => {
           </MainDiv>
         </HomeDiv>
       </form>
+      {isAlertOpen && (
+        <Backdrop>
+          <Alert
+            title="내 공간 입점신청"
+            titleColor="#049dd9"
+            message="입점 신청되었습니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose}
+          />
+        </Backdrop>
+      )}
     </>
   );
 };

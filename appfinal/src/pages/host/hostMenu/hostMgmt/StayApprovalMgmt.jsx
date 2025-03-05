@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import HostApprovalCard from "../../hostComponents/HostApprovalCard";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const MainDiv = styled.div`
   display: grid;
@@ -9,21 +11,89 @@ const MainDiv = styled.div`
 
 const StatusSpan = styled.span`
   font-size: 25px;
+  cursor: pointer;
   margin-left: ${(props) => {
     return props.left;
   }};
+  color: ${(props) => (props.isSelected ? props.colorSelected : "black")};
 `;
 const StayApprovalMgmt = () => {
+  window.scrollTo(0, 0);
+  const [status, setStatus] = useState("1");
+  const [dataArr, setDataArr] = useState([]);
+  const navigate = useNavigate();
+  const [hostNo, setHostNo] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        setHostNo(decodedToken.no);
+      } catch (error) {
+        console.error("토큰 디코딩 실패:", error);
+      }
+    }
+  }, []);
+
+  const handleStatus = (e) => {
+    setStatus(e.target.id);
+  };
+
+  useEffect(() => {
+    const fd = new FormData();
+    fd.append("status", status);
+    fd.append("hostNo", hostNo);
+    fetch("http://127.0.0.1:8080/api/host/stayApprovalList", {
+      method: "POST",
+      body: fd,
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        setDataArr(data);
+      });
+  }, [hostNo, status]);
+
+  const moveDetail = (stayNo) => {
+    navigate(`/adminMenu/stayEnrollReqDetail/${stayNo}`);
+  };
+
   return (
     <>
       <MainDiv>
         <div>
-          <StatusSpan left="280px">승인 대기</StatusSpan>
+          <StatusSpan
+            left="280px"
+            id="1"
+            onClick={handleStatus}
+            isSelected={status === "1"}
+            colorSelected="green"
+          >
+            승인 대기
+          </StatusSpan>
           <StatusSpan left="20px"> | </StatusSpan>
-          <StatusSpan left="20px">승인 반려</StatusSpan>
+          <StatusSpan
+            left="20px"
+            id="3"
+            onClick={handleStatus}
+            isSelected={status === "3"}
+            colorSelected="red"
+          >
+            승인 반려
+          </StatusSpan>
         </div>
-        <HostApprovalCard />
-        <HostApprovalCard />
+        {dataArr.map((vo, idx) => {
+          return (
+            <HostApprovalCard
+              key={idx}
+              status="1"
+              vo={vo}
+              id={vo.no}
+              f={moveDetail}
+            />
+          );
+        })}
       </MainDiv>
     </>
   );

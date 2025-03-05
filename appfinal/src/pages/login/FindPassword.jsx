@@ -1,6 +1,11 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useFormData } from "../../utils/useFormData";
+import { getPayload } from "../../utils/jwtUtil";
+import { findpwd } from "../../redux/memberSlice";
+import { BASE_URL } from "../../components/service/config";
 
 const MainDiv = styled.div`
   display: grid;
@@ -74,16 +79,46 @@ const BtnTag = styled.button`
   grid-row: 7;
 `;
 
-const ButtonLink = styled(Link)`
-  color: #fafafa;
-  text-decoration-line: none;
-`;
-
 const FindPassword = () => {
-  const [email, setEmail] = useState("");
+  const [emails, setEmail] = useState("");
   const [number, setNumber] = useState("");
   const [nameError, setNameError] = useState("");
   const [numberError, setNumberError] = useState("");
+  const navi = useNavigate();
+  const dispatch = useDispatch();
+
+  const initState = {
+    email: "",
+    phone: "",
+  };
+
+  const submitCallBack = (formData) => {
+    const url = `${BASE_URL}/api/guest/findpwd`;
+    const option = {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    };
+
+    fetch(url, option)
+      .then((resp) => {
+        return resp.text();
+      })
+      .then((token) => {
+        localStorage.setItem("token", token);
+        const email = (token, "email");
+
+        dispatch(findpwd({ email }));
+        navi("/login/newpwd");
+      });
+  };
+
+  const { formData, handleInputChange, handleSubmit } = useFormData(
+    initState,
+    submitCallBack
+  );
 
   const validateEmail = (value) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -112,7 +147,7 @@ const FindPassword = () => {
   };
 
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <MainDiv>
         <StyleMain>FIND PASSWORD</StyleMain>
 
@@ -120,8 +155,12 @@ const FindPassword = () => {
           <StyledInput
             type="text"
             placeholder="이메일을 입력해주세요."
-            value={email}
-            onChange={handleNameChange}
+            value={emails}
+            name="email"
+            onChange={(event) => {
+              handleNameChange(event);
+              handleInputChange(event);
+            }}
           />
           {nameError && <ErrorMessage>{nameError}</ErrorMessage>}
         </StyleInputId>
@@ -131,13 +170,15 @@ const FindPassword = () => {
             type="number"
             placeholder="'-'을 제외한 휴대 전화 번호를 입력해주세요."
             value={number}
-            onChange={handleNumberChange}
+            name="phone"
+            onChange={(event) => {
+              handleNumberChange(event);
+              handleInputChange(event);
+            }}
           />
           {numberError && <ErrorMessage>{numberError}</ErrorMessage>}
         </StyleInputPwd>
-        <BtnTag>
-          <ButtonLink to="/login/newpwd">비밀번호 찾기</ButtonLink>
-        </BtnTag>
+        <BtnTag>비밀번호 찾기</BtnTag>
       </MainDiv>
     </form>
   );

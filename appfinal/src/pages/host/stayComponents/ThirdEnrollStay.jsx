@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import HostBtn from "../hostComponents/HostBtn";
 import EnrollRoom from "../roomComponents/EnrollRoom";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import Alert from "../../../components/Alert";
 
 const HomeDiv = styled.div`
   display: grid;
@@ -35,8 +36,8 @@ const HeaderDiv = styled.div`
 `;
 
 const BtnArea = styled.div`
-  margin-top: 80px;
-  margin-bottom: 80px;
+  margin-top: 60px;
+  margin-bottom: 60px;
   display: grid;
   place-items: center;
 `;
@@ -52,11 +53,26 @@ const Hr = styled.hr`
   background-color: #d9d9d9;
 `;
 
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
+
 const ThirdEnrollStay = () => {
   const stayNum = useParams();
+  const navigate = useNavigate();
   const [formDataArr, setFormDataArr] = useState([]);
   const [featuresArr, setFeaturesArr] = useState([]);
   const [fileData, setFileData] = useState([]);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
   const addRoom = () => {
     setFormDataArr((prev) => {
       return [...prev, { stayNo: stayNum.x }];
@@ -74,8 +90,6 @@ const ThirdEnrollStay = () => {
   }, []);
 
   const enrollRoom = async () => {
-    console.log(stayNum);
-
     const url = "http://127.0.0.1:8080/api/host/enroll/room";
     for (let idx = 0; idx < formDataArr.length; ++idx) {
       const fd = new FormData();
@@ -85,6 +99,9 @@ const ThirdEnrollStay = () => {
       fd.append("price", formDataArr[idx].price);
       fd.append("maxGuest", formDataArr[idx].max_guest);
       fd.append("standardGuest", formDataArr[idx].standard_guest);
+      fd.append("singleSize", formDataArr[idx].singleSize);
+      fd.append("doubleSize", formDataArr[idx].doubleSize);
+      fd.append("queenSize", formDataArr[idx].queenSize);
       fd.append("features", featuresArr[idx]);
       fd.append("thumbnail", fileData[idx].thumbnail);
       fd.append("room_floor_plan", fileData[idx].room_floor_plan);
@@ -96,6 +113,13 @@ const ThirdEnrollStay = () => {
       });
       const data = await resp.text();
     }
+    setIsAlertOpen(true);
+  };
+
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
+    navigate("/hostMenu/hostMgmtMenu/stayApprovalMgmt");
+    window.scrollTo(0, 0);
   };
 
   return (
@@ -114,7 +138,7 @@ const ThirdEnrollStay = () => {
               margin="10px"
               marginBot="70px"
             >
-              스테이 신청
+              독채 신청
             </HeaderDiv>
           </div>
           <div>
@@ -138,6 +162,7 @@ const ThirdEnrollStay = () => {
           </div>
           <AddBtnArea>
             <HostBtn
+              border="none"
               width="100px"
               height="30px"
               font="15px"
@@ -149,6 +174,7 @@ const ThirdEnrollStay = () => {
           </AddBtnArea>
           <BtnArea>
             <HostBtn
+              border="1px solid #2B8C44"
               width="400px"
               height="50px"
               font="25px"
@@ -162,6 +188,18 @@ const ThirdEnrollStay = () => {
 
         <div></div>
       </HomeDiv>
+      {isAlertOpen && (
+        <Backdrop>
+          <Alert
+            title="내 숙소 입점신청"
+            titleColor="#049dd9"
+            message="입점 신청되었습니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose}
+          />
+        </Backdrop>
+      )}
     </>
   );
 };

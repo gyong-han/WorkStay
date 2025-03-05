@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import HostApprovalCard from "../../hostComponents/HostApprovalCard";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const MainDiv = styled.div`
   display: grid;
@@ -15,14 +17,59 @@ const StatusSpan = styled.span`
 `;
 
 const MyStayMgmt = () => {
+  window.scrollTo(0, 0);
+  const [dataArr, setDataArr] = useState([]);
+  const navigate = useNavigate();
+  const [hostNo, setHostNo] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        setHostNo(decodedToken.no);
+      } catch (error) {
+        console.error("토큰 디코딩 실패:", error);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    const fd = new FormData();
+    fd.append("hostNo", hostNo);
+    fetch("http://127.0.0.1:8080/api/host/myStay", {
+      method: "POST",
+      body: fd,
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        setDataArr(data);
+      });
+  }, [hostNo]);
+
+  const moveDetail = (stayNum) => {
+    navigate(`myStayDetail/${stayNum}`);
+    window.scrollTo(0, 0);
+  };
+
   return (
     <>
       <MainDiv>
         <div>
           <StatusSpan left="330px">내 숙소 목록</StatusSpan>
         </div>
-        <HostApprovalCard status="1" />
-        <HostApprovalCard />
+        {dataArr.map((vo, idx) => {
+          return (
+            <HostApprovalCard
+              key={idx}
+              status="1"
+              vo={vo}
+              id={vo.no}
+              f={moveDetail}
+            />
+          );
+        })}
       </MainDiv>
     </>
   );

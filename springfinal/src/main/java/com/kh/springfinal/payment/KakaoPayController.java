@@ -16,7 +16,10 @@ public class KakaoPayController {
     @PostMapping("/ready")
     public KakaoPayVo readyToKakaoPay(@RequestBody  KakaoPayReadyVo vo) {
         System.out.println("vo = " + vo);
-        return kakaoPayService.kakaoPayReady(vo);
+        if (vo.getPackageType() == null || vo.getPackageType().isEmpty()) {
+        return kakaoPayService.kakaoPayReadyRoom(vo);
+        }
+       return kakaoPayService.kakaoPayReady(vo);
     }
 
     @GetMapping("/cancel")

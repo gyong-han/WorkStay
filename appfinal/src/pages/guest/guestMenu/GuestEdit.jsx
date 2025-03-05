@@ -1,6 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FaCheck } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import { logout } from "../../../redux/memberSlice";
+import Alert from "../../../components/Alert";
+import { BASE_URL } from "../../../components/service/config";
+import PasswordModal from "./PasswordModal";
 
 // const MainDiv = styled.div`
 //   display: flex;
@@ -92,6 +99,19 @@ const SpanTag = styled.span`
   color: #049dd9;
 `;
 
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
+
 const BtnTag = styled.button`
   display: grid;
   /* justify-self: center; */
@@ -105,11 +125,11 @@ const BtnTag = styled.button`
   width: 500px;
   height: 60px;
   margin-top: 100px;
+  cursor: pointer;
 `;
 
 const OutBtnTag = styled.button`
   display: grid;
-  /* justify-self: center; */
   border: none;
   align-items: center;
   border-radius: 5px;
@@ -120,10 +140,100 @@ const OutBtnTag = styled.button`
   width: 500px;
   height: 60px;
   margin-bottom: 100px;
+  cursor: pointer;
 `;
 
 const GuestEdit = () => {
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const navi = useNavigate();
+  const [memberVo, setMemberVo] = useState({});
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const guest = useSelector((state) => state.guest); // Redux에서 값 가져오기
+  const [showPasswordModal, setShowPasswordModal] = useState(true); // 모달 초기 표시
+
+  const token = localStorage.getItem("token");
+  useEffect(() => {
+    if (!token) {
+      navi("/login");
+    }
+  });
+
+  const handleVerifyPassword = async (password) => {
+    const decodedToken = jwtDecode(token);
+    const email = decodedToken.email;
+
+    const response = await fetch(`${BASE_URL}/api/guest/verify-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const isValid = await response.json();
+
+    if (isValid) {
+      setShowPasswordModal(false);
+    } else {
+      alert("비밀번호가 일치하지 않습니다.");
+    }
+  };
+
+  //토큰 정보 있으면 화면에 보여주기
+  useEffect(() => {
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      setMemberVo((prev) => ({
+        ...prev,
+        email: decodedToken.email, // 토큰에서 이메일 가져와서 저장
+      }));
+
+      fetch(`${BASE_URL}/api/guest/mypage?email=${decodedToken.email}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setMemberVo(data);
+        })
+        .catch((err) => console.error("회원 정보 불러오기 실패:", err));
+    }
+  }, [token]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setMemberVo((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+    const updatedData = {
+      ...memberVo,
+      pwd: password.length > 0 ? password : "",
+    };
+
+    const response = await fetch(`${BASE_URL}/api/guest/editMember`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(updatedData), // 토큰에서 추출한 이메일 포함
+    });
+
+    if (response.ok) {
+      setIsAlertOpen(true);
+      navi("/hostMenu/editHost");
+    } else {
+      alert("수정 실패. 다시 시도해주세요.");
+    }
+  };
+
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
+    navi("/hostMenu/editHost");
+  };
 
   // 비밀번호 조건 검사 함수
   const checkPasswordConditions = (password) => {
@@ -137,87 +247,157 @@ const GuestEdit = () => {
 
   const passwordConditions = checkPasswordConditions(password);
 
+  const memberquit = async (e) => {
+    e.preventDefault();
+
+    const isConfirmed = window.confirm("정말 탈퇴하시겠습니까?");
+    if (!isConfirmed) return; // 사용자가 "취소"를 눌렀다면 탈퇴 중단
+
+    const updatedData = {
+      ...memberVo,
+      pwd: password.length > 0 ? password : "",
+    };
+
+    const response = await fetch(`${BASE_URL}/api/guest/memberQuit`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(updatedData),
+    });
+
+    if (response.ok) {
+      alert("회원 탈퇴 되었습니다.");
+      localStorage.removeItem("token");
+      dispatch(logout());
+      navi("/");
+    } else {
+      alert("탈퇴 실패. 다시 시도해주세요.");
+    }
+  };
+
   return (
-    <form>
-      <MainWrapper>
-        {/* <MainDiv> */}
-        <MainSpanDiv>회원 정보 수정</MainSpanDiv>
-        {/* </MainDiv> */}
-        <ListDiv>
-          <ListSpanDiv>이메일</ListSpanDiv>
-          <DataDiv type="text" value={"yeji0714@naver.com"} readOnly></DataDiv>
-        </ListDiv>
-        <ListDiv>
-          <ListSpanDiv>이름</ListSpanDiv>
-          <DataDiv type="text" value={"안예지"} readOnly></DataDiv>
-        </ListDiv>
-        <ListDiv>
-          <ListSpanDiv>비밀번호 변경</ListSpanDiv>
-          <DataDiv
-            type="password"
-            placeholder="비밀번호를 입력 해주세요."
-            value={password}
-            maxLength={20}
-            onChange={(e) => setPassword(e.target.value)}
-          ></DataDiv>
-          <div style={{ marginTop: "10px" }}>
-            <PasswordCheckInput>
-              <PasswordCheck valid={passwordConditions.hasEnglish}>
-                <IoMdCheckmarkStyled valid={passwordConditions.hasEnglish} />
-                영문
-              </PasswordCheck>
+    <>
+      {showPasswordModal && (
+        <PasswordModal
+          onVerify={handleVerifyPassword}
+          onClose={() => navi("/hostMenu")}
+        />
+      )}
+      {!showPasswordModal && (
+        <MainWrapper>
+          <form onSubmit={handleSave}>
+            {/* <MainDiv> */}
+            <MainSpanDiv>회원 정보 수정</MainSpanDiv>
+            {/* </MainDiv> */}
+            <ListDiv>
+              <ListSpanDiv>이메일</ListSpanDiv>
+              <DataDiv type="text" value={memberVo.email} readOnly></DataDiv>
+            </ListDiv>
+            <ListDiv>
+              <ListSpanDiv>이름</ListSpanDiv>
+              <DataDiv type="text" value={memberVo.name} readOnly></DataDiv>
+            </ListDiv>
+            <ListDiv>
+              <ListSpanDiv>비밀번호 변경</ListSpanDiv>
+              <DataDiv
+                type="password"
+                placeholder="비밀번호를 입력 해주세요."
+                value={password}
+                name="pwd"
+                maxLength={20}
+                onChange={(e) => setPassword(e.target.value)}
+              ></DataDiv>
+              <div style={{ marginTop: "10px" }}>
+                <PasswordCheckInput>
+                  <PasswordCheck valid={passwordConditions.hasEnglish}>
+                    <IoMdCheckmarkStyled
+                      valid={passwordConditions.hasEnglish}
+                    />
+                    영문
+                  </PasswordCheck>
 
-              <PasswordCheck valid={passwordConditions.hasNumber}>
-                <IoMdCheckmarkStyled valid={passwordConditions.hasNumber} />
-                숫자
-              </PasswordCheck>
+                  <PasswordCheck valid={passwordConditions.hasNumber}>
+                    <IoMdCheckmarkStyled valid={passwordConditions.hasNumber} />
+                    숫자
+                  </PasswordCheck>
 
-              <PasswordCheck valid={passwordConditions.hasSpecialChar}>
-                <IoMdCheckmarkStyled
-                  valid={passwordConditions.hasSpecialChar}
-                />
-                특수문자
-              </PasswordCheck>
+                  <PasswordCheck valid={passwordConditions.hasSpecialChar}>
+                    <IoMdCheckmarkStyled
+                      valid={passwordConditions.hasSpecialChar}
+                    />
+                    특수문자
+                  </PasswordCheck>
 
-              <PasswordCheck valid={passwordConditions.validLength}>
-                <IoMdCheckmarkStyled valid={passwordConditions.validLength} />
-                8자 이상 20자 이하
-              </PasswordCheck>
-            </PasswordCheckInput>
-          </div>
-        </ListDiv>
-        <ListDiv>
-          <ListSpanDiv>닉네임</ListSpanDiv>
-          <DataDiv type="text" placeholder="닉네임을 입력해주세요."></DataDiv>
-        </ListDiv>
-        <ListDiv>
-          <ListSpanDiv>휴대전화번호</ListSpanDiv>
-          <DataDiv
-            type="text"
-            placeholder="'-'을 제외한 휴대전화 번호를 입력해주세요. ex)01012345678."
-          ></DataDiv>
-        </ListDiv>
-        <ListDiv>
-          <ListSpanDiv>생년월일</ListSpanDiv>
-          <DataDiv
-            type="text"
-            placeholder="생년월일을 입력해주세요.(8글자)"
-          ></DataDiv>
-        </ListDiv>
-        <ListDiv>
-          <ListSpanDiv>마케팅 정보 수신</ListSpanDiv>
-          <CheckListDiv>
-            <CheckBtn /> 이벤트, 광고 등 혜택 알림 동의 (선택)
-          </CheckListDiv>
-          <SpanTag>
-            ※ 정보성 알림은 혜택 알림 동의 여부와 상관없이 제공됩니다. (예약
-            안내 및 메세지)
-          </SpanTag>
-        </ListDiv>
-        <BtnTag type="submit">저장하기</BtnTag>
-        <OutBtnTag>회원탈퇴</OutBtnTag>
-      </MainWrapper>
-    </form>
+                  <PasswordCheck valid={passwordConditions.validLength}>
+                    <IoMdCheckmarkStyled
+                      valid={passwordConditions.validLength}
+                    />
+                    8자 이상 20자 이하
+                  </PasswordCheck>
+                </PasswordCheckInput>
+              </div>
+            </ListDiv>
+            <ListDiv>
+              <ListSpanDiv>닉네임</ListSpanDiv>
+              <DataDiv
+                type="text"
+                name="nick"
+                value={memberVo.nick}
+                onChange={handleInputChange}
+                placeholder="닉네임을 입력해주세요."
+              ></DataDiv>
+            </ListDiv>
+            <ListDiv>
+              <ListSpanDiv>휴대전화번호</ListSpanDiv>
+              <DataDiv
+                type="text"
+                placeholder="'-'을 제외한 휴대전화 번호를 입력해주세요. ex)01012345678."
+                name="phone"
+                value={memberVo.phone}
+                onChange={handleInputChange}
+              ></DataDiv>
+            </ListDiv>
+            <ListDiv>
+              <ListSpanDiv>생년월일</ListSpanDiv>
+              <DataDiv
+                type="text"
+                placeholder="생년월일을 입력해주세요.(8글자)"
+                name="birthDate"
+                value={memberVo.birthDate}
+                onChange={handleInputChange}
+              ></DataDiv>
+            </ListDiv>
+            <ListDiv>
+              <ListSpanDiv>마케팅 정보 수신</ListSpanDiv>
+              <CheckListDiv>
+                <CheckBtn /> 이벤트, 광고 등 혜택 알림 동의 (선택)
+              </CheckListDiv>
+              <SpanTag>
+                ※ 정보성 알림은 혜택 알림 동의 여부와 상관없이 제공됩니다. (예약
+                안내 및 메세지)
+              </SpanTag>
+            </ListDiv>
+            <BtnTag type="submit">저장하기</BtnTag>
+          </form>
+          <OutBtnTag onClick={memberquit}>회원탈퇴</OutBtnTag>
+        </MainWrapper>
+      )}
+
+      {isAlertOpen && (
+        <Backdrop>
+          <Alert
+            title="회원수정"
+            titleColor="#049dd9"
+            message="회원수정 되었습니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose}
+          />
+        </Backdrop>
+      )}
+    </>
   );
 };
 

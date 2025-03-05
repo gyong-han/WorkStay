@@ -1,10 +1,10 @@
-package com.kh.springfinal.stayReservation;
+package com.kh.springfinal.roomReservation;
 
 import lombok.Data;
 
 @Data
 public class RoomReservationVo {
-private Long no;
+private String no;
 private Long memberNo;
 private Long paymentNo;
 private Long roomNo;
@@ -17,4 +17,7 @@ private String baby;
 private String request;
 private String amount;
 private String reservationDate;
+
+private String useday;
+private String stayNo;
 }

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 const HomeDiv = styled.div`
@@ -42,7 +42,7 @@ const Hr = styled.hr`
 const MenuAreaDiv = styled.div`
   margin-top: 40px;
   display: grid;
-  grid-template-rows: repeat(7, 60px);
+  grid-template-rows: repeat(8, 60px);
   place-items: center center;
   position: fixe;
 `;
@@ -60,6 +60,17 @@ const MenuDiv = styled.div`
 const AdminLayOut = ({ children }) => {
   const navigate = useNavigate();
   const [selectedMenu, setSelectedMenu] = useState("");
+  const [url, setUrl] = useState("");
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    const lastPath = pathname.split("/").pop();
+    setUrl(lastPath);
+  }, []);
+
+  useEffect(() => {
+    setSelectedMenu(url);
+  }, [url]);
 
   function movePath(e) {
     setSelectedMenu(e.target.id);
@@ -86,7 +97,11 @@ const AdminLayOut = ({ children }) => {
         </div>
         <MainDiv>
           <MenuAreaDiv>
-            <MenuDiv id="" onClick={movePath} selected={selectedMenu === ""}>
+            <MenuDiv
+              id=""
+              onClick={movePath}
+              selected={selectedMenu === "" || selectedMenu === "adminMenu"}
+            >
               호스트 조회
             </MenuDiv>
             <MenuDiv
@@ -111,25 +126,32 @@ const AdminLayOut = ({ children }) => {
               숙소 수정 요청
             </MenuDiv>
             <MenuDiv
+              id="roomEditReq"
+              onClick={movePath}
+              selected={selectedMenu === "roomEditReq"}
+            >
+              독채 수정 요청
+            </MenuDiv>
+            <MenuDiv
               id="spaceEditReq"
               onClick={movePath}
               selected={selectedMenu === "spaceEditReq"}
             >
-              숙소 수정 요청
+              공간 수정 요청
             </MenuDiv>
             <MenuDiv
               id="stayDelReq"
               onClick={movePath}
               selected={selectedMenu === "stayDelReq"}
             >
-              숙소 취소 요청
+              숙소 삭제 목록
             </MenuDiv>
             <MenuDiv
               id="spaceDelReq"
               onClick={movePath}
               selected={selectedMenu === "spaceDelReq"}
             >
-              공간 취소 요청
+              공간 삭제 목록
             </MenuDiv>
           </MenuAreaDiv>
           <div>{children}</div>

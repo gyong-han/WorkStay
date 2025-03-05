@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import Alert from "../../components/Alert";
+import { useLocation, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import { BASE_URL } from "../../components/service/config";
 
 const MainDiv = styled.div`
   display: grid;
@@ -79,6 +82,54 @@ const Backdrop = styled.div`
 
 const NewPassword = () => {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const navi = useNavigate();
+  // const location = useLocation();
+
+  // URL에서 토큰 가져오기
+  // const queryParams = new URLSearchParams(location.search);
+  // const token = queryParams.get("token");
+
+  // 토큰에서 이메일 추출
+  let email = "";
+
+  const token = localStorage.getItem("token");
+  if (token) {
+    try {
+      const decoded = jwtDecode(token);
+      email = decoded.email;
+      console.log("디코딩 email : ", email);
+    } catch (error) {
+      console.error("토큰 디코딩 실패", error);
+      navi("/error"); // 토큰이 잘못되었을 경우 에러 페이지로 이동
+    }
+  }
+
+  const handleSubmits = async (data) => {
+    const url = `${BASE_URL}/api/guest/newpwd`;
+    const requestBody = {
+      email: email,
+      pwd: data.password,
+    };
+
+    console.log("보내는 요청 데이터:", requestBody); // ✅ 확인용
+
+    const option = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    };
+
+    fetch(url, option)
+      .then((resp) => resp.text())
+      .then((data) => {
+        setIsAlertOpen(true);
+      })
+      .catch((error) => {
+        console.error("비밀번호 변경 실패", error);
+      });
+  };
 
   const {
     register,
@@ -103,14 +154,14 @@ const NewPassword = () => {
     }
   }, [password, passwordCheck, setError, clearErrors]);
 
-  const onSubmit = (data) => {
-    console.log("비밀번호 변경 성공:", data);
-    setIsAlertOpen(true); // 알람 띄우기
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
+    navi("/login"); // 확인 버튼 누르면 로그인 페이지로 이동
   };
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(handleSubmits)}>
         <MainDiv>
           <StyleMain>NEW PASSWORD</StyleMain>
 
@@ -135,6 +186,7 @@ const NewPassword = () => {
           <StyleInput row={4}>
             <StyledInput
               type="password"
+              name="pwd"
               placeholder="비밀번호를 재입력 해주세요."
               {...register("passwordCheck", {
                 required: "비밀번호를 다시 입력해주세요.",
@@ -159,7 +211,7 @@ const NewPassword = () => {
             message="비밀번호가 변경되었습니다."
             buttonText="확인"
             buttonColor="#049dd9"
-            onClose={() => setIsAlertOpen(false)}
+            onClose={handleAlertClose}
           />
         </Backdrop>
       )}

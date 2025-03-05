@@ -13,6 +13,7 @@ import {
 } from "../../redux/counterSlice";
 import { RiResetRightFill } from "react-icons/ri";
 import { setMemberCnt } from "../../redux/spaceSlice";
+import { setMemberCount } from "../../redux/roomSlice";
 
 const Overlay = styled.div`
   position: fixed;
@@ -164,8 +165,9 @@ const People = ({ isOpen, onClose }) => {
     console.log("성인 : ", adult);
     console.log("아동 : ", child);
     console.log("영아 : ", baby);
-    
-    dispatch(setMemberCnt({adult,child,baby}))
+
+    dispatch(setMemberCnt({ adult, child, baby }));
+    dispatch(setMemberCount({ adult, child, baby }));
     dispatch(RESET());
     onClose();
   }
@@ -207,16 +209,18 @@ const People = ({ isOpen, onClose }) => {
           <TitleDiv>
             <CounterDiv>
               <div class="minusBtn">
-                <ModalBtn disabled={adult<=0?true:false}
+                <ModalBtn
+                  disabled={adult <= 0 ? true : false}
                   str="-"
                   f={() => {
                     dispatch(DECREMENT_ADULT());
                   }}
-                  />
+                />
               </div>
               <div class="Counter">{adult}</div>
               <div>
-                <ModalBtn disabled={adult>=40?true:false}
+                <ModalBtn
+                  disabled={adult >= 40 ? true : false}
                   str="+"
                   f={() => {
                     dispatch(INCREMENT_ADULT());
@@ -226,16 +230,18 @@ const People = ({ isOpen, onClose }) => {
             </CounterDiv>
             <CounterDiv>
               <div class="minusBtn">
-                <ModalBtn disabled={child<=0?true:false}
+                <ModalBtn
+                  disabled={child <= 0 ? true : false}
                   str="-"
                   f={() => {
                     dispatch(DECREMENT_CHILD());
                   }}
-                 ></ModalBtn>
+                ></ModalBtn>
               </div>
               <div class="Counter">{child}</div>
               <div>
-                <ModalBtn disabled={child>=10?true:false}
+                <ModalBtn
+                  disabled={child >= 10 ? true : false}
                   str="+"
                   f={() => {
                     dispatch(INCREMENT_CHILD());
@@ -245,7 +251,8 @@ const People = ({ isOpen, onClose }) => {
             </CounterDiv>
             <CounterDiv>
               <div class="minusBtn">
-                <ModalBtn disabled={baby<=0?true:false}
+                <ModalBtn
+                  disabled={baby <= 0 ? true : false}
                   str="-"
                   f={() => {
                     dispatch(DECREMENT_BABY());
@@ -254,12 +261,12 @@ const People = ({ isOpen, onClose }) => {
               </div>
               <div class="Counter">{baby}</div>
               <div>
-                <ModalBtn disabled={baby>=5?true:false}
+                <ModalBtn
+                  disabled={baby >= 5 ? true : false}
                   str="+"
                   f={() => {
                     dispatch(INCREMENT_BABY());
                   }}
-                  
                 ></ModalBtn>
               </div>
             </CounterDiv>

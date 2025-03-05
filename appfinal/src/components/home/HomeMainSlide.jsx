@@ -27,7 +27,7 @@ const ArrowButton = styled.button`
   transform: translateY(-50%);
   font-size: 30px;
   background-color: rgba(0, 0, 0, 0);
-  color: red;
+  color: #202020;
   border: none;
   padding: 10px;
   cursor: pointer;
@@ -36,19 +36,18 @@ const ArrowButton = styled.button`
 
 
 
-const HomeMainSlide = ({ w, h, imgPaths, main }) => {
-  console.log("img path ~~~ ::: ", imgPaths);
+const HomeMainSlide = ({ w, h, vo, main }) => {
 
   // 화면넘길때마다 가질 인덱스 구성
   const [slideIdx, setSlideIdx] = useState(0);
 
   // 화면 넘기면 인덱스에 1값 더해서 인덱스 1로 만든뒤 슬라이드 창으로 나눠서 마지막페이지 구하기
   const goToNextSlide = () => {
-    setSlideIdx((props) => (props + 1) % imgPaths.length);
+    setSlideIdx((props) => (props + 1) % vo.length);
   };
 
   const goToPreviousSlide = () => {
-    setSlideIdx((props) => (props - 1 + imgPaths.length) % imgPaths.length);
+    setSlideIdx((props) => (props - 1 + vo.length) % vo.length);
   };
 
   useEffect(() => {
@@ -57,16 +56,16 @@ const HomeMainSlide = ({ w, h, imgPaths, main }) => {
     }
 
     const interval = setInterval(() => {
-      setSlideIdx((prev) => (prev + 1) % imgPaths.length);
+      setSlideIdx((prev) => (prev + 1) % vo.length);
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [main, imgPaths]);
+  }, [main, vo]);
 
-  if (!imgPaths || imgPaths.length === 0) {
+  if (!vo || vo.length === 0) {
     return (
       <>
-        <h1>null</h1>
+        <h1>등록된 정보가 없습니다.</h1>
       </>
     );
   }
@@ -74,7 +73,7 @@ const HomeMainSlide = ({ w, h, imgPaths, main }) => {
   return (
     <SlideContainer w={w} h={h}>
       <Slide index={slideIdx}>
-              <HomeCard imgPath={imgPaths}/>
+              <HomeCard imgPath={vo}/>
       </Slide>
       <ArrowButton left onClick={goToPreviousSlide}>
         ❮

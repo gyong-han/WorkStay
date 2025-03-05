@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useFormData } from "../../utils/useFormData";
+import { getPayload } from "../../utils/jwtUtil";
+import { login } from "../../redux/memberSlice";
+import { ABC, BASE_URL } from "../../components/service/config";
 
 const MainDiv = styled.div`
   display: grid;
@@ -116,10 +121,50 @@ const Ptag = styled.p`
 `;
 
 const MainLogin = () => {
-  const [email, setEmail] = useState("");
+  const [emails, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const navi = useNavigate();
+  const dispatch = useDispatch();
+
+  const initState = {
+    email: "",
+    pwd: "",
+  };
+
+  const submitCallBack = (formData) => {
+    const url = `${BASE_URL}/api/guest/login`;
+    console.log("BASE_URL : ", url);
+
+    const option = {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    };
+
+    fetch(url, option)
+      .then((resp) => {
+        return resp.text();
+      })
+      .then((token) => {
+        console.log("token :", token);
+        localStorage.setItem("token", token);
+        const no = getPayload(token, "no");
+        const email = getPayload(token, "email");
+        const pageNick = getPayload(token, "pageNick");
+
+        dispatch(login({ no, email, pageNick }));
+        navi("/");
+      });
+  };
+
+  const { formData, handleInputChange, handleSubmit } = useFormData(
+    initState,
+    submitCallBack
+  );
 
   const validateEmail = (value) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -147,9 +192,9 @@ const MainLogin = () => {
     setPassword(value);
     setPasswordError(validatePassword(value));
   };
-
+  window.scrollTo(0, 0);
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <MainDiv>
         <StyleMain>L O G I N</StyleMain>
 
@@ -157,8 +202,12 @@ const MainLogin = () => {
           <StyledInput
             type="text"
             placeholder="이메일을 입력해주세요."
-            value={email}
-            onChange={handleEmailChange}
+            value={emails}
+            name="email"
+            onChange={(event) => {
+              handleEmailChange(event);
+              handleInputChange(event);
+            }}
           />
           {emailError && <ErrorMessage>{emailError}</ErrorMessage>}
         </StyleInputId>
@@ -168,7 +217,11 @@ const MainLogin = () => {
             type="password"
             placeholder="비밀번호를 입력해주세요."
             value={password}
-            onChange={handlePasswordChange}
+            name="pwd"
+            onChange={(event) => {
+              handlePasswordChange(event);
+              handleInputChange(event);
+            }}
           />
           {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
         </StyleInputPwd>

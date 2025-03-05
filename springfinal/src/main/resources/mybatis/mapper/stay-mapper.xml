@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kh.springfinal.stay.StayMapper">
+    <select id="findAllByOrderByCreatedAtDesc">
+        SELECT  S.HOST_NO,S.NO,S.NAME,RA.FILE_PATH,S.ADDRESS,R.PRICE,R.MAX_GUEST,R.STANDARD_GUEST
+        FROM STAY S
+        JOIN (
+        SELECT STAY_NO, NO, PRICE, STANDARD_GUEST, MAX_GUEST
+        FROM ROOM
+        WHERE NO = (
+        SELECT MIN(NO)
+        FROM ROOM R2
+        WHERE R2.STAY_NO = ROOM.STAY_NO
+        )
+        ) R ON S.NO = R.STAY_NO
+        JOIN ROOM_ATTACHMENT RA ON (R.NO = RA.ROOM_NO)
+        WHERE STATUS_NO = '2'
+        AND RA.THUMBNAIL = 'Y'
+        <if test="area != null and area !='' ">
+            AND S.ADDRESS LIKE CONCAT(#{area}, '%')
+        </if>
+        <if test="people != null and people !='' and people != '0' ">
+            AND R.MAX_GUEST > #{people}
+        </if>
+        <if test="date != null and date !='' and date != '00000000' ">
+            AND R.NO NOT IN(
+            SELECT STAY_NO
+            FROM ROOM_RESERVATION
+            WHERE USE_DAY = #{date}
+            AND PACKAGE_NO IN (1, 2)
+            GROUP BY R.STAY_NO
+            HAVING COUNT(DISTINCT PACKAGE_NO) = 2)
+        </if>
+        AND S.DEL_YN = 'N'
+        ORDER BY S.NO DESC
+    </select>
+
+    <select id="findAllByOrderByPriceAsc">
+        SELECT  S.HOST_NO,S.NO,S.NAME,RA.FILE_PATH,S.ADDRESS,R.PRICE,R.MAX_GUEST,R.STANDARD_GUEST
+        FROM STAY S
+        JOIN (
+        SELECT STAY_NO, NO, PRICE, STANDARD_GUEST, MAX_GUEST
+        FROM ROOM
+        WHERE NO = (
+        SELECT MIN(NO)
+        FROM ROOM R2
+        WHERE R2.STAY_NO = ROOM.STAY_NO
+        )
+        ) R ON S.NO = R.STAY_NO
+        JOIN ROOM_ATTACHMENT RA ON (R.NO = RA.ROOM_NO)
+        WHERE STATUS_NO = '2'
+        AND RA.THUMBNAIL = 'Y'
+        <if test="area != null and area !='' ">
+            AND S.ADDRESS LIKE CONCAT(#{area}, '%')
+        </if>
+        <if test="people != null and people !='' and people != '0' ">
+            AND R.MAX_GUEST > #{people}
+        </if>
+        <if test="date != null and date !='' and date != '00000000' ">
+            AND S.NO NOT IN(
+            SELECT STAY_NO
+            FROM ROOM_RESERVATION
+            WHERE USE_DAY = #{date}
+            AND PACKAGE_NO IN (1, 2)
+            GROUP BY STAY_NO
+            HAVING COUNT(DISTINCT PACKAGE_NO) = 2)
+        </if>
+        ORDER BY R.PRICE ASC, S.NO DESC
+    </select>
+
+    <select id="findAllByOrderByPriceDesc">
+        SELECT  S.HOST_NO,S.NO,S.NAME,RA.FILE_PATH,S.ADDRESS,R.PRICE,R.MAX_GUEST,R.STANDARD_GUEST
+        FROM STAY S
+        JOIN (
+        SELECT STAY_NO, NO, PRICE, STANDARD_GUEST, MAX_GUEST
+        FROM ROOM
+        WHERE NO = (
+        SELECT MIN(NO)
+        FROM ROOM R2
+        WHERE R2.STAY_NO = ROOM.STAY_NO
+        )
+        ) R ON S.NO = R.STAY_NO
+        JOIN ROOM_ATTACHMENT RA ON (R.NO = RA.ROOM_NO)
+        WHERE STATUS_NO = '2'
+        AND RA.THUMBNAIL = 'Y'
+        <if test="area != null and area !='' ">
+            AND S.ADDRESS LIKE CONCAT(#{area}, '%')
+        </if>
+        <if test="people != null and people !='' and people != '0' ">
+            AND R.MAX_GUEST > #{people}
+        </if>
+        <if test="date != null and date !='' and date != '00000000' ">
+            AND S.NO NOT IN(
+            SELECT STAY_NO
+            FROM STAY_RESERVATION
+            WHERE USE_DAY = #{date}
+            AND PACKAGE_NO IN (1, 2)
+            GROUP BY STAY_NO
+            HAVING COUNT(DISTINCT PACKAGE_NO) = 2)
+        </if>
+        ORDER BY R.PRICE DESC, S.NO DESC
+    </select>
+
+    <select id="findAllByOrderByBookmarksDesc">
+        SELECT  S.HOST_NO,S.NO,S.NAME,RA.FILE_PATH,S.ADDRESS,R.PRICE,R.MAX_GUEST,R.STANDARD_GUEST
+        FROM STAY S
+        JOIN (
+        SELECT STAY_NO, NO, PRICE, STANDARD_GUEST, MAX_GUEST
+        FROM ROOM
+        WHERE NO = (
+        SELECT MIN(NO)
+        FROM ROOM R2
+        WHERE R2.STAY_NO = ROOM.STAY_NO
+        )
+        ) R ON S.NO = R.STAY_NO
+        JOIN ROOM_ATTACHMENT RA ON (R.NO = RA.ROOM_NO)
+        WHERE STATUS_NO = '2'
+        AND RA.THUMBNAIL = 'Y'
+        <if test="area != null and area !='' ">
+            AND S.ADDRESS LIKE CONCAT(#{area}, '%')
+        </if>
+        <if test="people != null and people !='' and people != '0' ">
+            AND R.MAX_GUEST > #{people}
+        </if>
+        <if test="date != null and date !='' and date != '00000000' ">
+            AND S.NO NOT IN(
+            SELECT STAY_NO
+            FROM ROOM_RESERVATION
+            WHERE USE_DAY = #{date}
+            AND PACKAGE_NO IN (1, 2)
+            GROUP BY STAY_NO
+            HAVING COUNT(DISTINCT PACKAGE_NO) = 2)
+        </if>
+        GROUP BY
+        S.NO, S.HOST_NO, S.NAME, S.ADDRESS, R.PRICE,
+        R.STANDARD_GUEST, R.MAX_GUEST, M.HOST_PERMISSION, A.THUMBNAIL, A.FILE_PATH
+        ORDER BY COUNT(B.STAY_NO) DESC, S.NO DESC
+    </select>
+
+</mapper>

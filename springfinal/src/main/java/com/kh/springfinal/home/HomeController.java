@@ -1,11 +1,10 @@
 package com.kh.springfinal.home;
 
+import com.kh.springfinal.reservation.SpaceReservVo;
+import com.kh.springfinal.reservation.StayReservVo;
 import com.kh.springfinal.stay.StayVo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -45,6 +44,28 @@ public class HomeController {
 
         List<StayVo> voList = service.getBestHitStayByFive();
         return voList;
+    }
+    @PostMapping("bookmark")
+    public int bookmark(@RequestBody StayReservVo vo){
+        return service.bookmark(vo);
+    }
+
+    @PostMapping("bookmarkdel")
+    public int bookmarkdel(@RequestBody StayReservVo vo){
+        return service.bookmarkdel(vo);
+    }
+
+
+
+    @PostMapping("getbookmarkInfo")
+    public boolean getbookmark(@RequestBody StayReservVo vo){
+        int result = service.getbookmark(vo);
+        if(result >= 1){
+            return true;
+        }else{
+            return false;
+        }
+
     }
 
 

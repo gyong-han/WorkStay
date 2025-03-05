@@ -19,4 +19,17 @@ public class StayVo {
     private String sns;
     private String brn;
     private String season;
+    private String thumbnail;
+
+    private String price;
+    private String standardGuest;
+    private String maxGuest;
+    private String hostPermission;
+    private String filePath;
+    private String hostName;
+    private String[] attachmentFilePaths;
+    private String businessTypeName;
+
+    private String roomNo;
+    private String roomName;
 }

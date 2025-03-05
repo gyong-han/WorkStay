@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FaAngleDown } from "react-icons/fa6";
 import Btn from "../../components/Btn";
@@ -6,6 +6,10 @@ import { useNavigate } from "react-router-dom";
 import Accordion from "./stayComponent/Accordion";
 import Calendar from "../../components/FilterBar/Calendal";
 import SelectPerson from "./stayComponent/SelectPerson";
+import { useDispatch, useSelector } from "react-redux";
+import { jwtDecode } from "jwt-decode";
+import { getMemberNo } from "../../components/service/roomService";
+import PaymentButton from "../../components/payment/PaymentButton";
 
 const Layout = styled.div`
   display: grid;
@@ -231,11 +235,31 @@ const Ptag = styled.p`
 `;
 
 const BookingStay = () => {
+  const token = localStorage.getItem("token");
+  const decodedToken = jwtDecode(token);
+
+  const [loginMember, setLoginMember] = useState({});
+  const [phoneNumber, setPhoneNumber] = useState();
+
+  useEffect(() => {
+    const memberInfomation = async () => {
+      const memberObj = await getMemberNo(decodedToken.no);
+      setLoginMember(memberObj);
+      const cleaned = memberObj.phone?.replace(/\D/g, "") || "";
+      const formattedPhoneNumber = cleaned.replace(
+        /(\d{3})(\d{4})(\d{4})/,
+        "$1-$2-$3"
+      );
+      setPhoneNumber(formattedPhoneNumber);
+    };
+    memberInfomation();
+  }, []);
+
   const termsData = [
     {
       id: 1,
       text: "(필수) 개인정보 제 3자 제공 동의",
-      details: (hotelName) => (
+      details: () => (
         <div>
           <p>
             (주)워크스테이는 예약 시스템 제공 과정에서 예약자 동의 하에 서비스
@@ -245,7 +269,7 @@ const BookingStay = () => {
             제한됩니다.
           </p>
           <ul>
-            <li>제공받는자 : {hotelName}</li>
+            <li>제공받는자 : {roomVo.stayName}</li>
             <li>
               제공 목적: 제휴 판매자(숙소)와 이용자(회원)의 예약에 대한 서비스
               제공, 계약의 이행(예약확인, 이용자 확인), 민원 처리 등 소비자 분쟁
@@ -346,19 +370,68 @@ const BookingStay = () => {
 
   // 날짜 선택
   const [dateRange, setDateRange] = useState([null, null]);
+  const roomVo = useSelector((state) => state.room);
+  const reservationDate = useSelector((state) => state.room.rezservationDate);
+  const dispatch = useDispatch();
+  const [request, setRequest] = useState("");
+
+  const priceWon = roomVo.price
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+  useEffect(() => {}, []);
+
+  const dates = roomVo.reservationDate;
+
+  const date1 = new Date(dates[0]);
+  const date2 = new Date(dates[1]);
+
+  const diffInTime = date2.getTime() - date1.getTime();
+  const diffInDays = diffInTime / (1000 * 60 * 60 * 24);
+
+  const totalPrice = (roomVo.price * diffInDays)
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+  const rd = {
+    roomNo: roomVo.no,
+    memberNo: loginMember.no,
+    stayNo: roomVo.stayNo,
+    stayName: roomVo.stayName,
+    paymentNo: 1,
+    adult: roomVo.adult,
+    child: roomVo.child,
+    baby: roomVo.baby,
+    request: request,
+    amount: totalPrice,
+    checkIn: roomVo.reservationDate[0],
+    checkOut: roomVo.reservationDate[1],
+    useDay: roomVo.reservationDate,
+    name: roomVo.name,
+    filePath: roomVo.filePath,
+  };
+
+  const rData = {
+    no: roomVo.no,
+    name: roomVo.name,
+    price: roomVo.price * diffInDays,
+  };
+
+  localStorage.setItem("roomdata", JSON.stringify(rd));
 
   return (
     <Layout>
       <BookingText>BOOKING</BookingText>
       <DateWrapper>
-        <Calendar type="button" setDateRange={setDateRange}>
-          <DateSpan>
-            {dateRange[0] && dateRange[1]
-              ? `${dateRange[0].toLocaleDateString()} ~ ${dateRange[1].toLocaleDateString()}`
-              : "날짜를 선택해주세요."}
-            <FaAngleDown />
-          </DateSpan>
-        </Calendar>
+        <DateSpan>
+          {!roomVo.reservationDate ? (
+            <Calendar type={"text"}>날짜를 입력해주세요.</Calendar>
+          ) : (
+            <Calendar
+              type={"text"}
+            >{`${roomVo.reservationDate[0]}~${roomVo.reservationDate[1]}`}</Calendar>
+          )}
+        </DateSpan>
       </DateWrapper>
       <LineDiv />
       <ReservationText>Reservations</ReservationText>
@@ -366,43 +439,59 @@ const BookingStay = () => {
       <ReservationWrapper>
         <ReservationDiv>
           <InfoText>예약 스테이</InfoText>
-          <Info>온숲 / Room A1</Info>
-        </ReservationDiv>
-        <ReservationLine />
-        <ReservationDiv>
-          <InfoText>예약일</InfoText>
           <Info>
-            {dateRange[0] && dateRange[1]
-              ? `${dateRange[0].toLocaleDateString()} ~ ${dateRange[1].toLocaleDateString()}`
-              : "날짜를 선택해주세요."}
+            {roomVo.stayName} / {roomVo.name}
           </Info>
         </ReservationDiv>
         <ReservationLine />
         <ReservationDiv>
+          <InfoText>예약일</InfoText>
+          <div>
+            <Info>
+              {!roomVo.reservationDate ? (
+                <Calendar type={"text"}>날짜를 입력해주세요.</Calendar>
+              ) : (
+                <Calendar
+                  type={"text"}
+                  position={true}
+                >{`${roomVo.reservationDate[0]}~${roomVo.reservationDate[1]}`}</Calendar>
+              )}
+            </Info>
+          </div>
+        </ReservationDiv>
+        <ReservationLine />
+        <ReservationDiv>
           <InfoText>이름</InfoText>
-          <Info>홍길동</Info>
+          <Info>{loginMember.name}</Info>
         </ReservationDiv>
         <ReservationLine />
         <ReservationDiv>
           <InfoText>휴대전화</InfoText>
-          <Info>010-1111-1111</Info>
+          <Info>{phoneNumber}</Info>
         </ReservationDiv>
         <ReservationLine />
         <ReservationDiv>
           <InfoText>이메일</InfoText>
-          <Info>gamza@naver.com</Info>
+          <Info>{loginMember.email}</Info>
         </ReservationDiv>
         <ReservationLine />
         <ReservationDiv>
           <InfoText>인원</InfoText>
           <Info>
-            <SelectPerson maxAdults={4} maxChildren={4} maxInfant={4} />
+            <SelectPerson
+              maxAdults={roomVo.maxGuest}
+              maxChildren={4}
+              maxInfant={4}
+            />
           </Info>
         </ReservationDiv>
         <ReservationLine />
         <ReservationDiv>
           <InfoText>요청사항</InfoText>
           <Request
+            onChange={(e) => {
+              setRequest(e.target.value);
+            }}
             placeholder="사전에 협의되지 않은 상업 사진 및 영상 촬영은 불가합니다.
 상업적 용도의 촬영은 별도 대관료를 책정하여 운영하고 있습니다."
           />
@@ -415,22 +504,14 @@ const BookingStay = () => {
           <div>
             <ChargeText>
               <span>객실요금</span>
-              <span>₩180,000</span>
+              <span>₩{priceWon}</span>
             </ChargeText>
-            <ChargeDate>
-              <span>2025-01-20</span>
-              <span>₩180,000</span>
-            </ChargeDate>
-            <ChargeDate>
-              <span>2025-01-20</span>
-              <span>₩180,000</span>
-            </ChargeDate>
             <ChargeLine />
           </div>
           <div></div>
           <ChargeText>
             <span></span>
-            <span>₩180,000</span>
+            <span>₩{totalPrice}</span>
           </ChargeText>
         </ReservationDiv>
         <ReservationLine />
@@ -438,7 +519,7 @@ const BookingStay = () => {
           <InfoText>결제방법 선택</InfoText>
           <div>
             <RadioBtn checked name="payment" />
-            <Info>결제 방식 선택</Info>
+            <Info>카카오페이</Info>
           </div>
         </ReservationDiv>
         <ReservationLine />
@@ -466,7 +547,7 @@ const BookingStay = () => {
         </Agree>
       </UserAgreeWrapper>
       <PaddingDiv>
-        <Btn w={"500px"}>결제하기</Btn>
+        <PaymentButton reservationData={rData} />
       </PaddingDiv>
       <ProvisionDiv>
         <ProvisionSpan>

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import HostBtn from "../../host/hostComponents/HostBtn";
+import { useLocation, useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../../components/service/config";
 
 const MainDiv = styled.div`
   display: flex;
@@ -76,8 +78,28 @@ const BtnDiv = styled.div`
   margin-bottom: 50px;
 `;
 
+const BtnCancle = styled.button`
+  width: 250px;
+  height: 50px;
+  background-color: #049dd9;
+  margin-top: 100px;
+  border: none;
+  border-radius: 5px;
+  font-size: 20px;
+  color: #fafafa;
+  cursor: pointer;
+`;
+
 const StayCancle = () => {
   const [showTextarea, setShowTextarea] = useState(false);
+  const [params, setParams] = useState({ no: "", reno: "" });
+
+  const navi = useNavigate();
+  const location = useLocation();
+
+  const queryParams = new URLSearchParams(location.search);
+  const no = queryParams.get("no");
+  const reno = queryParams.get("reno");
 
   const handleRadioChange = (event) => {
     if (event.target.value === "other") {
@@ -86,8 +108,34 @@ const StayCancle = () => {
       setShowTextarea(false);
     }
   };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    fetch(`${BASE_URL}/api/guest/stayCancle?no=${no}&reno=${reno}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ no, reno }),
+    })
+      .then((resp) => {
+        if (!resp.ok) throw new Error("서버 응답 오류");
+        return resp.json();
+      })
+      .then((data) => {
+        console.log("예약 취소 성공:", data);
+        alert("예약이 취소되었습니다.");
+        navi("/hostMenu");
+      })
+      .catch((error) => {
+        console.error("예약 취소 실패:", error);
+        alert("예약 취소에 실패했습니다.");
+      });
+  };
+
   return (
-    <>
+    <form onSubmit={handleSubmit}>
       <MainDiv>
         <MainSpanDiv>예약 취소 요청</MainSpanDiv>
       </MainDiv>
@@ -134,15 +182,7 @@ const StayCancle = () => {
       </RadioDiv>
       <BtnDiv>
         <div>
-          <HostBtn
-            width="250px"
-            height="50px"
-            font="20px"
-            backColor="#049DD9"
-            color="#FAFAFA"
-            str="예약취소"
-            top="100px"
-          />
+          <BtnCancle type="submit">예약취소</BtnCancle>
         </div>
         <div></div>
         <div>
@@ -151,13 +191,14 @@ const StayCancle = () => {
             height="50px"
             font="20px"
             backColor="#FAFAFA"
-            color="#049DD9"
+            color="#202020"
             str="이용 안내 및 환불 규정"
             top="100px"
+            border="1px solid #049DD9"
           />
         </div>
       </BtnDiv>
-    </>
+    </form>
   );
 };
 
