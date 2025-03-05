@@ -17,4 +17,8 @@ public class SlogVo {
     private String originalName;
     private String enrollDate;
     private String name;
+    private String stayName;
+    private String phone;
+    private String address;
+    private String sns;
 }

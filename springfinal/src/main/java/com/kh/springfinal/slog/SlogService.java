@@ -56,4 +56,8 @@ public class SlogService {
 
         return slogMapper.shareKakao(no);
     }
+
+    public SlogVo getMapInfo(String no) {
+        return slogMapper.getMapInfo(no);
+    }
 }
