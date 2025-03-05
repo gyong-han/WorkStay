@@ -76,13 +76,10 @@ const StayListCard = (props) => {
   const navigate = useNavigate();
 
   const clickHandler = () => {
-    console.log(props.no);
     navigate(`/${props.url}/detail/${props.no}`);
   };
 
   const Price = props.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-  console.log(Price);
 
   return (
     <Layout no={props.no}>
@@ -95,7 +92,7 @@ const StayListCard = (props) => {
           <PeopleDiv>
             기준 {props.min}명 (최대 {props.max}명)
           </PeopleDiv>
-          {/* <PriceDiv>₩{Price}</PriceDiv> */}
+          <PriceDiv>₩{Price}</PriceDiv>
           <div></div>
           <div></div>
           <ReservationDiv>예약하기</ReservationDiv>

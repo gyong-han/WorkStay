@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import { setMemberCount } from "../../../redux/roomSlice";
 
 const SelectorWrapper = styled.div`
   display: flex;
@@ -27,10 +29,9 @@ const CntBtn = styled.button`
   }
 `;
 
-const SelectPerson = ({ maxAdults, maxChildren, maxInfant }) => {
-  const [adult, setAdult] = useState(0);
-  const [child, setChild] = useState(0);
-  const [infant, setInfant] = useState(0);
+const SelectPeople = ({ maxAdults, maxChildren, maxInfant }) => {
+  const { adult, child, baby } = useSelector((state) => state.room);
+  const dispatch = useDispatch();
 
   return (
     <>
@@ -38,12 +39,19 @@ const SelectPerson = ({ maxAdults, maxChildren, maxInfant }) => {
         {/* 성인 인원 선택 */}
         <CntWrapper>
           성인
-          <CntBtn onClick={() => setAdult(adult - 1)} disabled={adult <= 0}>
+          <CntBtn
+            onClick={() =>
+              dispatch(setMemberCount({ adult: adult - 1, child, baby }))
+            }
+            disabled={adult <= 0}
+          >
             -
           </CntBtn>
           {adult}명
           <CntBtn
-            onClick={() => setAdult(adult + 1)}
+            onClick={() =>
+              dispatch(setMemberCount({ adult: adult + 1, child, baby }))
+            }
             disabled={adult >= maxAdults}
           >
             +
@@ -53,12 +61,19 @@ const SelectPerson = ({ maxAdults, maxChildren, maxInfant }) => {
         {/* 아동 인원 선택 */}
         <CntWrapper>
           아동
-          <CntBtn onClick={() => setChild(child - 1)} disabled={child <= 0}>
+          <CntBtn
+            onClick={() =>
+              dispatch(setMemberCount({ child: child - 1, adult, baby }))
+            }
+            disabled={child <= 0}
+          >
             -
           </CntBtn>
           {child}명
           <CntBtn
-            onClick={() => setChild(child + 1)}
+            onClick={() =>
+              dispatch(setMemberCount({ child: child + 1, adult, baby }))
+            }
             disabled={child >= maxChildren}
           >
             +
@@ -68,13 +83,20 @@ const SelectPerson = ({ maxAdults, maxChildren, maxInfant }) => {
         {/* 영아 인원 선택 */}
         <CntWrapper>
           영아
-          <CntBtn onClick={() => setInfant(infant - 1)} disabled={infant <= 0}>
+          <CntBtn
+            onClick={() =>
+              dispatch(setMemberCount({ baby: baby - 1, adult, child }))
+            }
+            disabled={baby <= 0}
+          >
             -
           </CntBtn>
-          {infant}명
+          {baby}명
           <CntBtn
-            onClick={() => setInfant(infant + 1)}
-            disabled={infant >= maxInfant}
+            onClick={() =>
+              dispatch(setMemberCount({ baby: baby + 1, adult, child }))
+            }
+            disabled={baby >= maxInfant}
           >
             +
           </CntBtn>
@@ -84,4 +106,4 @@ const SelectPerson = ({ maxAdults, maxChildren, maxInfant }) => {
   );
 };
 
-export default SelectPerson;
+export default SelectPeople;

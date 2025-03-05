@@ -57,7 +57,7 @@ const roomSlice = createSlice({
     },
     setMemberCount: (state, action) => {
       state.adult = action.payload.adult;
-      state.child = action.payload.kids;
+      state.child = action.payload.child;
       state.baby = action.payload.baby;
     },
     setRoomData: (state, action) => {
@@ -74,10 +74,10 @@ const roomSlice = createSlice({
     },
     setStayReservationInfo: (state, action) => {
       state.reservationNo = action.payload.no;
-      state.reservationDate = action.payload.reservationDate;
+      state.payDay = action.payload.reservationDate;
     },
     setRoomLoginMemberInfo: (state, action) => {
-      state.memberNo = action.payload.memberNo;
+      state.memberNo = Number(action.payload);
     },
     setResetFilter: (state) => {
       state.reservationDate = "";

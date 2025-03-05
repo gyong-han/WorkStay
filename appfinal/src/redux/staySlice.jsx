@@ -35,7 +35,6 @@ const staySlice = createSlice({
       state.introduction = action.payload.introduction;
       state.sns = action.payload.sns;
       state.thumbnail = action.payload.thumbnail;
-      state.address = action.payload.address;
     },
     selectCheckIn: (state, action) => {
       state.checkIn = action.payload.checkIn;
@@ -59,6 +58,12 @@ const staySlice = createSlice({
     setStayLoginMemberNo: (state, action) => {
       state.memberNo = Number(action.payload);
     },
+    setReset: (state, action) => {
+      state.address = "";
+      state.sort = "";
+      state.title = "";
+      state.reservationDate = "";
+    },
   },
 });
 
@@ -69,6 +74,8 @@ export const {
   setStayData,
   setAddress,
   setSort,
+  setStayLoginMemberNo,
+  setReset,
 } = staySlice.actions;
 
 export default staySlice.reducer;

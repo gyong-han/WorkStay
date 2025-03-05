@@ -7,7 +7,11 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Calendar from "../../components/FilterBar/Calendal";
 import { useDispatch, useSelector } from "react-redux";
-import { setStayData, setStayVo } from "../../redux/staySlice";
+import {
+  setStayData,
+  setStayLoginMemberNo,
+  setStayVo,
+} from "../../redux/staySlice";
 import {
   setRoomData,
   setRoomVo,
@@ -179,7 +183,7 @@ const PictureWrapper = styled.div`
 
 const FindStayDetail = () => {
   const [bookMark, setBookMark] = useState(false);
-  const [no, setNo] = useState({});
+  const [no, setNo] = useState();
   const [result, setResult] = useState([]);
   const { x } = useParams();
   const stayVo = useSelector((state) => state.stay);
@@ -188,19 +192,6 @@ const FindStayDetail = () => {
   const reservationDate = useSelector((state) => state.room.reservationDate);
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
-
-  useEffect(() => {
-    //토큰 정보 없으면 로그인 페이지로 보내기
-
-    if (token) {
-      try {
-        const decodedToken = jwtDecode(token);
-        setNo(decodedToken.no); // 상태 업데이트
-      } catch (error) {
-        console.error("토큰 디코딩 실패:", error);
-      }
-    }
-  }, []);
 
   const StayDetail = async () => {
     const stayDetail = await getStayDetail(x);
@@ -212,10 +203,30 @@ const FindStayDetail = () => {
     dispatch(setRoomData(roomListData));
   };
 
+  let y = "";
+
+  useEffect(() => {
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        // dispatch(setStayLoginMemberNo(decodedToken.no));
+        y = decodedToken.no;
+        setNo(y);
+      } catch (error) {
+        console.error("토큰 디코딩 실패:", error);
+      }
+    }
+  }, [bookMark]);
+
   const bookmarkData = async () => {
-    const dataObj = { memberNo: no, stayVo: x };
+    const dataObj = { memberNo: y, stayNo: x };
     const data = await getBookmark(dataObj);
-    setBookMark(data);
+
+    if (data == "true") {
+      setBookMark(true);
+    } else {
+      setBookMark(false);
+    }
   };
 
   const available = async () => {
@@ -233,9 +244,11 @@ const FindStayDetail = () => {
     if (bookMark == true) {
       setBookMark(false);
       delBookmark(dataObj);
+      alert("북마크 삭제됨...");
     } else {
       setBookMark(true);
       setBookmarkInsert(dataObj);
+      alert("북마크 등록됨!!!!");
     }
   };
 

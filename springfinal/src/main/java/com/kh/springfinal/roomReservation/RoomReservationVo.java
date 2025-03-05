@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class RoomReservationVo {
-private Long no;
+private String no;
 private Long memberNo;
 private Long paymentNo;
 private Long roomNo;
@@ -18,6 +18,6 @@ private String request;
 private String amount;
 private String reservationDate;
 
-private String useDay;
-private Long stayNo;
+private String useday;
+private String stayNo;
 }
