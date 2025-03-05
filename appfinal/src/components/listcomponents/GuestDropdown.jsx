@@ -67,8 +67,8 @@ const GuestDropdown = ({ setIsDropdownOpen }) => {
       <LogoutButton
         onClick={() => {
           localStorage.removeItem("token");
-          dispatch(logout());
           navi("/");
+          dispatch(logout());
         }}
       >
         로그아웃
