@@ -268,7 +268,7 @@ const GuestEdit = () => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ email: memberVo.email }),
+      body: JSON.stringify({ email: memberVo.email, no: memberVo.no }),
     });
 
     if (response.ok) {
