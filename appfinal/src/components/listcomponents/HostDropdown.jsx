@@ -68,8 +68,8 @@ const HostDropdown = ({ setIsDropdownOpen }) => {
       <LogoutButton
         onClick={() => {
           localStorage.removeItem("token");
+          navi("/login");
           dispatch(logout());
-          navi("/");
         }}
       >
         로그아웃
