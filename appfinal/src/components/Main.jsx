@@ -13,15 +13,16 @@ const Layout = styled.div`
 const TitleDiv = styled.div`
   display: flex;
   align-items: end;
-  font-size: 30px;
+  font-size: 25px;
   font-weight: 600;
 `;
 
 const SubTitleDiv = styled.div`
-  color: 202020;
+  color: #202020;
   display: flex;
   align-items: start;
-  font-size: 20px;
+  font-size: 18px;
+  margin-top: 5px;
 `;
 
 const Main = () => {
