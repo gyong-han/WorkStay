@@ -1,6 +1,8 @@
+import { jwtDecode } from "jwt-decode";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
+import Alert from "../../../components/Alert";
 
 const HomeDiv = styled.div`
   display: grid;
@@ -57,11 +59,38 @@ const MenuDiv = styled.div`
   }
 `;
 
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
+
 const AdminLayOut = ({ children }) => {
   const navigate = useNavigate();
   const [selectedMenu, setSelectedMenu] = useState("");
   const [url, setUrl] = useState("");
   const { pathname } = useLocation();
+  const token = localStorage.getItem("token");
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+
+  useEffect(() => {
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      const pageNick = decodedToken.pageNick;
+      if (pageNick != "ADMIN") {
+        setIsAlertOpen(true);
+      }
+    } else {
+      navigate("/login");
+    }
+  }, [token]);
 
   useEffect(() => {
     const lastPath = pathname.split("/").pop();
@@ -76,6 +105,11 @@ const AdminLayOut = ({ children }) => {
     setSelectedMenu(e.target.id);
     navigate(`/adminMenu/${e.target.id}`);
   }
+
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
+    navigate("/");
+  };
 
   return (
     <>
@@ -156,6 +190,18 @@ const AdminLayOut = ({ children }) => {
           </MenuAreaDiv>
           <div>{children}</div>
         </MainDiv>
+        {isAlertOpen && (
+          <Backdrop>
+            <Alert
+              title="권한 오류"
+              titleColor="red"
+              message="관리자만 접근 가능합니다."
+              buttonText="확인"
+              buttonColor="#049dd9"
+              onClose={handleAlertClose}
+            />
+          </Backdrop>
+        )}
       </HomeDiv>
     </>
   );
