@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import GuestDropdown from "./listcomponents/GuestDropdown";
 import HostDropdown from "./listcomponents/HostDropdown";
@@ -41,15 +41,12 @@ const StyledLink = styled(Link)`
   text-decoration: none;
   color: black;
   font-weight: 500;
-
-  &:active {
-    text-decoration: line-through;
-    text-decoration-color: lightblue;
-  }
+  text-decoration: ${(props) => (props.selected ? "line-through" : "")};
+  text-decoration-color: ${(props) => (props.selected ? "#049dd9" : "")};
 
   &:hover {
     text-decoration: line-through;
-    text-decoration-color: lightblue;
+    text-decoration-color: #049dd9;
   }
 `;
 
@@ -97,8 +94,22 @@ const Header = () => {
   // const pageNick = useSelector((state) => {
   //   return state.member.pageNick;
   // });
+
+  const [selectedMenu, setSelectedMenu] = useState("");
   const [pageNick, setPageNick] = useState("");
   const token = localStorage.getItem("token");
+  const [url, setUrl] = useState("");
+  const { pathname } = useLocation();
+  const lastPath = pathname.split("/").pop();
+
+  useEffect(() => {
+    setUrl(lastPath);
+  }, [lastPath]);
+
+  useEffect(() => {
+    setSelectedMenu(url);
+  }, [url]);
+
 
   useEffect(() => {
     if (token) {
@@ -122,6 +133,10 @@ const Header = () => {
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  function changeSelected(e) {
+    setSelectedMenu(e.target.id);
+  }
+
   return (
     <HeaderContainer>
       <Logo>
@@ -130,10 +145,38 @@ const Header = () => {
         </Link>
       </Logo>
       <NavMenu>
-        <StyledLink to="/findstay">FIND STAY</StyledLink>
-        <StyledLink to="/findspace">FIND SPACE</StyledLink>
-        <StyledLink to="/traffic">TRAFFIC</StyledLink>
-        <StyledLink to="/slog">S-LOG</StyledLink>
+        <StyledLink
+          to="/findstay"
+          id="findstay"
+          onClick={changeSelected}
+          selected={selectedMenu === "findstay"}
+        >
+          FIND STAY
+        </StyledLink>
+        <StyledLink
+          to="/findspace"
+          id="findspace"
+          onClick={changeSelected}
+          selected={selectedMenu === "findspace"}
+        >
+          FIND SPACE
+        </StyledLink>
+        <StyledLink
+          to="/traffic"
+          id="traffic"
+          onClick={changeSelected}
+          selected={selectedMenu === "traffic"}
+        >
+          TRAFFIC
+        </StyledLink>
+        <StyledLink
+          to="/slog"
+          id="slog"
+          onClick={changeSelected}
+          selected={selectedMenu === "slog"}
+        >
+          S-LOG
+        </StyledLink>
       </NavMenu>
       <UserSection>
         {pageNick === "LOGIN" ? (
