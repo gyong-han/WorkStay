@@ -126,7 +126,7 @@ const Header = () => {
     <HeaderContainer>
       <Logo>
         <Link to="/" style={{ textDecoration: "none" }}>
-          <img src="./img/logo.png" />
+          <img src="https://sgh-final-server.s3.ap-northeast-2.amazonaws.com/KakaoTalk_20250305_120529785.png" />
         </Link>
       </Logo>
       <NavMenu>
