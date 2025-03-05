@@ -17,7 +17,19 @@ import { getBookmarkInfo } from '../../components/service/spaceServcie';
 import ShareModal from '../../components/modal/ShareModal';
 import { RiInstagramLine } from "react-icons/ri";
 import { SiNaver } from "react-icons/si";
+import Alert from '../../components/Alert';
 
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
 const Layout =styled.div`
 width: 100%;
 height: 100%;
@@ -232,6 +244,16 @@ const FindSpaceDetail = () => {
   const [packageNo,setPackageNo] = useState("");
   const [modalStatus, setModalStatus] = useState('');
   const token = localStorage.getItem("token");
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [isAlertOpen2, setIsAlertOpen2] = useState(false);
+
+//알림창
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
+  };
+  const handleAlertClose2 = () => {
+    setIsAlertOpen2(false);
+  };
 
     //Gallery Modal 관련
     const openModal = () => {
@@ -320,8 +342,9 @@ const FindSpaceDetail = () => {
       })
       .then((resp)=>resp.text())
       .then((data)=>{
+        setIsAlertOpen2(true);
         // console.log("삭제된데이터수:",data);
-        alert("북마크가 해지되었습니다.")
+
       })
     }else{
       setBookMark(true);
@@ -336,7 +359,7 @@ const FindSpaceDetail = () => {
       .then((resp)=>resp.text())
       .then((data)=>{
         // console.log(data);
-        alert("마이페이지 찜목록에 저장되었습니다.")
+        setIsAlertOpen(true);
       })
     }
     
@@ -452,6 +475,30 @@ const FindSpaceDetail = () => {
         <Map address={spaceVo.address} name={spaceVo.name}>space</Map></div>
       <div></div>
       <Infomation morning={morningPrice} night={nigthPrice} standard={spaceVo.standardGuest} max={spaceVo.maxGuest}></Infomation>
+      {isAlertOpen && (
+        <Backdrop>
+          <Alert
+            title="북마크"
+            titleColor="#049dd9"
+            message="북마크가 등록되었습니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose}
+          />
+        </Backdrop>
+      )}
+      {isAlertOpen2 && (
+        <Backdrop>
+          <Alert
+            title="북마크"
+            titleColor="#049dd9"
+            message="북마크가 해지되었습니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose2}
+          />
+        </Backdrop>
+      )}
     </Layout>
     </>
   );
