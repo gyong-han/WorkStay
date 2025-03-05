@@ -21,7 +21,7 @@ const Slide = styled.div`
 const SlideImage = styled.img`
   width: ${(props) => props.w || "400"}px;
   height: ${(props) => props.h || "230"}px;
-  object-fit: cover;
+  object-fit: fill;
   
   
 `;
