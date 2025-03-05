@@ -126,6 +126,9 @@ const InconTitleDiv = styled.div`
   justify-content: center;
   font-size: 35px;
 }
+&>div:nth-child(3){
+  color: #049dd9;
+}
 & > div:nth-child(4), 
 & > div:nth-child(5),
 & > div:nth-child(6){

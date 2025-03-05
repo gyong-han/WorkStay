@@ -70,6 +70,7 @@ const ReservationDiv = styled.div`
 `;
 const BookMarkDiv = styled.div`
   margin-top: 5px;
+  color: #049dd9;
   width: 30px;
   height: 30px;
   &>svg{
