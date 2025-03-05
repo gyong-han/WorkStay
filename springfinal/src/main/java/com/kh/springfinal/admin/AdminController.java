@@ -206,14 +206,16 @@ public class AdminController {
     @PostMapping("approveEditRoom")
     public int approveEditRoom(@RequestBody String roomNum){
         String roomNo = roomNum.replace("\"","");
-        return service.approveEditRoom(roomNo);
+        int result = service.approveEditRoom(roomNo);
+        return result;
     }
 
     //독채 수정 반려
     @PostMapping("companionEditRoom")
     public int companionEditRoom(@RequestBody String roomNum){
         String roomNo = roomNum.replace("\"","");
-        return service.companionEditRoom(roomNo);
+        int result = service.companionEditRoom(roomNo);
+        return result;
     }
 
     //공간 삭제 목록조회

@@ -685,4 +685,20 @@ public interface AdminMapper {
             AND THUMBNAIL = 'N'
             """)
     void updateEditSpaceAttach(String spaceNo);
+
+    @Select("""
+            SELECT COUNT(NO)
+            FROM EDIT_ROOM_ATTACHMENT
+            WHERE ROOM_NO = #{roomNo}
+            AND STATUS_NO = '1'            
+            """)
+    int getEditRoomAttachList(String roomNo);
+
+    @Select("""
+            SELECT COUNT(NO)
+            FROM EDIT_SPACE_ATTACHMENT
+            WHERE SPACE_NO = #{spaceNo}
+            AND STATUS_NO = '1'         
+            """)
+    int getEditSpaceAttachList(String spaceNo);
 }
