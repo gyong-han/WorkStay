@@ -399,4 +399,17 @@ public interface GuestMapper {
             """)
     List<SlogListVo> slogList(String memberNo);
 
+    @Update("""
+            UPDATE SPACE SET
+                STATUS_NO = '15'
+                WHERE HOST_NO = #{no}
+            """)
+    int deleteSpace(GuestVo vo);
+
+    @Update("""
+            UPDATE STAY SET
+            STATUS_NO = '15'
+            WHERE HOST_NO = #{no}
+            """)
+    void deleteStay(GuestVo vo);
 }//class

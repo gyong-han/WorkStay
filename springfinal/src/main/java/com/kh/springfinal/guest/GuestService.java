@@ -150,7 +150,10 @@ public class GuestService {
     }
 
     public GuestVo memberQuit(GuestVo vo) {
+        System.out.println("vo = " + vo);
         int result = mapper.memberQuit(vo);
+        mapper.deleteSpace(vo);
+        mapper.deleteStay(vo);
         return vo;
     }
 
