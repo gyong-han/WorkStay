@@ -4,6 +4,7 @@ import Btn from "../../components/Btn";
 import { useDispatch, useSelector } from "react-redux";
 import { setReservationInfo } from "../../redux/spaceSlice";
 import { getInfomation, getMemberInfo, inputReservation } from "../../components/service/spaceServcie";
+import { useNavigate } from "react-router-dom";
 
 const Wrapper = styled.div`
   display: grid;
@@ -138,6 +139,13 @@ const SpaceReservation = () => {
 
   const cleaned = memberInfo.phone?.replace(/\D/g, '') || ''; 
   const formattedPhoneNumber = cleaned.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+  const navi = useNavigate();
+  const clickHandle = ()=>{
+    navi(`/hostMenu/spaceReserv/spacedetail?reno=${spaceVo.reservationNo}`);
+  }
+  const clickHandler = ()=>{
+    navi(`/hostMenu/spaceReserv/spacedetail/spacecancle?no=${fdData.memberNo}&reno=${spaceVo.reservationNo}`);
+  }
 
 
   return (
@@ -171,9 +179,9 @@ const SpaceReservation = () => {
         </UserWrapper>
         <LineDiv />
         <ButtonWrapper>
-          <Btn b="none">예약상세보기</Btn>
+          <Btn b="none" f={clickHandle}>예약상세보기</Btn>
           <div></div>
-          <Btn bg="#fafafa" c="#202020">
+          <Btn bg="#fafafa" c="#202020" f={clickHandler}>
             예약 취소
           </Btn>
         </ButtonWrapper>
