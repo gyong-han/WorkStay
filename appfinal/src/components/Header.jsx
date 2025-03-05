@@ -109,6 +109,7 @@ const Header = () => {
 
   useEffect(() => {
     setSelectedMenu(url);
+    setIsDropdownOpen(false);
   }, [url]);
 
   useEffect(() => {
