@@ -77,9 +77,11 @@ const SubTitle = styled.div`
 const Img = styled.div`
   width: 400px;
   height: 250px;
-  background-image: url(https://images.stayfolio.com/system/pictures/images/000/144/470/original/017d972b55f43f2bfd9cb3a91ec9641020e2f6f3.jpg?1663912019);
+  background-image: url(${(props)=>props.urls?props.urls:"https://images.stayfolio.com/system/pictures/images/000/144/470/original/017d972b55f43f2bfd9cb3a91ec9641020e2f6f3.jpg?1663912019"});
   background-size: cover;
-`;
+  background-position: center;
+  background-repeat: no-repeat;
+  `;
 
 const Info = styled.div`
   font-size: 1.2rem;
@@ -103,6 +105,7 @@ const SpaceReservation = () => {
 
   const fd1 = localStorage.getItem("fd");
   const fdData = JSON.parse(fd1);  
+  
 
   const fd = new FormData();
   const [memberInfo,setMemberInfo] = useState({});
@@ -151,7 +154,7 @@ const SpaceReservation = () => {
             <Cost>₩{priceWon}</Cost>
             <Info>예약 확정({spaceVo.payDay})</Info>
           </InfoWrapper>
-          <Img></Img>
+          <Img urls={fdData.filePath}></Img>
         </ReservationWrapper>
         <LineDiv />
         <UserInfoWrapper>
