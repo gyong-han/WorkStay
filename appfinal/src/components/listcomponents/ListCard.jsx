@@ -5,6 +5,7 @@ import { IoBookmarkOutline } from "react-icons/io5";
 import { IoBookmark } from "react-icons/io5";
 import { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
+import Alert from '../Alert';
 
 const Layout = styled.div`
   width: 616px;
@@ -70,17 +71,29 @@ const ReservationDiv = styled.div`
 `;
 const BookMarkDiv = styled.div`
   margin-top: 5px;
-  color: #049dd9;
   width: 30px;
   height: 30px;
+  color:#049dd9;
   &>svg{
     width: 30px;
     height: 30px;
   }
 `;
 
-
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
 const ListCard = (props) => {
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [isAlertOpen2, setIsAlertOpen2] = useState(false);
   const [bookMark,setBookMark] = useState(false);
   const navigate = useNavigate();
 
@@ -89,6 +102,14 @@ const ListCard = (props) => {
   if(token){
     userData= jwtDecode(token);  
   }
+
+  
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
+  };
+  const handleAlertClose2 = () => {
+    setIsAlertOpen2(false);
+  };
   
   
   const dataObjByGet = {
@@ -140,10 +161,10 @@ const ListCard = (props) => {
       })
       .then((resp)=>resp.text())
       .then((data)=>{
+        setIsAlertOpen2(true);
         // console.log("삭제된데이터수:",data);
       })
       
-      alert("북마크가 해지되었습니다.")
     }else{
       setBookMark(true);
       fetch(("http://localhost:8080/space/bookmark"),{
@@ -156,10 +177,10 @@ const ListCard = (props) => {
       })
       .then((resp)=>resp.text())
       .then((data)=>{
+        setIsAlertOpen(true);
         // console.log(data);
     
       });
-      alert("마이페이지 찜목록에 저장되었습니다.");
     }
   }
 
@@ -192,6 +213,30 @@ const ListCard = (props) => {
       main={false}
       >
       </PictureSlide>
+      {isAlertOpen && (
+        <Backdrop>
+          <Alert
+            title="북마크"
+            titleColor="#049dd9"
+            message="북마크가 등록되었습니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose}
+          />
+        </Backdrop>
+      )}
+      {isAlertOpen2 && (
+        <Backdrop>
+          <Alert
+            title="북마크"
+            titleColor="#049dd9"
+            message="북마크가 해지되었습니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose2}
+          />
+        </Backdrop>
+      )}
     </Layout>
   );
 };
