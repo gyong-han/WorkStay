@@ -9,7 +9,7 @@ import { setStayReservationDate } from "../../redux/roomSlice";
 
 const Calendar = ({ children, type, w, position }) => {
   const [dateRange, setLocalDateRange] = useState([null, null]);
-  const [startDate, endDate] = dateRange;
+  const [checkIn, checkOut] = dateRange;
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -17,7 +17,7 @@ const Calendar = ({ children, type, w, position }) => {
       const formattedDates = dateRange.map((date) =>
         format(date, "yyyy-MM-dd")
       );
-      console.log(formattedDates);
+      // console.log(formattedDates);
       dispatch(setStayReservationDate(formattedDates));
     }
   }, [dateRange]);
@@ -26,9 +26,9 @@ const Calendar = ({ children, type, w, position }) => {
     <DatePicker
       locale={ko}
       selectsRange={true}
-      startDate={startDate}
+      startDate={checkIn}
       minDate={new Date()}
-      endDate={endDate}
+      endDate={checkOut}
       onChange={(update) => {
         setLocalDateRange(update);
       }}

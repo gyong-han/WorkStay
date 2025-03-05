@@ -30,11 +30,10 @@ import {
 } from "../../components/service/roomService";
 import Notification from "./stayComponent/noti/Notification";
 import RoomSlider from "../room/roomComponent/RoomSlider";
-import BookmarkIcon from "../../components/bookmark/BookmarkIcon";
-import { FaAngleDown } from "react-icons/fa6";
 import { IoBookmarkOutline } from "react-icons/io5";
 import { IoBookmark } from "react-icons/io5";
 import { jwtDecode } from "jwt-decode";
+import Alert from "../../components/Alert";
 
 const Layout = styled.div`
   width: 100%;
@@ -181,9 +180,24 @@ const PictureWrapper = styled.div`
   place-items: center center;
 `;
 
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
+
 const FindStayDetail = () => {
   const [bookMark, setBookMark] = useState(false);
   const [no, setNo] = useState();
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [isAlertOpen2, setIsAlertOpen2] = useState(false);
   const [result, setResult] = useState([]);
   const { x } = useParams();
   const stayVo = useSelector((state) => state.stay);
@@ -239,17 +253,26 @@ const FindStayDetail = () => {
       memberNo: no,
       stayNo: stayVo.no,
     };
-    console.log("dataObj :: ", dataObj);
 
     if (bookMark == true) {
       setBookMark(false);
       delBookmark(dataObj);
-      alert("북마크 삭제됨...");
+      setIsAlertOpen(true);
     } else {
       setBookMark(true);
       setBookmarkInsert(dataObj);
-      alert("북마크 등록됨!!!!");
+      setIsAlertOpen2(true);
     }
+  };
+
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
+    navi(`/findstay/detail/${x}`);
+  };
+
+  const handleAlertClose2 = () => {
+    setIsAlertOpen2(false);
+    navi(`/findstay/detail/${x}`);
   };
 
   useEffect(
@@ -270,7 +293,7 @@ const FindStayDetail = () => {
       reservationDate[0] !== selectedDate[0] ||
       reservationDate[1] !== selectedDate[1]
     ) {
-      console.log("📌 변경된 날짜:", selectedDate);
+      // console.log("📌 변경된 날짜:", selectedDate);
       dispatch(setStayReservationDate(selectedDate)); // Redux 저장
     }
   };
@@ -304,7 +327,11 @@ const FindStayDetail = () => {
               <RxShare2 />
             </div>
             <div onClick={bookmarkInsert}>
-              {!bookMark ? <IoBookmarkOutline /> : <IoBookmark />}
+              {!bookMark ? (
+                <IoBookmarkOutline color="#049dd9" />
+              ) : (
+                <IoBookmark color="#049dd9" />
+              )}
             </div>
             <div>메세지</div>
             <div>공유하기</div>
@@ -364,6 +391,30 @@ const FindStayDetail = () => {
         </MapDiv>
         <div></div>
         <Notification x={x} rooms={roomVoList} stay={stayVo}></Notification>
+        {isAlertOpen && (
+          <Backdrop>
+            <Alert
+              title="북마크"
+              titleColor="#049dd9"
+              message="북마크가 해제되었습니다."
+              buttonText="확인"
+              buttonColor="#049dd9"
+              onClose={handleAlertClose}
+            />
+          </Backdrop>
+        )}
+        {isAlertOpen2 && (
+          <Backdrop>
+            <Alert
+              title="북마크"
+              titleColor="#049dd9"
+              message="북마크가 등록되었습니다."
+              buttonText="확인"
+              buttonColor="#049dd9"
+              onClose={handleAlertClose2}
+            />
+          </Backdrop>
+        )}
       </Layout>
     </>
   );

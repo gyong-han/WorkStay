@@ -12,6 +12,7 @@ import {
 } from "../../components/service/stayService";
 import {
   setReset,
+  setSearch,
   setSort,
   setStayData,
   setStayLoginMemberNo,
@@ -106,15 +107,6 @@ const FindStayList = () => {
     localStorage.removeItem("roomdata");
   }
 
-  const handleChange = (e) => {
-    setFormData((prev) => {
-      return {
-        ...prev,
-        [e.target.name]: e.target.value,
-      };
-    });
-  };
-
   const queryParams = new URLSearchParams({
     datedata: stayVo.reservationDate || "", // undefined 방지
     people: (roomVo.adult || 0) + (roomVo.child || 0) + (roomVo.baby || 0), // undefined 방지
@@ -133,7 +125,7 @@ const FindStayList = () => {
     // );
     // console.log("queryParams :: ", queryParams);
     // console.log("sort 값 확인: ", stayVo.sort);
-    console.log("꺼내온 데이터 ::", listData);
+    // console.log("꺼내온 데이터 ::", listData);
     setStayVoList(listData);
     dispatch(setStayData(listData));
 
@@ -159,17 +151,13 @@ const FindStayList = () => {
     setImgPath(arr);
   };
 
+  const handleChange = (e) => {
+    setFormData(e.target.value);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // fetch("localhost:8080/findstay", {
-    //   method: "GET",
-    //   headers: { "content-type": "application/json" },
-    //   body: JSON.stringify(formData),
-    // })
-    //   .then((resp) => resp.text())
-    //   .then((data) => {
-    //     // console.log("data : ", data);
-    //   });
+    dispatch(setSearch(formData));
   };
 
   useEffect(() => {

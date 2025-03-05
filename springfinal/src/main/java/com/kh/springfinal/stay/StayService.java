@@ -27,15 +27,15 @@ public class StayService {
         return stayAttachment;
     }
 
-    public List<StayVo> sortByList(String sort, String people, String area, String date) {
+    public List<StayVo> sortByList(String sort, String people, String area, String date, String title) {
         if (sort.equals("lowPrice")) {
-            return stayMapper.findAllByOrderByPriceAsc(people, area, date);
+            return stayMapper.findAllByOrderByPriceAsc(people, area, date, title);
         } else if (sort.equals("highPrice")) {
-            return stayMapper.findAllByOrderByPriceDesc(people, area, date);
+            return stayMapper.findAllByOrderByPriceDesc(people, area, date, title);
         } else if (sort.equals("popular")) {
-            return stayMapper.findAllByOrderByBookmarksDesc(people, area, date);
+            return stayMapper.findAllByOrderByBookmarksDesc(people, area, date, title);
         } else {
-            return stayMapper.findAllByOrderByCreatedAtDesc(people, area, date);
+            return stayMapper.findAllByOrderByCreatedAtDesc(people, area, date, title);
         }
     }
 
