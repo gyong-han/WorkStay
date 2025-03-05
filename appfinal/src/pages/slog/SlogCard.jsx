@@ -9,11 +9,42 @@ const Container = styled.div`
   flex-direction: column;
   color: #333;
   text-align: start;
+  font-family: "Pretendard-Regular";
 
   & > h4 {
     color: gray;
     font-weight: 300;
     text-align: start;
+  }
+`;
+
+const CardDetail = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+
+  .title {
+    font-size: 20px;
+    color: #202020;
+    font-weight: 300;
+  }
+
+  .name {
+    font-size: 18px;
+    color: #202020;
+    margin-top: 20px;
+    font-weight: 200;
+  }
+
+  .tagline {
+    font-size: 15px;
+    color: #202020;
+  }
+
+  .nick {
+    font-size: 15px;
+    color: #202020;
   }
 `;
 
@@ -28,10 +59,14 @@ const SlogCard = ({ vo }) => {
         src={firstImage}
         // alt={vo.title}
       />
-      <h2>{vo.title}</h2>
-      <h3>{vo.name}</h3>
-      <h4>{vo.tagline}</h4>
-      <h5>by.{vo.nick}</h5>
+      <CardDetail>
+        <div className="title">{vo.title}</div>
+        <div className="name">
+          {vo.name} / {vo.address}
+        </div>
+        <div className="tagline">{vo.tagline}</div>
+        <div className="nick">by.{vo.nick}</div>
+      </CardDetail>
     </Container>
   );
 };

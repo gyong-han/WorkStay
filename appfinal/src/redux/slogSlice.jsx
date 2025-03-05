@@ -18,6 +18,9 @@ const slogSlice = createSlice({
       nick: "",
       name: "",
       enrollDate: "",
+      stayName: "",
+      sns: "",
+      stayNo: "",
     },
   },
   reducers: {
@@ -25,8 +28,6 @@ const slogSlice = createSlice({
       state.isLoading = action.payload;
     },
     addSlogVoList: (state, action) => {
-      console.log("@@@@@@@@@ action ::: ", action.payload);
-
       state.voList = [...state.voList, ...action.payload];
     },
     plusPno: (state) => {

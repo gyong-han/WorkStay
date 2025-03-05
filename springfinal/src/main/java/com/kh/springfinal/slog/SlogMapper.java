@@ -50,37 +50,42 @@ public interface SlogMapper {
 
     @Select("""
             SELECT
-                        TITLE
-                        ,CONTENT
-                        ,TAGLINE
-                        ,FILE_URL
-                        ,TITLE_FILE_URL
-                        ,ORIGINAL_NAME
-                        ,MEMBER_NO
-                        ,M.NICK
-                        ,S.ENROLL_DATE
-                        FROM SLOG S
-                        JOIN MEMBER M ON(S.MEMBER_NO = M.NO)
-                        WHERE S.NO = #{no}
+                TITLE
+                ,CONTENT
+                ,TAGLINE
+                ,FILE_URL
+                ,TITLE_FILE_URL
+                ,ORIGINAL_NAME
+                ,MEMBER_NO
+                ,M.NICK
+                ,S.ENROLL_DATE
+                FROM SLOG S
+                JOIN MEMBER M ON(S.MEMBER_NO = M.NO)
+                WHERE S.NO = #{no}
             """)
     SlogVo findByNo(String no);
 
     @Select("""
             SELECT
                 S.NO
-                ,TITLE
-                ,CONTENT
-                ,TAGLINE
-                ,FILE_URL
-                ,TITLE_FILE_URL
-                ,ORIGINAL_NAME
+                ,ST.NO AS STAY_NO
+                ,S.TITLE
+                ,S.CONTENT
+                ,S.TAGLINE
+                ,S.FILE_URL
+                ,S.TITLE_FILE_URL
+                ,S.ORIGINAL_NAME
                 ,S.MEMBER_NO
                 ,M.NICK
                 ,R.NAME
+                ,ST.NAME AS STAY_NAME
+                ,ST.PHONE
+                ,ST.ADDRESS
                 FROM SLOG S
                 JOIN MEMBER M ON(S.MEMBER_NO = M.NO)
                 JOIN ROOM_RESERVATION RS ON(S.RESERVATION_NO = RS.NO)
                 JOIN ROOM R ON (RS.ROOM_NO = R.NO)
+                JOIN STAY ST ON (R.STAY_NO = ST.NO)
                 WHERE S.DEL_YN = 'N'
                 ORDER BY S.NO DESC
             OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
@@ -129,4 +134,15 @@ public interface SlogMapper {
             WHERE NO = #{no}
             """)
     SlogVo shareKakao(String no);
+
+
+    @Select("""
+            SELECT
+                NAME
+                ,PHONE
+                ,ADDRESS
+                ,SNS
+                FROM STAY WHERE NO = #{no}
+            """)
+    SlogVo getMapInfo(String no);
 }
