@@ -27,11 +27,11 @@ const CardDetail = styled.div`
   .title {
     font-size: 20px;
     color: #202020;
-    font-weight: 300;
+    font-weight: 500;
   }
 
   .name {
-    font-size: 18px;
+    font-size: 15px;
     color: #202020;
     margin-top: 20px;
     font-weight: 200;
@@ -39,12 +39,13 @@ const CardDetail = styled.div`
 
   .tagline {
     font-size: 15px;
-    color: #202020;
+    color: gray;
   }
 
   .nick {
+    margin-top: 50px;
     font-size: 15px;
-    color: #202020;
+    color: gray;
   }
 `;
 
@@ -60,12 +61,12 @@ const SlogCard = ({ vo }) => {
         // alt={vo.title}
       />
       <CardDetail>
-        <div className="title">{vo.title}</div>
         <div className="name">
           {vo.name} / {vo.address}
         </div>
+        <div className="title">{vo.title}</div>
         <div className="tagline">{vo.tagline}</div>
-        <div className="nick">by.{vo.nick}</div>
+        <div className="nick">by. {vo.nick}</div>
       </CardDetail>
     </Container>
   );

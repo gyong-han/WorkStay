@@ -61,7 +61,8 @@ const Content = styled.div`
   flex-direction: column;
   height: auto;
   margin-top: 100px;
-  max-width: 500px;
+  max-width: 600px;
+  line-height: 200%;
 
   .img {
     min-width: 500px;
