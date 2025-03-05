@@ -59,9 +59,9 @@ const TaglineDiv = styled.div`
 const BookmarkCardlist = ({ data, type, onToggle, f }) => {
   return (
     <>
-      <MainCardDiv onClick={f}>
+      <MainCardDiv>
         <ImgDIv>
-          <Img src={data.filePath} alt="thumbnail" />
+          <Img src={data.filePath} alt="thumbnail" onClick={f} />
         </ImgDIv>
         <TopDiv>
           <TitleDiv>{data.name}</TitleDiv>
