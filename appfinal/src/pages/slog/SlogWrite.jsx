@@ -20,7 +20,7 @@ import { addSlogVoList } from "../../redux/slogSlice";
 
 const Container = styled.div`
   width: 100%;
-  height: 100vh;
+  /* height: 100vh; */
   display: flex;
   flex-direction: column;
 `;
@@ -155,6 +155,7 @@ const Main = styled.div`
   grid-template-columns: 2fr 5fr 2fr;
   grid-template-rows: 1fr;
   height: 100vh;
+  position: relative;
 `;
 
 const Title = styled.div`
@@ -212,17 +213,17 @@ const Title = styled.div`
 const Middle = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
 `;
 
 const LeftBlank = styled.div`
   background-color: #eeeeee;
-  height: 100vh;
+  height: 100%;
 `;
 
 const RightBlank = styled.div`
   background-color: #eeeeee;
-  height: 100vh;
+  height: 100%;
 `;
 
 const Tagline = styled.div`
@@ -249,7 +250,7 @@ const Tagline = styled.div`
 const Editor = styled.div`
   width: 80%;
   margin: 30px auto 0;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   /* text-align: start; */
@@ -260,7 +261,7 @@ const Editor = styled.div`
     border: 1px solid #ccc;
     outline: none;
     border: none;
-    white-space: pre-wrap;
+    /* white-space: pre-wrap; */
     word-wrap: break-word;
   }
 
@@ -334,6 +335,7 @@ const SlogWrite = () => {
           const imgElement = document.createElement("img");
           imgElement.src = imgUrl;
           imgElement.style.maxWidth = "100%";
+          imgElement.style.width = "600px";
           imgElement.style.margin = "10px 0";
           contentDiv.appendChild(imgElement);
         });
