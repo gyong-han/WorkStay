@@ -1,5 +1,6 @@
 package com.kh.springfinal.stay;
 
+import com.kh.springfinal.room.RoomAttachmentVo;
 import com.kh.springfinal.roomReservation.RoomReservationVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,8 +20,11 @@ public class StayService {
 //        return voList;
 //    }
 
-    public List<StayAttachmentVo> stayGetAttachmentList() {
-        return stayMapper.stayGetAttachmentList();
+    public List<RoomAttachmentVo> stayGetAttachmentList() {
+
+        List<RoomAttachmentVo> stayAttachment = stayMapper.stayGetAttachmentList();
+
+        return stayAttachment;
     }
 
     public List<StayVo> sortByList(String sort, String people, String area, String date) {
@@ -37,11 +41,11 @@ public class StayService {
 
     public StayVo getFindStayByNo(Long no) {
         StayVo stayVo = stayMapper.getFindStayByNo(no);
-        List<StayAttachmentVo> stayAttachments = stayMapper.getAttachmentByNo(no);
+        List<RoomAttachmentVo> stayAttachments = stayMapper.getAttachmentByNo(no);
 
         // 모든 첨부파일의 파일 경로를 배열로 만들어줌
         String[] attachmentPaths = stayAttachments.stream()
-                .map(StayAttachmentVo::getFilePath)
+                .map(RoomAttachmentVo::getFilePath)
                 .toArray(String[]::new);
 
         // 배열에 담겨있는 대표이미지 하나 선정
@@ -53,7 +57,6 @@ public class StayService {
 
         // Vo에 담아주기
         stayVo.setAttachmentFilePaths(filePaths);
-
         return stayVo;
         }
 

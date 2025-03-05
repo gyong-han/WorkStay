@@ -55,8 +55,8 @@ const RoomDetailCard = (props) => {
         </div>
         <div>공간면적 90㎡</div>
         <div>{props.queen ? <div>퀸 침대 {props.queen}개</div> : null}</div>
-        <div>{props.double ? <div>퀸 침대 {props.double}개</div> : null}</div>
-        <div>{props.single ? <div>퀸 침대 {props.single}개</div> : null}</div>
+        <div>{props.double ? <div>더블 침대 {props.double}개</div> : null}</div>
+        <div>{props.single ? <div>싱글 침대 {props.single}개</div> : null}</div>
       </TextAreaDiv>
       <div>
         <PictureSlide w={960} h={540} imgPaths={props.imgPaths}></PictureSlide>

@@ -5,8 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getMemberNo,
   getReservationInfo,
+  roomReservation,
 } from "../../components/service/roomService";
 import { setStayReservationInfo } from "../../redux/roomSlice";
+import { jwtDecode } from "jwt-decode";
 
 const Wrapper = styled.div`
   display: grid;
@@ -108,6 +110,7 @@ const Reservations = () => {
   const rd1 = localStorage.getItem("roomdata");
   const rData = JSON.parse(rd1);
   const dispatch = useDispatch();
+  const token = localStorage.getItem("token");
 
   const rd = new FormData();
   const [memberInfo, setMemberInfo] = useState({});
@@ -116,11 +119,11 @@ const Reservations = () => {
   rd.append("roomName", rData.roomName);
   rd.append("stayNo", rData.stayNo);
   rd.append("stayName", rData.stayName);
+  rd.append("memberNo", rData.memberNo);
   rd.append("adult", rData.adult);
   rd.append("child", rData.child);
   rd.append("baby", rData.baby);
   rd.append("request", rData.request);
-  rd.append("useDay", rData.useDay);
   rd.append("checkIn", rData.checkIn);
   rd.append("checkOut", rData.checkOut);
   rd.append("filePath", rData.filePath);
@@ -130,23 +133,32 @@ const Reservations = () => {
   const roomVo = useSelector((state) => state.room);
 
   const RoomReservation = async () => {
-    const insertData = await RoomReservation(rData);
+    try {
+      const insertData = await roomReservation(rData);
+      console.log("rd :: ", rd);
+      const getInfo = await getReservationInfo(rd);
+      console.log("GET INFO :: ", getInfo);
 
-    const getInfo = await getReservationInfo(rd);
-    dispatch(setStayReservationInfo(getInfo));
+      dispatch(setStayReservationInfo(getInfo));
 
-    const getMemberInformation = await getMemberNo(rData.memberNo);
-    setMemberInfo(getMemberInformation);
+      const getMemberInformation = await getMemberNo(rData.memberNo);
+
+      setMemberInfo(getMemberInformation);
+    } catch (error) {
+      console.error("Error fetching member information: ", error);
+    }
   };
+
   useEffect(() => {
     RoomReservation();
   }, []);
 
-  const cleaned = memberInfo.phone.replace(/\D/g, "");
-  const formattedPhoneNumber = cleaned.replace(
-    /(\d{3})(\d{4})(\d{4})/,
-    "$1-$2-$3"
-  );
+  console.log();
+
+  const cleaned = memberInfo.phone ? memberInfo.phone.replace(/\D/g, "") : "";
+  const formattedPhoneNumber = cleaned
+    ? cleaned.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3")
+    : "번호 없음";
 
   return (
     <>
@@ -157,13 +169,15 @@ const Reservations = () => {
         <ReservationWrapper>
           <InfoWrapper>
             <Title>{rData.stayName}</Title>
-            <Info>{rData.useDay}</Info>
             <Info>
-              {rData.roomName} / 성인 {rData.adult}명 / 아동 {rData.child}명 /
-              유아 {rData.baby}명
+              {rData.checkIn}~{rData.checkOut}
+            </Info>
+            <Info>
+              {rData.name} / 성인 {rData.adult}명 / 아동 {rData.child}명 / 유아{" "}
+              {rData.baby}명
             </Info>
             <Cost>₩{priceWon}</Cost>
-            <Info>예약 확정({rData.payDay})</Info>
+            <Info>예약 확정({roomVo.payDay})</Info>
           </InfoWrapper>
           <Img bgImage={rData.filePath}></Img>
         </ReservationWrapper>

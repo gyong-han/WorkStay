@@ -7,9 +7,9 @@ import Accordion from "./stayComponent/Accordion";
 import Calendar from "../../components/FilterBar/Calendal";
 import SelectPerson from "./stayComponent/SelectPerson";
 import { useDispatch, useSelector } from "react-redux";
-import { eachDayOfInterval, format } from "date-fns";
-import { setStayReservationDate } from "../../redux/roomSlice";
-import PaymentBtn from "../../components/payment/PaymentBtn";
+import { jwtDecode } from "jwt-decode";
+import { getMemberNo } from "../../components/service/roomService";
+import PaymentButton from "../../components/payment/PaymentButton";
 
 const Layout = styled.div`
   display: grid;
@@ -235,11 +235,31 @@ const Ptag = styled.p`
 `;
 
 const BookingStay = () => {
+  const token = localStorage.getItem("token");
+  const decodedToken = jwtDecode(token);
+
+  const [loginMember, setLoginMember] = useState({});
+  const [phoneNumber, setPhoneNumber] = useState();
+
+  useEffect(() => {
+    const memberInfomation = async () => {
+      const memberObj = await getMemberNo(decodedToken.no);
+      setLoginMember(memberObj);
+      const cleaned = memberObj.phone?.replace(/\D/g, "") || "";
+      const formattedPhoneNumber = cleaned.replace(
+        /(\d{3})(\d{4})(\d{4})/,
+        "$1-$2-$3"
+      );
+      setPhoneNumber(formattedPhoneNumber);
+    };
+    memberInfomation();
+  }, []);
+
   const termsData = [
     {
       id: 1,
       text: "(필수) 개인정보 제 3자 제공 동의",
-      details: (hotelName) => (
+      details: () => (
         <div>
           <p>
             (주)워크스테이는 예약 시스템 제공 과정에서 예약자 동의 하에 서비스
@@ -249,7 +269,7 @@ const BookingStay = () => {
             제한됩니다.
           </p>
           <ul>
-            <li>제공받는자 : {hotelName}</li>
+            <li>제공받는자 : {roomVo.stayName}</li>
             <li>
               제공 목적: 제휴 판매자(숙소)와 이용자(회원)의 예약에 대한 서비스
               제공, 계약의 이행(예약확인, 이용자 확인), 민원 처리 등 소비자 분쟁
@@ -375,7 +395,7 @@ const BookingStay = () => {
 
   const rd = {
     roomNo: roomVo.no,
-    memberNo: roomVo.memberNo,
+    memberNo: loginMember.no,
     stayNo: roomVo.stayNo,
     stayName: roomVo.stayName,
     paymentNo: 1,
@@ -442,17 +462,17 @@ const BookingStay = () => {
         <ReservationLine />
         <ReservationDiv>
           <InfoText>이름</InfoText>
-          <Info>dd</Info>
+          <Info>{loginMember.name}</Info>
         </ReservationDiv>
         <ReservationLine />
         <ReservationDiv>
           <InfoText>휴대전화</InfoText>
-          <Info>010-1111-1111</Info>
+          <Info>{phoneNumber}</Info>
         </ReservationDiv>
         <ReservationLine />
         <ReservationDiv>
           <InfoText>이메일</InfoText>
-          <Info>gamza@naver.com</Info>
+          <Info>{loginMember.email}</Info>
         </ReservationDiv>
         <ReservationLine />
         <ReservationDiv>
@@ -527,7 +547,7 @@ const BookingStay = () => {
         </Agree>
       </UserAgreeWrapper>
       <PaddingDiv>
-        <PaymentBtn reservationData={rData} />
+        <PaymentButton reservationData={rData} />
       </PaddingDiv>
       <ProvisionDiv>
         <ProvisionSpan>

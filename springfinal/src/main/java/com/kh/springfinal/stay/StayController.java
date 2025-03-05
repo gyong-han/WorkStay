@@ -1,5 +1,6 @@
 package com.kh.springfinal.stay;
 
+import com.kh.springfinal.room.RoomAttachmentVo;
 import com.kh.springfinal.roomReservation.RoomReservationVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,9 +26,9 @@ public class StayController {
 //        }
 //    }
     @GetMapping("attachmentlist")
-    public List<StayAttachmentVo> attachmentList(){
+    public List<RoomAttachmentVo> attachmentList(){
         try{
-            List<StayAttachmentVo> stayAttachmentVoList = stayService.stayGetAttachmentList();
+            List<RoomAttachmentVo> stayAttachmentVoList = stayService.stayGetAttachmentList();
             return stayAttachmentVoList;
         }catch (Exception e){
             log.warn(e.getMessage());
@@ -57,7 +58,7 @@ public class StayController {
             return stayVo;
         }catch (Exception e){
             log.warn(e.getMessage());
-//            System.out.println("error :: "+ e.getMessage());
+            System.out.println("error :: "+ e.getMessage());
             throw new IllegalStateException("[STAY-ERROR-03]STAY DETAIL FAIL");
         }
     }
@@ -94,6 +95,7 @@ public class StayController {
             }
         }catch (Exception e){
             log.warn(e.getMessage());
+            System.out.println("e.getMessage() = " + e.getMessage());
             throw new IllegalStateException("[STAY-ERROR-06]STAY BOOKMARK_INFO FAIL");
         }
     }

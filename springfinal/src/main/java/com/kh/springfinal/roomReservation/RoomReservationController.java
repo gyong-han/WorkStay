@@ -17,38 +17,38 @@ public class RoomReservationController {
     @PostMapping
     public int reservation(@RequestBody RoomReservationVo vo){
         try{
-            String date = vo.getUseDay();
-            String formattedDate = date.replaceAll("-", "");
             String checkIn = vo.getCheckIn();
             String formattedCheckIn = checkIn.replaceAll("-", "");
             String checkOut = vo.getCheckOut();
             String formattedCheckOut = checkOut.replaceAll("-", "");
-            vo.setUseDay(formattedDate);
             vo.setCheckIn(formattedCheckIn);
             vo.setCheckOut(formattedCheckOut);
+            String amount = vo.getAmount();
+            String formattedAmount = amount.replaceAll(",","");
+            vo.setAmount(formattedAmount);
             int result = reservationService.reservation(vo);
             return result;
         }catch (Exception e){
             log.warn(e.getMessage());
+            System.out.println("RESERVATION ERROR :: " +e.getMessage());
             throw new IllegalStateException("[ERROR-RESERVATION-01] RESERVATION ERROR");
         }
     }
     @PostMapping("getReservationInfo")
     public RoomReservationVo getReservationInfo(RoomReservationVo vo){
         try{
-            String date = vo.getUseDay();
-            String formattedDate = date.replaceAll("-", "");
             String checkIn = vo.getCheckIn();
             String formattedCheckIn = checkIn.replaceAll("-", "");
             String checkOut = vo.getCheckOut();
             String formattedCheckOut = checkOut.replaceAll("-", "");
-            vo.setUseDay(formattedDate);
             vo.setCheckIn(formattedCheckIn);
             vo.setCheckOut(formattedCheckOut);
             RoomReservationVo reservationVo = reservationService.getReservationInfo(vo);
+            System.out.println("RESERVATION vo = " + reservationVo);
             return reservationVo;
         }catch(Exception e){
             log.warn(e.getMessage());
+            System.out.println("error msg :: "+e.getMessage());
             throw new IllegalStateException("[ERROR-RESERVATION-02] RESERVATION INFO ERROR");
         }
     }
