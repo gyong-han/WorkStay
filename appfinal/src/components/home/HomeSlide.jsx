@@ -20,7 +20,7 @@ const Slide = styled.div`
 const SlideImage = styled.img`
   width: ${(props) => props.w || "400"}px;
   height: ${(props) => props.h || "230"}px;
-  object-fit: cover;
+  object-fit: fill;
   border-radius: 5px;
 `;
 
@@ -43,7 +43,7 @@ const Xdiv = styled.div`
   height: 100%;
   border-radius: 5px;
 `;
-const InfomationDiv =styled.div`
+const InfomationDiv = styled.div`
   display: flex;
   position: absolute;
   width: 100%;
@@ -101,7 +101,9 @@ const HomeSlide = ({ w, h, imgPaths, main }) => {
         ) : (
           imgPaths.map((src, idx) => (
             <Xdiv key={idx}>
-              <InfomationDiv>{`🔥  지금 바로 추천드리는 숙소 인기 BEST "${idx+1}"`}</InfomationDiv>
+              <InfomationDiv>{`🔥  지금 바로 추천드리는 숙소 인기 BEST "${
+                idx + 1
+              }"`}</InfomationDiv>
               <SlideImage src={src} alt={`Slide ${idx + 1}`} w={w} h={h} />
             </Xdiv>
           ))
