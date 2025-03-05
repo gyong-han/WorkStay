@@ -42,6 +42,9 @@ const StayApprovalMgmt = () => {
   };
 
   useEffect(() => {
+    if (hostNo == "") {
+      return;
+    }
     const fd = new FormData();
     fd.append("status", status);
     fd.append("hostNo", hostNo);

@@ -100,6 +100,9 @@ const SpaceReservMgmt = () => {
   }, [status]);
 
   useEffect(() => {
+    if (hostNo == "") {
+      return;
+    }
     const fd = new FormData();
     fd.append("hostNo", hostNo);
     fd.append("status", status);
