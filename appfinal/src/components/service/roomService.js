@@ -78,7 +78,7 @@ const getReservationInfo = async (rd) => {
     if (!result.ok) {
       throw new Error(`HTTP error! Status: ${result.status}`);
     }
-    const data = await result.json();
+    const data = await result.text();
     return data;
   } catch (e) {
     console.log("Room Reservation Info ERROR", e);

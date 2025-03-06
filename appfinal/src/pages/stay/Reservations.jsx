@@ -139,7 +139,7 @@ const Reservations = () => {
     try {
       const insertData = await roomReservation(rData);
       const getInfo = await getReservationInfo(rd);
-      // console.log("GET INFO :: ", getInfo);
+      console.log("GET INFO :: ", getInfo);
 
       dispatch(setStayReservationInfo(getInfo));
 
