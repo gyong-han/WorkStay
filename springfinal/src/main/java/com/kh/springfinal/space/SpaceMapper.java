@@ -76,11 +76,11 @@ public interface SpaceMapper {
             SELECT DISTINCT USE_DAY
             FROM SPACE_RESERVATION
             WHERE SPACE_NO = #{no}
-            AND STATUS_NO=5
             AND USE_DAY IN (
                 SELECT USE_DAY
                 FROM SPACE_RESERVATION
                 WHERE SPACE_NO = #{no}
+                AND STATUS_NO=5
                 AND PACKAGE_NO IN (1, 2)
                 GROUP BY USE_DAY
                 HAVING COUNT(DISTINCT PACKAGE_NO) = 2
@@ -89,18 +89,18 @@ public interface SpaceMapper {
     String[] getIsAvailable(String no);
 
     @Select("""
-            SELECT NO, SPACE_NO, PACKAGE_NO, USE_DAY
+            SELECT NO, SPACE_NO, PACKAGE_NO, USE_DAY, STATUS_NO
             FROM SPACE_RESERVATION
             WHERE SPACE_NO = #{no}
               AND USE_DAY = #{date}
-              AND STATUS_NO=5
+              AND STATUS_NO = 5
               AND SPACE_NO NOT IN (
                   SELECT SPACE_NO
                   FROM SPACE_RESERVATION
-                  WHERE SPACE_NO = #{no}
-                    AND USE_DAY = #{date}
+                  WHERE USE_DAY = #{date}
+                    AND STATUS_NO = 5
                   GROUP BY SPACE_NO
-                  HAVING COUNT(SPACE_NO) = 2
+                  HAVING COUNT(*) = 2
               )
             
             """)
