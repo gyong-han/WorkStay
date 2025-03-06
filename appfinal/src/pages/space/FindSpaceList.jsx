@@ -7,7 +7,7 @@ import { IoCheckmarkCircleOutline } from "react-icons/io5";
 import { CiFilter } from "react-icons/ci";
 import { RiResetRightFill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
-import { setLoginMemberNo, setReset, setResetSearch, setTitleSearch } from "../../redux/spaceSlice";
+import { setDateReset, setLoginMemberNo, setReset, setResetSearch, setTitleSearch } from "../../redux/spaceSlice";
 import { getAttachmentAll, getSpaceListAll } from "../../components/service/spaceServcie";
 import SortDropdownSpace from "../../components/listcomponents/SortDropdownSpace";
 import { jwtDecode } from'jwt-decode'
@@ -86,14 +86,17 @@ const FindSpaceList = () => {
   const dispatch = useDispatch();
   const location = useLocation();
 
+
+  const spaceVo = useSelector((state)=>state.space);
+
   console.log("위치는",location.pathname);
-  if(location.pathname){
+  if(location.pathname=="/findspace"){
     localStorage.removeItem("fd");
   }
   
   
   
-  const spaceVo = useSelector((state)=>state.space);
+
   const [formData, setFormData] = useState();
   const [spaceVoList,setSpaceVoList] = useState([]);
   const [imgPath,setImgPath]= useState([]);
@@ -101,6 +104,10 @@ const FindSpaceList = () => {
 
 
   // console.log("쏘트 ~~~~~~~:::::",spaceVo.sort);
+
+  if(!spaceVo.reservationDate){
+    
+  }
   const queryParams = new URLSearchParams({
     datedata: spaceVo.reservationDate,
     people: spaceVo.adult+spaceVo.child+spaceVo.baby,
@@ -120,10 +127,12 @@ const FindSpaceList = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(setTitleSearch(formData));
+
+
   };
 
   useEffect(()=>{
+    dispatch(setDateReset());
     // async 사용하여 데이터값 추출해보기
     // console.log("Redux space 상태 확인:", spaceVo);
 
@@ -132,7 +141,7 @@ const FindSpaceList = () => {
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
-        console.log("decodedToken: ", decodedToken.no);
+        // console.log("decodedToken: ", decodedToken.no);
         dispatch(setLoginMemberNo(decodedToken.no));
       } catch (error) {
         console.error("토큰 디코딩 실패:", error);
@@ -163,7 +172,7 @@ const FindSpaceList = () => {
   return(<> 
 <Layout>
   <h1>FIND SPACE</h1>
-  <Display isTimeMode={true}></Display>
+  <Display isTimeMode={true} reset={true}></Display>
    <SearchWrapper>
           <form onSubmit={handleSubmit}>
             <SearchInput
