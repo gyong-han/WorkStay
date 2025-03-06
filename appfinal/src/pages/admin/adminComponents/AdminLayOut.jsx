@@ -79,11 +79,13 @@ const AdminLayOut = ({ children }) => {
   const { pathname } = useLocation();
   const token = localStorage.getItem("token");
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [pageNick, setPageNick] = useState("");
 
   useEffect(() => {
     if (token) {
       const decodedToken = jwtDecode(token);
       const pageNick = decodedToken.pageNick;
+      setPageNick(pageNick);
       if (pageNick != "ADMIN") {
         setIsAlertOpen(true);
       }
@@ -113,96 +115,101 @@ const AdminLayOut = ({ children }) => {
 
   return (
     <>
-      <HomeDiv>
-        <div>
-          <HeaderDiv size="40px" color="#F20530" margin="70px" weight="400">
-            ADMIN
-          </HeaderDiv>
-          <HeaderDiv
-            size="50px"
-            color="black"
-            weight="600"
-            margin="10px"
-            marginBot="70px"
-          >
-            관리자님 반가워요!
-          </HeaderDiv>
-          <Hr />
-        </div>
-        <MainDiv>
-          <MenuAreaDiv>
-            <MenuDiv
-              id=""
-              onClick={movePath}
-              selected={selectedMenu === "" || selectedMenu === "adminMenu"}
+      {pageNick === "ADMIN" ? (
+        <HomeDiv>
+          <div>
+            <HeaderDiv size="40px" color="#F20530" margin="70px" weight="400">
+              ADMIN
+            </HeaderDiv>
+            <HeaderDiv
+              size="50px"
+              color="black"
+              weight="600"
+              margin="10px"
+              marginBot="70px"
             >
-              호스트 조회
-            </MenuDiv>
-            <MenuDiv
-              id="stayEnrollReq"
-              onClick={movePath}
-              selected={selectedMenu === "stayEnrollReq"}
-            >
-              숙소 입점 요청
-            </MenuDiv>
-            <MenuDiv
-              id="spaceEnrollReq"
-              onClick={movePath}
-              selected={selectedMenu === "spaceEnrollReq"}
-            >
-              공간 입점 요청
-            </MenuDiv>
-            <MenuDiv
-              id="stayEditReq"
-              onClick={movePath}
-              selected={selectedMenu === "stayEditReq"}
-            >
-              숙소 수정 요청
-            </MenuDiv>
-            <MenuDiv
-              id="roomEditReq"
-              onClick={movePath}
-              selected={selectedMenu === "roomEditReq"}
-            >
-              독채 수정 요청
-            </MenuDiv>
-            <MenuDiv
-              id="spaceEditReq"
-              onClick={movePath}
-              selected={selectedMenu === "spaceEditReq"}
-            >
-              공간 수정 요청
-            </MenuDiv>
-            <MenuDiv
-              id="stayDelReq"
-              onClick={movePath}
-              selected={selectedMenu === "stayDelReq"}
-            >
-              숙소 삭제 목록
-            </MenuDiv>
-            <MenuDiv
-              id="spaceDelReq"
-              onClick={movePath}
-              selected={selectedMenu === "spaceDelReq"}
-            >
-              공간 삭제 목록
-            </MenuDiv>
-          </MenuAreaDiv>
-          <div>{children}</div>
-        </MainDiv>
-        {isAlertOpen && (
-          <Backdrop>
-            <Alert
-              title="권한 오류"
-              titleColor="red"
-              message="관리자만 접근 가능합니다."
-              buttonText="확인"
-              buttonColor="#049dd9"
-              onClose={handleAlertClose}
-            />
-          </Backdrop>
-        )}
-      </HomeDiv>
+              관리자님 반가워요!
+            </HeaderDiv>
+            <Hr />
+          </div>
+          <MainDiv>
+            <MenuAreaDiv>
+              <MenuDiv
+                id=""
+                onClick={movePath}
+                selected={selectedMenu === "" || selectedMenu === "adminMenu"}
+              >
+                호스트 조회
+              </MenuDiv>
+              <MenuDiv
+                id="stayEnrollReq"
+                onClick={movePath}
+                selected={selectedMenu === "stayEnrollReq"}
+              >
+                숙소 입점 요청
+              </MenuDiv>
+              <MenuDiv
+                id="spaceEnrollReq"
+                onClick={movePath}
+                selected={selectedMenu === "spaceEnrollReq"}
+              >
+                공간 입점 요청
+              </MenuDiv>
+              <MenuDiv
+                id="stayEditReq"
+                onClick={movePath}
+                selected={selectedMenu === "stayEditReq"}
+              >
+                숙소 수정 요청
+              </MenuDiv>
+              <MenuDiv
+                id="roomEditReq"
+                onClick={movePath}
+                selected={selectedMenu === "roomEditReq"}
+              >
+                독채 수정 요청
+              </MenuDiv>
+              <MenuDiv
+                id="spaceEditReq"
+                onClick={movePath}
+                selected={selectedMenu === "spaceEditReq"}
+              >
+                공간 수정 요청
+              </MenuDiv>
+              <MenuDiv
+                id="stayDelReq"
+                onClick={movePath}
+                selected={selectedMenu === "stayDelReq"}
+              >
+                숙소 삭제 목록
+              </MenuDiv>
+              <MenuDiv
+                id="spaceDelReq"
+                onClick={movePath}
+                selected={selectedMenu === "spaceDelReq"}
+              >
+                공간 삭제 목록
+              </MenuDiv>
+            </MenuAreaDiv>
+            <div>{children}</div>
+          </MainDiv>
+        </HomeDiv>
+      ) : (
+        <></>
+      )}
+
+      {isAlertOpen && (
+        <Backdrop>
+          <Alert
+            title="권한 오류"
+            titleColor="red"
+            message="관리자만 접근 가능합니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose}
+          />
+        </Backdrop>
+      )}
     </>
   );
 };
