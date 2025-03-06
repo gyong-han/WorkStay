@@ -256,11 +256,11 @@ const Area = ({ isOpen, onClose }) => {
             </div>
             <div>
               <label>
-                춘천
+                충청
                 <input
                   type="radio"
                   name="area"
-                  value={"춘천"}
+                  value={"충청"}
                   onClick={ClickHandler}
                 />
               </label>
