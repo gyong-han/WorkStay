@@ -35,6 +35,8 @@ import { FaAngleDown } from "react-icons/fa6";
 import { IoBookmarkOutline } from "react-icons/io5";
 import { IoBookmark } from "react-icons/io5";
 import { jwtDecode } from "jwt-decode";
+import { RiInstagramLine } from "react-icons/ri";
+import { SiNaver } from "react-icons/si";
 
 const Layout = styled.div`
   width: 100%;
@@ -173,12 +175,64 @@ const MapDiv = styled.div`
   display: grid;
   width: 100%;
   place-items: center;
-  margin-left: 60px;
+  margin-left: 100px;
 `;
 
 const PictureWrapper = styled.div`
   display: grid;
   place-items: center center;
+`;
+
+const InfoDiv = styled.div`
+  width: 270px;
+  height: 270px;
+  background-color: white;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr 1fr 25px 25px 1fr;
+  z-index: 999;
+  margin-right: 950px;
+  margin-bottom: 200px;
+  position: absolute;
+  justify-items: center;
+
+  & > div {
+    width: 80%;
+    height: 90%;
+    display: flex;
+    align-items: center;
+  }
+  & > div:nth-child(1) {
+    padding-top: 10px;
+    font-size: 25px;
+    font-weight: 600;
+  }
+  & > div:nth-child(2) {
+    font-size: 25px;
+  }
+  & > div:nth-child(3),
+  & > div:nth-child(4),
+  & > div:nth-child(5) {
+    display: flex;
+    align-items: end;
+    color: #999;
+  }
+`;
+
+const InfomationDiv = styled.div`
+  width: 100%;
+  height: 100%;
+  gap: 20px;
+  & > svg {
+    color: #999;
+  }
+  & > svg:hover {
+    color: black;
+  }
+  & > svg:nth-child(1) {
+    width: 20px;
+    height: 20px;
+  }
 `;
 
 const FindStayDetail = () => {
@@ -287,6 +341,12 @@ const FindStayDetail = () => {
     console.log("hello");
   };
 
+  const cleaned = stayVo.phone.replace(/\D/g, "");
+  const formattedPhoneNumber = cleaned.replace(
+    /(\d{3})(\d{4})(\d{4})/,
+    "$1-$2-$3"
+  );
+
   return (
     <>
       <Layout>
@@ -356,12 +416,22 @@ const FindStayDetail = () => {
           </div>
           <div></div>
         </div>
-        <MapDiv>
-          <Map address={stayVo.address} name={stayVo.name}>
-            {" "}
-            stay
-          </Map>
-        </MapDiv>
+        <div>
+          <InfoDiv>
+            <div>HELLO.</div>
+            <div>{stayVo.name}</div>
+            <div>({stayVo.address})</div>
+            <div>{formattedPhoneNumber}</div>
+            <div>{stayVo.sns}</div>
+            <InfomationDiv>
+              <RiInstagramLine />
+              <SiNaver />
+            </InfomationDiv>
+          </InfoDiv>
+          <MapDiv>
+            <Map address={stayVo.address} name={stayVo.name}></Map>
+          </MapDiv>
+        </div>
         <div></div>
         <Notification x={x} rooms={roomVoList} stay={stayVo}></Notification>
       </Layout>
