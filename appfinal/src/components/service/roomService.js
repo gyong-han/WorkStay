@@ -70,6 +70,8 @@ const roomReservation = async (rData) => {
 };
 
 const getReservationInfo = async (rd) => {
+  console.log("");
+
   try {
     const result = await fetch(`${BASE_URL}/reservation/getReservationInfo`, {
       method: "POST",
@@ -78,7 +80,7 @@ const getReservationInfo = async (rd) => {
     if (!result.ok) {
       throw new Error(`HTTP error! Status: ${result.status}`);
     }
-    const data = await result.text();
+    const data = await result.json();
     return data;
   } catch (e) {
     console.log("Room Reservation Info ERROR", e);
