@@ -100,9 +100,9 @@ const HomeSlide = ({ w, h, imgPaths, main }) => {
         ) : (
           imgPaths.map((src, idx) => (
             <Xdiv key={idx}>
-              <InfomationDiv>{`🔥  지금 바로 추천드리는 숙소 인기 BEST "${
+              <InfomationDiv>{` 지금 바로 추천하는 숙소 인기 BEST ❛ ${
                 idx + 1
-              }"`}</InfomationDiv>
+              } ❜`}</InfomationDiv>
               <SlideImage src={src} alt={`Slide ${idx + 1}`} w={w} h={h} />
             </Xdiv>
           ))
