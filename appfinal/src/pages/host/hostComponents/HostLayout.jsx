@@ -174,9 +174,9 @@ const HostLayout = ({ children }) => {
               내 공간 관리
             </MenuDiv>
             <MenuDiv
-              id="msgggg"
+              id="msg"
               onClick={movePath}
-              selected={selectedMenu === "msgggg"}
+              selected={selectedMenu === "msg"}
             >
               메세지
             </MenuDiv>
