@@ -61,6 +61,11 @@ const TableTag = styled.table`
 `;
 
 const ReservationGuide = ({ rooms, stay }) => {
+  const cleaned = stay.phone.replace(/\D/g, "");
+  const formattedPhoneNumber = cleaned.replace(
+    /(\d{3})(\d{4})(\d{4})/,
+    "$1-$2-$3"
+  );
   return (
     <Layout>
       <TextWrapper>
@@ -136,7 +141,7 @@ const ReservationGuide = ({ rooms, stay }) => {
           </ExplainWrapper>
           <ExplainWrapper>
             <div>문의하기</div>
-            <div>예약 및 이용 문의 {stay.phone}</div>
+            <div>예약 및 이용 문의 {formattedPhoneNumber}</div>
           </ExplainWrapper>
         </InfoWrapper>
       </TextWrapper>
