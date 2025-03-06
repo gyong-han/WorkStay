@@ -66,9 +66,13 @@ const Address = ({ w1, w2, t1, t2, setFormData }) => {
 
   function combineAddress(value) {
     const roadAddress = document.querySelector("#roadAddress").value;
-    // const detailAddress = document.querySelector('#detailAddress').value;
 
-    let combinAddressValue = roadAddress + ", " + value;
+    let combinAddressValue = "";
+    if (value === null || value == undefined) {
+      combinAddressValue = roadAddress + ", " + value;
+    } else {
+      combinAddressValue = roadAddress;
+    }
 
     setAddress(combinAddressValue);
     setFormData((prev) => {
