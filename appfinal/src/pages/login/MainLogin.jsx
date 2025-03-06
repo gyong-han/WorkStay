@@ -6,10 +6,24 @@ import { useFormData } from "../../utils/useFormData";
 import { getPayload } from "../../utils/jwtUtil";
 import { login } from "../../redux/memberSlice";
 import { ABC, BASE_URL } from "../../components/service/config";
+import Alert from "../../components/Alert";
 
 const MainDiv = styled.div`
   display: grid;
   grid-template-rows: 2fr 1fr 3.5fr 0.5fr 0.5fr 0.8fr 1fr 1fr;
+`;
+
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
 `;
 
 const StyleMain = styled.div`
@@ -126,6 +140,7 @@ const MainLogin = () => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const navi = useNavigate();
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
   const dispatch = useDispatch();
 
   const initState = {
@@ -150,7 +165,12 @@ const MainLogin = () => {
         return resp.text();
       })
       .then((token) => {
-        console.log("token :", token);
+        if (!token || token.includes("error")) {
+          // 에러 처리 (서버 응답이 정상적인 토큰이 아닌 경우)
+          setIsAlertOpen(true);
+          return;
+        }
+
         localStorage.setItem("token", token);
         const no = getPayload(token, "no");
         const email = getPayload(token, "email");
@@ -159,6 +179,10 @@ const MainLogin = () => {
         dispatch(login({ no, email, pageNick }));
         navi("/");
       });
+  };
+
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
   };
 
   const { formData, handleInputChange, handleSubmit } = useFormData(
@@ -194,45 +218,59 @@ const MainLogin = () => {
   };
   window.scrollTo(0, 0);
   return (
-    <form onSubmit={handleSubmit}>
-      <MainDiv>
-        <StyleMain>L O G I N</StyleMain>
+    <>
+      <form onSubmit={handleSubmit}>
+        <MainDiv>
+          <StyleMain>L O G I N</StyleMain>
 
-        <StyleInputId>
-          <StyledInput
-            type="text"
-            placeholder="이메일을 입력해주세요."
-            value={emails}
-            name="email"
-            onChange={(event) => {
-              handleEmailChange(event);
-              handleInputChange(event);
-            }}
-          />
-          {emailError && <ErrorMessage>{emailError}</ErrorMessage>}
-        </StyleInputId>
+          <StyleInputId>
+            <StyledInput
+              type="text"
+              placeholder="이메일을 입력해주세요."
+              value={emails}
+              name="email"
+              onChange={(event) => {
+                handleEmailChange(event);
+                handleInputChange(event);
+              }}
+            />
+            {emailError && <ErrorMessage>{emailError}</ErrorMessage>}
+          </StyleInputId>
 
-        <StyleInputPwd>
-          <StyledInput
-            type="password"
-            placeholder="비밀번호를 입력해주세요."
-            value={password}
-            name="pwd"
-            onChange={(event) => {
-              handlePasswordChange(event);
-              handleInputChange(event);
-            }}
+          <StyleInputPwd>
+            <StyledInput
+              type="password"
+              placeholder="비밀번호를 입력해주세요."
+              value={password}
+              name="pwd"
+              onChange={(event) => {
+                handlePasswordChange(event);
+                handleInputChange(event);
+              }}
+            />
+            {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
+          </StyleInputPwd>
+          <BtnTag type="submit">LOGIN</BtnTag>
+          <BtnDiv>
+            <BtnTagID to="/login/findid">아이디 찾기</BtnTagID>
+            <Ptag>|</Ptag>
+            <BtnTagPwD to="/login/findpwd">비밀번호 찾기</BtnTagPwD>
+          </BtnDiv>
+        </MainDiv>
+      </form>
+      {isAlertOpen && (
+        <Backdrop>
+          <Alert
+            title="로그인"
+            titleColor="#049dd9"
+            message="잘못 입력하셨습니다. 다시 입력해주세요."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose}
           />
-          {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
-        </StyleInputPwd>
-        <BtnTag type="submit">LOGIN</BtnTag>
-        <BtnDiv>
-          <BtnTagID to="/login/findid">아이디 찾기</BtnTagID>
-          <Ptag>|</Ptag>
-          <BtnTagPwD to="/login/findpwd">비밀번호 찾기</BtnTagPwD>
-        </BtnDiv>
-      </MainDiv>
-    </form>
+        </Backdrop>
+      )}
+    </>
   );
 };
 
