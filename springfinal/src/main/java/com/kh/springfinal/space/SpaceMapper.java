@@ -108,7 +108,7 @@ public interface SpaceMapper {
 
     @Select("""
              SELECT NO,RESERVATION_DATE FROM SPACE_RESERVATION
-              WHERE SPACE_NO =#{spaceNo} AND PACKAGE_NO =#{packageNo} AND USE_DAY =#{useDay}
+              WHERE SPACE_NO =#{spaceNo} AND PACKAGE_NO =#{packageNo} AND USE_DAY =#{useDay} AND STATUS_NO = 5
             """)
     SpaceReservVo getNowTime(SpaceReservVo vo);
 

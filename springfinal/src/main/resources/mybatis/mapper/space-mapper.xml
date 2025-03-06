@@ -21,6 +21,7 @@
             SELECT SPACE_NO
             FROM SPACE_RESERVATION
             WHERE USE_DAY =  #{date}
+            AND STATUS_NO =5
             AND PACKAGE_NO IN (1, 2)
             GROUP BY SPACE_NO
             HAVING COUNT(DISTINCT PACKAGE_NO) = 2)
