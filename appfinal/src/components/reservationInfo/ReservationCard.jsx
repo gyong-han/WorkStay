@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { BASE_URL } from "../service/config";
+import Alert from "../Alert";
 
 const DataDiv = styled.div`
   width: 850px;
@@ -12,6 +14,19 @@ const DataDiv = styled.div`
   margin-left: 50px;
   margin-bottom: 30px;
   border: none;
+`;
+
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
 `;
 
 const DataArea = styled.div`
@@ -26,6 +41,7 @@ const TextDiv = styled.div`
   font-size: ${(props) => props.size};
   font-weight: ${(props) => props.weight};
   cursor: pointer;
+  text-decoration: ${(props) => props.deco};
 `;
 
 const ImgTag = styled.img`
@@ -48,19 +64,23 @@ const PriceDiv = styled.div`
 
 const SLogButton = styled.button`
   background-color: #fafafa;
-  color: #f20530;
+  /* color: #f20530; */
+  color: ${(props) => props.c};
   border: none;
-  padding: 10px 15px;
+  /* padding: 10px 15px; */
   font-size: 14px;
-  font-weight: 800px;
+  font-weight: bold;
   border-radius: 5px;
   cursor: pointer;
   margin-top: 10px;
+  margin-bottom: 10px;
 `;
 
 const ReservationCard = ({ data, hideDate, moveDetail }) => {
   const navi = useNavigate();
   const location = useLocation(); // 현재 경로 가져오기
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [progressState, setProgressState] = useState(data.progressState);
 
   function movePath() {
     const isSpaceReserv = location.pathname.includes("spaceReserv");
@@ -85,11 +105,43 @@ const ReservationCard = ({ data, hideDate, moveDetail }) => {
     navi(`/slog/write?reno=${reno}&memberNo=${memberNo}`);
   }
 
+  // 이용확정 버튼 클릭 시 이동 (reno + 회원번호 포함)
+  function handleUpdateStay(event) {
+    event.preventDefault();
+    const userToken = localStorage.getItem("token");
+    const no = JSON.parse(atob(userToken.split(".")[1])).no; // JWT에서 no 추출
+    const reno = data.reno; // 예약 번호
+    fetch(`${BASE_URL}/api/guest/updateStay?no=${no}&reno=${reno}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ no, reno }),
+    })
+      .then((resp) => {
+        if (!resp.ok) throw new Error("서버 응답 오류");
+        return resp.json();
+      })
+      .then((data) => {
+        setProgressState("이용완료");
+        setIsAlertOpen(true);
+      })
+      .catch((error) => {
+        console.error("이용 완료 실패:", error);
+        alert("이용 완료에 실패했습니다.");
+      });
+  }
+
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
+    navi("/hostMenu");
+  };
+
   return (
     <>
       <DataDiv>
         <DataArea>
-          <TextDiv size="15px">{data.progressState}</TextDiv>
+          <TextDiv size="15px">{progressState}</TextDiv>
           <TextDiv size="25px" weight="600">
             {data.name}
           </TextDiv>
@@ -102,12 +154,19 @@ const ReservationCard = ({ data, hideDate, moveDetail }) => {
           <div></div>
           <PriceDiv>
             <div>
-              {data.progressState === "이용완료" && (
-                <SLogButton onClick={handleSLogWrite}>S-Log 작성</SLogButton>
+              {progressState === "이용완료" && (
+                <SLogButton c="#049dd9" onClick={handleSLogWrite}>
+                  S-Log 작성
+                </SLogButton>
+              )}
+              {progressState === "예약완료" && (
+                <SLogButton c="#f20530" onClick={handleUpdateStay}>
+                  이용 확정
+                </SLogButton>
               )}
             </div>
             {!hideDate && (
-              <TextDiv onClick={moveDetail} size="15px">
+              <TextDiv onClick={moveDetail} size="15px" deco="underline">
                 예약 상세 확인
               </TextDiv>
             )}
@@ -117,6 +176,18 @@ const ReservationCard = ({ data, hideDate, moveDetail }) => {
         </DataArea>
         <ImgTag src={data.filePath} alt="숙소 이미지" />
       </DataDiv>
+      {isAlertOpen && (
+        <Backdrop>
+          <Alert
+            title="이용완료"
+            titleColor="#049dd9"
+            message="이용확정 되었습니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose}
+          />
+        </Backdrop>
+      )}
     </>
   );
 };

@@ -396,6 +396,7 @@ public interface GuestMapper {
             LEFT OUTER JOIN ROOM R ON (R.NO = RE.ROOM_NO)
             LEFT OUTER JOIN STAY S ON (S.NO = R.STAY_NO)
             WHERE L.MEMBER_NO =#{memberNo}
+            AND L.DEL_YN ='N'
             """)
     List<SlogListVo> slogList(String memberNo);
 
@@ -412,4 +413,14 @@ public interface GuestMapper {
             WHERE HOST_NO = #{no}
             """)
     void deleteStay(GuestVo vo);
+
+    @Update("""
+            UPDATE ROOM_RESERVATION
+                SET STATUS_NO ='4'
+            WHERE NO = #{reno}
+            AND MEMBER_NO = #{no}
+            AND STATUS_NO ='5'
+            """)
+    int updateStay(String no, String reno);
+
 }//class
