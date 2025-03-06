@@ -76,6 +76,7 @@ public interface SpaceMapper {
             SELECT DISTINCT USE_DAY
             FROM SPACE_RESERVATION
             WHERE SPACE_NO = #{no}
+            AND STATUS_NO=5
             AND USE_DAY IN (
                 SELECT USE_DAY
                 FROM SPACE_RESERVATION
@@ -92,6 +93,7 @@ public interface SpaceMapper {
             FROM SPACE_RESERVATION
             WHERE SPACE_NO = #{no}
               AND USE_DAY = #{date}
+              AND STATUS_NO=5
               AND SPACE_NO NOT IN (
                   SELECT SPACE_NO
                   FROM SPACE_RESERVATION
