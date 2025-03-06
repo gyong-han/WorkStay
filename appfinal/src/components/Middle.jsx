@@ -11,24 +11,23 @@ const MiddleContainer = styled.section`
 `;
 
 const Middle = () => {
-  const [homeSlide,setHomeSlide] = useState([]);
-  useEffect(()=>{
+  const [homeSlide, setHomeSlide] = useState([]);
+  useEffect(() => {
     fetch("http://localhost:8080/home/besthit")
-    .then((resp)=>resp.json())
-    .then((data)=>{
-      console.log("인기순위별 숙소 :: ",data);
-      const fileArr = data.map((vo)=>vo.filePath);
-      if(fileArr.length <=1){
-        setHomeSlide(data[0].filePath);
-      }else{
-        setHomeSlide(fileArr);
-      }
-     
-    })
-  },[])
-  
+      .then((resp) => resp.json())
+      .then((data) => {
+        console.log("인기순위별 숙소 :: ", data);
+        const fileArr = data.map((vo) => vo.filePath);
+        if (fileArr.length <= 1) {
+          setHomeSlide(data[0].filePath);
+        } else {
+          setHomeSlide(fileArr);
+        }
+      });
+  }, []);
+
   return (
-    <MiddleContainer>      
+    <MiddleContainer>
       <HomeSlide w={1500} h={400} imgPaths={homeSlide} main={true}></HomeSlide>
     </MiddleContainer>
   );

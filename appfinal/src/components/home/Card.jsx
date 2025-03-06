@@ -57,8 +57,9 @@ const SecondDiv = styled.div`
   & > div:nth-child(5) {
     display: flex;
     font-size: 18px;
-    font-weight: 700;
+    font-weight: 600;
     padding-bottom: 20px;
+    letter-spacing: 1px;
   }
 `;
 
@@ -189,7 +190,7 @@ const Card = ({ vo }) => {
           {vo.price
             ? vo.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
             : null}{" "}
-          / 박
+          / 1박
         </div>
         <div></div>
       </SecondDiv>

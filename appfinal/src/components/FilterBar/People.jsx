@@ -41,8 +41,9 @@ const Modal = styled.div`
   z-index: 2;
   & > div > span {
     color: #049dd9;
-    font-size: 30px;
+    font-size: 25px;
     font-weight: 700;
+    letter-spacing: 1px;
   }
 
   & > div:nth-child(1) {
@@ -152,9 +153,16 @@ const FooterDiv = styled.div`
     height: 45px;
     border: none;
     background-color: #049dd9;
-    color: white;
+    color: #fafafa;
+    font-size: 20px;
     border-radius: 5px;
   }
+`;
+
+const PeopleSpan = styled.p`
+  font-size: 25px;
+  font-weight: 700;
+  color: #202020;
 `;
 
 const People = ({ isOpen, onClose }) => {
@@ -197,13 +205,13 @@ const People = ({ isOpen, onClose }) => {
           </TitleDiv>
           <TitleDiv>
             <div>
-              <h1>성인</h1>
+              <PeopleSpan>성인</PeopleSpan>
             </div>
             <div>
-              <h1>아동</h1>
+              <PeopleSpan>아동</PeopleSpan>
             </div>
             <div>
-              <h1>영아</h1>
+              <PeopleSpan>영아</PeopleSpan>
             </div>
           </TitleDiv>
           <TitleDiv>

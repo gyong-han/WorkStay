@@ -15,6 +15,7 @@ const TitleDiv = styled.div`
   align-items: end;
   font-size: 25px;
   font-weight: 600;
+  color: #202020;
 `;
 
 const SubTitleDiv = styled.div`
@@ -102,8 +103,8 @@ const Main = () => {
     <Layout>
       <TitleDiv>봄 : 꽃이 만개한 자연 속에서 영감을 얻는 워케이션</TitleDiv>
       <SubTitleDiv>
-        “계절의 시작, 자연이 전하는 에너지를 느끼며 새로운 아이디어를
-        발견하세요.”
+        ❛ 봄의 시작, 자연이 전하는 에너지를 느끼며 새로운 아이디어를 발견하세요.
+        ❜
       </SubTitleDiv>
       <div>
         <HomeMainSlide
@@ -117,8 +118,8 @@ const Main = () => {
         여름 : 물가에서 시원하게 몰입할 수 있는 리프레시 워케이션
       </TitleDiv>
       <SubTitleDiv>
-        “계절의 시작, 자연이 전하는 에너지를 느끼며 새로운 아이디어를
-        발견하세요.”
+        ❛ 여름의 시작, 자연이 전하는 에너지를 느끼며 새로운 아이디어를
+        발견하세요. ❜
       </SubTitleDiv>
       <div>
         <HomeMainSlide
@@ -130,8 +131,8 @@ const Main = () => {
       </div>
       <TitleDiv>가을 : 단풍 아래에서 사색과 창의력을 키우는 워케이션</TitleDiv>
       <SubTitleDiv>
-        “계절의 시작, 자연이 전하는 에너지를 느끼며 새로운 아이디어를
-        발견하세요.”
+        ❛ 가을의 시작, 자연이 전하는 에너지를 느끼며 새로운 아이디어를
+        발견하세요. ❜
       </SubTitleDiv>
       <div>
         <HomeMainSlide
@@ -145,8 +146,8 @@ const Main = () => {
         겨울 : 따뜻한 공간에서 집중과 휴식을 동시에 하는 워케이션
       </TitleDiv>
       <SubTitleDiv>
-        “계절의 시작, 자연이 전하는 에너지를 느끼며 새로운 아이디어를
-        발견하세요.”
+        ❛ 겨울의 시작, 자연이 전하는 에너지를 느끼며 새로운 아이디어를
+        발견하세요. ❜
       </SubTitleDiv>
       <div>
         <HomeMainSlide
