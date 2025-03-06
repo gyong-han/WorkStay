@@ -36,7 +36,6 @@ const staySlice = createSlice({
       state.introduction = action.payload.introduction;
       state.sns = action.payload.sns;
       state.thumbnail = action.payload.thumbnail;
-      state.address = action.payload.address;
     },
     selectCheckIn: (state, action) => {
       state.checkIn = action.payload.checkIn;
@@ -49,7 +48,7 @@ const staySlice = createSlice({
       state.attachmentFilePaths = action.payload.attachmentFilePaths;
     },
     setAddress: (state, action) => {
-      state.address = action.payload;
+      state.address = action.payload.address;
     },
     setSort: (state, action) => {
       state.sort = action.payload;
