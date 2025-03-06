@@ -61,11 +61,10 @@ const TableTag = styled.table`
 `;
 
 const ReservationGuide = ({ rooms, stay }) => {
-  const cleaned = stay.phone.replace(/\D/g, "");
-  const formattedPhoneNumber = cleaned.replace(
-    /(\d{3})(\d{4})(\d{4})/,
-    "$1-$2-$3"
-  );
+  const cleaned = stay.phone ? stay.phone.replace(/\D/g, "") : "";
+  const formattedPhoneNumber = cleaned
+    ? cleaned.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3")
+    : "번호 없음";
   return (
     <Layout>
       <TextWrapper>

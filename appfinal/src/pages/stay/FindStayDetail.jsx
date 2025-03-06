@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import Calendar from "../../components/FilterBar/Calendal";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  setAddress,
   setStayData,
   setStayLoginMemberNo,
   setStayVo,
@@ -255,6 +256,7 @@ const FindStayDetail = () => {
     dispatch(setRoomVo(roomListData));
     dispatch(setStayData(stayDetail));
     dispatch(setRoomData(roomListData));
+    dispatch(setAddress(stayDetail));
   };
 
   let y = "";
@@ -341,11 +343,10 @@ const FindStayDetail = () => {
     console.log("hello");
   };
 
-  const cleaned = stayVo.phone.replace(/\D/g, "");
-  const formattedPhoneNumber = cleaned.replace(
-    /(\d{3})(\d{4})(\d{4})/,
-    "$1-$2-$3"
-  );
+  const cleaned = stayVo.phone ? stayVo.phone.replace(/\D/g, "") : "";
+  const formattedPhoneNumber = cleaned
+    ? cleaned.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3")
+    : "번호 없음";
 
   return (
     <>
