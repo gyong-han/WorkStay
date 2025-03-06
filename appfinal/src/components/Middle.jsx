@@ -28,7 +28,7 @@ const Middle = () => {
 
   return (
     <MiddleContainer>
-      <HomeSlide w={1500} h={400} imgPaths={homeSlide} main={true}></HomeSlide>
+      <HomeSlide w={1903} h={400} imgPaths={homeSlide} main={true}></HomeSlide>
     </MiddleContainer>
   );
 };
