@@ -89,7 +89,7 @@ const FindSpaceList = () => {
 
   const spaceVo = useSelector((state)=>state.space);
 
-  console.log("위치는",location.pathname);
+  // console.log("위치는",location.pathname);
   if(location.pathname=="/findspace"){
     localStorage.removeItem("fd");
   }
@@ -127,6 +127,7 @@ const FindSpaceList = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    dispatch(setTitleSearch(formData));
 
 
   };
