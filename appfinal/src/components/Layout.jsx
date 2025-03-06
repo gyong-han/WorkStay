@@ -39,14 +39,16 @@ const Layout = ({ children }) => {
     return <>{children}</>;
   }
 
+  const isHome = location.pathname === "/";
+
   return (
     <>
       <LayoutContainer>
         <Header />
         <MainDiv>
-          <LeftBlank />
+          {!isHome && <LeftBlank />}
           <Content>{children}</Content>
-          <RightBlank />
+          {!isHome && <RightBlank />}
         </MainDiv>
       </LayoutContainer>
       <Footer />
