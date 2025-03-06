@@ -245,6 +245,7 @@ const GuestEdit = () => {
   const handleAlertClose2 = () => {
     setIsAlertOpen2(false);
     localStorage.removeItem("token");
+    localStorage.removeItem("kakao_a6735a34948b72ea00b68392d6281037");
     dispatch(logout());
     navi("/");
   };

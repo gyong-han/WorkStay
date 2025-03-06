@@ -102,6 +102,11 @@ const Header = () => {
   const { pathname } = useLocation();
   const lastPath = pathname.split("/").pop();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const location = useLocation();
+
+  const kakaoToken = localStorage.getItem(
+    "kakao_a6735a34948b72ea00b68392d6281037"
+  );
 
   useEffect(() => {
     setUrl(lastPath);
@@ -114,6 +119,12 @@ const Header = () => {
 
   useEffect(() => {
     setIsDropdownOpen(false);
+    if (location.pathname) {
+      if (kakaoToken) {
+        setPageNick("GUEST");
+        return;
+      }
+    }
     if (token) {
       const decodedToken = jwtDecode(token);
 
@@ -131,7 +142,7 @@ const Header = () => {
     } else {
       setPageNick("LOGIN");
     }
-  }, [token, pageNick]);
+  }, [token, pageNick, kakaoToken]);
 
   function changeSelected(e) {
     setSelectedMenu(e.target.id);
