@@ -62,6 +62,7 @@ const Content = styled.div`
   flex-direction: column;
   height: auto;
   margin-top: 100px;
+  margin-bottom: 100px;
   max-width: 600px;
   line-height: 200%;
 
@@ -73,7 +74,7 @@ const Content = styled.div`
 
 const ButtonSection = styled.div`
   display: flex;
-  flex-wrap: wrap;
+  flex-flow: wrap;
   gap: 200px;
   justify-content: center;
   align-items: center;
