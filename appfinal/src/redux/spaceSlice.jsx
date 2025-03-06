@@ -69,8 +69,6 @@ const spaceSlice = createSlice({
       state.baby = action.payload.baby;
     },
     setArea : (state,action)=>{
-      console.log("시시시시작 시작 ~~~~");
-      console.log("action에 들어온값",action.payload);
       state.area = action.payload;
     },
     setReset : (state)=>{
@@ -97,6 +95,7 @@ const spaceSlice = createSlice({
     state.reservationDone= '';
     state.titleData = '';
     state.sort= '';
+    state.reservationDate = '';
 
     },
     setReservationDone : (state,action)=>{
@@ -115,7 +114,6 @@ const spaceSlice = createSlice({
       state.titleData = action.payload;
     },
     setOrderByStandard : (state,action)=>{
-      console.log("액션시작",action.payload);
       state.sort = action.payload;
     },
     setResetSearch : (state)=>{
@@ -130,6 +128,9 @@ const spaceSlice = createSlice({
     },
     setLoginMemberNo : (state,action)=>{
       state.memberNo = Number(action.payload);
+    },
+    setDateReset : (state)=>{
+      state.reservationDone = '';
     }
     
     
@@ -137,5 +138,5 @@ const spaceSlice = createSlice({
 });
 
 
-export const { setSpaceVo,setPackageType,setreservationDate,setMemberCnt,setArea,setReset,setReservationDone,setReservationInfo,setRequest,setTitleSearch,setOrderByStandard,setResetSearch,setLoginMemberNo } = spaceSlice.actions;
+export const { setDateReset,setSpaceVo,setPackageType,setreservationDate,setMemberCnt,setArea,setReset,setReservationDone,setReservationInfo,setRequest,setTitleSearch,setOrderByStandard,setResetSearch,setLoginMemberNo } = spaceSlice.actions;
 export default spaceSlice.reducer;
