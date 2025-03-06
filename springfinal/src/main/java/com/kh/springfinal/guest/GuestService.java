@@ -194,4 +194,10 @@ public class GuestService {
     public List<SlogListVo> slogList(String memberNo) {
         return mapper.slogList(memberNo);
     }
+
+    public int updateStay(String no, String reno) {
+        int result = mapper.updateStay(no,reno);
+        return result;
+    }
+
 }//class
