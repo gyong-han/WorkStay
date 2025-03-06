@@ -31,9 +31,8 @@ const Modal = styled.div`
 
   & > div > span {
     color: #049dd9;
-    font-size: 25px;
+    font-size: 30px;
     font-weight: 700;
-    letter-spacing: 1px;
   }
   & > div:nth-child(1) {
     display: grid;
@@ -49,7 +48,7 @@ const Modal = styled.div`
     height: 40px;
     margin-left: auto;
     margin-bottom: auto;
-    background-color: #fafafa;
+    background-color: white;
     border: none;
   }
 `;
@@ -91,7 +90,7 @@ const SelectDiv = styled.div`
   }
   & > div > label:has(input[type="radio"]:checked) {
     background-color: #04b2d9; /* 선택된 라벨 스타일 */
-    color: #fafafa;
+    color: white;
   }
 
   & > div > label {
@@ -134,8 +133,7 @@ const FooterDiv = styled.div`
     height: 45px;
     border: none;
     background-color: #049dd9;
-    color: #fafafa;
-    font-size: 20px;
+    color: white;
     border-radius: 5px;
   }
 `;
@@ -256,7 +254,7 @@ const Area = ({ isOpen, onClose }) => {
                 />
               </label>
             </div>
-            {/* <div>
+            <div>
               <label>
                 충청
                 <input
@@ -266,7 +264,7 @@ const Area = ({ isOpen, onClose }) => {
                   onClick={ClickHandler}
                 />
               </label>
-            </div> */}
+            </div>
             <div>
               <label>
                 제주
