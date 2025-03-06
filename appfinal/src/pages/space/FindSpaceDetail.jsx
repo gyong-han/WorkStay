@@ -287,7 +287,7 @@ const FindSpaceDetail = () => {
     })
     .then((resp)=>resp.json())
     .then((data)=>{
-      console.log("디테일 데이터 시점  ::: ",data);
+      // console.log("디테일 데이터 시점  ::: ",data);
       dispatch(setSpaceVo(data));
     })
     bookmarkdata();

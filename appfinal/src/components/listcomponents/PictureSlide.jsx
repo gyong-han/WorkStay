@@ -47,7 +47,7 @@ const Xdiv = styled.div`
 `;
 
 const PictureSlide = ({ w, h, imgPaths, main }) => {
-  console.log("imgpPathsss : ", imgPaths);
+  // console.log("imgpPathsss : ", imgPaths);
 
   // console.log("img path ~~~ ::: ", imgPaths);
 
