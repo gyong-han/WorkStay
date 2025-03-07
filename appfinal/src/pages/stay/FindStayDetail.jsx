@@ -270,7 +270,7 @@ const FindStayDetail = () => {
     dispatch(setRoomVo(roomListData));
     dispatch(setStayData(stayDetail));
     dispatch(setRoomData(roomListData));
-    dispatch(setAddress(stayDetail));
+    // dispatch(setAddress(stayDetail));
   };
 
   let y = "";

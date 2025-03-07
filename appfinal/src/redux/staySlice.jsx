@@ -36,6 +36,7 @@ const staySlice = createSlice({
       state.introduction = action.payload.introduction;
       state.sns = action.payload.sns;
       state.thumbnail = action.payload.thumbnail;
+      state.address = action.payload.address;
     },
     selectCheckIn: (state, action) => {
       state.checkIn = action.payload.checkIn;
