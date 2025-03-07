@@ -125,6 +125,7 @@ public class HostController {
     //내 공간 예약 목록조회
     @PostMapping("space/reservList")
     public Map<String, Object> getSpaceReservList(@RequestParam String status, @RequestParam String hostNo, @RequestParam(defaultValue = "1") int pno){
+
         int listCnt = service.getSpaceReservCount(hostNo,status);
         int pageLimit = 5;
         int boardLimit = 10;

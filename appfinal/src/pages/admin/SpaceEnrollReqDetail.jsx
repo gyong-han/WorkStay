@@ -570,7 +570,7 @@ const SpaceEnrollReqDetail = () => {
               </SpaceDiv>
               <BtnArea>
                 <div></div>
-                {role === "HOST" ? (
+                {role === "HOST" || role === "GUEST" ? (
                   <>
                     <HostBtn
                       top="90px"
