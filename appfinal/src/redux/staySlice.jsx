@@ -48,7 +48,7 @@ const staySlice = createSlice({
       state.attachmentFilePaths = action.payload.attachmentFilePaths;
     },
     setAddress: (state, action) => {
-      state.address = action.payload.address;
+      state.address = action.payload;
     },
     setSort: (state, action) => {
       state.sort = action.payload;
