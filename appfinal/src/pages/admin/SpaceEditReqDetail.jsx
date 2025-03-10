@@ -212,8 +212,6 @@ const SpaceEditReqDetail = () => {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        console.log(data);
-
         setHostvo(data.hostVo);
         setSpaceVo(data.spaceVo);
         setFeaturesList(data.featuresList);
@@ -376,7 +374,7 @@ const SpaceEditReqDetail = () => {
                 top="40px"
               />
               <DataTitle top="40px">스페이스 소개 *</DataTitle>
-              <TextDiv color="#2b8c44" height="100px">
+              <TextDiv color="#2b8c44" height="150px">
                 {editSpaceVo.introduction}
               </TextDiv>
               <DataTitle top="40px">스페이스 수용인원 *</DataTitle>

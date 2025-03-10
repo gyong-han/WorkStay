@@ -10,7 +10,7 @@ const BookmarkBtn = styled.div`
   border: none;
   color: #049dd9;
   font-size: 20px;
-  cursor: pointer;
+  cursor: auto;
 `;
 
 const BookmarkIcon = ({ type, targetNo, onToggle }) => {

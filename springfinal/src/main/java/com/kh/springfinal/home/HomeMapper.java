@@ -86,39 +86,26 @@ public interface HomeMapper {
     List<StayVo> getWinterStay();
 
     @Select("""
-            SELECT
-                            S.NO,
-                            S.HOST_NO,
-                            S.NAME,
-                            S.ADDRESS,
-                            R.PRICE,
-                            R.STANDARD_GUEST,
-                            R.MAX_GUEST,
-                            M.HOST_PERMISSION,
-                            RA.FILE_PATH,
-                            COUNT(B.STAY_NO) AS BOOKMARKS
-                        FROM STAY S
-                        JOIN (
-                            SELECT STAY_NO, PRICE, STANDARD_GUEST, MAX_GUEST,NO
-                            FROM ROOM
-                            WHERE NO = (
-                                SELECT MIN(NO)
-                                FROM ROOM R2
-                                WHERE R2.STAY_NO = ROOM.STAY_NO
-                            )
-                        ) R ON S.NO = R.STAY_NO
-                        JOIN ROOM_ATTACHMENT RA ON (R.NO = RA.ROOM_NO)
-                        JOIN MEMBER M ON S.HOST_NO = M.NO
-                        LEFT JOIN STAY_BOOKMARK B ON S.NO = B.STAY_NO
-                        WHERE M.HOST_PERMISSION = 'Y'
-                        AND S.STATUS_NO = '2'
-                        AND RA.THUMBNAIL = 'Y'
-                        AND S.DEL_YN = 'N'
-                        GROUP BY
-                            S.NO, S.HOST_NO, S.NAME, S.ADDRESS, R.PRICE,
-                            R.STANDARD_GUEST, R.MAX_GUEST, M.HOST_PERMISSION,RA.FILE_PATH
-                        ORDER BY COUNT(B.STAY_NO) DESC, S.NO DESC
-                        FETCH FIRST 5 ROWS ONLY
+             SELECT  S.HOST_NO,S.NO,S.NAME,RA.FILE_PATH,S.ADDRESS,R.PRICE,R.MAX_GUEST,R.STANDARD_GUEST,COUNT(B.STAY_NO) AS BOOKMARKS
+                       FROM STAY S
+                       JOIN (
+                       SELECT STAY_NO,NO, PRICE, STANDARD_GUEST, MAX_GUEST
+                       FROM ROOM
+                       WHERE NO = (
+                       SELECT MIN(NO)
+                       FROM ROOM R2
+                       WHERE R2.STAY_NO = ROOM.STAY_NO
+                       )
+                       ) R ON S.NO = R.STAY_NO
+                       LEFT JOIN STAY_BOOKMARK B ON S.NO = B.STAY_NO
+                       JOIN ROOM_ATTACHMENT RA ON (R.NO = RA.ROOM_NO)
+                       WHERE STATUS_NO = '2'
+                       AND RA.THUMBNAIL = 'Y'
+                       GROUP BY
+                   S.NO, S.HOST_NO, S.NAME, S.ADDRESS, R.PRICE,
+                   R.STANDARD_GUEST, R.MAX_GUEST,RA.FILE_PATH
+                    ORDER BY COUNT(B.STAY_NO) DESC, S.NO DESC
+                      FETCH FIRST 5 ROWS ONLY
             """)
     List<StayVo> getBestHitStayByFive();
 

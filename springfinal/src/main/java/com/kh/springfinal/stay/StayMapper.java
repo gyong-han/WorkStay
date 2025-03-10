@@ -30,7 +30,7 @@ public interface StayMapper {
     List<StayVo> findAllByOrderByCreatedAtDesc(String people, String area, String date, String title);
 
     @Select("""
-             SELECT  S.HOST_NO,S.NO,S.NAME,RA.FILE_PATH,S.ADDRESS,R.PRICE,R.MAX_GUEST,R.STANDARD_GUEST
+             SELECT  S.HOST_NO,S.NO,S.NAME,RA.FILE_PATH,S.ADDRESS,S.PHONE,S.TAGLINE, S.INTRODUCTION, R.PRICE,R.MAX_GUEST,R.STANDARD_GUEST
                                             FROM STAY S
                                             JOIN (
                                             SELECT STAY_NO,NO, PRICE, STANDARD_GUEST, MAX_GUEST

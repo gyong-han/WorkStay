@@ -3,11 +3,12 @@ import { BiMessageAltDetail } from "react-icons/bi";
 import { RxShare2 } from "react-icons/rx";
 import PictureSlide from "../../components/listcomponents/PictureSlide";
 import Map from "../../components/map/Map";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Calendar from "../../components/FilterBar/Calendal";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  setAddress,
   setStayData,
   setStayLoginMemberNo,
   setStayVo,
@@ -30,11 +31,12 @@ import {
 } from "../../components/service/roomService";
 import Notification from "./stayComponent/noti/Notification";
 import RoomSlider from "../room/roomComponent/RoomSlider";
-import BookmarkIcon from "../../components/bookmark/BookmarkIcon";
-import { FaAngleDown } from "react-icons/fa6";
 import { IoBookmarkOutline } from "react-icons/io5";
 import { IoBookmark } from "react-icons/io5";
 import { jwtDecode } from "jwt-decode";
+import Alert from "../../components/Alert";
+import { RiInstagramLine } from "react-icons/ri";
+import { SiNaver } from "react-icons/si";
 
 const Layout = styled.div`
   width: 100%;
@@ -181,9 +183,77 @@ const PictureWrapper = styled.div`
   place-items: center center;
 `;
 
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
+
+const InfoDiv = styled.div`
+  width: 270px;
+  height: 270px;
+  background-color: white;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr 1fr 25px 25px 1fr;
+  z-index: 999;
+  margin-right: 950px;
+  margin-bottom: 200px;
+  position: absolute;
+  justify-items: center;
+
+  & > div {
+    width: 80%;
+    height: 90%;
+    display: flex;
+    align-items: center;
+  }
+  & > div:nth-child(1) {
+    padding-top: 10px;
+    font-size: 25px;
+    font-weight: 600;
+  }
+  & > div:nth-child(2) {
+    font-size: 25px;
+  }
+  & > div:nth-child(3),
+  & > div:nth-child(4),
+  & > div:nth-child(5) {
+    display: flex;
+    align-items: end;
+    color: #999;
+  }
+`;
+
+const InfomationDiv = styled.div`
+  width: 100%;
+  height: 100%;
+  gap: 20px;
+  & > svg {
+    color: #999;
+  }
+  & > svg:hover {
+    color: black;
+  }
+  & > svg:nth-child(1) {
+    width: 20px;
+    height: 20px;
+  }
+`;
+
 const FindStayDetail = () => {
   const [bookMark, setBookMark] = useState(false);
   const [no, setNo] = useState();
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [isAlertOpen2, setIsAlertOpen2] = useState(false);
+  const [isAlertOpen3, setIsAlertOpen3] = useState(false);
   const [result, setResult] = useState([]);
   const { x } = useParams();
   const stayVo = useSelector((state) => state.stay);
@@ -201,7 +271,10 @@ const FindStayDetail = () => {
     dispatch(setRoomVo(roomListData));
     dispatch(setStayData(stayDetail));
     dispatch(setRoomData(roomListData));
+    // dispatch(setAddress(stayDetail));
   };
+
+  const navi = useNavigate();
 
   let y = "";
 
@@ -239,18 +312,42 @@ const FindStayDetail = () => {
       memberNo: no,
       stayNo: stayVo.no,
     };
-    console.log("dataObj :: ", dataObj);
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      setIsAlertOpen3(true);
+    }
 
     if (bookMark == true) {
       setBookMark(false);
       delBookmark(dataObj);
-      alert("북마크 삭제됨...");
+      setIsAlertOpen(true);
     } else {
       setBookMark(true);
       setBookmarkInsert(dataObj);
-      alert("북마크 등록됨!!!!");
+      setIsAlertOpen2(true);
     }
   };
+
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
+    navi(`/findstay/detail/${x}`);
+  };
+
+  const handleAlertClose2 = () => {
+    setIsAlertOpen2(false);
+    navi(`/findstay/detail/${x}`);
+  };
+  const handleAlertClose3 = () => {
+    setIsAlertOpen3(false);
+    navi(`/login`);
+  };
+
+  const cleaned = stayVo.phone ? stayVo.phone.replace(/\D/g, "") : "";
+  const formattedPhoneNumber = cleaned
+    ? cleaned.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3")
+    : "번호 없음";
 
   useEffect(
     (x) => {
@@ -270,7 +367,7 @@ const FindStayDetail = () => {
       reservationDate[0] !== selectedDate[0] ||
       reservationDate[1] !== selectedDate[1]
     ) {
-      console.log("📌 변경된 날짜:", selectedDate);
+      // console.log("📌 변경된 날짜:", selectedDate);
       dispatch(setStayReservationDate(selectedDate)); // Redux 저장
     }
   };
@@ -280,12 +377,8 @@ const FindStayDetail = () => {
   if (park === "4") {
     parking = "스테이 건물 전용 주차장에 주차 가능합니다";
   } else {
-    parking = "스페이스 공간 주차불가능";
+    parking = "스테이 공간 주차불가능";
   }
-
-  const navi = () => {
-    console.log("hello");
-  };
 
   return (
     <>
@@ -304,7 +397,11 @@ const FindStayDetail = () => {
               <RxShare2 />
             </div>
             <div onClick={bookmarkInsert}>
-              {!bookMark ? <IoBookmarkOutline /> : <IoBookmark />}
+              {!bookMark ? (
+                <IoBookmarkOutline color="#049dd9" />
+              ) : (
+                <IoBookmark color="#049dd9" />
+              )}
             </div>
             <div>메세지</div>
             <div>공유하기</div>
@@ -356,14 +453,60 @@ const FindStayDetail = () => {
           </div>
           <div></div>
         </div>
-        <MapDiv>
-          <Map address={stayVo.address} name={stayVo.name}>
-            {" "}
-            stay
-          </Map>
-        </MapDiv>
+        <div>
+          <InfoDiv>
+            <div>HELLO.</div>
+            <div>{stayVo.name}</div>
+            <div>({stayVo.address})</div>
+            <div>{formattedPhoneNumber}</div>
+            <div>{stayVo.sns}</div>
+            <InfomationDiv>
+              <RiInstagramLine />
+              <SiNaver />
+            </InfomationDiv>
+          </InfoDiv>
+          <MapDiv>
+            <Map address={stayVo.address} name={stayVo.name}></Map>
+          </MapDiv>
+        </div>
         <div></div>
         <Notification x={x} rooms={roomVoList} stay={stayVo}></Notification>
+        {isAlertOpen && (
+          <Backdrop>
+            <Alert
+              title="북마크"
+              titleColor="#049dd9"
+              message="북마크가 해제되었습니다."
+              buttonText="확인"
+              buttonColor="#049dd9"
+              onClose={handleAlertClose}
+            />
+          </Backdrop>
+        )}
+        {isAlertOpen2 && (
+          <Backdrop>
+            <Alert
+              title="북마크"
+              titleColor="#049dd9"
+              message="북마크가 등록되었습니다."
+              buttonText="확인"
+              buttonColor="#049dd9"
+              onClose={handleAlertClose2}
+            />
+          </Backdrop>
+        )}
+        {isAlertOpen3 && (
+          <Backdrop>
+            <Alert
+              title="로그인"
+              titleColor="#049dd9"
+              message="로그인 후 이용해주세요."
+              buttonText="확인"
+              buttonColor="#049dd9"
+              onClose={handleAlertClose3}
+            />
+          </Backdrop>
+        )}
       </Layout>
     </>
   );

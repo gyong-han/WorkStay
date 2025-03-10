@@ -1,4 +1,3 @@
-// PictureSlide.jsx
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
@@ -7,7 +6,6 @@ const SlideContainer = styled.div`
   width: ${(props) => props.w || "400"}px;
   height: ${(props) => props.h || "230"}px;
   overflow: hidden;
-  /* margin: 20px; */
 `;
 
 const Slide = styled.div`
@@ -52,10 +50,9 @@ const InfomationDiv = styled.div`
   z-index: 999;
   justify-content: center;
   align-items: center;
-  font-size: 45px;
-  color: #fafafa;
+  font-size: 40px;
+  color: white;
   font-weight: 700;
-  letter-spacing: 1px;
 `;
 
 const HomeSlide = ({ w, h, imgPaths, main }) => {

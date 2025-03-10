@@ -40,7 +40,7 @@ public interface AdminMapper {
             FROM MEMBER M
             WHERE M.HOST_PERMISSION = 'Y'
             AND M.DEL_YN = 'N' 
-            ORDER BY M.NO
+            ORDER BY M.NO DESC
             OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
             """)
     List<TableVo> getHostList(int offset, int limit);

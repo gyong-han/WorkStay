@@ -6,24 +6,32 @@ const Layout = styled.div`
   width: 100%;
   height: 100%;
   display: grid;
+  place-items: center;
   grid-template-columns: 1fr;
-  grid-template-rows: 100px 40px 380px 100px 40px 380px 100px 40px 380px 100px 40px 380px;
+  grid-template-rows: 60px 60px 380px 60px 60px 380px 60px 60px 380px 60px 60px 380px;
 `;
 
 const TitleDiv = styled.div`
   display: flex;
-  align-items: end;
+  align-items: flex-end;
+  justify-content: flex-start;
   font-size: 25px;
   font-weight: 600;
   color: #202020;
+  width: 90%;
+  margin-left: 10px;
+  margin-top: 30px;
 `;
 
 const SubTitleDiv = styled.div`
-  color: #202020;
   display: flex;
-  align-items: start;
+  align-items: flex-end;
+  justify-content: flex-start;
   font-size: 18px;
-  margin-top: 5px;
+  color: #202020;
+  width: 90%;
+  margin-left: 10px;
+  margin-bottom: 20px;
 `;
 
 const Main = () => {

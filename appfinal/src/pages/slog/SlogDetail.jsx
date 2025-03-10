@@ -489,7 +489,7 @@ const SlogDetail = () => {
         )}
       </Middle>
       <EditDeleteBtn>
-        {userNo === slogVo?.memberNo ? (
+        {userNo === slogVo?.memberNo || userNo === "1" ? (
           <>
             <button className="edit" onClick={handleEdit}>
               수정하기

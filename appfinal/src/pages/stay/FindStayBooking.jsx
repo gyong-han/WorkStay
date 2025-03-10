@@ -15,6 +15,8 @@ import {
 import { setStayVo } from "../../redux/staySlice";
 import Calendar from "../../components/FilterBar/Calendal";
 import { FaAngleDown } from "react-icons/fa6";
+import Alert from "../../components/Alert";
+import { jwtDecode } from "jwt-decode";
 
 const Layout = styled.div`
   width: 100%;
@@ -97,14 +99,30 @@ const IconLayoutDiv = styled.div`
   align-items: center;
 `;
 
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
+
 const FindStayBooking = () => {
   const { x } = useParams();
   const [selectDate, setSelectDate] = useState("");
+  const [no, setNo] = useState();
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
   const dispatch = useDispatch();
   const stayVo = useSelector((state) => state.stay);
   const roomVo = useSelector((state) => state.room);
   const reservationDate = useSelector((state) => state.room.reservationDate);
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
   const StayBooking = async () => {
     const setRoomDetail = await getRoomDetail(x);
@@ -112,6 +130,21 @@ const FindStayBooking = () => {
     dispatch(setStayVo(setRoomDetail));
     dispatch(setRoomData(setRoomDetail));
   };
+
+  let y = "";
+
+  useEffect(() => {
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        // dispatch(setStayLoginMemberNo(decodedToken.no));
+        y = decodedToken.no;
+        setNo(y);
+      } catch (error) {
+        console.error("토큰 디코딩 실패:", error);
+      }
+    }
+  }, []);
 
   const handleDateChange = (selectedDate) => {
     if (
@@ -125,7 +158,17 @@ const FindStayBooking = () => {
   };
 
   const handleReservation = () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setIsAlertOpen(true);
+      return;
+    }
     navigate(`/findstay/reservation/${x}`);
+  };
+
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
+    navigate(`/login`);
   };
 
   useEffect(() => {
@@ -214,6 +257,18 @@ const FindStayBooking = () => {
       </ContentLayout>
       <div></div>
       <Notification x={x} rooms={roomVo} stay={stayVo} />
+      {isAlertOpen && (
+        <Backdrop>
+          <Alert
+            title="로그인"
+            titleColor="#049dd9"
+            message="로그인 후 이용해주세요."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose}
+          />
+        </Backdrop>
+      )}
     </Layout>
   );
 };

@@ -46,7 +46,6 @@ const MenuAreaDiv = styled.div`
   display: grid;
   grid-template-rows: repeat(8, 60px);
   place-items: center center;
-  position: fixe;
 `;
 
 const MenuDiv = styled.div`
