@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setReservationInfo } from "../../redux/spaceSlice";
 import { getInfomation, getMemberInfo, inputReservation } from "../../components/service/spaceServcie";
 import { useNavigate } from "react-router-dom";
+import KakaoMsg from "../../components/kakaopage/KakaoMsg";
 
 const Wrapper = styled.div`
   display: grid;
@@ -184,6 +185,8 @@ const SpaceReservation = () => {
           <Btn bg="#fafafa" c="#202020" f={clickHandler}>
             예약 취소
           </Btn>
+          <div></div>
+          <KakaoMsg></KakaoMsg>
         </ButtonWrapper>
       </Wrapper>
     </>
