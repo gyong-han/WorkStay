@@ -216,21 +216,27 @@ const SecondEnrollStay = () => {
   };
 
   const changephone = (e) => {
-    let inputValue = e.target.value;
+    //\d는 숫자를 의미, \D는 그 반대
+    let inputValue = e.target.value.replace(/\D/g, "").slice(0, 11);
 
-    // 숫자만 입력 허용 & 11자리 제한 적용
-    inputValue = inputValue.replace(/\D/g, "").slice(0, 11);
     setPhone(inputValue);
-    handleChange(e);
+    setFormData((prev) => {
+      return {
+        ...prev,
+        phone: inputValue,
+      };
+    });
   };
 
   const changebrn = (e) => {
-    let inputValue = e.target.value;
-
-    // 숫자만 입력 허용 & 10자리 제한 적용
-    inputValue = inputValue.replace(/\D/g, "").slice(0, 10);
+    let inputValue = e.target.value.replace(/\D/g, "").slice(0, 10);
     setbrn(inputValue);
-    handleChange(e);
+    setFormData((prev) => {
+      return {
+        ...prev,
+        brn: inputValue,
+      };
+    });
   };
 
   //fetch함수

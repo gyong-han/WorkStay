@@ -85,7 +85,6 @@ const RoomEditReqDetail = () => {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        console.log(data);
         setRoomVo(data.roomVo);
         setFeaturesArr(data.featuresList);
         setRoomFloorPlan(data.roomFloorPlan);
