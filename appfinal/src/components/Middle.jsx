@@ -24,7 +24,8 @@ const Middle = () => {
           setHomeSlide(fileArr);
         }
       });
-  }, []);
+
+  }, [homeSlide]);
 
   return (
     <MiddleContainer>
