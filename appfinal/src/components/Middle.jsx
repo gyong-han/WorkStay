@@ -25,7 +25,7 @@ const Middle = () => {
         }
       });
 
-  }, [homeSlide]);
+  }, []);
 
   return (
     <MiddleContainer>
