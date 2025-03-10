@@ -40,7 +40,7 @@ const memberSlice = createSlice({
       state.email = null;
       state.pageNick = "LOGIN";
       localStorage.removeItem("token"); // 로그아웃 시 토큰 삭제
-      window.location.reload();
+      localStorage.removeItem("kakao_a6735a34948b72ea00b68392d6281037");
     },
     findpwd: (state, action) => {
       state.email = action.payload.email;

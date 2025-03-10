@@ -9,6 +9,7 @@ import {
 } from "../../components/service/roomService";
 import { setStayReservationInfo } from "../../redux/roomSlice";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 const Wrapper = styled.div`
   display: grid;
@@ -112,6 +113,8 @@ const Reservations = () => {
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
 
+  const navigate = useNavigate();
+
   const rd = new FormData();
   const [memberInfo, setMemberInfo] = useState({});
 
@@ -135,7 +138,6 @@ const Reservations = () => {
   const RoomReservation = async () => {
     try {
       const insertData = await roomReservation(rData);
-      console.log("rd :: ", rd);
       const getInfo = await getReservationInfo(rd);
       console.log("GET INFO :: ", getInfo);
 
@@ -196,11 +198,25 @@ const Reservations = () => {
         </UserWrapper>
         <LineDiv />
         <ButtonWrapper>
-          <Btn b="none">예약상세보기</Btn>
+          <div
+            onClick={() => {
+              navigate(`/hostMenu/staydetail?reno=${roomVo.reservationNo}`);
+            }}
+          >
+            <Btn b="none">예약상세보기</Btn>
+          </div>
           <div></div>
-          <Btn bg="#fafafa" c="#202020">
-            예약 취소
-          </Btn>
+          <div
+            onClick={() => {
+              navigate(
+                `/hostMenu/staydetail/staycancle?no=1&reno=${roomVo.reservationNo}`
+              );
+            }}
+          >
+            <Btn bg="#fafafa" c="#202020">
+              예약 취소
+            </Btn>
+          </div>
         </ButtonWrapper>
       </Wrapper>
     </>

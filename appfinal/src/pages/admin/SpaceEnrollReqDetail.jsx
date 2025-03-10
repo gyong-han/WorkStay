@@ -411,7 +411,7 @@ const SpaceEnrollReqDetail = () => {
                   top="40px"
                 />
                 <DataTitle top="40px">스페이스 소개 *</DataTitle>
-                <TextDiv height="100px">{spaceVo.introduction}</TextDiv>
+                <TextDiv height="150px">{spaceVo.introduction}</TextDiv>
                 <DataTitle top="40px">스페이스 수용인원 *</DataTitle>
                 <div>
                   <DataInput2
@@ -570,7 +570,7 @@ const SpaceEnrollReqDetail = () => {
               </SpaceDiv>
               <BtnArea>
                 <div></div>
-                {role === "HOST" ? (
+                {role === "HOST" || role === "GUEST" ? (
                   <>
                     <HostBtn
                       top="90px"

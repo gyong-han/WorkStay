@@ -195,4 +195,11 @@ public class GuestController {
         return result;
     }
 
+    //이용 확정 으로 바꾸기
+    @PostMapping("updateStay")
+    public int updateStay(@RequestParam String no, @RequestParam String reno){
+        int result = service.updateStay(no,reno);
+        return result;
+    }
+
 }

@@ -13,16 +13,15 @@ const HomeContainer = styled.div`
 
 const Content = styled.div`
   flex: 1;
-  background-color: #f9f9f9;
+  background-color: #fafafa;
 `;
-
 
 const Home = () => {
   return (
     <HomeContainer>
       <Content>
         <Middle />
-        <Main/>
+        <Main />
       </Content>
     </HomeContainer>
   );

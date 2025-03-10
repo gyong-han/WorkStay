@@ -16,6 +16,7 @@ const roomSlice = createSlice({
     standardGuest: "",
     maxGuest: "",
     filePath: "",
+    title: "",
     attachmentFilePaths: [],
     features: [],
     checkIn: "",
@@ -86,8 +87,10 @@ const roomSlice = createSlice({
       state.baby = 0;
       state.area = "";
       state.reservationDone = "";
-      state.titleData = "";
+      state.title = "";
       state.sort = "";
+      state.checkIn = "";
+      state.checkOut = "";
     },
   },
 });

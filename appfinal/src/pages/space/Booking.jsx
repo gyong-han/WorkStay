@@ -8,8 +8,7 @@ import { useNavigate } from "react-router-dom";
 import PaymentBtn from "../../components/payment/PaymentBtn";
 import SpaceAccordion from "./spaceComponents/SpaceAccordion";
 import { getMemberInfo } from "../../components/service/spaceServcie";
-import { jwtDecode } from'jwt-decode'
-
+import { jwtDecode } from "jwt-decode";
 
 const Layout = styled.div`
   display: grid;
@@ -235,33 +234,32 @@ const Ptag = styled.p`
 `;
 
 const Booking = () => {
+  const spaceVo = useSelector((state) => state.space);
+  const [loginMember, setLoginMember] = useState({});
+  const [phoneNumber, setPhoneNumber] = useState();
+  const [check, setCheck] = useState();
+  const token = localStorage.getItem("token");
+  const decodedToken = jwtDecode(token);
 
-  const spaceVo = useSelector((state)=>state.space);
-   const [loginMember,setLoginMember] = useState({});
-   const [phoneNumber,setPhoneNumber] = useState();
-   const [check,setCheck] = useState();
-   const token = localStorage.getItem("token");
-   const decodedToken = jwtDecode(token);
-   
-
-   useEffect(()=>{
-  
-    const memberInfomation = async ()=>{
+  useEffect(() => {
+    const memberInfomation = async () => {
       const memberObj = await getMemberInfo(decodedToken.no);
       setLoginMember(memberObj);
-      const cleaned = memberObj.phone?.replace(/\D/g, '') || ''; 
-      const formattedPhoneNumber = cleaned.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
-      setPhoneNumber(formattedPhoneNumber);      
-     }   
-     memberInfomation();
-   },[])
+      const cleaned = memberObj.phone?.replace(/\D/g, "") || "";
+      const formattedPhoneNumber = cleaned.replace(
+        /(\d{3})(\d{4})(\d{4})/,
+        "$1-$2-$3"
+      );
+      setPhoneNumber(formattedPhoneNumber);
+    };
+    memberInfomation();
+  }, []);
 
-  
   const termsData = [
     {
       id: 1,
       text: "(필수) 개인정보 제 3자 제공 동의",
-      details:(
+      details: (
         <div>
           <p>
             (주)워크스테이는 예약 시스템 제공 과정에서 예약자 동의 하에 서비스
@@ -325,98 +323,95 @@ const Booking = () => {
         </TableWrapper>
       ),
     },
-    
   ];
   const [checkedItems, setCheckedItems] = useState([]);
 
- // 개별 체크박스 클릭 시
-const handleSingleCheck = (checked, id) => {
-  if (checked) {
-    setCheckedItems((prev) => [...prev, id]);
-  } else {
-    setCheckedItems((prev) => prev.filter((item) => item !== id));
-  }
-};
+  // 개별 체크박스 클릭 시
+  const handleSingleCheck = (checked, id) => {
+    if (checked) {
+      setCheckedItems((prev) => [...prev, id]);
+    } else {
+      setCheckedItems((prev) => prev.filter((item) => item !== id));
+    }
+  };
 
-// 전체 체크박스 클릭 시
-const handleAllCheck = (checked) => {
-  if (checked) {
-    setCheckedItems(termsData.map((item) => item.id));
-    setCheck(checked);
-  } else {
-    setCheckedItems([]);
-    setCheck(checked);
-  }
-};
+  // 전체 체크박스 클릭 시
+  const handleAllCheck = (checked) => {
+    if (checked) {
+      setCheckedItems(termsData.map((item) => item.id));
+      setCheck(checked);
+    } else {
+      setCheckedItems([]);
+      setCheck(checked);
+    }
+  };
 
-// 개별 체크박스를 체크할 때 전체 체크 상태 업데이트
-useEffect(() => {
-  if (checkedItems.length === termsData.length) {
-    // 모든 체크박스가 체크되면 전체 체크박스도 체크됨
-    setCheck(true);
-  } else {
-    setCheck(false);
-  }
-}, [checkedItems]);
+  // 개별 체크박스를 체크할 때 전체 체크 상태 업데이트
+  useEffect(() => {
+    if (checkedItems.length === termsData.length) {
+      // 모든 체크박스가 체크되면 전체 체크박스도 체크됨
+      setCheck(true);
+    } else {
+      setCheck(false);
+    }
+  }, [checkedItems]);
 
   // const navi = useNavigate();
 
   // 날짜 선택
-  const [selectDate,setSelectDate] = useState("");
-  const [request,setRequest] = useState("");
-  
-  const priceData = spaceVo.packageType === '낮 패키지'?spaceVo.daytimePrice :spaceVo.nightPrice;
-  const packageNo = spaceVo.packageType === '낮 패키지'?1:2;
+  const [selectDate, setSelectDate] = useState("");
+  const [request, setRequest] = useState("");
+
+  const priceData =
+    spaceVo.packageType === "낮 패키지"
+      ? spaceVo.daytimePrice
+      : spaceVo.nightPrice;
+  const packageNo = spaceVo.packageType === "낮 패키지" ? 2 : 1;
   const price = priceData.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const navi = useNavigate();
-  
-
- 
 
   //localstorge용 데이터 뭉치기
-    const fd = {
-      filePath : spaceVo.filePath,
-      spaceNo: spaceVo.no,
-      memberNo: spaceVo.memberNo,
-      paymentNo: 1,
-      packageNo: packageNo,
-      adult: spaceVo.adult,
-      child: spaceVo.child,
-      baby: spaceVo.baby,
-      request: request,
-      amount: priceData,
-      useDay: spaceVo.reservationDate,
-      name : spaceVo.name,
+  const fd = {
+    filePath: spaceVo.filePath,
+    spaceNo: spaceVo.no,
+    memberNo: spaceVo.memberNo,
+    paymentNo: 1,
+    packageNo: packageNo,
+    adult: spaceVo.adult,
+    child: spaceVo.child,
+    baby: spaceVo.baby,
+    request: request,
+    amount: priceData,
+    useDay: spaceVo.reservationDate,
+    name: spaceVo.name,
   };
 
-// 이제 `fd` 객체는 로컬스토리지에 저장할 수 있습니다.
+  // 이제 `fd` 객체는 로컬스토리지에 저장할 수 있습니다.
   localStorage.setItem("fd", JSON.stringify(fd));
 
+  const fdData = {
+    no: spaceVo.no,
+    name: spaceVo.name,
+    packageType: spaceVo.packageType,
+    price: priceData,
+  };
 
-
-
-const fdData = {
-  no: spaceVo.no,
-  name: spaceVo.name,
-  packageType: spaceVo.packageType,
-  price: priceData,
-};
-  
-  
   return (
     <Layout>
       <BookingText>BOOKING</BookingText>
       <DateWrapper>
-        
-          <DateSpan>
+        <DateSpan>
           {!spaceVo.reservationDate ? (
-          <CalendarTime type={"text"} setSelectDate={setSelectDate}>날짜 선택</CalendarTime>
+            <CalendarTime type={"text"} setSelectDate={setSelectDate}>
+              날짜 선택
+            </CalendarTime>
           ) : (
-            <CalendarTime type={"text"} setSelectDate={setSelectDate}>{spaceVo.reservationDate}</CalendarTime>
+            <CalendarTime type={"text"} setSelectDate={setSelectDate}>
+              {spaceVo.reservationDate}
+            </CalendarTime>
           )}
-            <FaAngleDown />
-          </DateSpan>
-        
+          <FaAngleDown />
+        </DateSpan>
       </DateWrapper>
       <LineDiv />
       <ReservationText>Reservations</ReservationText>
@@ -424,17 +419,21 @@ const fdData = {
       <ReservationWrapper>
         <ReservationDiv>
           <InfoText>예약 스페이스</InfoText>
-          <Info>{spaceVo.name} / {spaceVo.packageType}</Info>
+          <Info>
+            {spaceVo.name} / {spaceVo.packageType}
+          </Info>
         </ReservationDiv>
         <ReservationLine />
         <ReservationDiv>
           <InfoText>예약일</InfoText>
           <Info>
-          {!spaceVo.reservationDate ? (
-          <CalendarTime type={"text"}>날짜를 입력해주세요.</CalendarTime>
-          ) : (
-            <CalendarTime type={"text"} position={true}>{spaceVo.reservationDate}</CalendarTime>
-          )}
+            {!spaceVo.reservationDate ? (
+              <CalendarTime type={"text"}>날짜를 입력해주세요.</CalendarTime>
+            ) : (
+              <CalendarTime type={"text"} position={true}>
+                {spaceVo.reservationDate}
+              </CalendarTime>
+            )}
           </Info>
         </ReservationDiv>
         <ReservationLine />
@@ -456,13 +455,16 @@ const fdData = {
         <ReservationDiv>
           <InfoText>인원</InfoText>
           <Info>
-            <SelectPeople maxAdults={40} maxChildren={10} maxInfant={5}/>
+            <SelectPeople maxAdults={40} maxChildren={10} maxInfant={5} />
           </Info>
         </ReservationDiv>
         <ReservationLine />
         <ReservationDiv>
           <InfoText>요청사항</InfoText>
-          <Request onChange={(e)=>{setRequest(e.target.value)}}
+          <Request
+            onChange={(e) => {
+              setRequest(e.target.value);
+            }}
             placeholder="사전에 협의되지 않은 상업 사진 및 영상 촬영은 불가합니다.
 상업적 용도의 촬영은 별도 대관료를 책정하여 운영하고 있습니다."
           />
@@ -481,8 +483,7 @@ const fdData = {
               <span>{spaceVo.reservationDate}</span>
               <span>₩{price}</span>
             </ChargeDate>
-            <ChargeDate>
-            </ChargeDate>
+            <ChargeDate></ChargeDate>
             <ChargeLine />
           </div>
           <div></div>
@@ -525,7 +526,7 @@ const fdData = {
       </UserAgreeWrapper>
       <PaddingDiv>
         {/* <Btn f={clickHandler} w={"500px"}>결제하기</Btn> */}
-        <PaymentBtn reservationData ={fdData} checkInfo={check}/>
+        <PaymentBtn reservationData={fdData} checkInfo={check} />
       </PaddingDiv>
       <ProvisionDiv>
         <ProvisionSpan>
@@ -539,7 +540,6 @@ const fdData = {
         </ProvisionSpan>
       </ProvisionDiv>
     </Layout>
-    
   );
 };
 

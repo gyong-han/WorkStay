@@ -79,7 +79,7 @@ const SpaceDelReq = () => {
     <>
       <MainDiv>
         <div>
-          <StatusSpan left="330px">공간 삭제 목록</StatusSpan>
+          <StatusSpan left="300px">공간 삭제 목록</StatusSpan>
         </div>
         <div>
           <StyledTable>

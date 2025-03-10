@@ -352,7 +352,7 @@ const EnrollReqRoom = ({
         </div>
 
         <DataTitle top="40px">독채 소개 *</DataTitle>
-        <TextDiv height="100px">{roomVo.introduction}</TextDiv>
+        <TextDiv height="150px">{roomVo.introduction}</TextDiv>
 
         <DataTitle top="40px">독채 평면도 *</DataTitle>
         <div>

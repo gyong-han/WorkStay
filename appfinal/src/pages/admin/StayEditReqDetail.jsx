@@ -332,7 +332,7 @@ const StayEditReqDetail = () => {
               top="40px"
             />
             <DataTitle top="40px">스테이 소개 *</DataTitle>
-            <TextDiv height="100px">{editStayVo.introduction}</TextDiv>
+            <TextDiv height="150px">{editStayVo.introduction}</TextDiv>
             <DataTitle top="40px">추천 계절 *</DataTitle>
             <RadioArea>
               <RadioDiv>

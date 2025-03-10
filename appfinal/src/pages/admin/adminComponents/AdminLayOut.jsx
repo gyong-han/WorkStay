@@ -1,6 +1,8 @@
+import { jwtDecode } from "jwt-decode";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
+import Alert from "../../../components/Alert";
 
 const HomeDiv = styled.div`
   display: grid;
@@ -57,11 +59,40 @@ const MenuDiv = styled.div`
   }
 `;
 
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
+
 const AdminLayOut = ({ children }) => {
   const navigate = useNavigate();
   const [selectedMenu, setSelectedMenu] = useState("");
   const [url, setUrl] = useState("");
   const { pathname } = useLocation();
+  const token = localStorage.getItem("token");
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [pageNick, setPageNick] = useState("");
+
+  useEffect(() => {
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      const pageNick = decodedToken.pageNick;
+      setPageNick(pageNick);
+      if (pageNick != "ADMIN") {
+        setIsAlertOpen(true);
+      }
+    } else {
+      navigate("/login");
+    }
+  }, [token]);
 
   useEffect(() => {
     const lastPath = pathname.split("/").pop();
@@ -77,86 +108,108 @@ const AdminLayOut = ({ children }) => {
     navigate(`/adminMenu/${e.target.id}`);
   }
 
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
+    navigate("/");
+  };
+
   return (
     <>
-      <HomeDiv>
-        <div>
-          <HeaderDiv size="40px" color="#F20530" margin="70px" weight="400">
-            ADMIN
-          </HeaderDiv>
-          <HeaderDiv
-            size="50px"
-            color="black"
-            weight="600"
-            margin="10px"
-            marginBot="70px"
-          >
-            관리자님 반가워요!
-          </HeaderDiv>
-          <Hr />
-        </div>
-        <MainDiv>
-          <MenuAreaDiv>
-            <MenuDiv
-              id=""
-              onClick={movePath}
-              selected={selectedMenu === "" || selectedMenu === "adminMenu"}
+      {pageNick === "ADMIN" ? (
+        <HomeDiv>
+          <div>
+            <HeaderDiv size="40px" color="#F20530" margin="70px" weight="400">
+              ADMIN
+            </HeaderDiv>
+            <HeaderDiv
+              size="50px"
+              color="black"
+              weight="600"
+              margin="10px"
+              marginBot="70px"
             >
-              호스트 조회
-            </MenuDiv>
-            <MenuDiv
-              id="stayEnrollReq"
-              onClick={movePath}
-              selected={selectedMenu === "stayEnrollReq"}
-            >
-              숙소 입점 요청
-            </MenuDiv>
-            <MenuDiv
-              id="spaceEnrollReq"
-              onClick={movePath}
-              selected={selectedMenu === "spaceEnrollReq"}
-            >
-              공간 입점 요청
-            </MenuDiv>
-            <MenuDiv
-              id="stayEditReq"
-              onClick={movePath}
-              selected={selectedMenu === "stayEditReq"}
-            >
-              숙소 수정 요청
-            </MenuDiv>
-            <MenuDiv
-              id="roomEditReq"
-              onClick={movePath}
-              selected={selectedMenu === "roomEditReq"}
-            >
-              독채 수정 요청
-            </MenuDiv>
-            <MenuDiv
-              id="spaceEditReq"
-              onClick={movePath}
-              selected={selectedMenu === "spaceEditReq"}
-            >
-              공간 수정 요청
-            </MenuDiv>
-            <MenuDiv
-              id="stayDelReq"
-              onClick={movePath}
-              selected={selectedMenu === "stayDelReq"}
-            >
-              숙소 삭제 목록
-            </MenuDiv>
-            <MenuDiv
-              id="spaceDelReq"
-              onClick={movePath}
-              selected={selectedMenu === "spaceDelReq"}
-            >
-              공간 삭제 목록
-            </MenuDiv>
-          </MenuAreaDiv>
-          <div>{children}</div>
-        </MainDiv>
-      </HomeDiv>
+              관리자님 반가워요!
+            </HeaderDiv>
+            <Hr />
+          </div>
+          <MainDiv>
+            <MenuAreaDiv>
+              <MenuDiv
+                id=""
+                onClick={movePath}
+                selected={selectedMenu === "" || selectedMenu === "adminMenu"}
+              >
+                호스트 조회
+              </MenuDiv>
+              <MenuDiv
+                id="stayEnrollReq"
+                onClick={movePath}
+                selected={selectedMenu === "stayEnrollReq"}
+              >
+                숙소 입점 요청
+              </MenuDiv>
+              <MenuDiv
+                id="spaceEnrollReq"
+                onClick={movePath}
+                selected={selectedMenu === "spaceEnrollReq"}
+              >
+                공간 입점 요청
+              </MenuDiv>
+              <MenuDiv
+                id="stayEditReq"
+                onClick={movePath}
+                selected={selectedMenu === "stayEditReq"}
+              >
+                숙소 수정 요청
+              </MenuDiv>
+              <MenuDiv
+                id="roomEditReq"
+                onClick={movePath}
+                selected={selectedMenu === "roomEditReq"}
+              >
+                독채 수정 요청
+              </MenuDiv>
+              <MenuDiv
+                id="spaceEditReq"
+                onClick={movePath}
+                selected={selectedMenu === "spaceEditReq"}
+              >
+                공간 수정 요청
+              </MenuDiv>
+              <MenuDiv
+                id="stayDelReq"
+                onClick={movePath}
+                selected={selectedMenu === "stayDelReq"}
+              >
+                숙소 삭제 목록
+              </MenuDiv>
+              <MenuDiv
+                id="spaceDelReq"
+                onClick={movePath}
+                selected={selectedMenu === "spaceDelReq"}
+              >
+                공간 삭제 목록
+              </MenuDiv>
+            </MenuAreaDiv>
+            <div>{children}</div>
+          </MainDiv>
+        </HomeDiv>
+      ) : (
+        <></>
+      )}
+
+      {isAlertOpen && (
+        <Backdrop>
+          <Alert
+            title="권한 오류"
+            titleColor="red"
+            message="관리자만 접근 가능합니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose}
+          />
+        </Backdrop>
+      )}
     </>
   );
 };

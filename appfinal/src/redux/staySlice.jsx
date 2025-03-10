@@ -15,6 +15,7 @@ const staySlice = createSlice({
     sns: "",
     brn: "",
     season: "",
+    titleData: "",
     filePath: "",
     attachmentFilePaths: [],
     price: "",
@@ -35,6 +36,7 @@ const staySlice = createSlice({
       state.introduction = action.payload.introduction;
       state.sns = action.payload.sns;
       state.thumbnail = action.payload.thumbnail;
+      state.address = action.payload.address;
     },
     selectCheckIn: (state, action) => {
       state.checkIn = action.payload.checkIn;
@@ -53,7 +55,7 @@ const staySlice = createSlice({
       state.sort = action.payload;
     },
     setSearch: (state, action) => {
-      state.titleData = action.payload;
+      state.title = action.payload;
     },
     setStayLoginMemberNo: (state, action) => {
       state.memberNo = Number(action.payload);
@@ -63,6 +65,8 @@ const staySlice = createSlice({
       state.sort = "";
       state.title = "";
       state.reservationDate = "";
+      state.checkIn = "";
+      state.checkOut = "";
     },
   },
 });
@@ -73,6 +77,7 @@ export const {
   selectCheckOut,
   setStayData,
   setAddress,
+  setSearch,
   setSort,
   setStayLoginMemberNo,
   setReset,

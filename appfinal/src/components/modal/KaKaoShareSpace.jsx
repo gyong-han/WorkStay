@@ -15,7 +15,7 @@ const KakaoShareSpace = ({ no }) => {
         }
       );
       const data = await response.json();
-      console.log("가져온 데이터 ",data);
+      // console.log("가져온 데이터 ",data);
       setContent(data);
     };
     shareKakao();

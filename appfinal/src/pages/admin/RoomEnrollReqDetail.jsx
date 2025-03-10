@@ -45,7 +45,7 @@ const BtnArea = styled.div`
 `;
 
 const Hr = styled.hr`
-  margin-top: 100px;
+  margin-top: 170px;
   margin-bottom: 50px;
   background-color: #d9d9d9;
 `;
