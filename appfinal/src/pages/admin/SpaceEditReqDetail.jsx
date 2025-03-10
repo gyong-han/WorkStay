@@ -212,8 +212,6 @@ const SpaceEditReqDetail = () => {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        console.log(data);
-
         setHostvo(data.hostVo);
         setSpaceVo(data.spaceVo);
         setFeaturesList(data.featuresList);

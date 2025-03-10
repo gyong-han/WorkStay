@@ -1,4 +1,5 @@
-import React from "react";
+import { jwtDecode } from "jwt-decode";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const RoomDiv = styled.div`
@@ -166,6 +167,16 @@ const EnrollReqRoom = ({
   roomAttachArr,
   no,
 }) => {
+  const [pageNick, setPageNick] = useState();
+  const token = localStorage.getItem("token");
+  useEffect(() => {
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      const pageNick = decodedToken.pageNick;
+      setPageNick(pageNick);
+    }
+  }, []);
+
   return (
     <>
       <RoomDiv>
@@ -366,7 +377,11 @@ const EnrollReqRoom = ({
 
         <div>
           <DataTitle top="40px">독채 사진 첨부파일 *</DataTitle>
-          <DataTitle2>*최소 3장 이상</DataTitle2>
+          {pageNick === "ADMIN" ? (
+            <></>
+          ) : (
+            <DataTitle2>*최소 3장 이상</DataTitle2>
+          )}
         </div>
         <div>
           {roomAttachArr.map((data, idx) => {
