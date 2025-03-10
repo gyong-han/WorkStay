@@ -3,7 +3,7 @@ import { BiMessageAltDetail } from "react-icons/bi";
 import { RxShare2 } from "react-icons/rx";
 import PictureSlide from "../../components/listcomponents/PictureSlide";
 import Map from "../../components/map/Map";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Calendar from "../../components/FilterBar/Calendal";
 import { useDispatch, useSelector } from "react-redux";
@@ -253,6 +253,7 @@ const FindStayDetail = () => {
   const [no, setNo] = useState();
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [isAlertOpen2, setIsAlertOpen2] = useState(false);
+  const [isAlertOpen3, setIsAlertOpen3] = useState(false);
   const [result, setResult] = useState([]);
   const { x } = useParams();
   const stayVo = useSelector((state) => state.stay);
@@ -272,6 +273,8 @@ const FindStayDetail = () => {
     dispatch(setRoomData(roomListData));
     // dispatch(setAddress(stayDetail));
   };
+
+  const navi = useNavigate();
 
   let y = "";
 
@@ -310,6 +313,12 @@ const FindStayDetail = () => {
       stayNo: stayVo.no,
     };
 
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      setIsAlertOpen3(true);
+    }
+
     if (bookMark == true) {
       setBookMark(false);
       delBookmark(dataObj);
@@ -329,6 +338,10 @@ const FindStayDetail = () => {
   const handleAlertClose2 = () => {
     setIsAlertOpen2(false);
     navi(`/findstay/detail/${x}`);
+  };
+  const handleAlertClose3 = () => {
+    setIsAlertOpen3(false);
+    navi(`/login`);
   };
 
   const cleaned = stayVo.phone ? stayVo.phone.replace(/\D/g, "") : "";
@@ -364,12 +377,8 @@ const FindStayDetail = () => {
   if (park === "4") {
     parking = "스테이 건물 전용 주차장에 주차 가능합니다";
   } else {
-    parking = "스페이스 공간 주차불가능";
+    parking = "스테이 공간 주차불가능";
   }
-
-  const navi = () => {
-    console.log("hello");
-  };
 
   return (
     <>
@@ -483,6 +492,18 @@ const FindStayDetail = () => {
               buttonText="확인"
               buttonColor="#049dd9"
               onClose={handleAlertClose2}
+            />
+          </Backdrop>
+        )}
+        {isAlertOpen3 && (
+          <Backdrop>
+            <Alert
+              title="로그인"
+              titleColor="#049dd9"
+              message="로그인 후 이용해주세요."
+              buttonText="확인"
+              buttonColor="#049dd9"
+              onClose={handleAlertClose3}
             />
           </Backdrop>
         )}
