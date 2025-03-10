@@ -371,19 +371,21 @@ const Booking = () => {
   const navi = useNavigate();
 
   //localstorge용 데이터 뭉치기
-  const fd = {
-    filePath: spaceVo.filePath,
-    spaceNo: spaceVo.no,
-    memberNo: spaceVo.memberNo,
-    paymentNo: 1,
-    packageNo: packageNo,
-    adult: spaceVo.adult,
-    child: spaceVo.child,
-    baby: spaceVo.baby,
-    request: request,
-    amount: priceData,
-    useDay: spaceVo.reservationDate,
-    name: spaceVo.name,
+    const fd = {
+      filePath : spaceVo.filePath,
+      spaceNo: spaceVo.no,
+      memberNo: spaceVo.memberNo,
+      paymentNo: 1,
+      packageNo: packageNo,
+      adult: spaceVo.adult,
+      child: spaceVo.child,
+      baby: spaceVo.baby,
+      request: request,
+      amount: priceData,
+      useDay: spaceVo.reservationDate,
+      name : spaceVo.name,
+      tagline: spaceVo.tagline,
+
   };
 
   // 이제 `fd` 객체는 로컬스토리지에 저장할 수 있습니다.
