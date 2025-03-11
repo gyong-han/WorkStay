@@ -37,6 +37,7 @@ import { jwtDecode } from "jwt-decode";
 import Alert from "../../components/Alert";
 import { RiInstagramLine } from "react-icons/ri";
 import { SiNaver } from "react-icons/si";
+import ShareModal from "../../components/modal/ShareModal";
 
 const Layout = styled.div`
   width: 100%;
@@ -254,6 +255,7 @@ const FindStayDetail = () => {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [isAlertOpen2, setIsAlertOpen2] = useState(false);
   const [isAlertOpen3, setIsAlertOpen3] = useState(false);
+  const [modalStatus, setModalStatus] = useState("");
   const [result, setResult] = useState([]);
   const { x } = useParams();
   const stayVo = useSelector((state) => state.stay);
@@ -330,6 +332,7 @@ const FindStayDetail = () => {
     }
   };
 
+  // 북마크 알림창
   const handleAlertClose = () => {
     setIsAlertOpen(false);
     navi(`/findstay/detail/${x}`);
@@ -339,9 +342,19 @@ const FindStayDetail = () => {
     setIsAlertOpen2(false);
     navi(`/findstay/detail/${x}`);
   };
+
+  // 로그인으로 보내는 알림
   const handleAlertClose3 = () => {
     setIsAlertOpen3(false);
     navi(`/login`);
+  };
+
+  // share Modal
+  const openModal = () => {
+    setModalStatus("flex");
+  };
+  const closeModal = () => {
+    setModalStatus("");
   };
 
   const cleaned = stayVo.phone ? stayVo.phone.replace(/\D/g, "") : "";
@@ -382,6 +395,12 @@ const FindStayDetail = () => {
 
   return (
     <>
+      <ShareModal
+        type="stay"
+        closeModal={closeModal}
+        modalStatus={modalStatus}
+        no={x}
+      />
       <Layout>
         <TitleDiv>
           <div>
@@ -393,7 +412,7 @@ const FindStayDetail = () => {
             <div>
               <BiMessageAltDetail />
             </div>
-            <div>
+            <div onClick={openModal}>
               <RxShare2 />
             </div>
             <div onClick={bookmarkInsert}>
@@ -404,7 +423,7 @@ const FindStayDetail = () => {
               )}
             </div>
             <div>메세지</div>
-            <div>공유하기</div>
+            <div onClick={openModal}>공유하기</div>
             <div>북마크</div>
           </InconTitleDiv>
         </TitleDiv>

@@ -68,11 +68,6 @@ public interface RoomMapper {
             SELECT DISTINCT CHECK_OUT
             FROM ROOM_RESERVATION
             WHERE ROOM_NO = #{no}
-                AND CHECK_OUT IN (
-                            SELECT CHECK_OUT
-                            FROM ROOM_RESERVATION
-                            WHERE ROOM_NO = #{no}
-                        )
             """)
     String[] getIsAvailable(Long no);
 

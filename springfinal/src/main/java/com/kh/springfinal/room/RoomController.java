@@ -68,6 +68,4 @@ public class RoomController {
             throw new IllegalStateException("[ROOM-ERROR-01]ROOM-MEMBER INFO FAIL");
         }
     }
-
-
 }
