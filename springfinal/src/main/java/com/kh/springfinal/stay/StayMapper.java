@@ -21,13 +21,13 @@ public interface StayMapper {
             """)
     List<RoomAttachmentVo> stayGetAttachmentList();
 
-    List<StayVo> findAllByOrderByPriceAsc(String people, String area, String date, String title);
+    List<StayVo> findAllByOrderByPriceAsc(String people, String area, String checkIn, String checkOut, String title);
 
-    List<StayVo> findAllByOrderByPriceDesc(String people, String area, String date, String title);
+    List<StayVo> findAllByOrderByPriceDesc(String people, String area, String checkIn, String checkOut, String title);
 
-    List<StayVo> findAllByOrderByBookmarksDesc(String people, String area, String date, String title);
+    List<StayVo> findAllByOrderByBookmarksDesc(String people, String area, String checkIn, String checkOut, String title);
 
-    List<StayVo> findAllByOrderByCreatedAtDesc(String people, String area, String date, String title);
+    List<StayVo> findAllByOrderByCreatedAtDesc(String people, String area, String checkIn, String checkOut, String title);
 
     @Select("""
              SELECT  S.HOST_NO,S.NO,S.NAME,RA.FILE_PATH,S.ADDRESS,S.PHONE,S.TAGLINE, S.INTRODUCTION, R.PRICE,R.MAX_GUEST,R.STANDARD_GUEST
