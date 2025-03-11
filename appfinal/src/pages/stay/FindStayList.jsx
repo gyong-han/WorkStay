@@ -152,7 +152,7 @@ const FindStayList = () => {
   };
 
   useEffect(() => {
-    if (location.pathname === "/findstay") {
+    if (location.pathname === "/findstay/") {
       // 목록 페이지 진입 시 초기화
       dispatch(setReset());
       dispatch(setResetFilter());
