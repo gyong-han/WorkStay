@@ -40,11 +40,13 @@ public class StayController {
     public List<StayVo> sortByList(    @RequestParam(defaultValue = "latest") String sort,
                                        @RequestParam(required = false) String people,
                                        @RequestParam(required = false) String area,
-                                       @RequestParam(required = false) String dateData,
+                                       @RequestParam(required = false) String checkInData,
+                                       @RequestParam(required = false) String checkOutData,
                                        @RequestParam(required = false) String title ){
         try{
-            String date = (dateData != null) ? dateData.replaceAll("-", "") : null;
-            return stayService.sortByList(sort, people, area, date, title);
+            String checkIn = (checkInData != null) ? checkInData.replaceAll("-", "") : null;
+            String checkOut = (checkOutData != null) ? checkOutData.replaceAll("-", "") : null;
+            return stayService.filterByList(sort, people, area, checkIn, checkOut, title);
         }catch (Exception e){
             log.warn(e.getMessage());
             System.out.println(e.getMessage());

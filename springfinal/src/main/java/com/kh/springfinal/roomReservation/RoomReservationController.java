@@ -44,11 +44,11 @@ public class RoomReservationController {
             vo.setCheckIn(formattedCheckIn);
             vo.setCheckOut(formattedCheckOut);
             RoomReservationVo reservationVo = reservationService.getReservationInfo(vo);
-            System.out.println("RESERVATION vo = " + reservationVo);
+//            System.out.println("RESERVATION vo = " + reservationVo);
             return reservationVo;
         }catch(Exception e){
             log.warn(e.getMessage());
-            System.out.println("error msg :: "+e.getMessage());
+//            System.out.println("error msg :: "+e.getMessage());
             throw new IllegalStateException("[ERROR-RESERVATION-02] RESERVATION INFO ERROR");
         }
     }
