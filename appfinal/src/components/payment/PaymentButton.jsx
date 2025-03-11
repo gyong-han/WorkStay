@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { BASE_URL } from "../service/config";
+import Alert from "../Alert";
 
 const Button = styled.button`
   width: ${(props) => {
@@ -25,41 +27,55 @@ const Button = styled.button`
   border-radius: 5px;
 `;
 
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
+
 const PaymentButton = ({ reservationData, checkInfo }) => {
   const [paymentUrl, setPaymentUrl] = useState("");
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [isAlertOpen2, setIsAlertOpen2] = useState(false);
+  const [isAlertOpen3, setIsAlertOpen3] = useState(false);
+  const [isAlertOpen4, setIsAlertOpen4] = useState(false);
+  const [isAlertOpen5, setIsAlertOpen5] = useState(false);
 
   // 결제 준비를 위한 API 호출
   const handlePayment = async () => {
-    //   const fd1 = localStorage.getItem("fd");
-    //   const fdData = JSON.parse(fd1);
+    const rd = localStorage.getItem("roomdata");
+    const rdData = JSON.parse(rd);
 
-    // // 필수 값 검증 (비어 있으면 경고창 띄우기)
-    //     if (!fdData.spaceNo) {
-    //       alert("잘못된 경로입니다.");
-    //       return;
-    //     }
-    //     if (!fdData.request.trim()) {
-    //       alert("요청사항을 작성해주세요.");
-    //       return;
-    //     }
-    //     if (!fdData.amount) {
-    //       alert("결제 금액이 없습니다. 다시 시도 해주세요.");
-    //       return;
-    //     }
-    //     if (!fdData.useDay) {
-    //       alert("예약 날짜를 선택해주세요.");
-    //       return;
-    //     }
-    //     if ((fdData.adult+fdData.baby+fdData.child)<=0){
-    //       alert("인원수를 선택 해주세요.");
-    //       return;
-    //     }
-    //     if (!checkInfo) {
-    //       alert("사용자 전체 약관 동의해주세요.");
-    //       return;
-    //     }
+    // 필수 값 검증 (비어 있으면 경고창 띄우기)
+    if (!rdData.roomNo) {
+      setIsAlertOpen(true);
+      return;
+    }
+    if (!rdData.amount) {
+      setIsAlertOpen2(true);
+      return;
+    }
+    if (!rdData.checkIn || !rdData.checkOut) {
+      setIsAlertOpen3(true);
+      return;
+    }
+    if (rdData.adult <= 0) {
+      setIsAlertOpen4(true);
+      return;
+    }
+    if (!checkInfo) {
+      setIsAlertOpen5(true);
+      return;
+    }
     try {
-      const response = await fetch("http://localhost:8080/payment/ready", {
+      const response = await fetch(`${BASE_URL}/payment/ready`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -87,7 +103,87 @@ const PaymentButton = ({ reservationData, checkInfo }) => {
     }
   };
 
-  return <Button onClick={handlePayment}>카카오페이 결제</Button>;
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
+  };
+  const handleAlertClose2 = () => {
+    setIsAlertOpen2(false);
+  };
+  const handleAlertClose3 = () => {
+    setIsAlertOpen3(false);
+  };
+  const handleAlertClose4 = () => {
+    setIsAlertOpen4(false);
+  };
+  const handleAlertClose5 = () => {
+    setIsAlertOpen5(false);
+  };
+
+  return (
+    <>
+      <Button onClick={handlePayment}>결제하기</Button>
+      {isAlertOpen && (
+        <Backdrop>
+          <Alert
+            title="ROOM"
+            titleColor="#049dd9"
+            message="방 정보를 다시 확인해주세요."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose}
+          />
+        </Backdrop>
+      )}
+      {isAlertOpen2 && (
+        <Backdrop>
+          <Alert
+            title="PRICE"
+            titleColor="#049dd9"
+            message="총 금액을 다시 확인해주세요."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose2}
+          />
+        </Backdrop>
+      )}
+      {isAlertOpen3 && (
+        <Backdrop>
+          <Alert
+            title="RESERVATION DATE"
+            titleColor="#049dd9"
+            message="예약 날짜를 다시 확인해주세요."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose3}
+          />
+        </Backdrop>
+      )}
+      {isAlertOpen4 && (
+        <Backdrop>
+          <Alert
+            title="인원"
+            titleColor="#049dd9"
+            message="성인은 최소 1명 이상 투숙하여야합니다."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose4}
+          />
+        </Backdrop>
+      )}
+      {isAlertOpen5 && (
+        <Backdrop>
+          <Alert
+            title="사용자 약관"
+            titleColor="#049dd9"
+            message="필수 약관에 모두 동의해주세요."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose5}
+          />
+        </Backdrop>
+      )}
+    </>
+  );
 };
 
 export default PaymentButton;
