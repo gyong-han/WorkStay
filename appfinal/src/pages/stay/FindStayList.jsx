@@ -151,6 +151,16 @@ const FindStayList = () => {
     setImgPath(arr);
   };
 
+  useEffect(() => {
+    if (location.pathname === "/findstay") {
+      // 목록 페이지 진입 시 초기화
+      dispatch(setReset());
+      dispatch(setResetFilter());
+      dispatch(setStayReservationDate([]));
+    }
+  }, [location.pathname]);
+
+  // 검색
   const handleChange = (e) => {
     setFormData(e.target.value);
   };
@@ -195,8 +205,8 @@ const FindStayList = () => {
               <RiResetRightFill size={18} />
               <FilterText
                 onClick={() => {
-                  dispatch(setReset());
                   dispatch(setResetFilter());
+                  dispatch(setReset());
                 }}
               >
                 초기화
