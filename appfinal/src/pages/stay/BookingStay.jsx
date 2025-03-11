@@ -240,6 +240,7 @@ const BookingStay = () => {
 
   const [loginMember, setLoginMember] = useState({});
   const [phoneNumber, setPhoneNumber] = useState();
+  const [check, setCheck] = useState();
 
   useEffect(() => {
     const memberInfomation = async () => {
@@ -352,6 +353,7 @@ const BookingStay = () => {
   const handleAllCheck = (checked) => {
     if (checked) {
       setCheckedItems(termsData.map((item) => item.id));
+      setCheck(checked);
     } else {
       setCheckedItems([]);
     }
@@ -361,8 +363,10 @@ const BookingStay = () => {
   const handleSingleCheck = (checked, id) => {
     if (checked) {
       setCheckedItems((prev) => [...prev, id]);
+      setCheck(true);
     } else {
       setCheckedItems((prev) => prev.filter((item) => item !== id));
+      setCheck(false);
     }
   };
 
@@ -547,7 +551,7 @@ const BookingStay = () => {
         </Agree>
       </UserAgreeWrapper>
       <PaddingDiv>
-        <PaymentButton reservationData={rData} />
+        <PaymentButton reservationData={rData} checkInfo={check} />
       </PaddingDiv>
       <ProvisionDiv>
         <ProvisionSpan>
