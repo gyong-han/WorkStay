@@ -4,6 +4,7 @@ import styled from "styled-components";
 import HostBtn from "../host/hostComponents/HostBtn";
 import { jwtDecode } from "jwt-decode";
 import Alert from "../../components/Alert";
+import { BASE_URL } from "../../components/service/config";
 
 const HomeDiv = styled.div`
   display: grid;
@@ -218,7 +219,7 @@ const SpaceEnrollReqDetail = () => {
   useEffect(() => {
     const fd = new FormData();
     fd.append("enrollReqNo", enrollReqNo);
-    fetch("http://127.0.0.1:8080/api/admin/spaceEnrollReqDetail", {
+    fetch(`${BASE_URL}/api/admin/spaceEnrollReqDetail`, {
       method: "POST",
       headers: {},
       body: fd,
@@ -238,7 +239,7 @@ const SpaceEnrollReqDetail = () => {
     const fd = new FormData();
     fd.append("hostNo", hostVo.no);
     fd.append("spaceNo", enrollReqNo);
-    fetch("http://127.0.0.1:8080/api/admin/approveSpace", {
+    fetch(`${BASE_URL}/api/admin/approveSpace`, {
       method: "POST",
       body: fd,
     })
@@ -259,7 +260,7 @@ const SpaceEnrollReqDetail = () => {
   const companion = () => {
     const fd = new FormData();
     fd.append("spaceNo", enrollReqNo);
-    fetch("http://127.0.0.1:8080/api/admin/companionSpace", {
+    fetch(`${BASE_URL}/api/admin/companionSpace`, {
       method: "POST",
       body: fd,
     })
@@ -280,7 +281,7 @@ const SpaceEnrollReqDetail = () => {
   const cancelEnroll = () => {
     const fd = new FormData();
     fd.append("spaceNo", enrollReqNo);
-    fetch("http://127.0.0.1:8080/api/host/cancelEnrollSpace", {
+    fetch(`${BASE_URL}/api/host/cancelEnrollSpace`, {
       method: "POST",
       body: fd,
     })

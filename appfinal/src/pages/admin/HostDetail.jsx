@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import DataCard from "./adminComponents/DataCard";
+import { BASE_URL } from "../../components/service/config";
 
 const MainDiv = styled.div`
   display: grid;
@@ -103,7 +104,7 @@ const HostDetail = () => {
   useEffect(() => {
     const fd = new FormData();
     fd.append("hostNo", hostNo);
-    fetch("http://127.0.0.1:8080/api/admin/hostDetail", {
+    fetch(`${BASE_URL}/api/admin/hostDetail`, {
       method: "POST",
       body: fd,
     })

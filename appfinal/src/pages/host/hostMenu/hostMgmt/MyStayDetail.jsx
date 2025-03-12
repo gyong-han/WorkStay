@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import HostBtn from "../../hostComponents/HostBtn";
 import { jwtDecode } from "jwt-decode";
 import Alert from "../../../../components/Alert";
+import { BASE_URL } from "../../../../components/service/config";
 
 const HomeDiv = styled.div`
   display: grid;
@@ -222,7 +223,7 @@ const MyStayDetail = () => {
   };
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8080/api/host/myStayDetail", {
+    fetch(`${BASE_URL}/api/host/myStayDetail`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -246,7 +247,7 @@ const MyStayDetail = () => {
     fd.append("season", formData.season);
     fd.append("introduction", formData.introduction);
 
-    fetch("http://127.0.0.1:8080/api/host/modifyMyStay", {
+    fetch(`${BASE_URL}/api/host/modifyMyStay`, {
       method: "POST",
       body: fd,
     })
@@ -288,7 +289,7 @@ const MyStayDetail = () => {
   };
 
   const deleteSpace = () => {
-    fetch("http://127.0.0.1:8080/api/host/deleteMyStay", {
+    fetch(`${BASE_URL}/api/host/deleteMyStay`, {
       method: "POST",
       headers: {
         "content-type": "application/json",

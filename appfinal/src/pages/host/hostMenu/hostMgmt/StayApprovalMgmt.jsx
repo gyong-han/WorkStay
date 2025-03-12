@@ -3,6 +3,7 @@ import styled from "styled-components";
 import HostApprovalCard from "../../hostComponents/HostApprovalCard";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { BASE_URL } from "../../../../components/service/config";
 
 const MainDiv = styled.div`
   display: grid;
@@ -48,7 +49,7 @@ const StayApprovalMgmt = () => {
     const fd = new FormData();
     fd.append("status", status);
     fd.append("hostNo", hostNo);
-    fetch("http://127.0.0.1:8080/api/host/stayApprovalList", {
+    fetch(`${BASE_URL}/api/host/stayApprovalList`, {
       method: "POST",
       body: fd,
     })

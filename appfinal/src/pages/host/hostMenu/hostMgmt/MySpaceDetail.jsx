@@ -5,6 +5,7 @@ import HostBtn from "../../hostComponents/HostBtn";
 import AttachmentUpload from "../../hostComponents/AttachmentUpload";
 import { jwtDecode } from "jwt-decode";
 import Alert from "../../../../components/Alert";
+import { BASE_URL } from "../../../../components/service/config";
 
 const HomeDiv = styled.div`
   display: grid;
@@ -252,7 +253,7 @@ const MySpaceDetail = () => {
   }, []);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8080/api/host/mySpaceDetail", {
+    fetch(`${BASE_URL}/api/host/mySpaceDetail`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -307,7 +308,7 @@ const MySpaceDetail = () => {
     fileData.attachment.forEach(
       (file) => file instanceof File && fd.append("attachment", file)
     );
-    fetch("http://127.0.0.1:8080/api/host/modifyMySpace", {
+    fetch(`${BASE_URL}/api/host/modifyMySpace`, {
       method: "POST",
       headers: {},
       body: fd,
@@ -321,7 +322,7 @@ const MySpaceDetail = () => {
   };
 
   const deleteSpace = () => {
-    fetch("http://127.0.0.1:8080/api/host/deleteMySpace", {
+    fetch(`${BASE_URL}/api/host/deleteMySpace`, {
       method: "POST",
       headers: {
         "content-type": "application/json",

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import HostBtn from "../host/hostComponents/HostBtn";
 import Alert from "../../components/Alert";
+import { BASE_URL } from "../../components/service/config";
 
 const HomeDiv = styled.div`
   display: grid;
@@ -165,7 +166,7 @@ const StayEditReqDetail = () => {
   const [isAlertOpen2, setIsAlertOpen2] = useState(false);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8080/api/admin/stayEditReqDetail", {
+    fetch(`${BASE_URL}/api/admin/stayEditReqDetail`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -197,7 +198,7 @@ const StayEditReqDetail = () => {
   };
 
   const approve = () => {
-    fetch("http://127.0.0.1:8080/api/admin/approveEditStay", {
+    fetch(`${BASE_URL}/api/admin/approveEditStay`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -219,7 +220,7 @@ const StayEditReqDetail = () => {
   };
 
   const companion = () => {
-    fetch("http://127.0.0.1:8080/api/admin/companionEditStay", {
+    fetch(`${BASE_URL}/api/admin/companionEditStay`, {
       method: "POST",
       headers: {
         "content-type": "application/json",

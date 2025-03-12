@@ -4,6 +4,7 @@ import HostBtn from "../hostComponents/HostBtn";
 import EnrollRoom from "../roomComponents/EnrollRoom";
 import { useNavigate, useParams } from "react-router-dom";
 import Alert from "../../../components/Alert";
+import { BASE_URL } from "../../../components/service/config";
 
 const HomeDiv = styled.div`
   display: grid;
@@ -90,7 +91,7 @@ const ThirdEnrollStay = () => {
   }, []);
 
   const enrollRoom = async () => {
-    const url = "http://127.0.0.1:8080/api/host/enroll/room";
+    const url = `${BASE_URL}/api/host/enroll/room`;
     for (let idx = 0; idx < formDataArr.length; ++idx) {
       const fd = new FormData();
       fd.append("stayNo", stayNum.x);

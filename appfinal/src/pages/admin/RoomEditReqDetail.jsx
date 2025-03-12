@@ -5,6 +5,7 @@ import EnrollReqRoom from "./adminComponents/EnrollReqRoom";
 import styled from "styled-components";
 import EditReqRoom from "./adminComponents/EditReqRoom";
 import Alert from "../../components/Alert";
+import { BASE_URL } from "../../components/service/config";
 
 const HomeDiv = styled.div`
   display: grid;
@@ -76,7 +77,7 @@ const RoomEditReqDetail = () => {
 
   useEffect(() => {
     const fd = new FormData();
-    fetch("http://127.0.0.1:8080/api/admin/roomEditReqDetail", {
+    fetch(`${BASE_URL}/api/admin/roomEditReqDetail`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -94,7 +95,7 @@ const RoomEditReqDetail = () => {
   }, []);
 
   const approve = () => {
-    fetch("http://127.0.0.1:8080/api/admin/approveEditRoom", {
+    fetch(`${BASE_URL}/api/admin/approveEditRoom`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -116,7 +117,7 @@ const RoomEditReqDetail = () => {
   };
 
   const companion = () => {
-    fetch("http://127.0.0.1:8080/api/admin/companionEditRoom", {
+    fetch(`${BASE_URL}/api/admin/companionEditRoom`, {
       method: "POST",
       headers: {
         "content-type": "application/json",

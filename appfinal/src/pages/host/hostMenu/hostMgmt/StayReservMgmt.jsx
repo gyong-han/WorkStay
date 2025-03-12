@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { jwtDecode } from "jwt-decode";
 import PagingDiv from "../../../../components/paging/PagingDiv";
 import PagingFooter from "../../../../components/paging/PagingFooter";
+import { BASE_URL } from "../../../../components/service/config";
 
 const MainDiv = styled.div`
   display: grid;
@@ -105,7 +106,7 @@ const StayReservMgmt = () => {
     const fd = new FormData();
     fd.append("hostNo", hostNo);
     fd.append("status", status);
-    fetch(`http://127.0.0.1:8080/api/host/room/reservList?pno=${pno}`, {
+    fetch(`${BASE_URL}/api/host/room/reservList?pno=${pno}`, {
       method: "POST",
       headers: {},
       body: fd,

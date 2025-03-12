@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useLocation, useNavigate } from "react-router-dom";
 import PagingDiv from "../../../components/paging/PagingDiv";
 import PagingFooter from "../../../components/paging/PagingFooter";
+import { BASE_URL } from "../../../components/service/config";
 
 const MainDiv = styled.div`
   display: grid;
@@ -63,7 +64,7 @@ const SpaceEditReq = () => {
   }
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:8080/api/admin/spaceEditReq?pno=${pno}`, {
+    fetch(`${BASE_URL}/api/admin/spaceEditReq?pno=${pno}`, {
       method: "POST",
     })
       .then((resp) => resp.json())

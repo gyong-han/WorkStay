@@ -3,6 +3,7 @@ import styled from "styled-components";
 import HostApprovalCard from "../../hostComponents/HostApprovalCard";
 import { data, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { BASE_URL } from "../../../../components/service/config";
 
 const MainDiv = styled.div`
   display: grid;
@@ -48,7 +49,7 @@ const SpaceApprovalMgmt = () => {
     const fd = new FormData();
     fd.append("status", status);
     fd.append("hostNo", hostNo);
-    fetch("http://127.0.0.1:8080/api/host/spaceApprovalList", {
+    fetch(`${BASE_URL}/api/host/spaceApprovalList`, {
       method: "POST",
       body: fd,
     })
