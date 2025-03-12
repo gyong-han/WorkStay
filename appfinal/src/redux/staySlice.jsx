@@ -24,6 +24,7 @@ const staySlice = createSlice({
     checkIn: "",
     checkOut: "",
     sort: "latest",
+    rooms: [],
   },
   reducers: {
     setStayVo: (state, action) => {
@@ -37,6 +38,7 @@ const staySlice = createSlice({
       state.sns = action.payload.sns;
       state.thumbnail = action.payload.thumbnail;
       state.address = action.payload.address;
+      state.rooms = action.payload.rooms;
     },
     selectCheckIn: (state, action) => {
       state.checkIn = action.payload.checkIn;

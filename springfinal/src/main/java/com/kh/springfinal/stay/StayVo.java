@@ -1,6 +1,9 @@
 package com.kh.springfinal.stay;
 
+import com.kh.springfinal.room.RoomVo;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class StayVo {
@@ -32,4 +35,6 @@ public class StayVo {
 
     private String roomNo;
     private String roomName;
+
+    private List<RoomVo> rooms;
 }
