@@ -1,27 +1,24 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 
 const MapRec = ({ address, name }) => {
-  const mapContainerRef = useRef(null); // map container를 참조할 ref
-  const [isMapLoaded, setIsMapLoaded] = useState(false); // 지도 로딩 여부 상태
+  const mapContainerRef = useRef(null); // 지도 컨테이너
+  const roadViewContainerRef = useRef(null); // 로드뷰 컨테이너
 
   useEffect(() => {
-    const KAKAO_MAP_API_KEY = "e6fb0b3e3e788fbc7f697bdcbede0f13"; // 실제 API 키 사용
+    const KAKAO_MAP_API_KEY = "e6fb0b3e3e788fbc7f697bdcbede0f13";
     const scriptId = "kakao-map-script";
 
-    // 이미 스크립트가 로드되었는지 확인
     if (document.getElementById(scriptId)) {
       loadMap();
       return;
     }
 
-    // Kakao Map API 스크립트 로드
     const script = document.createElement("script");
     script.id = scriptId;
     script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_API_KEY}&libraries=services&autoload=false`;
     script.async = true;
 
     script.onload = () => {
-      // 카카오맵 API 로드 완료 시
       if (window.kakao && window.kakao.maps) {
         window.kakao.maps.load(() => {
           loadMap();
@@ -40,31 +37,35 @@ const MapRec = ({ address, name }) => {
     return () => {
       document.getElementById(scriptId)?.remove();
     };
-  }, [address, name]); // 주소와 이름이 변경될 때마다 useEffect 재실행
+  }, [address, name]);
 
   const loadMap = () => {
-    // mapContainerRef.current가 존재할 때만 지도 로드
-    if (!mapContainerRef.current) {
-      console.error("Map container not found.");
+    if (!mapContainerRef.current || !roadViewContainerRef.current) {
+      console.error("Map or RoadView container not found.");
       return;
     }
 
-    // Kakao Maps API가 로드되었는지 확인
     if (!window.kakao || !window.kakao.maps) {
       console.error("Kakao Maps API가 로드되지 않았습니다.");
       return;
     }
 
-    const imageSrc = "https://cdn-icons-png.flaticon.com/128/447/447031.png";
-    const imageSize = new window.kakao.maps.Size(50, 50); // 마커 이미지 크기
-    const imageOption = { offset: new window.kakao.maps.Point(26, 50) }; // 마커 위치 조정
+    const imageSrc = "https://t1.daumcdn.net/mapjsapi/images/marker.png";
+    const imageSize = new window.kakao.maps.Size(50, 50);
+    const imageOption = { offset: new window.kakao.maps.Point(26, 50) };
 
-    const container = mapContainerRef.current;
-    const options = {
+    // 지도 컨테이너 설정
+    const mapContainer = mapContainerRef.current;
+    const mapOptions = {
       center: new window.kakao.maps.LatLng(33.450701, 126.570667),
       level: 3,
     };
-    const map = new window.kakao.maps.Map(container, options);
+    const map = new window.kakao.maps.Map(mapContainer, mapOptions);
+
+    // 로드뷰 컨테이너 설정
+    const roadViewContainer = roadViewContainerRef.current;
+    const roadview = new window.kakao.maps.Roadview(roadViewContainer);
+    const roadviewClient = new window.kakao.maps.RoadviewClient();
 
     const geocoder = new window.kakao.maps.services.Geocoder();
     geocoder.addressSearch(`${address}`, function (result, status) {
@@ -88,6 +89,23 @@ const MapRec = ({ address, name }) => {
         infowindow.open(map, marker);
 
         map.setCenter(coords);
+
+        roadviewClient.getNearestPanoId(coords, 50, function (panoId) {
+          if (panoId !== null) {
+            roadview.setPanoId(panoId, coords);
+          } else {
+            console.error("해당 위치의 로드뷰를 찾을 수 없습니다.");
+          }
+        });
+
+        window.kakao.maps.event.addListener(marker, "click", function () {
+          roadviewClient.getNearestPanoId(coords, 50, function (panoId) {
+            if (panoId !== null) {
+              roadview.setPanoId(panoId, coords);
+              map.setCenter(coords);
+            }
+          });
+        });
       } else {
         console.error("주소를 찾을 수 없습니다.");
       }
@@ -95,10 +113,14 @@ const MapRec = ({ address, name }) => {
   };
 
   return (
-    <div>
+    <div style={{ display: "flex", width: "1500px", height: "500px" }}>
+      {/* 지도 */}
+      <div ref={mapContainerRef} style={{ width: "50%", height: "100%" }}></div>
+
+      {/* 로드뷰 */}
       <div
-        ref={mapContainerRef}
-        style={{ width: "1500px", height: "500px" }}
+        ref={roadViewContainerRef}
+        style={{ width: "50%", height: "100%" }}
       ></div>
     </div>
   );

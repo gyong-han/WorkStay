@@ -301,9 +301,106 @@ const SlogWrite = () => {
   const [center, setCenter] = useState();
   const [left, setLeft] = useState();
   const navigate = useNavigate();
+  const [rows, setRows] = useState(4);
+  const [columns, setColumns] = useState(4);
+  const [cellContent, setCellContent] = useState("");
 
   const handleInput = (e) => {
     setContent(e.target.cloneNode(true).innerHTML);
+  };
+
+  // const handleShowGraph = () => {
+  //   setShowGraph(true);
+  // };
+
+  // const handleMouseMove = (e) => {
+  //   if (!showGraph) return;
+
+  //   const newRows = Math.min(8, Math.max(1, Math.ceil(e.clientY / 50)));
+  //   const newColumns = Math.min(8, Math.max(1, Math.ceil(e.clientX / 50)));
+
+  //   setRows(newRows);
+  //   setColumns(newColumns);
+  // };
+
+  // const handleFileChange = (e) => {
+  //   if (!e.target.files || e.target.files.length === 0) {
+  //     return;
+  //   }
+
+  //   const files = e.target.files;
+  //   const fd = new FormData();
+
+  //   for (let i = 0; i < files.length; i++) {
+  //     fd.append("files", files[i]);
+  //   }
+
+  //   fetch("http://127.0.0.1:8080/api/slog/upload", {
+  //     method: "POST",
+  //     body: fd,
+  //   })
+  //     .then((resp) => resp.json())
+  //     .then((data) => {
+  //       setUrl((prevUrl) => [...prevUrl, ...data]);
+  //       setOriginalNames((prevName) => [
+  //         ...prevName,
+  //         ...Array.from(files).map((file) => file.name),
+  //       ]);
+
+  //       const contentDiv = document.querySelector(".content");
+  //       data.forEach((imgUrl) => {
+  //         const imgElement = document.createElement("img");
+  //         imgElement.src = imgUrl;
+  //         imgElement.style.maxWidth = "100%";
+  //         imgElement.style.width = "600px";
+  //         imgElement.style.margin = "10px 0";
+  //         contentDiv.appendChild(imgElement);
+  //       });
+  //     });
+  // };
+
+  const handleGraphClick = (e) => {
+    const contentDiv = document.querySelector(".content");
+    if (!contentDiv) return;
+
+    setCellContent(e.target.innerText);
+
+    const tableElement = document.createElement("table");
+    tableElement.style.border = "1px solid black";
+    tableElement.style.marginTop = "10px";
+    tableElement.style.width = "600px";
+    tableElement.style.height = "200px";
+
+    for (let i = 0; i < rows; i++) {
+      const trElement = document.createElement("tr");
+
+      for (let j = 0; j < columns; j++) {
+        const tdElement = document.createElement("td");
+        tdElement.style.width = "50px";
+        tdElement.style.height = "50px";
+        tdElement.style.textAlign = "center";
+        tdElement.style.border = "1px solid black";
+
+        trElement.appendChild(tdElement);
+      }
+
+      tableElement.appendChild(trElement);
+    }
+
+    contentDiv.appendChild(tableElement);
+  };
+
+  const handleLineChange = () => {
+    const contentDiv = document.querySelector(".content");
+    if (!contentDiv) {
+      return;
+    }
+
+    const hrElement = document.createElement("hr");
+    hrElement.style.border = "2px solid #ccc";
+    hrElement.style.margin = "30px auto 0";
+
+    contentDiv.appendChild(hrElement);
   };
 
   const handleFileChange = (e) => {
@@ -331,13 +428,56 @@ const SlogWrite = () => {
         ]);
 
         const contentDiv = document.querySelector(".content");
-        data.forEach((imgUrl) => {
-          const imgElement = document.createElement("img");
-          imgElement.src = imgUrl;
-          imgElement.style.maxWidth = "100%";
-          imgElement.style.width = "600px";
-          imgElement.style.margin = "10px 0";
-          contentDiv.appendChild(imgElement);
+
+        data.forEach((fileUrl, index) => {
+          const file = files[index];
+          const fileType = file.type.split("/")[0];
+
+          if (fileType === "image") {
+            const imgElement = document.createElement("img");
+            imgElement.src = fileUrl;
+            imgElement.style.maxWidth = "100%";
+            imgElement.style.width = "600px";
+            imgElement.style.margin = "10px 0";
+            contentDiv.appendChild(imgElement);
+          } else if (fileType === "video") {
+            const videoContainer = document.createElement("div");
+            videoContainer.style.position = "relative";
+            videoContainer.style.width = "600px";
+            videoContainer.style.cursor = "pointer";
+            videoContainer.style.margin = "10px 0";
+
+            const videoElement = document.createElement("video");
+            videoElement.src = fileUrl;
+            videoElement.style.width = "100%";
+            videoElement.style.display = "none";
+            videoElement.controls = true;
+
+            const thumbnail = document.createElement("img");
+            thumbnail.src =
+              "https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F3VzhA%2FbtsBBmZ2tlJ%2FPuLApcHgFhQhoiuKzUCmNK%2Fimg.png";
+            thumbnail.style.width = "100%";
+            thumbnail.style.position = "absolute";
+            thumbnail.style.top = "0";
+            thumbnail.style.left = "0";
+            thumbnail.style.cursor = "pointer";
+
+            videoContainer.addEventListener("click", () => {
+              thumbnail.style.display = "none";
+              videoElement.style.display = "block";
+              videoElement.play();
+            });
+
+            videoContainer.appendChild(thumbnail);
+            videoContainer.appendChild(videoElement);
+            contentDiv.appendChild(videoContainer);
+
+            videoElement.style.cursor = "default";
+
+            videoElement.addEventListener("mousemove", () => {
+              videoElement.style.cursor = "default";
+            });
+          }
         });
       });
   };
@@ -578,7 +718,7 @@ const SlogWrite = () => {
           <input
             id="file-upload"
             type="file"
-            multiple
+            accept="video/mp4,video/mkv, video/x-m4v,video/*"
             onChange={handleFileChange}
           />
           <label htmlFor="file-upload" className="custom-file-upload">
@@ -591,16 +731,14 @@ const SlogWrite = () => {
             multiple
             onChange={handleFileChange}
           />
-          <label htmlFor="file-upload" className="custom-file-upload">
-            <TfiLayoutLineSolid className="upload-icon" />
+          <label htmlFor="line-button" className="custom-file-upload">
+            <TfiLayoutLineSolid
+              className="upload-icon"
+              onClick={handleLineChange}
+            />
             구분선
           </label>
-          <input
-            id="file-upload"
-            type="file"
-            multiple
-            onChange={handleFileChange}
-          />
+
           <label htmlFor="file-upload" className="custom-file-upload">
             <CiLocationOn className="upload-icon" />
             장소
@@ -631,15 +769,14 @@ const SlogWrite = () => {
             multiple
             onChange={handleFileChange}
           />
-          <label htmlFor="file-upload" className="custom-file-upload">
-            <AiOutlineTable className="upload-icon" />표
+          <label htmlFor="graph-upload" className="custom-file-upload">
+            <AiOutlineTable
+              className="upload-icon"
+              onClick={handleGraphClick}
+            />
+            표
           </label>
-          <input
-            id="file-upload"
-            type="file"
-            multiple
-            onChange={handleFileChange}
-          />
+
           <input type="submit" className="submit" value={"발행"} />
         </NavList>
 
