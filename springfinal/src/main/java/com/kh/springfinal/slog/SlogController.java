@@ -34,10 +34,10 @@ public class SlogController {
             String randomName = "FINAL_" + System.currentTimeMillis() + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 
 
-            s3.putObject("sgh-final-server", randomName, file.getInputStream(), new ObjectMetadata());
+            s3.putObject("hsi-server", randomName, file.getInputStream(), new ObjectMetadata());
 
 
-            String fileUrl = s3.getUrl("sgh-final-server", randomName).toString();
+            String fileUrl = s3.getUrl("hsi-server", randomName).toString();
             fileUrls.add(fileUrl);
         }
 
@@ -55,10 +55,10 @@ public class SlogController {
             String randomName = "TITLE_" + System.currentTimeMillis() + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 
 
-            s3.putObject("sgh-final-server", randomName, file.getInputStream(), new ObjectMetadata());
+            s3.putObject("hsi-server", randomName, file.getInputStream(), new ObjectMetadata());
 
 
-            String titleFileUrl = s3.getUrl("sgh-final-server", randomName).toString();
+            String titleFileUrl = s3.getUrl("hsi-server", randomName).toString();
             titleFileUrls.add(titleFileUrl);
         }
 

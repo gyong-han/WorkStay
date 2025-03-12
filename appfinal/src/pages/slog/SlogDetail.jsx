@@ -11,6 +11,7 @@ import { jwtDecode } from "jwt-decode";
 import { SiNaver } from "react-icons/si";
 import { RiInstagramLine } from "react-icons/ri";
 import Alert from "../../components/Alert";
+import KakaoMap from "../../components/map/KaKaoMap";
 
 const Container = styled.div`
   width: 100%;
@@ -488,6 +489,8 @@ const SlogDetail = () => {
           <p>추천 장소가 없습니다.</p>
         )}
       </Middle>
+      <KakaoMap />
+
       <EditDeleteBtn>
         {userNo === slogVo?.memberNo || userNo === "1" ? (
           <>
