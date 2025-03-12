@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import HostBtn from "../../hostComponents/HostBtn";
 import { useParams } from "react-router-dom";
+import { BASE_URL } from "../../../../components/service/config";
 
 const MainDiv = styled.div`
   display: grid;
@@ -104,7 +105,7 @@ const StayResrvMgmtDetail = () => {
   };
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8080/api/host/stay/reservDetail", {
+    fetch(`${BASE_URL}/api/host/stay/reservDetail`, {
       method: "POST",
       body: JSON.stringify(stayReservNum),
     })

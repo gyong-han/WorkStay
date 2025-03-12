@@ -253,7 +253,7 @@ const SecondEnrollStay = () => {
     fd.append("introduction", formData.introduction);
     fd.append("hostNo", hostNo);
 
-    fetch("http://127.0.0.1:8080/api/host/enroll/stay", {
+    fetch(`${BASE_URL}/api/host/enroll/stay`, {
       method: "POST",
       body: fd,
     })

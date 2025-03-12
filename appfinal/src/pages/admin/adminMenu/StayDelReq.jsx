@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import PagingDiv from "../../../components/paging/PagingDiv";
 import PagingFooter from "../../../components/paging/PagingFooter";
+import { BASE_URL } from "../../../components/service/config";
 
 const MainDiv = styled.div`
   display: grid;
@@ -60,7 +61,7 @@ const StayDelReq = () => {
   }
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:8080/api/admin/deleteStayList?pno=${pno}`, {
+    fetch(`${BASE_URL}/api/admin/deleteStayList?pno=${pno}`, {
       method: "POST",
     })
       .then((resp) => resp.json())

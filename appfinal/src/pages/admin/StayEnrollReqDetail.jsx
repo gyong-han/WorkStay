@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import HostBtn from "../host/hostComponents/HostBtn";
 import { useNavigate, useParams } from "react-router-dom";
+import { BASE_URL } from "../../components/service/config";
 
 const HomeDiv = styled.div`
   display: grid;
@@ -147,7 +148,7 @@ const StayEnrollReqDetail = () => {
   useEffect(() => {
     const fd = new FormData();
     fd.append("enrollReqNo", enrollReqNo);
-    fetch("http://127.0.0.1:8080/api/admin/stayEnrollReqDetail", {
+    fetch(`${BASE_URL}/api/admin/stayEnrollReqDetail`, {
       method: "POST",
       body: fd,
     })

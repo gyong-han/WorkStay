@@ -5,6 +5,7 @@ import EnrollReqRoom from "../../../admin/adminComponents/EnrollReqRoom";
 import HostBtn from "../../hostComponents/HostBtn";
 import RoomDetail from "../../hostComponents/RoomDetail";
 import Alert from "../../../../components/Alert";
+import { BASE_URL } from "../../../../components/service/config";
 
 const HomeDiv = styled.div`
   display: grid;
@@ -74,7 +75,7 @@ const MyRoomDetail = () => {
   useEffect(() => {
     const fd = new FormData();
     fd.append("stayNum", stayNum);
-    fetch("http://127.0.0.1:8080/api/host/myRoomDetail", {
+    fetch(`${BASE_URL}/api/host/myRoomDetail`, {
       method: "POST",
       body: fd,
     })
@@ -89,7 +90,6 @@ const MyRoomDetail = () => {
   }, []);
 
   const editRoom = async () => {
-    const url = "http://127.0.0.1:8080/api/host/modifyMyRoom";
     for (let idx = 0; idx < formDataArr.length; ++idx) {
       const fd = new FormData();
       fd.append("no", formDataArr[idx].no);
@@ -111,7 +111,7 @@ const MyRoomDetail = () => {
         (file) => file instanceof File && fd.append("attachment", file)
       );
 
-      const resp = await fetch(url, {
+      const resp = await fetch(`${BASE_URL}/api/host/modifyMyRoom`, {
         method: "POST",
         body: fd,
       });

@@ -5,6 +5,7 @@ import styled from "styled-components";
 import HostBtn from "../host/hostComponents/HostBtn";
 import { jwtDecode } from "jwt-decode";
 import Alert from "../../components/Alert";
+import { BASE_URL } from "../../components/service/config";
 
 const HomeDiv = styled.div`
   display: grid;
@@ -92,7 +93,7 @@ const RoomEnrollReqDetail = () => {
   useEffect(() => {
     const fd = new FormData();
     fd.append("stayNo", enrollReqNo);
-    fetch("http://127.0.0.1:8080/api/admin/roomEnrollReqDetail", {
+    fetch(`${BASE_URL}/api/admin/roomEnrollReqDetail`, {
       method: "POST",
       body: fd,
     })
@@ -114,7 +115,7 @@ const RoomEnrollReqDetail = () => {
     const fd = new FormData();
     fd.append("hostNo", roomVoArr[0].hostNo);
     fd.append("stayNo", enrollReqNo);
-    fetch("http://127.0.0.1:8080/api/admin/approveStay", {
+    fetch(`${BASE_URL}/api/admin/approveStay`, {
       method: "POST",
       body: fd,
     })
@@ -135,7 +136,7 @@ const RoomEnrollReqDetail = () => {
   const companion = () => {
     const fd = new FormData();
     fd.append("stayNo", enrollReqNo);
-    fetch("http://127.0.0.1:8080/api/admin/companionStay", {
+    fetch(`${BASE_URL}/api/admin/companionStay`, {
       method: "POST",
       body: fd,
     })
@@ -156,7 +157,7 @@ const RoomEnrollReqDetail = () => {
   const cancelEnroll = () => {
     const fd = new FormData();
     fd.append("stayNo", enrollReqNo);
-    fetch("http://127.0.0.1:8080/api/host/cancelEnrollStay", {
+    fetch("${BASE_URL}/api/host/cancelEnrollStay", {
       method: "POST",
       body: fd,
     })

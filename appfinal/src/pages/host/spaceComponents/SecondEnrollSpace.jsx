@@ -310,7 +310,7 @@ const SecondEnrollSpace = () => {
     fd.append("thumbnail", fileData.thumbnail);
     fileData.attachment.map((file) => fd.append("attachment", file));
 
-    fetch("http://127.0.0.1:8080/api/host/enroll/space", {
+    fetch(`${BASE_URL}/api/host/enroll/space`, {
       method: "POST",
       headers: {},
       body: fd,
