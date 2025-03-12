@@ -59,13 +59,14 @@ const BtnTag = styled.button`
   align-items: center;
   border: 1px solid #fafafa;
   border-radius: 5px;
-  background-color: #049dd9;
+  background-color: ${(props) => (props.disabled ? "#bbbbbb" : "#049dd9")};
   color: #fafafa;
   font-size: 1.2em;
   font-weight: 600;
   width: 500px;
   height: 60px;
   grid-row: 8;
+  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
 `;
 
 const CheckInput = styled.div`
@@ -132,6 +133,7 @@ const Join = () => {
   const [password, setPassword] = useState("");
   const [numberError, setNumberError] = useState("");
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
   const navi = useNavigate();
 
   const callback = (formData) => {
@@ -244,6 +246,10 @@ const Join = () => {
     navi("/login"); // 확인 버튼 누르면 로그인 페이지로 이동
   };
 
+  const handleCheckboxChange = (e) => {
+    setIsChecked(e.target.checked);
+  };
+
   return (
     <>
       <form onSubmit={(e) => handleSubmit(e, onSubmit)}>
@@ -332,13 +338,19 @@ const Join = () => {
 
           <StyleInput row={7}>
             <CheckInput>
-              <Checkbox type="checkbox" />
+              <Checkbox
+                type="checkbox"
+                checked={isChecked}
+                onChange={handleCheckboxChange}
+              />
               <CheckPTag>[필수]</CheckPTag>
               <CheckSpan>이용약관 및 개인정보 처리방침에 동의합니다.</CheckSpan>
             </CheckInput>
           </StyleInput>
 
-          <BtnTag type="submit">가입하기</BtnTag>
+          <BtnTag type="submit" disabled={!isChecked}>
+            가입하기
+          </BtnTag>
         </MainDiv>
       </form>
 

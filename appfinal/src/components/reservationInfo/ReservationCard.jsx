@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { BASE_URL } from "../service/config";
 import Alert from "../Alert";
+import ConfirmModal from "../table/ConfirmModal";
 
 const DataDiv = styled.div`
   width: 850px;
@@ -81,6 +82,7 @@ const ReservationCard = ({ data, hideDate, moveDetail }) => {
   const location = useLocation(); // 현재 경로 가져오기
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [progressState, setProgressState] = useState(data.progressState);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   function movePath() {
     const isSpaceReserv = location.pathname.includes("spaceReserv");
@@ -105,12 +107,17 @@ const ReservationCard = ({ data, hideDate, moveDetail }) => {
     navi(`/slog/write?reno=${reno}&memberNo=${memberNo}`);
   }
 
-  // 이용확정 버튼 클릭 시 이동 (reno + 회원번호 포함)
-  function handleUpdateStay(event) {
+  const handleUpdateStay = (event) => {
     event.preventDefault();
+    setIsConfirmOpen(true); // 먼저 ConfirmModal을 띄움
+  };
+
+  const handleConfirmUpdateStay = () => {
     const userToken = localStorage.getItem("token");
-    const no = JSON.parse(atob(userToken.split(".")[1])).no; // JWT에서 no 추출
+    const no = JSON.parse(atob(userToken.split(".")[1])).no;
+
     const reno = data.reno; // 예약 번호
+
     fetch(`${BASE_URL}/api/guest/updateStay?no=${no}&reno=${reno}`, {
       method: "POST",
       headers: {
@@ -122,19 +129,24 @@ const ReservationCard = ({ data, hideDate, moveDetail }) => {
         if (!resp.ok) throw new Error("서버 응답 오류");
         return resp.json();
       })
-      .then((data) => {
+      .then(() => {
         setProgressState("이용완료");
         setIsAlertOpen(true);
+        setIsConfirmOpen(false);
       })
       .catch((error) => {
         console.error("이용 완료 실패:", error);
         alert("이용 완료에 실패했습니다.");
       });
-  }
+  };
 
   const handleAlertClose = () => {
     setIsAlertOpen(false);
     navi("/hostMenu");
+  };
+
+  const formatPrice = (price) => {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
   return (
@@ -161,7 +173,7 @@ const ReservationCard = ({ data, hideDate, moveDetail }) => {
               )}
               {progressState === "예약완료" && (
                 <SLogButton c="#f20530" onClick={handleUpdateStay}>
-                  이용 확정
+                  이용 완료
                 </SLogButton>
               )}
             </div>
@@ -170,7 +182,7 @@ const ReservationCard = ({ data, hideDate, moveDetail }) => {
                 예약 상세 확인
               </TextDiv>
             )}
-            <TextDiv size="20px">₩{data.amount}</TextDiv>
+            <TextDiv size="20px">₩{formatPrice(data.amount)}</TextDiv>
           </PriceDiv>
           {/*progressState가 4 (이용완료)일 때 S-Log 작성 버튼 표시 */}
         </DataArea>
@@ -187,6 +199,14 @@ const ReservationCard = ({ data, hideDate, moveDetail }) => {
             onClose={handleAlertClose}
           />
         </Backdrop>
+      )}
+      {isConfirmOpen && (
+        <ConfirmModal
+          title="이용 완료"
+          message="이용 완료시 환불이 불가합니다. 계속 진행하시겠습니까?"
+          onConfirm={handleConfirmUpdateStay} // 확인 버튼 클릭 시 API 호출
+          onCancel={() => setIsConfirmOpen(false)} // 취소 버튼 클릭 시 닫기
+        />
       )}
     </>
   );

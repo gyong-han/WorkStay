@@ -202,6 +202,7 @@ public interface GuestMapper {
                 , RE.REQUEST
                 , R.NO AS roomNo
                 , M.NO AS no
+                , RE.STATUS_NO AS progressState
                 , TO_CHAR(RESERVATION_DATE, 'YYYY-MM-DD HH24:MI') AS RESERVATION_DATE
                 , RE.ADULT + RE.CHILD + RE.BABY AS TOTAL_PERSON
                 , (SELECT MIN(FILE_PATH) FROM ROOM_ATTACHMENT AT WHERE AT.ROOM_NO = R.NO) AS FILE_PATH
@@ -225,6 +226,7 @@ public interface GuestMapper {
                 RE.REQUEST,
                 R.NO,
                 M.NO,
+                RE.STATUS_NO,
                 TO_CHAR(RESERVATION_DATE, 'YYYY-MM-DD HH24:MI')
             """)
     MypageVo stayDetailReserv(String reno);
