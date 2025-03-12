@@ -47,7 +47,6 @@ const Main = () => {
         if (!data) {
           return;
         }
-        console.log("봄 숙소 :: ", data);
         const fileArr = data.map((vo) => vo);
 
         if (fileArr.length <= 1) {
@@ -61,7 +60,6 @@ const Main = () => {
     fetch("http://localhost:8080/home/summer")
       .then((resp) => resp.json())
       .then((data) => {
-        console.log("여름 숙소 :: ", data);
         if (!data) {
           return;
         }
@@ -80,7 +78,6 @@ const Main = () => {
         if (!data) {
           return;
         }
-        console.log("가을 숙소 :: ", data);
         const fileArr = data.map((vo) => vo);
 
         if (fileArr.length <= 1) {
@@ -97,7 +94,6 @@ const Main = () => {
         if (!data) {
           return;
         }
-        console.log("겨울 숙소 :: ", data);
         const fileArr = data.map((vo) => vo);
 
         if (fileArr.length <= 1) {

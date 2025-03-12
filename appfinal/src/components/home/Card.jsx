@@ -86,7 +86,6 @@ const Card = ({ vo }) => {
     userData = jwtDecode(token);
   }
   const navi = useNavigate();
-  console.log(userData.no);
 
   const dataObjByGet = {
     memberNo: userData.no,
@@ -105,7 +104,6 @@ const Card = ({ vo }) => {
     })
       .then((resp) => resp.text())
       .then((data) => {
-        console.log("가져옴@@@@@@@@@@@@@@@", data);
         if (data == "true") {
           setBookMark(true);
         } else {
