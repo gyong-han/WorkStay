@@ -445,9 +445,7 @@ const FindStayDetail = () => {
           </div>
           <div></div>
           <InconTitleDiv>
-            <div>
-              <BiMessageAltDetail />
-            </div>
+            <div></div>
             <div onClick={openModal}>
               <RxShare2 />
             </div>
@@ -458,7 +456,7 @@ const FindStayDetail = () => {
                 <IoBookmark color="#049dd9" />
               )}
             </div>
-            <div>메세지</div>
+            <div></div>
             <div onClick={openModal}>공유하기</div>
             <div>북마크</div>
           </InconTitleDiv>
@@ -491,11 +489,13 @@ const FindStayDetail = () => {
         <PackageDiv>
           <div>ROOM</div>
           <div>
-            <RoomSlider
-              rooms={roomVoList}
-              roomBlocked={roomBlocked}
-              reservationDate={reservationDate}
-            />
+            {Array.isArray(roomVoList) && roomVoList.length > 0 && (
+              <RoomSlider
+                rooms={roomVoList}
+                roomBlocked={roomBlocked}
+                reservationDate={reservationDate}
+              />
+            )}
           </div>
         </PackageDiv>
         <div>
