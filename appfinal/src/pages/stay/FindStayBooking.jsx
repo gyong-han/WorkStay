@@ -17,6 +17,7 @@ import Calendar from "../../components/FilterBar/Calendal";
 import { FaAngleDown } from "react-icons/fa6";
 import Alert from "../../components/Alert";
 import { jwtDecode } from "jwt-decode";
+import { getBlockDate } from "../../components/service/stayService";
 
 const Layout = styled.div`
   width: 100%;
@@ -117,6 +118,7 @@ const FindStayBooking = () => {
   const [selectDate, setSelectDate] = useState("");
   const [no, setNo] = useState();
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [reservationDone, setReservationDone] = useState([]);
   const dispatch = useDispatch();
   const stayVo = useSelector((state) => state.stay);
   const roomVo = useSelector((state) => state.room);
@@ -130,6 +132,21 @@ const FindStayBooking = () => {
     dispatch(setStayVo(setRoomDetail));
     dispatch(setRoomData(setRoomDetail));
   };
+
+  // 방 예약 막는 로직
+  const fetchBlockedDates = async () => {
+    const blockedDates = await getBlockDate(x);
+    setReservationDone(blockedDates);
+  };
+
+  useEffect(() => {
+    const loadData = async () => {
+      await StayBooking(); // 방 상세 정보 가져오기
+      await fetchBlockedDates(); // 해당 방의 예약 불가 날짜 가져오기
+    };
+
+    loadData();
+  }, [x]);
 
   let y = "";
 
@@ -152,7 +169,6 @@ const FindStayBooking = () => {
       reservationDate[0] !== selectedDate[0] ||
       reservationDate[1] !== selectedDate[1]
     ) {
-      console.log("📌 변경된 날짜:", selectedDate);
       dispatch(setStayReservationDate(selectedDate)); // Redux 저장
     }
   };
@@ -171,10 +187,6 @@ const FindStayBooking = () => {
     navigate(`/login`);
   };
 
-  useEffect(() => {
-    StayBooking();
-  }, [x]);
-
   return (
     <Layout>
       <div>
@@ -184,7 +196,11 @@ const FindStayBooking = () => {
         <div>
           <div>{roomVo.stayName}</div>
           <CalendarLayout>
-            <Calendar type="text" setDateRange={handleDateChange}>
+            <Calendar
+              type="text"
+              reservationDone={reservationDone}
+              setDateRange={handleDateChange}
+            >
               <span>
                 {reservationDate[0] && reservationDate[1]
                   ? `${reservationDate[0]} ~ ${reservationDate[1]}`

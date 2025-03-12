@@ -31,7 +31,7 @@ public interface RoomReservationMapper {
             FROM ROOM_RESERVATION RR
             JOIN ROOM R ON (RR.ROOM_NO = R.NO)
             JOIN STAY S ON (R.STAY_NO = S.NO)
-            WHERE R.STAY_NO = #{no}
+            WHERE R.NO = #{no}
               AND RR.STATUS_NO = 5
             """)
     List<Map<String, String>> getBlockDate(Long no);

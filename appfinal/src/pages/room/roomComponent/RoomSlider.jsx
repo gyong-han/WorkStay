@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import RoomDisplay from "./RoomDisplay";
+import { eachDayOfInterval, format, subDays } from "date-fns";
 
 const SliderWrapper = styled.div`
   width: 100%;
@@ -39,7 +40,7 @@ const ArrowButton = styled.button`
   }
 `;
 
-const RoomSlider = ({ rooms }) => {
+const RoomSlider = ({ rooms, roomBlocked, reservationDate }) => {
   const [startIndex, setStartIndex] = useState(0);
   const visibleRooms = 2; // ✅ 최대 2개만 표시
 
@@ -69,21 +70,43 @@ const RoomSlider = ({ rooms }) => {
           <IoIosArrowForward />
         </ArrowButton>
       </ArrowBtnWrapper>
-
-      {/* 🔥 2개씩만 표시되도록 수정 */}
       <SliderContainer>
-        {rooms.slice(startIndex, startIndex + visibleRooms).map((room) => (
-          <RoomDisplay
-            key={room.no}
-            img={room.filePath}
-            title={room.name}
-            standard={room.standardGuest}
-            max={room.maxGuest}
-            price={room.price}
-            // titleHandler={}
-            url={`/findstay/staybooking/${room.no}`}
-          />
-        ))}
+        {rooms.slice(startIndex, startIndex + visibleRooms).map((room) => {
+          const blockedDates = roomBlocked[room.no] || [];
+
+          const [checkIn, checkOut] = reservationDate || [];
+
+          let isAvailable = true;
+
+          if (checkIn && checkOut) {
+            const selectedRange = eachDayOfInterval({
+              start: new Date(checkIn),
+              end: subDays(new Date(checkOut), 1),
+            });
+
+            const selectedDates = selectedRange.map((date) =>
+              format(date, "yyyy-MM-dd")
+            );
+
+            const isBlocked = selectedDates.some((date) =>
+              blockedDates.includes(date)
+            );
+
+            isAvailable = !isBlocked;
+          }
+          return (
+            <RoomDisplay
+              key={room.no}
+              img={room.filePath}
+              title={room.name}
+              standard={room.standardGuest}
+              max={room.maxGuest}
+              price={room.price}
+              url={`/findstay/staybooking/${room.no}`}
+              isAvailable={isAvailable}
+            />
+          );
+        })}
       </SliderContainer>
     </SliderWrapper>
   );

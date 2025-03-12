@@ -70,8 +70,6 @@ const roomReservation = async (rData) => {
 };
 
 const getReservationInfo = async (rd) => {
-  console.log("");
-
   try {
     const result = await fetch(`${BASE_URL}/reservation/getReservationInfo`, {
       method: "POST",
