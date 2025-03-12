@@ -371,19 +371,26 @@ const FindStayDetail = () => {
   useEffect(() => {
     const fetchBlockedDatesForRooms = async () => {
       let blocked = {};
+      let allBlockedDates = [];
 
       for (const room of roomVoList) {
         const blockedDates = await getBlockDate(room.no);
         blocked[room.no] = blockedDates;
+        allBlockedDates.push(...blockedDates);
       }
 
       setRoomBlocked(blocked);
+      setReservationDoneOrigin(allBlockedDates);
     };
 
     if (roomVoList.length > 0) {
       fetchBlockedDatesForRooms();
     }
   }, [roomVoList]);
+
+  useEffect(() => {
+    setReservationDone(reservationDoneOrigin);
+  }, [reservationDoneOrigin]);
 
   const cleaned = stayVo.phone ? stayVo.phone.replace(/\D/g, "") : "";
   const formattedPhoneNumber = cleaned

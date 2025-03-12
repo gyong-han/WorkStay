@@ -107,6 +107,8 @@ const FindStayList = () => {
     localStorage.removeItem("roomdata");
   }
 
+  const reservationDone = useSelector((state) => state.room.reservationDone);
+
   const queryParams = new URLSearchParams({
     datedata: stayVo.reservationDate || "", // undefined 방지
     people: (roomVo.adult || 0) + (roomVo.child || 0) + (roomVo.baby || 0), // undefined 방지
@@ -178,7 +180,11 @@ const FindStayList = () => {
     <>
       <Layout>
         <h1>FIND STAY</h1>
-        <Display isTimeMode={false} dateRange={reservationDate}></Display>
+        <Display
+          isTimeMode={false}
+          dateRange={reservationDate}
+          reservationDone={reservationDone}
+        ></Display>
         <SearchWrapper>
           <form onSubmit={handleSubmit}>
             <SearchInput
