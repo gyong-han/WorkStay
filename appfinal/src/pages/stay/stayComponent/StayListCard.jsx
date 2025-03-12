@@ -171,6 +171,18 @@ const StayListCard = (props) => {
     }
   };
 
+  const extractProvinceCity = (address) => {
+    if (!address) return "";
+
+    const parts = address.split(" ");
+
+    if (parts.length >= 2) {
+      return `${parts[0]} ${parts[1]}`;
+    }
+
+    return address;
+  };
+
   const Price = props.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
   return (
@@ -187,7 +199,7 @@ const StayListCard = (props) => {
             {!bookMark ? <IoBookmarkOutline /> : <IoBookmark />}
           </BookMarkDiv>
           <div></div>
-          <AreaDiv>{props.address}</AreaDiv>
+          <AreaDiv>{extractProvinceCity(props.address)}</AreaDiv>
           <PeopleDiv>
             기준 {props.min}명 (최대 {props.max}명)
           </PeopleDiv>
