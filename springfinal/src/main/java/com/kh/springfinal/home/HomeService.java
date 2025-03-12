@@ -70,4 +70,8 @@ public class HomeService {
         mapper.changeSpaceAlert(no);
         mapper.changeStayAlert(no);
     }
+
+    public List<FaqVo> getFaq() {
+        return mapper.getFaq();
+    }
 }
