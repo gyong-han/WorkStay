@@ -2,10 +2,7 @@ package com.kh.springfinal.home;
 
 import com.kh.springfinal.reservation.StayReservVo;
 import com.kh.springfinal.stay.StayVo;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -133,4 +130,52 @@ public interface HomeMapper {
                         FROM DUAL
             """)
     int getbookmark(StayReservVo vo);
+
+    @Select("""
+            SELECT COUNT(NO)
+            FROM SPACE
+            WHERE HOST_NO = #{no}
+            AND ALERT = '11'
+            """)
+    int approveSpaceAlert(Long no);
+
+    @Select("""
+            SELECT COUNT(NO)
+            FROM STAY
+            WHERE HOST_NO = #{no}
+            AND ALERT = '11'
+            """)
+    int approveStayAlert(Long no);
+
+    @Select("""
+            SELECT COUNT(NO)
+            FROM SPACE
+            WHERE HOST_NO = #{no}
+            AND ALERT = '12'
+            """)
+    int companionSpaceAlert(Long no);
+
+    @Select("""
+            SELECT COUNT(NO)
+            FROM STAY
+            WHERE HOST_NO = #{no}
+            AND ALERT = '12'
+            """)
+    int companionStayAlert(Long no);
+
+    @Update("""
+            UPDATE SPACE SET
+            ALERT = '13'
+            WHERE HOST_NO = #{no}
+            AND ALERT IN (11,12)
+            """)
+    void changeSpaceAlert(Long no);
+
+    @Update("""
+            UPDATE STAY SET
+            ALERT = '13'
+            WHERE HOST_NO = #{no}
+            AND ALERT IN (11,12)
+            """)
+    void changeStayAlert(Long no);
 }

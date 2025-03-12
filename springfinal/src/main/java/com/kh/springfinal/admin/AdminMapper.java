@@ -125,7 +125,8 @@ public interface AdminMapper {
     @Update("""
             UPDATE SPACE 
             SET
-            STATUS_NO = '2'
+            STATUS_NO = '2',
+            ALERT = '11'
             WHERE NO = #{spaceNo}
             """)
     int approveSpace(Long spaceNo);
@@ -142,7 +143,8 @@ public interface AdminMapper {
     @Update("""
             UPDATE SPACE 
             SET
-            STATUS_NO = '3'
+            STATUS_NO = '3',
+            ALERT = '12'
             WHERE NO = #{spaceNo}
             """)
     int companionSpace(Long spaceNo);
@@ -213,7 +215,8 @@ public interface AdminMapper {
     @Update("""
             UPDATE STAY
             SET
-            STATUS_NO = '2'
+            STATUS_NO = '2',
+            ALERT = '11'
             WHERE NO = #{stayNo}
             """)
     int approveStay(Long stayNo);
@@ -221,7 +224,8 @@ public interface AdminMapper {
     @Update("""
             UPDATE STAY 
             SET
-            STATUS_NO = '3'
+            STATUS_NO = '3',
+            ALERT = '12'
             WHERE NO = #{stayNo}
             """)
     int companionStay(Long stayNo);

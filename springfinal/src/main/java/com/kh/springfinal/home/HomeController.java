@@ -1,12 +1,12 @@
 package com.kh.springfinal.home;
 
-import com.kh.springfinal.reservation.SpaceReservVo;
 import com.kh.springfinal.reservation.StayReservVo;
 import com.kh.springfinal.stay.StayVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -66,6 +66,17 @@ public class HomeController {
             return false;
         }
 
+    }
+
+    @PostMapping("alert")
+    public Map<String, String> alert(@RequestBody Long no){
+        Map<String,String> alert = service.alert(no);
+        return alert;
+    }
+
+    @PostMapping("changeAlert")
+    public void changeAlert(@RequestBody Long no){
+        service.changeAlert(no);
     }
 
 
