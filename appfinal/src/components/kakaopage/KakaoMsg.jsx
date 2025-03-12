@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 
 const KakaoMsg = () => {
   const fd1 = localStorage.getItem("fd");
-  const fdData = JSON.parse(fd1);  
+  const fdData = JSON.parse(fd1);
   const KAKAO_JS_KEY = "fc5cec587b47d4825551ae8da5ed23b6"; // 본인의 JS 키로 변경
   const SCOPE = "talk_message"; // 메시지 전송 권한
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
+    // Kakao SDK가 로드되지 않았을 경우 로드하기
     if (!window.Kakao) {
       const script = document.createElement("script");
       script.src = "https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js";
@@ -18,6 +19,9 @@ const KakaoMsg = () => {
         if (!window.Kakao.isInitialized()) {
           window.Kakao.init(KAKAO_JS_KEY);
           console.log("Kakao SDK initialized:", window.Kakao.isInitialized());
+          
+          // SDK 로드 후 handleKakaoAction 실행
+          handleKakaoAction();
         }
       };
       document.head.appendChild(script);
@@ -25,16 +29,11 @@ const KakaoMsg = () => {
       if (!window.Kakao.isInitialized()) {
         window.Kakao.init(KAKAO_JS_KEY);
       }
+
+      // 이미 SDK가 로드되었으면 바로 실행
+      handleKakaoAction();
     }
   }, []);
-
-  // 로그인 확인
-  const checkLogin = () => {
-    const token = window.Kakao.Auth.getAccessToken();
-    if (token) {
-      setIsLoggedIn(true);
-    }
-  };
 
   // 카카오 로그인 (팝업 방식)
   const loginWithKakao = () => {
@@ -64,21 +63,20 @@ const KakaoMsg = () => {
         template_object: {
           object_type: "feed", // 기본 템플릿 (피드 형식)
           content: {
-            title: fdData.name+"(결제 완료)", // 제목
-            description: "\n✅ 예약이 정상적으로 완료되었습니다!"+"사용일자 :"+fdData.useDay,
-            
+            title: fdData.name + "(결제 완료)", // 제목
+            description: "\n✅ 예약이 정상적으로 완료되었습니다!" + "사용일자 :" + fdData.useDay,
             image_url: fdData.filePath, // 이미지 URL
             link: {
-              web_url: "https://your-website.com", // 웹 링크
-              mobile_web_url: "https://your-website.com"
+              web_url: "http://localhost:3000/hostMenu/spaceReserv/spacedetail?reno=S20250312008", // 웹 링크
+              mobile_web_url: "http://localhost:3000/hostMenu/spaceReserv/spacedetail?reno=S20250312008"
             }
           },
           buttons: [
             {
               title: "결제내역 확인하기",
               link: {
-                web_url: "https://your-website.com",
-                mobile_web_url: "https://your-website.com"
+                web_url: "http://localhost:3000/hostMenu/spaceReserv/spacedetail?reno=S20250312008",
+                mobile_web_url: "http://localhost:3000/hostMenu/spaceReserv/spacedetail?reno=S20250312008"
               }
             }
           ]
@@ -100,10 +98,11 @@ const KakaoMsg = () => {
     }
   };
 
-  useEffect(()=>{
-    handleKakaoAction();
-  },[])
-
+  return (
+    <div>
+      <button onClick={handleKakaoAction}>카카오톡 메시지 보내기</button>
+    </div>
+  );
 };
 
 export default KakaoMsg;
