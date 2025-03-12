@@ -34,7 +34,6 @@ const getStayDetail = async (x) => {
       throw new Error(`HTTP error! Status: ${result.status}`);
     }
     const data = await result.json();
-    // console.log("data :: ", data);
     return data;
   } catch (e) {
     console.log("Stay Detail Error", e);

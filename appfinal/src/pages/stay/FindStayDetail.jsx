@@ -6,6 +6,7 @@ import Map from "../../components/map/Map";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Calendar from "../../components/FilterBar/Calendal";
+import { addDays, format, eachDayOfInterval, subDays } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setAddress,
@@ -21,14 +22,12 @@ import {
 } from "../../redux/roomSlice";
 import {
   delBookmark,
+  getBlockDate,
   getBookmark,
   getStayDetail,
   setBookmarkInsert,
 } from "../../components/service/stayService";
-import {
-  getRoomListAll,
-  isAvailable,
-} from "../../components/service/roomService";
+import { getRoomListAll } from "../../components/service/roomService";
 import Notification from "./stayComponent/noti/Notification";
 import RoomSlider from "../room/roomComponent/RoomSlider";
 import { IoBookmarkOutline } from "react-icons/io5";
@@ -257,6 +256,9 @@ const FindStayDetail = () => {
   const [isAlertOpen3, setIsAlertOpen3] = useState(false);
   const [modalStatus, setModalStatus] = useState("");
   const [result, setResult] = useState([]);
+  const [roomBlocked, setRoomBlocked] = useState({});
+  const [reservationDone, setReservationDone] = useState([]);
+  const [reservationDoneOrigin, setReservationDoneOrigin] = useState([]); // 원본
   const { x } = useParams();
   const stayVo = useSelector((state) => state.stay);
   const roomVoList = useSelector((state) => state.room.rooms);
@@ -302,11 +304,6 @@ const FindStayDetail = () => {
     } else {
       setBookMark(false);
     }
-  };
-
-  const available = async () => {
-    const checkAvailable = await isAvailable(x);
-    dispatch(setStayReservationDone(checkAvailable));
   };
 
   const bookmarkInsert = () => {
@@ -357,6 +354,37 @@ const FindStayDetail = () => {
     setModalStatus("");
   };
 
+  // 날짜 막는 기능
+  const getSelectedRangeDates = (start, end) => {
+    if (!start || !end) return [];
+
+    // 체크인 ~ 체크아웃 전날까지 날짜 배열 구하기
+    const range = eachDayOfInterval({
+      start: start,
+      end: subDays(end, 1), // 체크아웃 전날까지
+    });
+
+    // 'yyyy-MM-dd' 포맷으로 변환
+    return range.map((date) => format(date, "yyyy-MM-dd"));
+  };
+
+  useEffect(() => {
+    const fetchBlockedDatesForRooms = async () => {
+      let blocked = {};
+
+      for (const room of roomVoList) {
+        const blockedDates = await getBlockDate(room.no);
+        blocked[room.no] = blockedDates;
+      }
+
+      setRoomBlocked(blocked);
+    };
+
+    if (roomVoList.length > 0) {
+      fetchBlockedDatesForRooms();
+    }
+  }, [roomVoList]);
+
   const cleaned = stayVo.phone ? stayVo.phone.replace(/\D/g, "") : "";
   const formattedPhoneNumber = cleaned
     ? cleaned.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3")
@@ -365,7 +393,6 @@ const FindStayDetail = () => {
   useEffect(
     (x) => {
       StayDetail();
-      available();
     },
     [x]
   );
@@ -375,14 +402,16 @@ const FindStayDetail = () => {
   }, []);
 
   const handleDateChange = (selectedDate) => {
-    if (
-      !reservationDate ||
-      reservationDate[0] !== selectedDate[0] ||
-      reservationDate[1] !== selectedDate[1]
-    ) {
-      // console.log("📌 변경된 날짜:", selectedDate);
-      dispatch(setStayReservationDate(selectedDate)); // Redux 저장
-    }
+    const [start, end] = selectedDate;
+
+    // 기존 예약된 날짜 + 선택 날짜 구간 추가
+    const newBlockedDates = [
+      ...reservationDoneOrigin, // 백엔드에서 받아온 원본 날짜
+      ...getSelectedRangeDates(start, end), // 선택한 날짜 구간
+    ];
+
+    setReservationDone(newBlockedDates);
+    dispatch(setStayReservationDate(selectedDate)); // redux에 날짜 저장
   };
 
   const park = "4";
@@ -438,7 +467,11 @@ const FindStayDetail = () => {
         <div>
           <div></div>
           <DateDiv>
-            <Calendar type="text" setDateRange={handleDateChange}>
+            <Calendar
+              type="text"
+              reservationDone={reservationDone}
+              setDateRange={handleDateChange}
+            >
               <span>
                 {reservationDate[0] && reservationDate[1]
                   ? `${reservationDate[0]} ~ ${reservationDate[1]}`
@@ -451,7 +484,11 @@ const FindStayDetail = () => {
         <PackageDiv>
           <div>ROOM</div>
           <div>
-            <RoomSlider rooms={roomVoList} />
+            <RoomSlider
+              rooms={roomVoList}
+              roomBlocked={roomBlocked}
+              reservationDate={reservationDate}
+            />
           </div>
         </PackageDiv>
         <div>
