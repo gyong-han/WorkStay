@@ -76,7 +76,7 @@ const Bookmark = () => {
   };
 
   const stayClick = (stayNo) => {
-    navi(`/findstay/detail/${stayNo}`);
+    navi(`/findstay/detail/${stayNo}/refund-policy`);
   };
 
   const spaceClick = (spaceNo) => {

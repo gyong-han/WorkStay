@@ -47,13 +47,25 @@ const LText = styled.span`
 
 const DetailText = styled.span`
   font-family: "Pretendard-Light";
-  font-size: 0.7rem;
+  font-size: 0.8rem;
 `;
 
 const Logos = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, auto);
+  grid-template-columns: repeat(4, auto);
   gap: 10px;
+`;
+
+const LogoLink = styled.a`
+  color: inherit;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    color: #2b8c44;
+  }
 `;
 
 const EnrollSpan = styled.span`
@@ -112,10 +124,34 @@ const Footer = () => {
             <DetailText>CopyrightⓒWORKSTAY</DetailText>
           </FooterInfoContainer>
           <Logos>
-            <FaFacebookF size={15} />
-            <FaInstagram />
-            <SiNaver />
-            <FaYoutube />
+            <LogoLink
+              href="https://www.facebook.com/share/1P19m9fUj3/?mibextid=wwXIfr"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaFacebookF size={20} />
+            </LogoLink>
+            <LogoLink
+              href="https://www.instagram.com/workstay_?igsh=bDJveWszdm10enVh&utm_source=qr"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaInstagram size={25} />
+            </LogoLink>
+            <LogoLink
+              href="https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=workstay"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <SiNaver size={20} />
+            </LogoLink>
+            <LogoLink
+              href="https://youtu.be/cps5VQK-2dw?si=WCwAhoPcDE-buxV_"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaYoutube size={22} />
+            </LogoLink>
           </Logos>
         </FooterMainContainer>
       </FooterContent>

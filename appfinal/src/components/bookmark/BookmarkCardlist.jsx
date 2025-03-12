@@ -65,7 +65,7 @@ const BookmarkCardlist = ({ data, type, onToggle, f }) => {
         </ImgDIv>
         <TopDiv>
           <TitleDiv>{data.name}</TitleDiv>
-          <Share />
+          <div></div>
           <BookmarkIcon type={type} targetNo={data.no} onToggle={onToggle} />
         </TopDiv>
         <MiddleDiv>
