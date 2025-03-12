@@ -117,7 +117,8 @@ const FindStayList = () => {
   }, [location.pathname]);
 
   const queryParams = new URLSearchParams({
-    datedata: stayVo.reservationDate || "", // undefined 방지
+    checkIn: stayVo.checkIn || "", // undefined 방지
+    checkOut: stayVo.checkOut || "", // undefined 방지
     people: (roomVo.adult || 0) + (roomVo.child || 0) + (roomVo.baby || 0), // undefined 방지
     area: stayVo.address || "", // undefined 방지
     sort: stayVo.sort || "latest", // 기본값 설정
@@ -166,11 +167,7 @@ const FindStayList = () => {
     <>
       <Layout>
         <h1>FIND STAY</h1>
-        <Display
-          isTimeMode={false}
-          dateRange={reservationDate}
-          reservationDone={reservationDone}
-        ></Display>
+        <Display isTimeMode={false} reservationDone={reservationDone}></Display>
         <SearchWrapper>
           <form onSubmit={handleSubmit}>
             <SearchInput

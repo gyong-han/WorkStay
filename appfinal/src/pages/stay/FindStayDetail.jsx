@@ -383,7 +383,7 @@ const FindStayDetail = () => {
       setReservationDoneOrigin(allBlockedDates);
     };
 
-    if (roomVoList.length > 0) {
+    if (roomVoList.length > 0 && roomVoList.every((room) => room.no)) {
       fetchBlockedDatesForRooms();
     }
   }, [roomVoList]);
