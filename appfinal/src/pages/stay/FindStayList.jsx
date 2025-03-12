@@ -117,8 +117,8 @@ const FindStayList = () => {
   }, [location.pathname]);
 
   const queryParams = new URLSearchParams({
-    checkIn: stayVo.checkIn || "", // undefined 방지
-    checkOut: stayVo.checkOut || "", // undefined 방지
+    checkInData: reservationDate[0] || "", // undefined 방지
+    checkOutData: reservationDate[1] || "", // undefined 방지
     people: (roomVo.adult || 0) + (roomVo.child || 0) + (roomVo.baby || 0), // undefined 방지
     area: stayVo.address || "", // undefined 방지
     sort: stayVo.sort || "latest", // 기본값 설정
