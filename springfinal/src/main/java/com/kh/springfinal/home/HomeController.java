@@ -79,5 +79,10 @@ public class HomeController {
         service.changeAlert(no);
     }
 
+    @GetMapping("faq")
+    public List<FaqVo> getFaq(){
+        List<FaqVo> faqList = service.getFaq();
+        return faqList;
+    }
 
 }

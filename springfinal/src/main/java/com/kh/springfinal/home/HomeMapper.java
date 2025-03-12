@@ -178,4 +178,12 @@ public interface HomeMapper {
             AND ALERT IN (11,12)
             """)
     void changeStayAlert(Long no);
+
+    @Select("""
+            SELECT NO,TITLE,CONTENT
+            FROM FAQ
+            WHERE SHOW_YN = 'Y'
+            """)
+    List<FaqVo> getFaq();
+
 }
