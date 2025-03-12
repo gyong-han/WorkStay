@@ -64,7 +64,7 @@ const BtnDiv = styled.div`
   }
 `;
 
-const Display = ({ isTimeMode, reservationDone, dateRange }) => {
+const Display = ({ isTimeMode, reservationDone }) => {
   const [isModal1Open, setIsModal1Open] = useState(false);
   const [isModal2Open, setIsModal2Open] = useState(false);
 
