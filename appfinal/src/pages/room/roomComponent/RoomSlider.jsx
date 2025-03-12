@@ -102,7 +102,7 @@ const RoomSlider = ({ rooms, roomBlocked, reservationDate }) => {
               standard={room.standardGuest}
               max={room.maxGuest}
               price={room.price}
-              url={`/findstay/staybooking/${room.no}`}
+              url={`/findstay/staybooking/${room.no}/refund-policy`}
               isAvailable={isAvailable}
             />
           );

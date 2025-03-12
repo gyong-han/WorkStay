@@ -110,7 +110,7 @@ const StayListCard = (props) => {
   const navigate = useNavigate();
 
   const clickHandler = () => {
-    navigate(`/${props.url}/detail/${props.no}`);
+    navigate(`/${props.url}/detail/${props.no}/refund-policy`);
   };
 
   const [isAlertOpen, setIsAlertOpen] = useState(false);
