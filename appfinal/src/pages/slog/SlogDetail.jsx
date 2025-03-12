@@ -151,7 +151,8 @@ const EditDeleteBtn = styled.div`
     font-family: "Pretendard-Regular";
     background-color: #fafafa;
     /* border-color: #049dd9; */
-    border-radius: 10px;
+    border-radius: 5px;
+    border: 1px solid #202020;
   }
 
   .delete {
@@ -161,7 +162,8 @@ const EditDeleteBtn = styled.div`
     color: #fafafa;
     font-family: "Pretendard-Regular";
     background-color: #049dd9;
-    border-radius: 10px;
+    border-radius: 5px;
+    border: none;
   }
 
   .share {
@@ -171,8 +173,8 @@ const EditDeleteBtn = styled.div`
     font-family: "Pretendard-Regular";
     background-color: #fafafa;
     /* border-color: #049dd9; */
-    border-radius: 10px;
-    border: 1px solid black;
+    border-radius: 5px;
+    border: 1px solid #202020;
   }
 
   .reservation {
@@ -183,6 +185,7 @@ const EditDeleteBtn = styled.div`
     font-family: "Pretendard-Regular";
     background-color: #049dd9;
     border-radius: 10px;
+    border: none;
   }
 `;
 
@@ -504,7 +507,7 @@ const SlogDetail = () => {
         ) : (
           <>
             <button className="share" onClick={openKakaoModal}>
-              트레블 공유하기
+              트래블 공유하기
             </button>
             <button className="reservation">스테이 예약하기</button>
           </>

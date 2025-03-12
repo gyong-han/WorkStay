@@ -34,7 +34,8 @@ const Traffic = () => {
       <h1>Traffic</h1>
       <NavBar>
         <NavLink
-          to="/traffic/train"
+          to="/traffic"
+          end
           className={({ isActive }) => (isActive ? "active" : "")}
         >
           Train
@@ -47,7 +48,7 @@ const Traffic = () => {
         </NavLink>
       </NavBar>
       <Routes>
-        <Route path="train" element={<TrainPage />} />
+        <Route path="/" element={<TrainPage />} />
         <Route path="bus" element={<BusPage />} />
         <Route path="bus/detail" element={<BusDetail />} />
         <Route path="train/detail" element={<TrainDetail />} />

@@ -301,69 +301,25 @@ const SlogWrite = () => {
   const [center, setCenter] = useState();
   const [left, setLeft] = useState();
   const navigate = useNavigate();
-  const [rows, setRows] = useState(4);
-  const [columns, setColumns] = useState(4);
+  // const [rows, setRows] = useState(4);
+  // const [columns, setColumns] = useState(4);
   const [cellContent, setCellContent] = useState("");
+  const rows = 4;
+  const columns = 4;
 
   const handleInput = (e) => {
     setContent(e.target.cloneNode(true).innerHTML);
   };
 
-  // const handleShowGraph = () => {
-  //   setShowGraph(true);
-  // };
-
-  // const handleMouseMove = (e) => {
-  //   if (!showGraph) return;
-
-  //   const newRows = Math.min(8, Math.max(1, Math.ceil(e.clientY / 50)));
-  //   const newColumns = Math.min(8, Math.max(1, Math.ceil(e.clientX / 50)));
-
-  //   setRows(newRows);
-  //   setColumns(newColumns);
-  // };
-
-  // const handleFileChange = (e) => {
-  //   if (!e.target.files || e.target.files.length === 0) {
-  //     return;
-  //   }
-
-  //   const files = e.target.files;
-  //   const fd = new FormData();
-
-  //   for (let i = 0; i < files.length; i++) {
-  //     fd.append("files", files[i]);
-  //   }
-
-  //   fetch("http://127.0.0.1:8080/api/slog/upload", {
-  //     method: "POST",
-  //     body: fd,
-  //   })
-  //     .then((resp) => resp.json())
-  //     .then((data) => {
-  //       setUrl((prevUrl) => [...prevUrl, ...data]);
-  //       setOriginalNames((prevName) => [
-  //         ...prevName,
-  //         ...Array.from(files).map((file) => file.name),
-  //       ]);
-
-  //       const contentDiv = document.querySelector(".content");
-  //       data.forEach((imgUrl) => {
-  //         const imgElement = document.createElement("img");
-  //         imgElement.src = imgUrl;
-  //         imgElement.style.maxWidth = "100%";
-  //         imgElement.style.width = "600px";
-  //         imgElement.style.margin = "10px 0";
-  //         contentDiv.appendChild(imgElement);
-  //       });
-  //     });
-  // };
-
   const handleGraphClick = (e) => {
+    setCellContent("표 생성됨");
+  };
+
+  useEffect(() => {
+    if (!cellContent) return;
+
     const contentDiv = document.querySelector(".content");
     if (!contentDiv) return;
-
-    setCellContent(e.target.innerText);
 
     const tableElement = document.createElement("table");
     tableElement.style.border = "1px solid black";
@@ -388,7 +344,8 @@ const SlogWrite = () => {
     }
 
     contentDiv.appendChild(tableElement);
-  };
+    setCellContent("");
+  }, [cellContent]);
 
   const handleLineChange = () => {
     const contentDiv = document.querySelector(".content");
@@ -450,33 +407,33 @@ const SlogWrite = () => {
             const videoElement = document.createElement("video");
             videoElement.src = fileUrl;
             videoElement.style.width = "100%";
-            videoElement.style.display = "none";
+            // videoElement.style.display = "none";
             videoElement.controls = true;
 
-            const thumbnail = document.createElement("img");
-            thumbnail.src =
-              "https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F3VzhA%2FbtsBBmZ2tlJ%2FPuLApcHgFhQhoiuKzUCmNK%2Fimg.png";
-            thumbnail.style.width = "100%";
-            thumbnail.style.position = "absolute";
-            thumbnail.style.top = "0";
-            thumbnail.style.left = "0";
-            thumbnail.style.cursor = "pointer";
+            // const thumbnail = document.createElement("img");
+            // thumbnail.src =
+            //   "https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F3VzhA%2FbtsBBmZ2tlJ%2FPuLApcHgFhQhoiuKzUCmNK%2Fimg.png";
+            // thumbnail.style.width = "100%";
+            // thumbnail.style.position = "absolute";
+            // thumbnail.style.top = "0";
+            // thumbnail.style.left = "0";
+            // thumbnail.style.cursor = "pointer";
 
             videoContainer.addEventListener("click", () => {
-              thumbnail.style.display = "none";
+              // thumbnail.style.display = "none";
               videoElement.style.display = "block";
               videoElement.play();
             });
 
-            videoContainer.appendChild(thumbnail);
+            // videoContainer.appendChild(thumbnail);
             videoContainer.appendChild(videoElement);
             contentDiv.appendChild(videoContainer);
 
-            videoElement.style.cursor = "default";
+            // videoElement.style.cursor = "default";
 
-            videoElement.addEventListener("mousemove", () => {
-              videoElement.style.cursor = "default";
-            });
+            // videoElement.addEventListener("mousemove", () => {
+            //   videoElement.style.cursor = "default";
+            // });
           }
         });
       });
