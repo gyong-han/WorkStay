@@ -64,7 +64,7 @@ const BtnDiv = styled.div`
   }
 `;
 
-const Display = ({ isTimeMode }) => {
+const Display = ({ isTimeMode, reservationDone, dateRange }) => {
   const [isModal1Open, setIsModal1Open] = useState(false);
   const [isModal2Open, setIsModal2Open] = useState(false);
 
@@ -92,7 +92,11 @@ const Display = ({ isTimeMode }) => {
                 <CiCalendar size={20} /> 일정
               </CalendarTime>
             ) : (
-              <Calendar w="170px" type="button">
+              <Calendar
+                w="170px"
+                type="button"
+                reservationDone={reservationDone}
+              >
                 <CiCalendar size={20} /> 일정
               </Calendar>
             )}

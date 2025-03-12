@@ -30,25 +30,45 @@
         AND RA.THUMBNAIL = 'Y'
         WHERE S.STATUS_NO = '2'
         AND S.DEL_YN = 'N'
+
+        <!-- 지역 필터 -->
         <if test="area != null and area != '' ">
             AND S.ADDRESS LIKE CONCAT(#{area}, '%')
         </if>
+
+        <!-- 인원 수 필터 -->
         <if test="people != null and people != '' ">
             AND R.MAX_GUEST >= #{people}
         </if>
+
+        <!-- 체크인 & 체크아웃 날짜가 있을 경우 -->
         <if test="checkIn != null and checkOut != null and checkIn != '' and checkOut != '' ">
             AND S.NO NOT IN (
-            SELECT DISTINCT R.STAY_NO
+            SELECT R.STAY_NO
             FROM ROOM R
-            JOIN ROOM_RESERVATION RR ON RR.ROOM_NO = R.NO
+            WHERE R.STAY_NO = S.NO
+            GROUP BY R.STAY_NO
+            HAVING COUNT(*) = SUM(
+            CASE
+            WHEN R.NO IN (
+            SELECT ROOM_NO
+            FROM ROOM_RESERVATION RR
             WHERE RR.STATUS_NO = 5
             AND RR.CHECK_IN &lt; #{checkOut}
             AND RR.CHECK_OUT &gt; #{checkIn}
             )
+            THEN 1
+            ELSE 0
+            END
+            )
+            )
         </if>
+
+        <!-- 검색어(숙소명) 필터 -->
         <if test="title != null and title != '' ">
             AND S.NAME LIKE '%' || #{title} || '%'
         </if>
+
         ORDER BY S.NO DESC
     </select>
 
@@ -86,12 +106,23 @@
         </if>
         <if test="checkIn != null and checkOut != null and checkIn != '' and checkOut != '' ">
             AND S.NO NOT IN (
-            SELECT DISTINCT R.STAY_NO
+            SELECT R.STAY_NO
             FROM ROOM R
-            JOIN ROOM_RESERVATION RR ON RR.ROOM_NO = R.NO
+            WHERE R.STAY_NO = S.NO
+            GROUP BY R.STAY_NO
+            HAVING COUNT(*) = SUM(
+            CASE
+            WHEN R.NO IN (
+            SELECT ROOM_NO
+            FROM ROOM_RESERVATION RR
             WHERE RR.STATUS_NO = 5
             AND RR.CHECK_IN &lt; #{checkOut}
             AND RR.CHECK_OUT &gt; #{checkIn}
+            )
+            THEN 1
+            ELSE 0
+            END
+            )
             )
         </if>
         <if test="title != null and title != '' ">
@@ -134,12 +165,23 @@
         </if>
         <if test="checkIn != null and checkOut != null and checkIn != '' and checkOut != '' ">
             AND S.NO NOT IN (
-            SELECT DISTINCT R.STAY_NO
+            SELECT R.STAY_NO
             FROM ROOM R
-            JOIN ROOM_RESERVATION RR ON RR.ROOM_NO = R.NO
+            WHERE R.STAY_NO = S.NO
+            GROUP BY R.STAY_NO
+            HAVING COUNT(*) = SUM(
+            CASE
+            WHEN R.NO IN (
+            SELECT ROOM_NO
+            FROM ROOM_RESERVATION RR
             WHERE RR.STATUS_NO = 5
             AND RR.CHECK_IN &lt; #{checkOut}
             AND RR.CHECK_OUT &gt; #{checkIn}
+            )
+            THEN 1
+            ELSE 0
+            END
+            )
             )
         </if>
         <if test="title != null and title != '' ">
@@ -190,12 +232,23 @@
 
         <if test="checkIn != null and checkOut != null and checkIn != '' and checkOut != '' ">
             AND S.NO NOT IN (
-            SELECT DISTINCT R.STAY_NO
+            SELECT R.STAY_NO
             FROM ROOM R
-            JOIN ROOM_RESERVATION RR ON RR.ROOM_NO = R.NO
+            WHERE R.STAY_NO = S.NO
+            GROUP BY R.STAY_NO
+            HAVING COUNT(*) = SUM(
+            CASE
+            WHEN R.NO IN (
+            SELECT ROOM_NO
+            FROM ROOM_RESERVATION RR
             WHERE RR.STATUS_NO = 5
             AND RR.CHECK_IN &lt; #{checkOut}
             AND RR.CHECK_OUT &gt; #{checkIn}
+            )
+            THEN 1
+            ELSE 0
+            END
+            )
             )
         </if>
 
