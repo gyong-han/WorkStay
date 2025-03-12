@@ -69,6 +69,9 @@ const SpaceReservationCard = ({ data, hideDate, moveDetail }) => {
     navi(finalPath);
   }
 
+  const formatPrice = (price) => {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
   return (
     <>
       <DataDiv>
@@ -88,7 +91,7 @@ const SpaceReservationCard = ({ data, hideDate, moveDetail }) => {
                 예약 상세 확인
               </TextDiv>
             )}
-            <TextDiv size="20px">₩{data.amount}</TextDiv>
+            <TextDiv size="20px">₩{formatPrice(data.amount)}</TextDiv>
           </PriceDiv>
         </DataArea>
         <ImgTag src={data.filePath} />

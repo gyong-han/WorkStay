@@ -197,6 +197,10 @@ const StayDetail = () => {
     navi(newPath);
   }
 
+  const formatPrice = (price) => {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
   return (
     <>
       <MainDiv>
@@ -336,7 +340,7 @@ const StayDetail = () => {
               총 결제 금액
             </StatusSpan>
             <StatusSpan size="17px" right="10px">
-              ₩{data.amount}
+              ₩{formatPrice(data.amount)}
             </StatusSpan>
           </AmountDiv>
           <div></div>
@@ -352,24 +356,31 @@ const StayDetail = () => {
           <div></div>
           <div></div>
           <BtnDiv>
-            <div>
-              <HostBtn
-                width="250px"
-                height="50px"
-                font="20px"
-                backColor="#049DD9"
-                color="#FAFAFA"
-                str="예약취소"
-                top="100px"
-                f={movePath}
-                border="none"
-              />
-            </div>
-            <div>
-              <Btn onClick={() => moveDetail(data.roomNo)}>
-                이용 안내 및 환불 규정
-              </Btn>
-            </div>
+            {data.progressState === "4" && <div></div>}
+            {data.progressState === "5" && (
+              <div>
+                <HostBtn
+                  width="250px"
+                  height="50px"
+                  font="20px"
+                  backColor="#049DD9"
+                  color="#FAFAFA"
+                  str="예약취소"
+                  top="100px"
+                  f={movePath}
+                  border="none"
+                />
+              </div>
+            )}
+
+            {data.progressState === "4" && <div></div>}
+            {data.progressState === "5" && (
+              <div>
+                <Btn onClick={() => moveDetail(data.roomNo)}>
+                  이용 안내 및 환불 규정
+                </Btn>
+              </div>
+            )}
           </BtnDiv>
         </DataArea>
       </MainDiv>

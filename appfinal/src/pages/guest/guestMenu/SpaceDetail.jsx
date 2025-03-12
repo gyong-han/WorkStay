@@ -177,6 +177,9 @@ const SpaceDetail = () => {
 
     navi(newPath);
   }
+  const formatPrice = (price) => {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
 
   //이용 안내 및 환불 규정 이동
   function moveDetail(spaceNo) {
@@ -325,7 +328,7 @@ const SpaceDetail = () => {
               총 결제 금액
             </StatusSpan>
             <StatusSpan size="17px" right="10px">
-              ₩{data.amount}
+              ₩{formatPrice(data.amount)}
             </StatusSpan>
           </AmountDiv>
           <div></div>
