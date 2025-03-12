@@ -2,10 +2,9 @@ package com.kh.springfinal.roomReservation;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -52,5 +51,13 @@ public class RoomReservationController {
             throw new IllegalStateException("[ERROR-RESERVATION-02] RESERVATION INFO ERROR");
         }
     }
-
+    @PostMapping("isblockdate")
+    public List<String> getBlockDates(@RequestBody Long no) {
+        try {
+            return reservationService.getBlockDates(no);
+        } catch (Exception e) {
+            log.warn(e.getMessage());
+            throw new IllegalStateException("[ERROR-RESERVATION-03] RESERVATION BLOCK DATE ERROR");
+        }
+    }
 }
