@@ -4,13 +4,14 @@ import { ko } from "date-fns/locale";
 import "react-datepicker/dist/react-datepicker.css";
 import Form from "react-bootstrap/Form";
 import { format } from "date-fns";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setStayReservationDate } from "../../redux/roomSlice";
 
-const Calendar = ({ children, type, w, position }) => {
+const Calendar = ({ children, type, w, position, reservationDone }) => {
   const [dateRange, setLocalDateRange] = useState([null, null]);
   const [checkIn, checkOut] = dateRange;
   const dispatch = useDispatch();
+  const roomVo = useSelector((state) => state.room);
 
   useEffect(() => {
     if (dateRange[0] !== null && dateRange[1] !== null) {
@@ -34,6 +35,10 @@ const Calendar = ({ children, type, w, position }) => {
       }}
       monthsShown={2}
       withPortal
+      filterDate={(date) => {
+        const formattedDate = format(date, "yyyy-MM-dd"); // date-fns 사용
+        return !reservationDone.includes(formattedDate);
+      }}
       customInput={
         <Form.Control
           as={type}

@@ -34,7 +34,7 @@ const getStayDetail = async (x) => {
       throw new Error(`HTTP error! Status: ${result.status}`);
     }
     const data = await result.json();
-    console.log("data :: ", data);
+    // console.log("data :: ", data);
     return data;
   } catch (e) {
     console.log("Stay Detail Error", e);
@@ -92,6 +92,23 @@ const delBookmark = async (dataObj) => {
   }
 };
 
+const getBlockDate = async (no) => {
+  try {
+    const result = await fetch(`${BASE_URL}/reservation/isblockdate`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(no),
+    });
+    if (!result.ok) {
+      throw new Error(`HTTP error! Status: ${result.status}`);
+    }
+    const data = await result.json();
+    return data;
+  } catch (e) {
+    console.log("GET BLOCK DATE ERROR", e);
+  }
+};
+
 export {
   getAttachment,
   getStayListAll,
@@ -99,4 +116,5 @@ export {
   getBookmark,
   delBookmark,
   setBookmarkInsert,
+  getBlockDate,
 };

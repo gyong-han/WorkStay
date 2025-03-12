@@ -34,5 +34,6 @@ public class RoomVo {
     private String paymentName;
 
     private String statusNo;
+    private String[] reservations;
 
 }
