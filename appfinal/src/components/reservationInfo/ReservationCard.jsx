@@ -146,6 +146,7 @@ const ReservationCard = ({ data, hideDate, moveDetail }) => {
   };
 
   const formatPrice = (price) => {
+    if (price == null) return "가격 정보 없음"; // price가 undefined 또는 null이면 기본값 반환
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
