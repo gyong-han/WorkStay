@@ -23,10 +23,6 @@ const CustomAccordion = styled(Accordion)(({ theme }) => ({
   "& .MuiAccordionDetails-root": {
     backgroundColor: "#eeeeee",
     textAlign: "left",
-    wordBreak: "break-word", // 긴 단어 줄바꿈 (일부 브라우저에서 미적용 가능)
-    overflowWrap: "break-word", // 긴 단어 줄바꿈 (대체 속성)
-    whiteSpace: "normal",
-    hyphens: "auto",
     fontFamily: "Pretendard-Medium",
     paddingBottom: "8px",
   },
@@ -34,7 +30,7 @@ const CustomAccordion = styled(Accordion)(({ theme }) => ({
 
 const FAQComponent = ({ faq, no }) => {
   const addBr = (text) => {
-    return text.replace(/\./g, ".<br />"); // . 뒤에 <br /> 삽입
+    return text.replace(/\.(?![^.]*$)/g, ".<br /><br/>");
   };
 
   return (
