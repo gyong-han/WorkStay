@@ -98,6 +98,7 @@ const FindStayList = () => {
   const stayVo = useSelector((state) => state.stay);
   const roomVo = useSelector((state) => state.room);
   const reservationDate = useSelector((state) => state.room.reservationDate);
+  const reservationDone = useSelector((state) => state.room.reservationDone);
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
 
@@ -107,7 +108,13 @@ const FindStayList = () => {
     localStorage.removeItem("roomdata");
   }
 
-  const reservationDone = useSelector((state) => state.room.reservationDone);
+  useEffect(() => {
+    if (location.pathname === "/findstay") {
+      dispatch(setReset());
+      dispatch(setResetFilter());
+      dispatch(setStayReservationDate([]));
+    }
+  }, [location.pathname]);
 
   const queryParams = new URLSearchParams({
     datedata: stayVo.reservationDate || "", // undefined 방지
@@ -119,26 +126,14 @@ const FindStayList = () => {
 
   const AttachmentData = async () => {
     const attachmentData = await getAttachment();
-    // console.log("먼저 가져와야할 데이터::", attachmentData);
     const listData = await getStayListAll(queryParams);
-    // console.log(
-    //   "보내는 요청 URL: ",
-    //   `http://localhost:8080/stay/list?${queryParams}`
-    // );
-    // console.log("queryParams :: ", queryParams);
-    // console.log("sort 값 확인: ", stayVo.sort);
-    // console.log("꺼내온 데이터 ::", listData);
     setStayVoList(listData);
     dispatch(setStayData(listData));
 
-    //
     const arr = listData.map((vo) => {
       const matchingAttachments = attachmentData.filter(
         (att) => att.sno === vo.no
       );
-      // console.log("matchingAttachments::", matchingAttachments);
-      // console.log(vo.filePath);
-
       const imgPaths =
         matchingAttachments.length > 0
           ? matchingAttachments.map((att) => att.filePath)
@@ -152,15 +147,6 @@ const FindStayList = () => {
     // 리턴값을 저장
     setImgPath(arr);
   };
-
-  useEffect(() => {
-    if (location.pathname === "/findstay/") {
-      // 목록 페이지 진입 시 초기화
-      dispatch(setReset());
-      dispatch(setResetFilter());
-      dispatch(setStayReservationDate([]));
-    }
-  }, [location.pathname]);
 
   // 검색
   const handleChange = (e) => {
