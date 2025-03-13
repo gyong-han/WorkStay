@@ -88,8 +88,13 @@ const FindSpaceBooking = () => {
 
   const price = spaceVo.packageType === '낮 패키지'?spaceVo.daytimePrice :spaceVo.nightPrice;
  
-  
+  useEffect(()=>{
+    localStorage.removeItem('kakao_75fb27eb9d2a3889197748d9c8dcf230');
+  },[])
  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+}, []);
 
   return (
     <Layout>
