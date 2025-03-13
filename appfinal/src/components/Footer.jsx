@@ -90,6 +90,11 @@ const Footer = () => {
     window.scrollTo(0, 0);
   }
 
+  function moveFAQ() {
+    navigate("/faq");
+    window.scrollTo(0, 0);
+  }
+
   return (
     <FooterWrapper>
       <FooterContent>
@@ -104,6 +109,8 @@ const Footer = () => {
               <EnrollSpan onClick={enrollStay}>숙소입점 </EnrollSpan>
               <EnrollSpan> | </EnrollSpan>
               <EnrollSpan onClick={enrollSpace}> 공간입점</EnrollSpan>
+              <EnrollSpan> | </EnrollSpan>
+              <EnrollSpan onClick={moveFAQ}> FAQ</EnrollSpan>
             </div>
             <br />
             <DetailText>
