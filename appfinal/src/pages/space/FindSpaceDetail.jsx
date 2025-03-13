@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import CalendarTime from "../../components/FilterBar/CalendalTime";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  setLoginMemberNo,
   setPackageType,
   setReservationDone,
   setSpaceVo,
@@ -22,6 +23,8 @@ import ShareModal from "../../components/modal/ShareModal";
 import { RiInstagramLine } from "react-icons/ri";
 import { SiNaver } from "react-icons/si";
 import Alert from "../../components/Alert";
+import { jwtDecode } from "jwt-decode";
+import { BASE_URL } from "../../components/service/config";
 
 const Backdrop = styled.div`
   position: fixed;
@@ -235,6 +238,17 @@ const FindSpaceDetail = () => {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [isAlertOpen2, setIsAlertOpen2] = useState(false);
 
+
+  
+  if (token) {
+    try {
+      const decodedToken = jwtDecode(token);
+      // console.log("decodedToken: ", decodedToken.no);
+      dispatch(setLoginMemberNo(decodedToken.no));
+    } catch (error) {
+      console.error("토큰 디코딩 실패:", error);
+    }
+  }
   //알림창
   const handleAlertClose = () => {
     setIsAlertOpen(false);
@@ -263,7 +277,7 @@ const FindSpaceDetail = () => {
   };
 
   useEffect(() => {
-    fetch("http://localhost:8080/space/detail", {
+    fetch(`${BASE_URL}/space/detail`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -279,7 +293,7 @@ const FindSpaceDetail = () => {
   }, [x, dispatch]);
 
   useEffect(() => {
-    fetch("http://localhost:8080/space/isAvailable", {
+    fetch(`${BASE_URL}/space/isAvailable`, {
       method: "POST",
       body: x,
     })
@@ -297,7 +311,7 @@ const FindSpaceDetail = () => {
     if (!spaceVo.reservationDate) {
       return;
     }
-    fetch("http://localhost:8080/space/packagedone", {
+    fetch(`${BASE_URL}/space/packagedone`, {
       method: "POST",
       body: fd,
     })
@@ -316,7 +330,7 @@ const FindSpaceDetail = () => {
     };
     if (bookMark === true) {
       setBookMark(false);
-      fetch("http://localhost:8080/space/bookmarkdel", {
+      fetch(`${BASE_URL}/space/bookmarkdel`, {
         method: "POST",
         headers: {
           "content-type": "application/json",
@@ -330,7 +344,7 @@ const FindSpaceDetail = () => {
         });
     } else {
       setBookMark(true);
-      fetch("http://localhost:8080/space/bookmark", {
+      fetch(`${BASE_URL}/space/bookmark`, {
         method: "POST",
         headers: {
           "content-type": "application/json",
