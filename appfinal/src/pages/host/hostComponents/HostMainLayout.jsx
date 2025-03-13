@@ -166,13 +166,13 @@ const HostMainLayout = ({ children }) => {
             >
               북마크
             </MenuDiv>
-            <MenuDiv
+            {/* <MenuDiv
               id="message"
               onClick={movePath}
               selected={selectedMenu === "message"}
             >
               메세지
-            </MenuDiv>
+            </MenuDiv> */}
             {pageNick === "LOGIN" ? (
               <></>
             ) : pageNick === "GUEST" ? (

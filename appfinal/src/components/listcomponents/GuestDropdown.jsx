@@ -47,7 +47,7 @@ const GuestDropdown = ({ setIsDropdownOpen }) => {
     { label: "공간 예약 정보", path: "/hostMenu/spaceReserv" },
     { label: "S-LOG 관리", path: "/hostMenu/slogMgmt" },
     { label: "북마크", path: "/hostMenu/bookmark" },
-    { label: "메시지", path: "/hostMenu/message" },
+    // { label: "메시지", path: "/hostMenu/message" },
     { label: "회원 정보 수정", path: "/hostMenu/editHost" },
   ];
 

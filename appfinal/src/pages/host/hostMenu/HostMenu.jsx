@@ -76,15 +76,15 @@ const HostMenu = () => {
             </HostMainLayout>
           }
         />
-        <Route
+        {/* <Route
           path="/message/*"
           element={
-            <HostMainLayout>
-              {/* <Message /> */}
-              <Chatbot />
+            <HostMainLayout> */}
+        {/* <Message /> */}
+        {/* <Chatbot />
             </HostMainLayout>
           }
-        />
+        /> */}
         <Route
           path="/spaceReserv/spacedetail/*"
           element={
