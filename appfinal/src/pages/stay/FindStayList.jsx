@@ -185,10 +185,7 @@ const FindStayList = () => {
             <SortDropdown />
           </FilterDiv>
           <div></div>
-          <div>
-            <CiFilter size={18} />
-            <FilterTextMD>필터</FilterTextMD>
-          </div>
+          <div></div>
           <div>
             <Btn>
               <RiResetRightFill size={18} />
