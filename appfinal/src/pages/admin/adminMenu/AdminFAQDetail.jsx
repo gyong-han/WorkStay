@@ -168,7 +168,7 @@ const AdminFAQDetail = () => {
     <>
       <MainDiv>
         <div>
-          <StatusSpan left="300px">FAQ 상세</StatusSpan>
+          <StatusSpan left="330px">FAQ 상세</StatusSpan>
         </div>
       </MainDiv>
       <TitleArea value={title} onChange={handleChange1} />
