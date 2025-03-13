@@ -5,6 +5,7 @@ import { IoBookmark } from "react-icons/io5";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import Alert from "../Alert";
+import { BASE_URL } from "../service/config";
 
 const BlackDiv = styled.div`
   display: grid;
@@ -95,7 +96,7 @@ const Card = ({ vo }) => {
     if (!token) {
       return;
     }
-    fetch("http://localhost:8080/home/getbookmarkInfo", {
+    fetch(`${BASE_URL}/home/getbookmarkInfo`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -124,7 +125,7 @@ const Card = ({ vo }) => {
 
     if (bookMark === true) {
       setBookMark(false);
-      fetch("http://localhost:8080/home/bookmarkdel", {
+      fetch(`${BASE_URL}/home/bookmarkdel`, {
         method: "POST",
         headers: {
           "content-type": "application/json",
@@ -138,7 +139,7 @@ const Card = ({ vo }) => {
         });
     } else {
       setBookMark(true);
-      fetch("http://localhost:8080/home/bookmark", {
+      fetch(`${BASE_URL}/home/bookmark`, {
         method: "POST",
         headers: {
           "content-type": "application/json",

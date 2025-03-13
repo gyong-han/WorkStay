@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import HomeMainSlide from "./home/HomeMainSlide";
+import { BASE_URL } from "./service/config";
 
 const Layout = styled.div`
   width: 100%;
@@ -41,7 +42,7 @@ const Main = () => {
   const [homeWinterVo, setHomeWinterVo] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:8080/home/spring")
+    fetch(`${BASE_URL}/home/spring`)
       .then((resp) => resp.json())
       .then((data) => {
         if (!data) {
@@ -57,7 +58,7 @@ const Main = () => {
       });
   }, []);
   useEffect(() => {
-    fetch("http://localhost:8080/home/summer")
+    fetch(`${BASE_URL}/home/summer`)
       .then((resp) => resp.json())
       .then((data) => {
         if (!data) {
@@ -72,7 +73,7 @@ const Main = () => {
       });
   }, []);
   useEffect(() => {
-    fetch("http://localhost:8080/home/autumn")
+    fetch(`${BASE_URL}/home/autumn`)
       .then((resp) => resp.json())
       .then((data) => {
         if (!data) {
@@ -88,7 +89,7 @@ const Main = () => {
       });
   }, []);
   useEffect(() => {
-    fetch("http://localhost:8080/home/winter")
+    fetch(`${BASE_URL}/home/winter`)
       .then((resp) => resp.json())
       .then((data) => {
         if (!data) {
