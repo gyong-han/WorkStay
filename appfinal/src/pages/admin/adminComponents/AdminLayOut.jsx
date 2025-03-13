@@ -44,7 +44,7 @@ const Hr = styled.hr`
 const MenuAreaDiv = styled.div`
   margin-top: 40px;
   display: grid;
-  grid-template-rows: repeat(8, 60px);
+  grid-template-rows: repeat(9, 60px);
   place-items: center center;
 `;
 
@@ -188,6 +188,13 @@ const AdminLayOut = ({ children }) => {
                 selected={selectedMenu === "spaceDelReq"}
               >
                 공간 삭제 목록
+              </MenuDiv>
+              <MenuDiv
+                id="faq"
+                onClick={movePath}
+                selected={selectedMenu === "faq"}
+              >
+                FAQ
               </MenuDiv>
             </MenuAreaDiv>
             <div>{children}</div>

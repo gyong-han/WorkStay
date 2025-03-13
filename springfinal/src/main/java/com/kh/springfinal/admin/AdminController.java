@@ -1,5 +1,6 @@
 package com.kh.springfinal.admin;
 
+import com.kh.springfinal.home.FaqVo;
 import com.kh.springfinal.host.TableVo;
 import com.kh.springfinal.space.SpaceVo;
 import com.kh.springfinal.stay.StayVo;
@@ -244,5 +245,43 @@ public class AdminController {
         map.put("voList",voList);
         map.put("pageVo",pageVo);
         return map;
+    }
+
+    @PostMapping("getFAQ")
+    public Map<String, Object> getFAQList(@RequestParam(defaultValue = "1") int pno){
+        int listCnt = service.getFAQCount();
+        int pageLimit = 5;
+        int boardLimit = 10;
+        PageVo pageVo = new PageVo(listCnt,pno,pageLimit,boardLimit);
+        Map<String,Object> map = new HashMap<>();
+        List<FaqVo> voList = service.getFAQList(pageVo);
+        map.put("voList",voList);
+        map.put("pageVo",pageVo);
+        return map;
+    }
+    
+    @PostMapping("changeCheck")
+    public void changeCheck(FaqVo vo){
+        service.changeCheck(vo);
+    }
+
+    @PostMapping("faqWrite")
+    public int faqWrite(FaqVo vo){
+        return service.faqWrite(vo);
+    }
+
+    @PostMapping("getFAQDetail")
+    public FaqVo getFAQDetail(@RequestBody Long no){
+        return service.getFAQDetail(no);
+    }
+
+    @PostMapping("deleteFAQ")
+    public int deleteFAQ(@RequestBody Long no){
+        return service.deleteFAQ(no);
+    }
+
+    @PostMapping("editFAQ")
+    public int editFAQ(FaqVo vo){
+        return service.editFAQ(vo);
     }
 }

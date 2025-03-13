@@ -7,4 +7,5 @@ public class FaqVo {
     private Long no;
     private String title;
     private String content;
+    private String showYn;
 }
