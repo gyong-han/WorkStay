@@ -1,6 +1,37 @@
 import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import Alert from '../Alert';
 
-const KakaoMsg = () => {
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
+
+const KakaoButton = styled.button`
+  background-color: #FEE500;
+  height: 30px;
+  border: none;
+  font-weight: 700;
+`;
+
+
+const KakaoMsg = ({vo}) => {
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [isAlertOpen2, setIsAlertOpen2] = useState(false);
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
+  };
+  const handleAlertClose2 = () => {
+    setIsAlertOpen2(false);
+  };
+  
   const fd1 = localStorage.getItem("fd");
   const fdData = JSON.parse(fd1);
   const KAKAO_JS_KEY = "fc5cec587b47d4825551ae8da5ed23b6"; // 본인의 JS 키로 변경
@@ -20,8 +51,6 @@ const KakaoMsg = () => {
           window.Kakao.init(KAKAO_JS_KEY);
           console.log("Kakao SDK initialized:", window.Kakao.isInitialized());
           
-          // SDK 로드 후 handleKakaoAction 실행
-          handleKakaoAction();
         }
       };
       document.head.appendChild(script);
@@ -29,9 +58,6 @@ const KakaoMsg = () => {
       if (!window.Kakao.isInitialized()) {
         window.Kakao.init(KAKAO_JS_KEY);
       }
-
-      // 이미 SDK가 로드되었으면 바로 실행
-      handleKakaoAction();
     }
   }, []);
 
@@ -67,24 +93,24 @@ const KakaoMsg = () => {
             description: "\n✅ 예약이 정상적으로 완료되었습니다!" + "사용일자 :" + fdData.useDay,
             image_url: fdData.filePath, // 이미지 URL
             link: {
-              web_url: "http://localhost:3000/hostMenu/spaceReserv/spacedetail?reno=S20250312008", // 웹 링크
-              mobile_web_url: "http://localhost:3000/hostMenu/spaceReserv/spacedetail?reno=S20250312008"
+              web_url: `http://localhost:3000/hostMenu/spaceReserv/spacedetail?reno=${vo.reservationNo}`, // 웹 링크
+              mobile_web_url: `http://localhost:3000/hostMenu/spaceReserv/spacedetail?reno=${vo.reservationNo}`
             }
           },
           buttons: [
             {
               title: "결제내역 확인하기",
               link: {
-                web_url: "http://localhost:3000/hostMenu/spaceReserv/spacedetail?reno=S20250312008",
-                mobile_web_url: "http://localhost:3000/hostMenu/spaceReserv/spacedetail?reno=S20250312008"
+                web_url: `http://localhost:3000/hostMenu/spaceReserv/spacedetail?reno=${vo.reservationNo}`,
+                mobile_web_url:  `http://localhost:3000/hostMenu/spaceReserv/spacedetail?reno=${vo.reservationNo}`
               }
             }
           ]
         }
       }
     })
-      .then((res) => alert("메시지 전송 성공: " + JSON.stringify(res)))
-      .catch((err) => alert("메시지 전송 실패: " + JSON.stringify(err)));
+      .then((res) => setIsAlertOpen(true))
+      .catch((err) => setIsAlertOpen(true));
   };
 
   // 버튼 클릭 시 로그인 여부 확인 후 메시지 전송
@@ -100,7 +126,31 @@ const KakaoMsg = () => {
 
   return (
     <div>
-      <button onClick={handleKakaoAction}>카카오톡 메시지 보내기</button>
+       {isAlertOpen && (
+          <Backdrop>
+            <Alert
+              title="카카오톡"
+              titleColor="#049dd9"
+              message="카카오톡 전송완료."
+              buttonText="확인"
+              buttonColor="#049dd9"
+              onClose={handleAlertClose}
+            />
+          </Backdrop>
+        )}
+        {isAlertOpen2 && (
+          <Backdrop>
+            <Alert
+              title="카카오톡"
+              titleColor="#049dd9"
+              message="카카오톡 전송실패 (로그인 실패)."
+              buttonText="확인"
+              buttonColor="#049dd9"
+              onClose={handleAlertClose2}
+            />
+          </Backdrop>
+        )}
+      <KakaoButton onClick={handleKakaoAction}>카톡으로 결제내역 받기</KakaoButton>
     </div>
   );
 };

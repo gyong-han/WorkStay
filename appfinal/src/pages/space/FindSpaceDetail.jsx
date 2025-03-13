@@ -365,6 +365,11 @@ const FindSpaceDetail = () => {
     .toString()
     .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
+
+    useEffect(() => {
+      window.scrollTo(0, 0);
+  }, []);
+
   return (
     <>
       <ShareModal closeModal={closeModal} modalStatus={modalStatus} no={x} />

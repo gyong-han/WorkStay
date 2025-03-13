@@ -234,6 +234,9 @@ const Ptag = styled.p`
 `;
 
 const Booking = () => {
+    useEffect(() => {
+      window.scrollTo(0, 0);
+  }, []);
   const spaceVo = useSelector((state) => state.space);
   const [loginMember, setLoginMember] = useState({});
   const [phoneNumber, setPhoneNumber] = useState();

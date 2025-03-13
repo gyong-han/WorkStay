@@ -89,6 +89,13 @@ const Info = styled.div`
   font-size: 1.2rem;
 `;
 
+const Info2 = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  font-size: 1.2rem;
+`;
+
 const Cost = styled.div`
   font-size: 1.5rem;
 `;
@@ -103,7 +110,34 @@ const ButtonWrapper = styled.div`
   margin-top: 50px;
 `;
 
+const KakaoBtnLayout = styled.div`
+    display: grid;
+    margin-left: 200px;
+    grid-template-columns: 50px 1fr;
+    grid-template-rows: 1fr;
+    background-color: #FEE500;
+    align-items: center;
+    border:none;
+    border-radius: 10px;
+    width: 220px;
+    height: 45px;
+
+    &>div:nth-child(1)>img{
+      width: 25px;
+      height: 25px;
+ 
+      object-fit: cover; 
+    }
+    &>div:nth-child(1){
+      margin-left: 15px;
+      margin-top: 5px;
+    }
+  `;
+
 const SpaceReservation = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+}, []);
 
   const fd1 = localStorage.getItem("fd");
   const fdData = JSON.parse(fd1);  
@@ -161,7 +195,7 @@ const SpaceReservation = () => {
             <Info>{fdData.useDay}</Info>
             <Info>{fdData.packageNo===1?"낮 패키지":"밤 패키지"} / 성인 {fdData.adult}명 / 아동 {fdData.child}명 / 유아 {fdData.baby}명</Info>
             <Cost>₩{priceWon}</Cost>
-            <Info>예약 확정({spaceVo.payDay})</Info>
+            <Info2><div>예약 확정({spaceVo.payDay})</div><KakaoBtnLayout><div><img src="https://cdn-icons-png.flaticon.com/512/2111/2111466.png" alt="" /></div><KakaoMsg vo = {spaceVo}></KakaoMsg></KakaoBtnLayout></Info2>
           </InfoWrapper>
           <Img urls={fdData.filePath}></Img>
         </ReservationWrapper>
@@ -186,7 +220,7 @@ const SpaceReservation = () => {
             예약 취소
           </Btn>
           <div></div>
-          <KakaoMsg></KakaoMsg>
+      
         </ButtonWrapper>
       </Wrapper>
     </>
