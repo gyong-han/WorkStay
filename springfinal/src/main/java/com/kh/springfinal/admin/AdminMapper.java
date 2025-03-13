@@ -1,6 +1,7 @@
 package com.kh.springfinal.admin;
 
 import com.kh.springfinal.guest.GuestVo;
+import com.kh.springfinal.home.FaqVo;
 import com.kh.springfinal.host.AttachVo;
 import com.kh.springfinal.host.TableVo;
 import com.kh.springfinal.room.RoomVo;
@@ -709,4 +710,59 @@ public interface AdminMapper {
             AND STATUS_NO = '1'         
             """)
     int getEditSpaceAttachList(String spaceNo);
+
+    @Select("""
+            SELECT COUNT(NO)
+            FROM FAQ
+            """)
+    int getFAQCount();
+
+    @Select("""
+            SELECT NO,TITLE,SHOW_YN
+            FROM FAQ
+            ORDER BY NO
+            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+            """)
+    List<FaqVo> getFAQList(int limit, int offset);
+
+    @Update("""
+            UPDATE FAQ SET
+            SHOW_YN = 'N'
+            WHERE NO = #{no}
+            """)
+    void changeCheckYToN(FaqVo vo);
+
+    @Update("""
+            UPDATE FAQ SET
+            SHOW_YN = 'Y'
+            WHERE NO = #{no}
+            """)
+    void changeCheckNToY(FaqVo vo);
+
+    @Insert("""
+            INSERT INTO FAQ (NO,TITLE,CONTENT)
+            VALUES (SEQ_FAQ.NEXTVAL,#{title},#{content})
+            """)
+    int faqWrite(FaqVo vo);
+
+    @Select("""
+            SELECT NO,CONTENT,TITLE
+            FROM FAQ
+            WHERE NO = #{no}
+            """)
+    FaqVo getFAQDetail(Long no);
+
+    @Delete("""
+            DELETE FROM FAQ
+            WHERE NO = #{no}
+            """)
+    int deleteFAQ(Long no);
+
+    @Update("""
+            UPDATE FAQ SET
+            TITLE = #{title},
+            CONTENT = #{content}
+            WHERE NO = #{no}
+            """)
+    int editFAQ(FaqVo vo);
 }

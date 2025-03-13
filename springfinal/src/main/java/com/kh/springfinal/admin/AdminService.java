@@ -1,6 +1,7 @@
 package com.kh.springfinal.admin;
 
 import com.kh.springfinal.guest.GuestVo;
+import com.kh.springfinal.home.FaqVo;
 import com.kh.springfinal.host.AttachVo;
 import com.kh.springfinal.host.TableVo;
 import com.kh.springfinal.room.RoomVo;
@@ -351,5 +352,39 @@ public class AdminService {
 
     public int getSpaceDeleteReqListCount() {
         return mapper.getSpaceDeleteReqListCount();
+    }
+
+    public int getFAQCount() {
+        return mapper.getFAQCount();
+    }
+
+    public List<FaqVo> getFAQList(PageVo pageVo) {
+        int limit = pageVo.getBoardLimit();
+        int offset = pageVo.getOffset();
+        return mapper.getFAQList(limit,offset);
+    }
+
+    public void changeCheck(FaqVo vo) {
+        if(vo.getShowYn().equals("Y")){
+            mapper.changeCheckYToN(vo);
+        }else{
+            mapper.changeCheckNToY(vo);
+        }
+    }
+
+    public int faqWrite(FaqVo vo) {
+        return mapper.faqWrite(vo);
+    }
+
+    public FaqVo getFAQDetail(Long no) {
+        return mapper.getFAQDetail(no);
+    }
+
+    public int deleteFAQ(Long no) {
+        return mapper.deleteFAQ(no);
+    }
+
+    public int editFAQ(FaqVo vo) {
+        return mapper.editFAQ(vo);
     }
 }

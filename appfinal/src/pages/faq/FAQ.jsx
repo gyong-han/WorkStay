@@ -32,7 +32,7 @@ const FAQ = () => {
       .then((data) => {
         setFaq(data);
       });
-  }, [faq]);
+  }, []);
 
   return (
     <>
