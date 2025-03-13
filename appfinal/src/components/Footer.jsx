@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { FaFacebookF } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
-import { SiNaver } from "react-icons/si";
+import { RiKakaoTalkFill } from "react-icons/ri";
 import { FaYoutube } from "react-icons/fa";
 
 const FooterWrapper = styled.footer`
@@ -110,7 +110,7 @@ const Footer = () => {
               <EnrollSpan> | </EnrollSpan>
               <EnrollSpan onClick={enrollSpace}> 공간입점</EnrollSpan>
               <EnrollSpan> | </EnrollSpan>
-              <EnrollSpan onClick={moveFAQ}> FAQ</EnrollSpan>
+              <EnrollSpan onClick={moveFAQ}> FaQ</EnrollSpan>
             </div>
             <br />
             <DetailText>
@@ -146,11 +146,11 @@ const Footer = () => {
               <FaInstagram size={25} />
             </LogoLink>
             <LogoLink
-              href="https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=workstay"
+              href="http://pf.kakao.com/_kNenn"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <SiNaver size={20} />
+              <RiKakaoTalkFill size={25} />
             </LogoLink>
             <LogoLink
               href="https://youtu.be/cps5VQK-2dw?si=WCwAhoPcDE-buxV_"
