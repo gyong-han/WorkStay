@@ -10,6 +10,7 @@ import {
 import { setStayReservationInfo } from "../../redux/roomSlice";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import KakaoMsgStay from "../../components/kakaopage/KakaoMsgStay";
 
 const Wrapper = styled.div`
   display: grid;
@@ -48,7 +49,7 @@ const ReservationWrapper = styled.div`
 
 const InfoWrapper = styled.div`
   display: grid;
-  grid-template-rows: auto;
+  grid-template-rows: 50px 30px 30px 40px 30px 0.5fr 1fr;
 `;
 
 const UserInfoWrapper = styled.div`
@@ -106,6 +107,36 @@ const ButtonWrapper = styled.div`
   margin-top: 50px;
 `;
 
+const KakaoWrapper = styled.div`
+  display: grid;
+  grid-row: 7;
+  justify-content: start;
+  align-items: start;
+`;
+
+const KakaoBtnLayout = styled.div`
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  grid-template-rows: 1fr;
+  background-color: #fee500;
+  align-items: center;
+  border: none;
+  border-radius: 10px;
+  width: 180px;
+  height: 45px;
+
+  & > div:nth-child(1) > img {
+    width: 25px;
+    height: 25px;
+
+    object-fit: cover;
+  }
+  & > div:nth-child(1) {
+    margin-left: 15px;
+    margin-top: 5px;
+  }
+`;
+
 const Reservations = () => {
   // const [Info, setInfo] = useState({});
   const rd1 = localStorage.getItem("roomdata");
@@ -134,6 +165,8 @@ const Reservations = () => {
   const price = rData.amount;
   const priceWon = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const roomVo = useSelector((state) => state.room);
+
+  console.log("roomVo", roomVo);
 
   const RoomReservation = async () => {
     try {
@@ -180,9 +213,24 @@ const Reservations = () => {
             </Info>
             <Cost>₩{priceWon}</Cost>
             <Info>예약 확정({roomVo.payDay})</Info>
+            <div></div>
+            <KakaoWrapper>
+              <KakaoBtnLayout>
+                <div>
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/2111/2111466.png"
+                    alt=""
+                  />
+                </div>
+                <div>
+                  <KakaoMsgStay vo={roomVo}></KakaoMsgStay>
+                </div>
+              </KakaoBtnLayout>
+            </KakaoWrapper>
           </InfoWrapper>
           <Img bgImage={rData.filePath}></Img>
         </ReservationWrapper>
+
         <LineDiv />
         <UserInfoWrapper>
           <SubTitle>예약번호</SubTitle>
@@ -196,6 +244,7 @@ const Reservations = () => {
           <Info1>{formattedPhoneNumber}</Info1>
           <Info1>{memberInfo.email}</Info1>
         </UserWrapper>
+
         <LineDiv />
         <ButtonWrapper>
           <div

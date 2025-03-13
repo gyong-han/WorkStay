@@ -3,7 +3,7 @@ import DatePicker from "react-datepicker";
 import { ko } from "date-fns/locale";
 import "react-datepicker/dist/react-datepicker.css";
 import Form from "react-bootstrap/Form";
-import { format } from "date-fns";
+import { eachDayOfInterval, format, subDays } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
 import { setStayReservationDate } from "../../redux/roomSlice";
 import Alert from "../Alert";
@@ -27,26 +27,37 @@ const Calendar = ({ children, type, w, position, reservationDone }) => {
   const [checkIn, checkOut] = dateRange;
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [isAlertOpen2, setIsAlertOpen2] = useState(false);
+  const [isAlertOpen3, setIsAlertOpen3] = useState(false);
   const dispatch = useDispatch();
   const roomVo = useSelector((state) => state.room);
+
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
+  };
+  const handleAlertClose2 = () => {
+    setIsAlertOpen2(false);
+  };
+  const handleAlertClose3 = () => {
+    setIsAlertOpen3(false);
+  };
+
+  const isDateBlocked = (start, end) => {
+    const range = eachDayOfInterval({
+      start,
+      end: subDays(end, 1),
+    }).map((date) => format(date, "yyyy-MM-dd"));
+
+    return reservationDone.some((blockedDate) => range.includes(blockedDate));
+  };
 
   useEffect(() => {
     if (dateRange[0] !== null && dateRange[1] !== null) {
       const formattedDates = dateRange.map((date) =>
         format(date, "yyyy-MM-dd")
       );
-      // console.log(formattedDates);
       dispatch(setStayReservationDate(formattedDates));
     }
-  }, [dateRange]);
-
-  const handleAlertClose = () => {
-    setIsAlertOpen(false);
-  };
-
-  const handleAlertClose2 = () => {
-    setIsAlertOpen2(false);
-  };
+  }, [dateRange, dispatch]);
 
   return (
     <>
@@ -56,35 +67,37 @@ const Calendar = ({ children, type, w, position, reservationDone }) => {
         startDate={checkIn}
         minDate={new Date()}
         endDate={checkOut}
+        monthsShown={2}
+        withPortal
+        filterDate={(date) => {
+          const formattedDate = format(date, "yyyy-MM-dd");
+          return !reservationDone.includes(formattedDate);
+        }}
         onChange={(update) => {
-          // update가 배열 [checkIn, checkOut] 형태
           const [start, end] = update;
 
-          // 날짜가 둘 다 선택됐을 때만 검증
           if (start && end) {
             const startDate = new Date(start);
             const endDate = new Date(end);
 
-            // 체크인, 체크아웃 날짜가 같거나 체크아웃이 이전이면 경고창 띄우기
             if (startDate.getTime() === endDate.getTime()) {
               setIsAlertOpen(true);
-              return; // 여기서 return하면 setLocalDateRange 실행 안 됨
+              return;
             }
 
             if (endDate.getTime() < startDate.getTime()) {
               setIsAlertOpen2(true);
               return;
             }
+
+            if (isDateBlocked(startDate, endDate)) {
+              setIsAlertOpen3(true);
+              setLocalDateRange([null, null]);
+              return;
+            }
           }
 
-          // 유효한 경우에만 상태 변경
           setLocalDateRange(update);
-        }}
-        monthsShown={2}
-        withPortal
-        filterDate={(date) => {
-          const formattedDate = format(date, "yyyy-MM-dd"); // date-fns 사용
-          return !reservationDone.includes(formattedDate);
         }}
         customInput={
           <Form.Control
@@ -126,6 +139,18 @@ const Calendar = ({ children, type, w, position, reservationDone }) => {
             buttonText="확인"
             buttonColor="#049dd9"
             onClose={handleAlertClose2}
+          />
+        </Backdrop>
+      )}
+      {isAlertOpen3 && (
+        <Backdrop>
+          <Alert
+            title="DATE"
+            titleColor="#049dd9"
+            message="예약이 불가한 날짜가 포함되어있습니다. 다시 선택해주세요."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose3}
           />
         </Backdrop>
       )}
