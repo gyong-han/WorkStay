@@ -15,6 +15,7 @@ const roomSlice = createSlice({
     price: "",
     standardGuest: "",
     maxGuest: "",
+    extraGuestFee: 30000,
     filePath: "",
     title: "",
     attachmentFilePaths: [],

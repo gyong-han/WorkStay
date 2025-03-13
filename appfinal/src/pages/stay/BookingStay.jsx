@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { jwtDecode } from "jwt-decode";
 import { getMemberNo } from "../../components/service/roomService";
 import PaymentButton from "../../components/payment/PaymentButton";
+import { format } from "date-fns";
+import { setStayReservationDate } from "../../redux/roomSlice";
 
 const Layout = styled.div`
   display: grid;
@@ -234,6 +236,11 @@ const Ptag = styled.p`
   font-weight: 600;
 `;
 
+const DateSpanTag = styled.span`
+  color: #bbbbbb;
+  font-size: 15px;
+`;
+
 const BookingStay = () => {
   const token = localStorage.getItem("token");
   const decodedToken = jwtDecode(token);
@@ -373,9 +380,12 @@ const BookingStay = () => {
   // const navi = useNavigate();
 
   // 날짜 선택
-  const [dateRange, setDateRange] = useState([null, null]);
   const roomVo = useSelector((state) => state.room);
-  const reservationDate = useSelector((state) => state.room.rezservationDate);
+  const [dateRange, setDateRange] = useState(
+    roomVo.reservationDate || [null, null]
+  );
+  const reservationDate = roomVo.reservationDate || [];
+  const [checkIn, checkOut] = dateRange;
   const dispatch = useDispatch();
   const [request, setRequest] = useState("");
 
@@ -383,17 +393,96 @@ const BookingStay = () => {
     .toString()
     .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (dateRange[0] !== null && dateRange[1] !== null) {
+      const formattedDates = dateRange.map((date) =>
+        format(date, "yyyy-MM-dd")
+      );
+      dispatch(setStayReservationDate(formattedDates));
+    }
+  }, [dateRange, dispatch]);
 
-  const dates = roomVo.reservationDate;
+  // const dates = roomVo.reservationDate;
 
-  const date1 = new Date(dates[0]);
-  const date2 = new Date(dates[1]);
+  // const date1 = new Date(dates[0]);
+  // const date2 = new Date(dates[1]);
 
-  const diffInTime = date2.getTime() - date1.getTime();
-  const diffInDays = diffInTime / (1000 * 60 * 60 * 24);
+  // const diffInTime = date2.getTime() - date1.getTime();
+  // const diffInDays = diffInTime / (1000 * 60 * 60 * 24);
 
-  const totalPrice = (roomVo.price * diffInDays)
+  // const totalPrice = (roomVo.price * diffInDays)
+  // .toString()
+  // .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+  // 날짜 포맷 함수
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = (d.getMonth() + 1).toString().padStart(2, "0");
+    const day = d.getDate().toString().padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  // 체크인 ~ 체크아웃 전 날까지 날짜 리스트 생성
+  const getDateList = (startDate, endDate) => {
+    const dateArray = [];
+    let currentDate = new Date(startDate);
+    const lastDate = new Date(endDate);
+
+    while (currentDate < lastDate) {
+      dateArray.push(formatDate(currentDate));
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    return dateArray;
+  };
+
+  // 기준인원 및 추가 요금 기본값
+  const basePeople = roomVo.standardGuest || 2;
+  const extraFeePerPerson = roomVo.extraGuestFee || 30000;
+  const adultCnt = roomVo.adult || 1;
+
+  // 초과 인원 수
+  const extraPeople = Math.max(adultCnt - basePeople, 0);
+
+  // 날짜 리스트
+  const isDateSelected =
+    reservationDate &&
+    reservationDate.length === 2 &&
+    reservationDate[0] &&
+    reservationDate[1];
+
+  const dates = isDateSelected
+    ? getDateList(reservationDate[0], reservationDate[1])
+    : [];
+  const stayDays = dates.length;
+
+  // 날짜 별 기본 요금 배열 생성
+  const dailyPrices = dates.map((date) => ({
+    date,
+    basePrice: Number(roomVo.price),
+  }));
+
+  // 기본 객실 요금 총합 계산
+  const basePriceTotal = dailyPrices.reduce(
+    (acc, curr) => acc + curr.basePrice,
+    0
+  );
+
+  // 추가 인원 요금 총합 계산 (초과인원 * 1인당 추가요금 * 숙박일수)
+  const extraPeopleTotalFee = extraPeople * extraFeePerPerson * stayDays;
+
+  // 전체 합계
+  const grandTotal = basePriceTotal + extraPeopleTotalFee;
+
+  // 포맷
+  const basePriceTotalWon = basePriceTotal
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const extraPeopleTotalFeeWon = extraPeopleTotalFee
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const grandTotalWon = grandTotal
     .toString()
     .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
@@ -407,7 +496,7 @@ const BookingStay = () => {
     child: roomVo.child,
     baby: roomVo.baby,
     request: request,
-    amount: totalPrice,
+    amount: grandTotalWon,
     checkIn: roomVo.reservationDate[0],
     checkOut: roomVo.reservationDate[1],
     useDay: roomVo.reservationDate,
@@ -418,7 +507,7 @@ const BookingStay = () => {
   const rData = {
     no: roomVo.no,
     name: roomVo.name,
-    price: roomVo.price * diffInDays,
+    price: grandTotalWon,
   };
 
   localStorage.setItem("roomdata", JSON.stringify(rd));
@@ -428,13 +517,12 @@ const BookingStay = () => {
       <BookingText>BOOKING</BookingText>
       <DateWrapper>
         <DateSpan>
-          {!roomVo.reservationDate ? (
-            <Calendar type={"text"}>날짜를 입력해주세요.</Calendar>
-          ) : (
-            <Calendar
-              type={"text"}
-            >{`${roomVo.reservationDate[0]}~${roomVo.reservationDate[1]}`}</Calendar>
-          )}
+          <Calendar
+            type="text"
+            dateRange={dateRange}
+            setDateRange={setDateRange}
+            reservationDone={roomVo.reservedDates || []}
+          />
         </DateSpan>
       </DateWrapper>
       <LineDiv />
@@ -452,14 +540,13 @@ const BookingStay = () => {
           <InfoText>예약일</InfoText>
           <div>
             <Info>
-              {!roomVo.reservationDate ? (
-                <Calendar type={"text"}>날짜를 입력해주세요.</Calendar>
-              ) : (
-                <Calendar
-                  type={"text"}
-                  position={true}
-                >{`${roomVo.reservationDate[0]}~${roomVo.reservationDate[1]}`}</Calendar>
-              )}
+              <Calendar
+                type="text"
+                position={true}
+                dateRange={dateRange}
+                setDateRange={setDateRange}
+                reservationDone={roomVo.reservedDates || []}
+              />
             </Info>
           </div>
         </ReservationDiv>
@@ -508,14 +595,31 @@ const BookingStay = () => {
           <div>
             <ChargeText>
               <span>객실요금</span>
-              <span>₩{priceWon}</span>
+              <span>₩{basePriceTotalWon}</span>
             </ChargeText>
+            {dailyPrices.map((item, index) => (
+              <ChargeText>
+                <DateSpanTag>{item.date}</DateSpanTag>
+                <DateSpanTag>
+                  ₩
+                  {item.basePrice
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                </DateSpanTag>
+              </ChargeText>
+            ))}
+            {extraPeople > 0 && (
+              <ChargeText>
+                <span>추가 인원 요금</span>
+                <span>₩{extraPeopleTotalFeeWon}</span>
+              </ChargeText>
+            )}
             <ChargeLine />
           </div>
           <div></div>
           <ChargeText>
-            <span></span>
-            <span>₩{totalPrice}</span>
+            <span>총 합계</span>
+            <span>₩{grandTotalWon}</span>
           </ChargeText>
         </ReservationDiv>
         <ReservationLine />
