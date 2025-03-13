@@ -385,6 +385,7 @@ const BookingStay = () => {
     roomVo.reservationDate || [null, null]
   );
   const reservationDate = roomVo.reservationDate || [];
+  const reservationDone = useSelector((state) => state.room.reservationDone);
   const [checkIn, checkOut] = dateRange;
   const dispatch = useDispatch();
   const [request, setRequest] = useState("");
@@ -517,12 +518,15 @@ const BookingStay = () => {
       <BookingText>BOOKING</BookingText>
       <DateWrapper>
         <DateSpan>
-          <Calendar
-            type="text"
-            dateRange={dateRange}
-            setDateRange={setDateRange}
-            reservationDone={roomVo.reservedDates || []}
-          />
+          {!reservationDate || reservationDate.length === 0 ? (
+            <Calendar type={"text"} reservationDone={reservationDone}>
+              날짜를 입력해주세요.
+            </Calendar>
+          ) : (
+            <Calendar type={"text"} reservationDone={reservationDone}>
+              {`${reservationDate[0]} ~ ${reservationDate[1]}`}
+            </Calendar>
+          )}
         </DateSpan>
       </DateWrapper>
       <LineDiv />
@@ -540,13 +544,17 @@ const BookingStay = () => {
           <InfoText>예약일</InfoText>
           <div>
             <Info>
-              <Calendar
-                type="text"
-                position={true}
-                dateRange={dateRange}
-                setDateRange={setDateRange}
-                reservationDone={roomVo.reservedDates || []}
-              />
+              {!roomVo.reservationDate ? (
+                <Calendar type={"text"} reservationDone={reservationDone}>
+                  날짜를 입력해주세요.
+                </Calendar>
+              ) : (
+                <Calendar
+                  type={"text"}
+                  position={true}
+                  reservationDone={reservationDone}
+                >{`${roomVo.reservationDate[0]}~${roomVo.reservationDate[1]}`}</Calendar>
+              )}
             </Info>
           </div>
         </ReservationDiv>
