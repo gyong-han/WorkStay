@@ -24,9 +24,7 @@ public class GuestService {
         String encodedPwd = encoder.encode(vo.getPwd());
         vo.setPwd(encodedPwd);
 
-        System.out.println("vo = " + vo);
         int result = mapper.join(vo);
-        System.out.println("result = " + result);
         return vo;
     }
 
@@ -60,7 +58,6 @@ public class GuestService {
     }
 
     public String findPwd(GuestVo vo) {
-        System.out.println("service email = " + vo.getEmail());
 
         if (vo.getEmail() == null || vo.getEmail().isEmpty()) {
             throw new IllegalArgumentException("이메일이 null 또는 비어 있습니다!");
@@ -70,7 +67,6 @@ public class GuestService {
         if (dbVo == null) {
             throw new IllegalStateException("해당 이메일이 존재하지 않습니다.");
         }
-        System.out.println("dbVo email = " + dbVo.getEmail());
         String token = jwtUtil.createJwtPwdToken(dbVo.getEmail());
         return token;
     }
@@ -135,7 +131,6 @@ public class GuestService {
 
     public int stayCancle(String no,String reno) {
         int result = mapper.stayCancle(no,reno);
-        System.out.println("s result = " + result);
         return result;
     }
 
@@ -150,7 +145,6 @@ public class GuestService {
     }
 
     public GuestVo memberQuit(GuestVo vo) {
-        System.out.println("vo = " + vo);
         int result = mapper.memberQuit(vo);
         mapper.deleteSpace(vo);
         mapper.deleteStay(vo);

@@ -25,7 +25,6 @@ public class GuestController {
     public void join(@RequestBody GuestVo vo){
         try{
             GuestVo joinVo = service.join(vo);
-            System.out.println("joinVo = " + joinVo);
         }catch(Exception e) {
             throw new IllegalStateException("[GUEST-JOIN] JOIN FAIL ...");
         }

@@ -29,7 +29,6 @@ public class RoomReservationController {
             return result;
         }catch (Exception e){
             log.warn(e.getMessage());
-            System.out.println("RESERVATION ERROR :: " +e.getMessage());
             throw new IllegalStateException("[ERROR-RESERVATION-01] RESERVATION ERROR");
         }
     }

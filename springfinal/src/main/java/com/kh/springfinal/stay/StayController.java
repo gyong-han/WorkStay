@@ -49,7 +49,6 @@ public class StayController {
             return stayService.filterByList(sort, people, area, checkIn, checkOut, title);
         }catch (Exception e){
             log.warn(e.getMessage());
-            System.out.println(e.getMessage());
             throw new IllegalStateException("[STAY-ERROR-03]STAY SORT-LIST FAIL");
         }
     }
@@ -61,7 +60,6 @@ public class StayController {
             return stayVo;
         }catch (Exception e){
             log.warn(e.getMessage());
-            System.out.println("error :: "+ e.getMessage());
             throw new IllegalStateException("[STAY-ERROR-03]STAY DETAIL FAIL");
         }
     }
@@ -98,7 +96,7 @@ public class StayController {
             }
         }catch (Exception e){
             log.warn(e.getMessage());
-            System.out.println("e.getMessage() = " + e.getMessage());
+
             throw new IllegalStateException("[STAY-ERROR-06]STAY BOOKMARK_INFO FAIL");
         }
     }
