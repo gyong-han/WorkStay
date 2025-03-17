@@ -38,7 +38,7 @@ const KakaoShareSpace = ({ no }) => {
             description: content.tagline,
             imageUrl: content.filePath,
             link: {
-              webUrl: `${BASE_URL2}/findspace/detail/${no}`,
+              webUrl: `http://d34nr975ohjmz8.cloudfront.net/findspace/detail/${no}`,
             },
           },
           social: {
@@ -50,7 +50,7 @@ const KakaoShareSpace = ({ no }) => {
             {
               title: "앱으로 보기",
               link: {
-                webUrl: `${BASE_URL2}/findspace/detail/${no}`,
+                webUrl: `http://d34nr975ohjmz8.cloudfront.net/findspace/detail/${no}`,
               },
             },
           ],
