@@ -12,6 +12,7 @@ import { SiNaver } from "react-icons/si";
 import { RiInstagramLine } from "react-icons/ri";
 import Alert from "../../components/Alert";
 import KakaoMap from "../../components/map/KaKaoMap";
+import { BASE_URL } from "../../components/service/config";
 
 const Container = styled.div`
   width: 100%;
@@ -309,7 +310,7 @@ const SlogDetail = () => {
   useEffect(() => {
     if (stayNo) {
       console.log("Stay No ::::", stayNo);
-      fetch(`http://127.0.0.1:8080/api/slog/stay/${stayNo}`)
+      fetch(`${BASE_URL}/api/slog/stay/${stayNo}`)
         .then((resp) => resp.json())
         .then((data) => {
           console.log("stay data:::::", data);
@@ -327,7 +328,7 @@ const SlogDetail = () => {
   }, [recVo]);
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:8080/api/slog/${no}`)
+    fetch(`${BASE_URL}/api/slog/${no}`)
       .then((resp) => resp.json())
       .then((data) => {
         dispatch(setSlogVo(data));
@@ -335,7 +336,7 @@ const SlogDetail = () => {
   }, [no, dispatch]);
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:8080/api/slog/rec?no=${no}`, {
+    fetch(`${BASE_URL}/api/slog/rec?no=${no}`, {
       method: "GET",
     })
       .then((resp) => resp.json())
@@ -382,15 +383,12 @@ const SlogDetail = () => {
       return;
     }
 
-    const response = await fetch(
-      `http://127.0.0.1:8080/api/slog/delete/${no}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(`${BASE_URL}/api/slog/delete/${no}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     if (response.ok) {
       setAlertOpen(true);

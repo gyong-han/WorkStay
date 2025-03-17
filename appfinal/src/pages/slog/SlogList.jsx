@@ -9,6 +9,7 @@ import {
   setLoading,
 } from "../../redux/slogSlice";
 import SlogCard from "./SlogCard";
+import { BASE_URL } from "../../components/service/config";
 
 const Layout = styled.div`
   display: flex;
@@ -84,7 +85,7 @@ const SlogList = () => {
     if (pno > 0 && pno * 6 > voList.length) {
       dispatch(setLoading(true));
 
-      fetch(`http://127.0.0.1:8080/api/slog/list?pno=${pno}`)
+      fetch(`${BASE_URL}/api/slog/list?pno=${pno}`)
         .then((resp) => resp.json())
         .then((data) => {
           console.log("!!!!!!!!!!!!!! data : ", data);

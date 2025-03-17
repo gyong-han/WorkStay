@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react";
+import { BASE_URL } from "../../components/service/config";
 
 const KakaoShare = ({ no }) => {
   const [content, setContent] = useState();
 
   useEffect(() => {
     const shareKakao = async () => {
-      const response = await fetch(
-        `http://127.0.0.1:8080/api/slog/kakao/${no}`,
-        {
-          method: "GET",
-          headers: {
-            "content-type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`${BASE_URL}/api/slog/kakao/${no}`, {
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+        },
+      });
       const data = await response.json();
       setContent(data);
     };
