@@ -349,15 +349,25 @@ const SlogWrite = () => {
 
   const handleLineChange = () => {
     const contentDiv = document.querySelector(".content");
-    if (!contentDiv) {
-      return;
-    }
+    if (!contentDiv) return;
 
     const hrElement = document.createElement("hr");
     hrElement.style.border = "2px solid #ccc";
-    hrElement.style.margin = "30px auto 0";
+    hrElement.style.margin = "30px auto";
 
     contentDiv.appendChild(hrElement);
+
+    const newLine = document.createElement("br");
+    contentDiv.appendChild(newLine);
+
+    const range = document.createRange();
+    const selection = window.getSelection();
+
+    range.setStartAfter(newLine);
+    range.collapse(true);
+
+    selection.removeAllRanges();
+    selection.addRange(range);
   };
 
   const handleFileChange = (e) => {
@@ -401,41 +411,35 @@ const SlogWrite = () => {
             const videoContainer = document.createElement("div");
             videoContainer.style.position = "relative";
             videoContainer.style.width = "600px";
-            videoContainer.style.cursor = "pointer";
+            // videoContainer.style.cursor = "pointer";
             videoContainer.style.margin = "10px 0";
 
             const videoElement = document.createElement("video");
             videoElement.src = fileUrl;
             videoElement.style.width = "100%";
-            // videoElement.style.display = "none";
             videoElement.controls = true;
 
-            // const thumbnail = document.createElement("img");
-            // thumbnail.src =
-            //   "https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F3VzhA%2FbtsBBmZ2tlJ%2FPuLApcHgFhQhoiuKzUCmNK%2Fimg.png";
-            // thumbnail.style.width = "100%";
-            // thumbnail.style.position = "absolute";
-            // thumbnail.style.top = "0";
-            // thumbnail.style.left = "0";
-            // thumbnail.style.cursor = "pointer";
-
             videoContainer.addEventListener("click", () => {
-              // thumbnail.style.display = "none";
               videoElement.style.display = "block";
+              videoElement.focus();
               videoElement.play();
             });
 
-            // videoContainer.appendChild(thumbnail);
             videoContainer.appendChild(videoElement);
             contentDiv.appendChild(videoContainer);
-
-            // videoElement.style.cursor = "default";
-
-            // videoElement.addEventListener("mousemove", () => {
-            //   videoElement.style.cursor = "default";
-            // });
           }
         });
+        const newLine = document.createElement("br");
+        contentDiv.appendChild(newLine);
+
+        const range = document.createRange();
+        const selection = window.getSelection();
+
+        range.setStartAfter(newLine);
+        range.collapse(true);
+
+        selection.removeAllRanges();
+        selection.addRange(range);
       });
   };
 
