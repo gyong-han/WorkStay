@@ -149,7 +149,7 @@ const SlogReview = ({ stay, slogReview }) => {
 
       <Wrapper>
         <ContentWrapper>
-          <ImgWrapper bgImage={currentReview.fileUrl} />
+          <ImgWrapper bgImage={currentReview.titleFileUrl} />
           <TextWrapper>
             <h3>{currentReview.title}</h3>
             <p>{textOnlyContent}</p>
