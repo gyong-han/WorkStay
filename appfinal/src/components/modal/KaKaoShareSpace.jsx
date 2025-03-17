@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { BASE_URL2 } from "../service/config";
+import { BASE_URL, BASE_URL2 } from "../service/config";
 
 const KakaoShareSpace = ({ no }) => {
   const[content,setContent] = useState();
   useEffect(() => {
     const shareKakao = async () => {
       const response = await fetch(
-        `http://127.0.0.1:8080/space/detail`,
+        `${BASE_URL}/space/detail`,
         {
           method: "POST",
           headers: {

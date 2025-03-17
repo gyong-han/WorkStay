@@ -6,12 +6,16 @@ const KakaoShare = ({ no }) => {
 
   useEffect(() => {
     const shareKakao = async () => {
-      const response = await fetch(`${BASE_URL}/api/slog/kakao/${no}`, {
-        method: "GET",
-        headers: {
-          "content-type": "application/json",
-        },
-      });
+
+      const response = await fetch(
+        `${BASE_URL}/api/slog/kakao/${no}`,
+        {
+          method: "GET",
+          headers: {
+            "content-type": "application/json",
+          },
+        }
+      );
       const data = await response.json();
       setContent(data);
     };
