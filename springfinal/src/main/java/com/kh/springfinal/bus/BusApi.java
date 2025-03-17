@@ -25,7 +25,7 @@ public class BusApi {
     @GetMapping
 //    @Scheduled(fixedDelay = 1000 * 60)
     public void busList() throws IOException {
-        System.out.println("###########################################");
+
 
         String[] terminalIdArr = new String[]{"NAEK010", "NAEK700", "NAEK300", "NAEK801", "NAEK343"};
         for (int i = 0; i < terminalIdArr.length; ++i) {
@@ -70,10 +70,10 @@ public class BusApi {
         conn.disconnect();
 
         String responseStr = sb.toString();
-        System.out.println("Response String: " + responseStr);
+
 
         String arrPlaceNm = extractStringFromJson(responseStr, "arrPlaceNm");
-        System.out.println("arrPlaceNm = " + arrPlaceNm);
+
         String arrPlandTime = extractStringFromJson2(responseStr, "arrPlandTime");
         Integer charge = extractIntegerFromJson(responseStr, "charge");
         String depPlaceNm = extractStringFromJson(responseStr, "depPlaceNm");

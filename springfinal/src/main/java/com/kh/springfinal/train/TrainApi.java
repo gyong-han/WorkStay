@@ -22,7 +22,6 @@ public class TrainApi {
 
 //        @Scheduled(fixedDelay = 1000 * 60)
     public void trainList() throws IOException {
-        System.out.println("Fetching train data...");
 
         String[] stationArr = new String[]{"서울", "대전", "동대구", "부산", "전주"};
 
