@@ -94,16 +94,16 @@ const KakaoMsg = ({vo}) => {
             description: "\n✅ 예약이 정상적으로 완료되었습니다!" + "사용일자 :" + fdData.useDay,
             image_url: fdData.filePath, // 이미지 URL
             link: {
-              web_url: `${BASE_URL2}/hostMenu/spaceReserv/spacedetail?reno=${vo.reservationNo}`, // 웹 링크
-              mobile_web_url: `${BASE_URL2}/hostMenu/spaceReserv/spacedetail?reno=${vo.reservationNo}`
+              web_url: `http://d34nr975ohjmz8.cloudfront.net/hostMenu/spaceReserv/spacedetail?reno=${vo.reservationNo}`, // 웹 링크
+              mobile_web_url: `http://d34nr975ohjmz8.cloudfront.net/hostMenu/spaceReserv/spacedetail?reno=${vo.reservationNo}`
             }
           },
           buttons: [
             {
               title: "결제내역 확인하기",
               link: {
-                web_url: `${BASE_URL2}/hostMenu/spaceReserv/spacedetail?reno=${vo.reservationNo}`,
-                mobile_web_url:  `${BASE_URL2}/hostMenu/spaceReserv/spacedetail?reno=${vo.reservationNo}`
+                web_url: `http://d34nr975ohjmz8.cloudfront.net/hostMenu/spaceReserv/spacedetail?reno=${vo.reservationNo}`,
+                mobile_web_url:  `http://d34nr975ohjmz8.cloudfront.net/hostMenu/spaceReserv/spacedetail?reno=${vo.reservationNo}`
               }
             }
           ]
