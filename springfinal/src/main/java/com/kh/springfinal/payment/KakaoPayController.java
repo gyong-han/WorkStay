@@ -15,7 +15,6 @@ public class KakaoPayController {
 
     @PostMapping("/ready")
     public KakaoPayVo readyToKakaoPay(@RequestBody  KakaoPayReadyVo vo) {
-        System.out.println("vo = " + vo);
         vo.setPrice(vo.getPrice().replaceAll(",",""));
         if (vo.getPackageType() == null || vo.getPackageType().isEmpty()) {
         return kakaoPayService.kakaoPayReadyRoom(vo);

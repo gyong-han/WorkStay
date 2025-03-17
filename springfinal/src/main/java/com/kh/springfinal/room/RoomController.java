@@ -32,7 +32,6 @@ public class RoomController {
             return roomVo;
         }catch (Exception e){
             log.warn(e.getMessage());
-            System.out.println(e.getMessage());
             throw new IllegalStateException("[ROOM-ERROR-01]ROOM-DETAIL FAIL");
         }
     }

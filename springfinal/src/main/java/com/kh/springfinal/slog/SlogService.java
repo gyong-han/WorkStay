@@ -52,7 +52,6 @@ public class SlogService {
 
     public SlogVo shareKakao(String no) {
 
-        System.out.println("Service :::: no = " + no);
 
         return slogMapper.shareKakao(no);
     }

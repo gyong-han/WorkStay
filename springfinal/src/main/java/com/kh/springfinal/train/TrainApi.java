@@ -22,7 +22,6 @@ public class TrainApi {
 
     //    @Scheduled(fixedDelay = 1000 * 60)
     public void trainList() throws IOException {
-        System.out.println("Fetching train data...");
 
         String[] stationArr = new String[]{"서울", "대전", "동대구", "부산", "전주"};
 
@@ -70,7 +69,6 @@ public class TrainApi {
         conn.disconnect();
 
         String responseStr = sb.toString();
-        System.out.println("Response: " + responseStr);
 
         // 정규표현식으로 데이터 추출
         List<TrainVo> trains = extractTrainData(responseStr);

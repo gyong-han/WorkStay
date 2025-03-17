@@ -68,11 +68,9 @@ public class SlogController {
     @GetMapping("list")
     public ResponseEntity<Object> findAll(@RequestParam(defaultValue = "1") int pno){
 
-        System.out.println("pno = " + pno);
-        
+
         try{
             List<SlogVo> result = slogService.findAll(pno);
-            System.out.println("LIst ::::::::::::"+result);
             return ResponseEntity.ok().body(result);
 
         }catch(Exception e){
@@ -108,7 +106,6 @@ public class SlogController {
     @GetMapping("{no}")
     public SlogVo getSlogVo (@PathVariable String no){
 
-        System.out.println("Controller ::: no = " + no);
 
         try{
             return slogService.getSlogVo(no);
@@ -121,7 +118,6 @@ public class SlogController {
     @GetMapping("stay/{no}")
     public SlogVo getMapInfo (@PathVariable String no){
 
-        System.out.println("Controller ::: stay.no = " + no);
 
         try{
             return slogService.getMapInfo(no);
@@ -168,7 +164,6 @@ public class SlogController {
                             SlogVo slogVo) {
 
             slogVo.setNo(no);
-            System.out.println("editno = " + no);
             int result = slogService.edit(slogVo);
             return result;
 
