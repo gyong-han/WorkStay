@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BASE_URL } from "../service/config";
+import { BASE_URL, BASE_URL2 } from "../service/config";
 
 const KakaoShareStay = ({ no }) => {
   const [content, setContent] = useState();
@@ -35,7 +35,7 @@ const KakaoShareStay = ({ no }) => {
             description: content.tagline,
             imageUrl: content.filePath,
             link: {
-              webUrl: `http://localhost:3000/findstay/detail/${no}`,
+              webUrl: `${BASE_URL2}/findstay/detail/${no}`,
             },
           },
           social: {
@@ -47,7 +47,7 @@ const KakaoShareStay = ({ no }) => {
             {
               title: "앱으로 보기",
               link: {
-                webUrl: `http://localhost:3000/findstay/detail/${no}`,
+                webUrl: `${BASE_URL2}/findstay/detail/${no}`,
               },
             },
           ],
