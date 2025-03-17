@@ -4,6 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import { login } from "../../redux/memberSlice";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { BASE_URL } from "../../components/service/config";
 
 const Btn = styled.button`
   border: none;
@@ -45,7 +46,7 @@ const KakaoLoginButton = () => {
 
   const sendTokenToBackend = async (accessToken) => {
     try {
-      const response = await fetch("http://localhost:8080/oauth/kakao", {
+      const response = await fetch(`${BASE_URL}/oauth/kakao`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

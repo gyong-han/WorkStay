@@ -1,21 +1,17 @@
 import { useEffect, useState } from "react";
-import { BASE_URL } from "../../components/service/config";
+import { BASE_URL, BASE_URL2 } from "../../components/service/config";
 
 const KakaoShare = ({ no }) => {
   const [content, setContent] = useState();
 
   useEffect(() => {
     const shareKakao = async () => {
-
-      const response = await fetch(
-        `${BASE_URL}/api/slog/kakao/${no}`,
-        {
-          method: "GET",
-          headers: {
-            "content-type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`${BASE_URL}/api/slog/kakao/${no}`, {
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+        },
+      });
       const data = await response.json();
       setContent(data);
     };
@@ -51,7 +47,7 @@ const KakaoShare = ({ no }) => {
             {
               title: "앱으로 보기",
               link: {
-                webUrl: `http://localhost:3000/slog/detail/${no}`,
+                webUrl: `${BASE_URL2}/slog/detail/${no}`,
               },
             },
           ],
