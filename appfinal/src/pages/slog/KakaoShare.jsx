@@ -6,6 +6,7 @@ const KakaoShare = ({ no }) => {
 
   useEffect(() => {
     const shareKakao = async () => {
+
       const response = await fetch(
         `${BASE_URL}/api/slog/kakao/${no}`,
         {

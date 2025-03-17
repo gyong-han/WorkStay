@@ -7,6 +7,7 @@ import ArrivalStationList from "./ArrivalStationList";
 import { useDispatch, useSelector } from "react-redux";
 import { selectEndStation, selectStartStation } from "../../redux/stationSlice";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../components/service/config";
 
 const Container = styled.div`
   max-width: 600px;
@@ -125,7 +126,7 @@ const Train = () => {
 
     console.log(requestData);
 
-    fetch("http://127.0.0.1:8080/api/trainticket", {
+    fetch(`${BASE_URL}/api/trainticket`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
