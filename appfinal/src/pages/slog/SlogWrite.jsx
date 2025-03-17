@@ -17,6 +17,7 @@ import { AiOutlineTable } from "react-icons/ai";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { addSlogVoList } from "../../redux/slogSlice";
+import { BASE_URL } from "../../components/service/config";
 
 const Container = styled.div`
   width: 100%;
@@ -382,7 +383,7 @@ const SlogWrite = () => {
       fd.append("files", files[i]);
     }
 
-    fetch("http://127.0.0.1:8080/api/slog/upload", {
+    fetch(`${BASE_URL}/api/slog/upload`, {
       method: "POST",
       body: fd,
     })
@@ -467,7 +468,7 @@ const SlogWrite = () => {
       fd.append("files", files[i]);
     }
 
-    fetch("http://127.0.0.1:8080/api/slog/title/upload", {
+    fetch(`${BASE_URL}/api/slog/title/upload`, {
       method: "POST",
       body: fd,
     })
@@ -534,7 +535,7 @@ const SlogWrite = () => {
     fd2.append("originalName", originalNames.join(","));
 
     if (no) {
-      fetch(`http://127.0.0.1:8080/api/slog/edit/${no}`, {
+      fetch(`${BASE_URL}/api/slog/edit/${no}`, {
         method: "PUT",
         body: fd2,
       })
@@ -544,7 +545,7 @@ const SlogWrite = () => {
           navigate("/slog");
         });
     } else {
-      fetch("http://127.0.0.1:8080/api/slog/insert", {
+      fetch(`${BASE_URL}/api/slog/insert`, {
         method: "POST",
         body: fd1,
       })
