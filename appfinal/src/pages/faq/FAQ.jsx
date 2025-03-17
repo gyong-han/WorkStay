@@ -11,7 +11,7 @@ const Layout = styled.div`
 `;
 
 const MainDiv = styled.div`
-  background-color: white;
+  background-color: #fafafa;
   display: grid;
   grid-template-rows: 100px 1fr;
 `;
@@ -19,7 +19,7 @@ const MainDiv = styled.div`
 const HeaderDiv = styled.div`
   display: grid;
   align-content: center;
-  font-size: 35px;
+  font-size: 30px;
   font-weight: 600;
 `;
 

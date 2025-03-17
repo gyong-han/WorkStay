@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Alert from "../Alert";
+import { BASE_URL2 } from "../service/config";
 
 const Backdrop = styled.div`
   position: fixed;
@@ -25,7 +26,6 @@ const KakaoMsgStay = ({ vo }) => {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [isAlertOpen2, setIsAlertOpen2] = useState(false);
   const [isAlertOpen3, setIsAlertOpen3] = useState(false);
-  const [isAlertOpen4, setIsAlertOpen4] = useState(false);
   const handleAlertClose = () => {
     setIsAlertOpen(false);
   };
@@ -70,7 +70,7 @@ const KakaoMsgStay = ({ vo }) => {
     window.Kakao.Auth.login({
       scope: SCOPE,
       success: function (authObj) {
-        console.log("로그인 성공:", authObj);
+        // console.log("로그인 성공:", authObj);
         setIsLoggedIn(true);
         sendToMe(); // 로그인 후 메시지 전송
       },
@@ -93,23 +93,23 @@ const KakaoMsgStay = ({ vo }) => {
         template_object: {
           object_type: "feed", // 기본 템플릿 (피드 형식)
           content: {
-            title: fdData.name + "(결제 완료)", // 제목
+            title: fdData.name + "(예약 완료)", // 제목
             description:
               "\n✅ 예약이 정상적으로 완료되었습니다!" +
               "사용일자 :" +
               fdData.useDay,
             image_url: fdData.filePath, // 이미지 URL
             link: {
-              web_url: `http://localhost:3000/hostMenu/staydetail?reno=${vo.reservationNo}`, // 웹 링크
-              mobile_web_url: `http://localhost:3000/hostMenu/staydetail?reno=${vo.reservationNo}`,
+              web_url: `${BASE_URL2}/hostMenu/staydetail?reno=${vo.reservationNo}`, // 웹 링크
+              mobile_web_url: `${BASE_URL2}/hostMenu/staydetail?reno=${vo.reservationNo}`,
             },
           },
           buttons: [
             {
               title: "결제내역 확인하기",
               link: {
-                web_url: `http://localhost:3000/hostMenu/staydetail?reno=${vo.reservationNo}`,
-                mobile_web_url: `http://localhost:3000/hostMenu/staydetail?reno=${vo.reservationNo}`,
+                web_url: `${BASE_URL2}/hostMenu/staydetail?reno=${vo.reservationNo}`,
+                mobile_web_url: `${BASE_URL2}/hostMenu/staydetail?reno=${vo.reservationNo}`,
               },
             },
           ],

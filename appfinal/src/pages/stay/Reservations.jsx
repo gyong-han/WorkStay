@@ -166,13 +166,11 @@ const Reservations = () => {
   const priceWon = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const roomVo = useSelector((state) => state.room);
 
-  console.log("roomVo", roomVo);
-
   const RoomReservation = async () => {
     try {
       const insertData = await roomReservation(rData);
       const getInfo = await getReservationInfo(rd);
-      console.log("GET INFO :: ", getInfo);
+      // console.log("GET INFO :: ", getInfo);
 
       dispatch(setStayReservationInfo(getInfo));
 
