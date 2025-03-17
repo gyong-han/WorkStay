@@ -201,31 +201,90 @@ public interface HostMapper {
             """)
     List<StayVo> getMyStayList(String hostNo);
 
+//    @Select("""
+//            SELECT SR.NO,S.NAME,M.NAME AS HOST_NAME,M.PHONE,P.NAME AS PACKAGE_NAME,TO_CHAR(TO_DATE(SR.USE_DAY, 'YYYYMMDD'), 'YYYY.MM.DD') AS USE_DAY
+//            FROM SPACE_RESERVATION SR
+//            JOIN SPACE S ON (SR.SPACE_NO = S.NO)
+//            JOIN MEMBER M ON (SR.MEMBER_NO = M.NO)
+//            JOIN PACKAGE P ON (SR.PACKAGE_NO = P.NO)
+//            WHERE S.HOST_NO = #{hostNo}
+//            AND SR.STATUS_NO = #{status}
+//            ORDER BY USE_DAY DESC
+//            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+//            """)
     @Select("""
-            SELECT SR.NO,S.NAME,M.NAME AS HOST_NAME,M.PHONE,P.NAME AS PACKAGE_NAME,TO_CHAR(TO_DATE(SR.USE_DAY, 'YYYYMMDD'), 'YYYY.MM.DD') AS USE_DAY
-            FROM SPACE_RESERVATION SR
-            JOIN SPACE S ON (SR.SPACE_NO = S.NO)
-            JOIN MEMBER M ON (SR.MEMBER_NO = M.NO)
-            JOIN PACKAGE P ON (SR.PACKAGE_NO = P.NO)
-            WHERE S.HOST_NO = #{hostNo}
-            AND SR.STATUS_NO = #{status}
-            ORDER BY USE_DAY DESC
-            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+            SELECT NO, NAME, HOST_NAME, PHONE, PACKAGE_NAME, USE_DAY
+            FROM (
+                SELECT SR.NO,
+                       S.NAME,
+                       M.NAME AS HOST_NAME,
+                       M.PHONE,
+                       P.NAME AS PACKAGE_NAME,
+                       TO_CHAR(TO_DATE(SR.USE_DAY, 'YYYYMMDD'), 'YYYY.MM.DD') AS USE_DAY,
+                       ROWNUM AS RNUM
+                FROM (
+                    SELECT SR.NO,
+                           S.NAME,
+                           M.NAME AS HOST_NAME,
+                           M.PHONE,
+                           P.NAME AS PACKAGE_NAME,
+                           TO_CHAR(TO_DATE(SR.USE_DAY, 'YYYYMMDD'), 'YYYY.MM.DD') AS USE_DAY
+                    FROM SPACE_RESERVATION SR
+                    JOIN SPACE S ON SR.SPACE_NO = S.NO
+                    JOIN MEMBER M ON SR.MEMBER_NO = M.NO
+                    JOIN PACKAGE P ON SR.PACKAGE_NO = P.NO
+                    WHERE S.HOST_NO = #{hostNo}
+                    AND SR.STATUS_NO = #{status}
+                    ORDER BY USE_DAY DESC
+                ) T
+                WHERE ROWNUM <= #{offset} + #{limit}
+            )
+            WHERE RNUM > #{offset}            
             """)
     List<TableVo> getSpaceReservList(String status, String hostNo, int limit, int offset);
 
+//    @Select("""
+//            SELECT RS.NO,M.NAME AS HOST_NAME,M.PHONE,R.NAME AS ROOM_NAME,S.NAME,
+//            TO_CHAR(TO_DATE(CHECK_IN, 'YYYYMMDD'), 'YYYY.MM.DD') || '~' ||  TO_CHAR(TO_DATE(CHECK_OUT, 'YYYYMMDD'), 'MM.DD') AS USE_DAY
+//            FROM ROOM_RESERVATION RS
+//            JOIN MEMBER M ON(RS.MEMBER_NO = M.NO)
+//            JOIN ROOM R ON(RS.ROOM_NO = R.NO)
+//            JOIN STAY S ON(R.STAY_NO = S.NO)
+//            WHERE S.HOST_NO = #{hostNo}
+//            AND RS.STATUS_NO = #{status}
+//            ORDER BY USE_DAY DESC
+//            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+//            """)
     @Select("""
-            
-            SELECT RS.NO,M.NAME AS HOST_NAME,M.PHONE,R.NAME AS ROOM_NAME,S.NAME,
-            TO_CHAR(TO_DATE(CHECK_IN, 'YYYYMMDD'), 'YYYY.MM.DD') || '~' ||  TO_CHAR(TO_DATE(CHECK_OUT, 'YYYYMMDD'), 'MM.DD') AS USE_DAY
-            FROM ROOM_RESERVATION RS
-            JOIN MEMBER M ON(RS.MEMBER_NO = M.NO)
-            JOIN ROOM R ON(RS.ROOM_NO = R.NO)
-            JOIN STAY S ON(R.STAY_NO = S.NO)
-            WHERE S.HOST_NO = #{hostNo}
-            AND RS.STATUS_NO = #{status}
-            ORDER BY USE_DAY DESC
-            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+            SELECT NO, HOST_NAME, PHONE, ROOM_NAME, NAME, USE_DAY
+            FROM (
+                SELECT RS.NO,
+                       M.NAME AS HOST_NAME,
+                       M.PHONE,
+                       R.NAME AS ROOM_NAME,
+                       S.NAME,
+                       TO_CHAR(TO_DATE(CHECK_IN, 'YYYYMMDD'), 'YYYY.MM.DD') || '~' || 
+                       TO_CHAR(TO_DATE(CHECK_OUT, 'YYYYMMDD'), 'MM.DD') AS USE_DAY,
+                       ROWNUM AS RNUM
+                FROM (
+                    SELECT RS.NO,
+                           M.NAME AS HOST_NAME,
+                           M.PHONE,
+                           R.NAME AS ROOM_NAME,
+                           S.NAME,
+                           TO_CHAR(TO_DATE(CHECK_IN, 'YYYYMMDD'), 'YYYY.MM.DD') || '~' || 
+                           TO_CHAR(TO_DATE(CHECK_OUT, 'YYYYMMDD'), 'MM.DD') AS USE_DAY
+                    FROM ROOM_RESERVATION RS
+                    JOIN MEMBER M ON RS.MEMBER_NO = M.NO
+                    JOIN ROOM R ON RS.ROOM_NO = R.NO
+                    JOIN STAY S ON R.STAY_NO = S.NO
+                    WHERE S.HOST_NO = #{hostNo}
+                    AND RS.STATUS_NO = #{status}
+                    ORDER BY USE_DAY DESC
+                ) T
+                WHERE ROWNUM <= #{offset} + #{limit}
+            )
+            WHERE RNUM > #{offset}            
             """)
     List<TableVo> getRoomReservList(String status, String hostNo, int limit, int offset);
 

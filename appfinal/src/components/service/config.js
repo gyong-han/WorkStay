@@ -1,3 +1,5 @@
-const BASE_URL = "http://localhost:8080";
-const BASE_URL2 = "http://localhost:3000"
-export {BASE_URL,BASE_URL2};
+const API_SERVER = process.env.REACT_APP_SERVER_ROOT;
+
+const BASE_URL = `http://${API_SERVER}`;
+const BASE_URL2 = "http://localhost:3000";
+export { BASE_URL, BASE_URL2 };
