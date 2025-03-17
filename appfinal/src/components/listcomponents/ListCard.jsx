@@ -6,6 +6,7 @@ import { IoBookmark } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import Alert from "../Alert";
+import { BASE_URL } from "../service/config";
 
 const Layout = styled.div`
   width: 616px;
@@ -121,7 +122,7 @@ const ListCard = (props) => {
     if (!token) {
       return;
     }
-    fetch("http://localhost:8080/space/getbookmarkInfo", {
+    fetch(`${BASE_URL}/space/getbookmarkInfo`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -150,7 +151,7 @@ const ListCard = (props) => {
 
     if (bookMark === true) {
       setBookMark(false);
-      fetch("http://localhost:8080/space/bookmarkdel", {
+      fetch(`${BASE_URL}/space/bookmarkdel`, {
         method: "POST",
         headers: {
           "content-type": "application/json",
@@ -164,7 +165,7 @@ const ListCard = (props) => {
         });
     } else {
       setBookMark(true);
-      fetch("http://localhost:8080/space/bookmark", {
+      fetch(`${BASE_URL}/space/bookmark`, {
         method: "POST",
         headers: {
           "content-type": "application/json",
