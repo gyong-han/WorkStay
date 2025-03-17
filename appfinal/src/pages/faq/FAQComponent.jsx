@@ -8,20 +8,20 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const CustomAccordion = styled(Accordion)(({ theme }) => ({
   backgroundColor: "#FAFAFA",
-  color: "#333",
+  color: "#BBBBBB",
   borderTop: "1px solid #d9d9d9",
   borderBottom: "1px solid #d9d9d9",
   borderLeft: "none",
   borderRight: "none",
 
   "& .MuiAccordionSummary-root": {
-    backgroundColor: "white",
-    color: "black",
+    backgroundColor: "#FAFAFA",
+    color: "#202020",
     display: "flex",
     fontFamily: "Pretendard-Medium",
   },
   "& .MuiAccordionDetails-root": {
-    backgroundColor: "#eeeeee",
+    backgroundColor: "#d9d9d9",
     textAlign: "left",
     fontFamily: "Pretendard-Medium",
     paddingBottom: "8px",
