@@ -40,10 +40,19 @@ const slogSlice = createSlice({
     setSlogVo: (state, action) => {
       state.slogVo = action.payload;
     },
+    setSlogVoList: (state, action) => {
+      state.voList = action.payload;
+    },
   },
 });
 
-export const { addSlogVoList, plusPno, resetPno, setLoading, setSlogVo } =
-  slogSlice.actions;
+export const {
+  addSlogVoList,
+  plusPno,
+  resetPno,
+  setLoading,
+  setSlogVo,
+  setSlogVoList,
+} = slogSlice.actions;
 
 export default slogSlice.reducer;

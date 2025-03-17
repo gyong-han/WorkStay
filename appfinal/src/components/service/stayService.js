@@ -108,6 +108,23 @@ const getBlockDate = async (no) => {
   }
 };
 
+const getSlogReviewList = async (no) => {
+  try {
+    const result = await fetch(`${BASE_URL}/stay/getSlogReview`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(no),
+    });
+    if (!result.ok) {
+      throw new Error(`HTTP error! Status: ${result.status}`);
+    }
+    const data = await result.json();
+    return data;
+  } catch (e) {
+    console.log("GET GET SLOG REVIEW ERROR", e);
+  }
+};
+
 export {
   getAttachment,
   getStayListAll,
@@ -116,4 +133,5 @@ export {
   delBookmark,
   setBookmarkInsert,
   getBlockDate,
+  getSlogReviewList,
 };

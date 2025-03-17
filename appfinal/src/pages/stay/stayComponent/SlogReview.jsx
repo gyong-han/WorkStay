@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { useDispatch } from "react-redux";
+import { setSlogVoList } from "../../../redux/slogSlice";
+import { getSlogReviewList } from "../../../components/service/stayService";
 
 const OuterWrapper = styled.div`
   position: relative;
@@ -87,11 +90,30 @@ const OuterArrowButton = styled.button`
 `;
 
 const SlogReview = ({ stay, slogReview }) => {
+  const dispatch = useDispatch();
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const fetchSlog = async () => {
+      if (!stay.no) return;
+
+      const reviews = await getSlogReviewList(stay.no);
+
+      if (Array.isArray(reviews)) {
+        dispatch(setSlogVoList(reviews));
+      } else if (reviews) {
+        dispatch(setSlogVoList([reviews]));
+      } else {
+        dispatch(setSlogVoList([]));
+      }
+    };
+
+    fetchSlog();
+  }, [stay.no]);
+
   const filteredReviews = slogReview.voList.filter(
     (review) => String(review.stayNo) === String(stay.no)
   );
-
-  const [currentIndex, setCurrentIndex] = useState(0);
 
   if (!stay.no || filteredReviews.length === 0) {
     return <div>등록된 리뷰가 없습니다.</div>;
@@ -108,6 +130,7 @@ const SlogReview = ({ stay, slogReview }) => {
       prev === filteredReviews.length - 1 ? 0 : prev + 1
     );
   };
+
   const currentReview = filteredReviews[currentIndex];
 
   const stripHtmlTags = (htmlString) => {
@@ -120,12 +143,10 @@ const SlogReview = ({ stay, slogReview }) => {
 
   return (
     <OuterWrapper>
-      {/* 바깥쪽 좌우 화살표 버튼 */}
       <OuterArrowButton left onClick={prevSlide}>
         <IoIosArrowBack />
       </OuterArrowButton>
 
-      {/* 슬라이드 컨텐츠 */}
       <Wrapper>
         <ContentWrapper>
           <ImgWrapper bgImage={currentReview.fileUrl} />
