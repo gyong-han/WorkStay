@@ -37,13 +37,14 @@ import Alert from "../../components/Alert";
 import { RiInstagramLine } from "react-icons/ri";
 import { SiNaver } from "react-icons/si";
 import ShareModal from "../../components/modal/ShareModal";
+import SlogReview from "./stayComponent/SlogReview";
 
 const Layout = styled.div`
   width: 100%;
   height: 100%;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 120px 550px 100px 700px 450px 100px 549px 50px 1fr;
+  grid-template-rows: 120px 550px 100px 700px 450px 500px 100px 549px 50px 1fr;
 
   & > div:nth-child(3) {
     width: 100%;
@@ -63,7 +64,7 @@ const Layout = styled.div`
     grid-template-rows: 450px;
   }
 
-  & > div:nth-child(6) {
+  & > div:nth-child(7) {
     width: 100%;
     height: 100%;
     display: grid;
@@ -78,7 +79,7 @@ const Layout = styled.div`
       font-size: 20px;
     }
   }
-  & > div:nth-child(7) {
+  & > div:nth-child(8) {
     width: 1500px;
     height: 100%;
     display: flex;
@@ -248,6 +249,33 @@ const InfomationDiv = styled.div`
   }
 `;
 
+const SlogWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1100px 1fr;
+  place-items: center center;
+
+  & > div:nth-child(2) {
+    width: 100%;
+    height: 100%;
+    margin-top: 50px;
+    display: grid;
+    place-items: center center;
+  }
+
+  & > div:nth-child(3) {
+    width: 1500px;
+    height: 400px;
+    margin-top: 80px;
+  }
+`;
+
+const SlogSpan = styled.span`
+  width: 100%;
+  height: 100%;
+  font-size: 1.5rem;
+  font-weight: 600;
+`;
+
 const FindStayDetail = () => {
   const [bookMark, setBookMark] = useState(false);
   const [no, setNo] = useState();
@@ -262,8 +290,8 @@ const FindStayDetail = () => {
   const { x } = useParams();
   const stayVo = useSelector((state) => state.stay);
   const roomVoList = useSelector((state) => state.room.rooms);
-  const roomVo = useSelector((state) => state.room);
   const reservationDate = useSelector((state) => state.room.reservationDate);
+  const slogReview = useSelector((state) => state.slog);
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
 
@@ -506,6 +534,17 @@ const FindStayDetail = () => {
             <div>{stayVo.introduction}</div>
           </IntroduceWrapper>
           <div></div>
+        </div>
+        <div>
+          <SlogWrapper>
+            <div></div>
+            <div>
+              <div>
+                <SlogSpan>S-LOG</SlogSpan>
+              </div>
+              <SlogReview stay={stayVo} slogReview={slogReview} />
+            </div>
+          </SlogWrapper>
         </div>
         <div>
           <div></div>
