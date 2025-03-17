@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { BASE_URL } from "../../components/service/config";
 
 const KakaoShare = ({ no }) => {
   const [content, setContent] = useState();
@@ -6,7 +7,7 @@ const KakaoShare = ({ no }) => {
   useEffect(() => {
     const shareKakao = async () => {
       const response = await fetch(
-        `http://127.0.0.1:8080/api/slog/kakao/${no}`,
+        `${BASE_URL}/api/slog/kakao/${no}`,
         {
           method: "GET",
           headers: {

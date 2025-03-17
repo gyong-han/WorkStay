@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Alert from "../Alert";
+import { BASE_URL } from "../service/config";
 
 const Button = styled.button`
   width: ${(props) => {
@@ -96,7 +97,7 @@ const PaymentBtn = ({reservationData,checkInfo}) => {
         return;
       }
     try {
-      const response = await fetch("http://localhost:8080/payment/ready", {
+      const response = await fetch(`${BASE_URL}/payment/ready`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
