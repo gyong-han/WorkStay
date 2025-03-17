@@ -2,6 +2,7 @@ package com.kh.springfinal.stay;
 
 import com.kh.springfinal.room.RoomAttachmentVo;
 import com.kh.springfinal.roomReservation.RoomReservationVo;
+import com.kh.springfinal.slog.SlogVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -96,8 +97,17 @@ public class StayController {
             }
         }catch (Exception e){
             log.warn(e.getMessage());
-
             throw new IllegalStateException("[STAY-ERROR-06]STAY BOOKMARK_INFO FAIL");
+        }
+    }
+
+    @PostMapping("getSlogReview")
+    public List<SlogVo> getSlogReview(@RequestBody Long no){
+        try{
+            return stayService.getSlogReview(no);
+        }catch(Exception e){
+            log.warn(e.getMessage());
+            throw new IllegalStateException("[STAY-ERROR-05]STAY BOOKMARK_DEL FAIL");
         }
     }
 }

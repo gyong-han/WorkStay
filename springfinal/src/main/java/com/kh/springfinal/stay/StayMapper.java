@@ -2,6 +2,7 @@ package com.kh.springfinal.stay;
 
 import com.kh.springfinal.room.RoomAttachmentVo;
 import com.kh.springfinal.roomReservation.RoomReservationVo;
+import com.kh.springfinal.slog.SlogVo;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -84,4 +85,30 @@ public interface StayMapper {
             FROM DUAL
             """)
     int bookmarkInfo(RoomReservationVo vo);
+
+    @Select("""
+            SELECT
+                S.NO
+                ,ST.NO AS STAY_NO
+                ,S.TITLE
+                ,S.CONTENT
+                ,S.TAGLINE
+                ,S.FILE_URL
+                ,S.TITLE_FILE_URL
+                ,S.ORIGINAL_NAME
+                ,S.MEMBER_NO
+                ,M.NICK
+                ,R.NAME
+                ,ST.NAME AS STAY_NAME
+                ,ST.PHONE
+                ,ST.ADDRESS
+                FROM SLOG S
+                JOIN MEMBER M ON(S.MEMBER_NO = M.NO)
+                JOIN ROOM_RESERVATION RS ON(S.RESERVATION_NO = RS.NO)
+                JOIN ROOM R ON (RS.ROOM_NO = R.NO)
+                JOIN STAY ST ON (R.STAY_NO = ST.NO)
+                WHERE ST.NO = #{no}
+                AND S.DEL_YN = 'N'
+            """)
+    List<SlogVo> getSlogReview(Long no);
 }

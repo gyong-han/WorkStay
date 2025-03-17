@@ -2,6 +2,7 @@ package com.kh.springfinal.stay;
 
 import com.kh.springfinal.room.RoomAttachmentVo;
 import com.kh.springfinal.roomReservation.RoomReservationVo;
+import com.kh.springfinal.slog.SlogVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,5 +72,9 @@ public class StayService {
 
     public int getBookmarkInfo(RoomReservationVo vo) {
         return stayMapper.bookmarkInfo(vo);
+    }
+
+    public List<SlogVo> getSlogReview(Long no) {
+        return stayMapper.getSlogReview(no);
     }
 }
