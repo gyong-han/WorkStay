@@ -4,6 +4,8 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useDispatch } from "react-redux";
 import { setSlogVoList } from "../../../redux/slogSlice";
 import { getSlogReviewList } from "../../../components/service/stayService";
+import { BASE_URL2 } from "../../../components/service/config";
+import { useNavigate } from "react-router-dom";
 
 const OuterWrapper = styled.div`
   position: relative;
@@ -30,6 +32,7 @@ const ContentWrapper = styled.div`
   display: flex;
   width: 100%;
   height: 100%;
+  cursor: pointer;
 `;
 
 const ImgWrapper = styled.div`
@@ -92,6 +95,7 @@ const OuterArrowButton = styled.button`
 const SlogReview = ({ stay, slogReview }) => {
   const dispatch = useDispatch();
   const [currentIndex, setCurrentIndex] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchSlog = async () => {
@@ -141,6 +145,10 @@ const SlogReview = ({ stay, slogReview }) => {
 
   const textOnlyContent = stripHtmlTags(currentReview.content);
 
+  const handleClick = () => {
+    navigate(`/slog/detail/${currentReview.no}`);
+  };
+
   return (
     <OuterWrapper>
       <OuterArrowButton left onClick={prevSlide}>
@@ -148,11 +156,11 @@ const SlogReview = ({ stay, slogReview }) => {
       </OuterArrowButton>
 
       <Wrapper>
-        <ContentWrapper>
+        <ContentWrapper onClick={handleClick}>
           <ImgWrapper bgImage={currentReview.titleFileUrl} />
           <TextWrapper>
             <h3>{currentReview.title}</h3>
-            <p>{textOnlyContent}</p>
+            <p>{currentReview.tagline}</p>
             <p>by. {currentReview.nick}</p>
           </TextWrapper>
         </ContentWrapper>
