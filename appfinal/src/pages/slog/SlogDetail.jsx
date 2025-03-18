@@ -176,6 +176,7 @@ const EditDeleteBtn = styled.div`
     /* border-color: #049dd9; */
     border-radius: 5px;
     border: 1px solid #202020;
+    cursor: pointer;
   }
 
   .reservation {
@@ -187,6 +188,7 @@ const EditDeleteBtn = styled.div`
     background-color: #049dd9;
     border-radius: 10px;
     border: none;
+    cursor: pointer;
   }
 `;
 
@@ -376,6 +378,11 @@ const SlogDetail = () => {
     });
   };
 
+  const stayReservation = () => {
+    navigate(`/findstay/detail/${stayNo}/refund-policy`);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const handleRemove = async () => {
     const isDelete = window.confirm("정말 게시글을 삭제하시겠습니까?");
 
@@ -507,7 +514,9 @@ const SlogDetail = () => {
             <button className="share" onClick={openKakaoModal}>
               트래블 공유하기
             </button>
-            <button className="reservation">스테이 예약하기</button>
+            <button className="reservation" onClick={stayReservation}>
+              스테이 예약하기
+            </button>
           </>
         )}
       </EditDeleteBtn>
