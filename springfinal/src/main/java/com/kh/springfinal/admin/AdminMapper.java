@@ -14,100 +14,100 @@ import java.util.List;
 @Mapper
 public interface AdminMapper {
 
-//    @Select("""
-//            SELECT S.NO AS NO,M.NAME AS HOST_NAME,M.EMAIL,S.NAME AS NAME,M.PHONE
-//            FROM STAY S
-//            JOIN MEMBER M ON(S.HOST_NO = M.NO)
-//            WHERE S.STATUS_NO= '1'
-//            ORDER BY S.ENROLL_DATE DESC
-//            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
-//            """)
     @Select("""
-            SELECT NO, HOST_NAME, EMAIL, NAME, PHONE
-            FROM (
-                SELECT S.NO AS NO,
-                       M.NAME AS HOST_NAME,
-                       M.EMAIL,
-                       S.NAME AS NAME,
-                       M.PHONE,
-                       ROWNUM AS RNUM
-                FROM (
-                    SELECT S.NO, M.NAME, M.EMAIL, S.NAME, M.PHONE
-                    FROM STAY S
-                    JOIN MEMBER M ON S.HOST_NO = M.NO
-                    WHERE S.STATUS_NO = '1'
-                    ORDER BY S.ENROLL_DATE DESC
-                ) T
-                WHERE ROWNUM <= #{offset} + #{limit}
-            )
-            WHERE RNUM > #{offset}
+            SELECT S.NO AS NO,M.NAME AS HOST_NAME,M.EMAIL,S.NAME AS NAME,M.PHONE
+            FROM STAY S
+            JOIN MEMBER M ON(S.HOST_NO = M.NO)
+            WHERE S.STATUS_NO= '1'
+            ORDER BY S.ENROLL_DATE DESC
+            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
             """)
+//    @Select("""
+//            SELECT NO, HOST_NAME, EMAIL, NAME, PHONE
+//            FROM (
+//                SELECT S.NO AS NO,
+//                       M.NAME AS HOST_NAME,
+//                       M.EMAIL,
+//                       S.NAME AS NAME,
+//                       M.PHONE,
+//                       ROWNUM AS RNUM
+//                FROM (
+//                    SELECT S.NO, M.NAME, M.EMAIL, S.NAME, M.PHONE
+//                    FROM STAY S
+//                    JOIN MEMBER M ON S.HOST_NO = M.NO
+//                    WHERE S.STATUS_NO = '1'
+//                    ORDER BY S.ENROLL_DATE DESC
+//                ) T
+//                WHERE ROWNUM <= #{offset} + #{limit}
+//            )
+//            WHERE RNUM > #{offset}
+//            """)
     List<TableVo> getStayEnrollReqList(int limit, int offset);
 
-//    @Select("""
-//            SELECT S.NO AS NO,M.NAME AS HOST_NAME,M.EMAIL,S.NAME AS NAME,M.PHONE
-//            FROM SPACE S
-//            JOIN MEMBER M ON(S.HOST_NO = M.NO)
-//            WHERE S.STATUS_NO= '1'
-//            ORDER BY S.ENROLL_DATE DESC
-//            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
-//            """)
     @Select("""
-            SELECT NO, HOST_NAME, EMAIL, NAME, PHONE
-            FROM (
-                SELECT S.NO AS NO,
-                       M.NAME AS HOST_NAME,
-                       M.EMAIL,
-                       S.NAME AS NAME,
-                       M.PHONE,
-                       ROWNUM AS RNUM
-                FROM (
-                    SELECT S.NO, M.NAME, M.EMAIL, S.NAME, M.PHONE
-                    FROM SPACE S
-                    JOIN MEMBER M ON S.HOST_NO = M.NO
-                    WHERE S.STATUS_NO = '1'
-                    ORDER BY S.ENROLL_DATE DESC
-                ) T
-                WHERE ROWNUM <= #{offset} + #{limit}
-            )
-            WHERE RNUM > #{offset}
+            SELECT S.NO AS NO,M.NAME AS HOST_NAME,M.EMAIL,S.NAME AS NAME,M.PHONE
+            FROM SPACE S
+            JOIN MEMBER M ON(S.HOST_NO = M.NO)
+            WHERE S.STATUS_NO= '1'
+            ORDER BY S.ENROLL_DATE DESC
+            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
             """)
+//    @Select("""
+//            SELECT NO, HOST_NAME, EMAIL, NAME, PHONE
+//            FROM (
+//                SELECT S.NO AS NO,
+//                       M.NAME AS HOST_NAME,
+//                       M.EMAIL,
+//                       S.NAME AS NAME,
+//                       M.PHONE,
+//                       ROWNUM AS RNUM
+//                FROM (
+//                    SELECT S.NO, M.NAME, M.EMAIL, S.NAME, M.PHONE
+//                    FROM SPACE S
+//                    JOIN MEMBER M ON S.HOST_NO = M.NO
+//                    WHERE S.STATUS_NO = '1'
+//                    ORDER BY S.ENROLL_DATE DESC
+//                ) T
+//                WHERE ROWNUM <= #{offset} + #{limit}
+//            )
+//            WHERE RNUM > #{offset}
+//            """)
     List<TableVo> getSpaceEnrollReqList(int limit, int offset);
 
-//    @Select("""
-//            SELECT M.NO, M.NAME AS HOSTNAME, M.EMAIL, M.PHONE,
-//            (SELECT COUNT(*) FROM STAY S WHERE S.HOST_NO = M.NO AND S.STATUS_NO = 2) AS STAY_CNT,
-//            (SELECT COUNT(*) FROM SPACE SP WHERE SP.HOST_NO = M.NO AND SP.STATUS_NO = 2) AS SPACE_CNT
-//            FROM MEMBER M
-//            WHERE M.HOST_PERMISSION = 'Y'
-//            AND M.DEL_YN = 'N'
-//            ORDER BY M.NO DESC
-//            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
-//            """)
     @Select("""
-            SELECT NO, HOSTNAME, EMAIL, PHONE, STAY_CNT, SPACE_CNT
-            FROM (
-                SELECT M.NO,
-                       M.NAME AS HOSTNAME,
-                       M.EMAIL,
-                       M.PHONE,
-                       (SELECT COUNT(*) FROM STAY S WHERE S.HOST_NO = M.NO AND S.STATUS_NO = 2) AS STAY_CNT,
-                       (SELECT COUNT(*) FROM SPACE SP WHERE SP.HOST_NO = M.NO AND SP.STATUS_NO = 2) AS SPACE_CNT,
-                       ROWNUM AS RNUM
-                FROM (
-                    SELECT M.NO,
-                           M.NAME AS HOSTNAME,
-                           M.EMAIL,
-                           M.PHONE
-                    FROM MEMBER M
-                    WHERE M.HOST_PERMISSION = 'Y'
-                    AND M.DEL_YN = 'N'
-                    ORDER BY M.NO DESC
-                ) T
-                WHERE ROWNUM <= #{offset} + #{limit}
-            )
-            WHERE RNUM > #{offset}            
+            SELECT M.NO, M.NAME AS HOSTNAME, M.EMAIL, M.PHONE,
+            (SELECT COUNT(*) FROM STAY S WHERE S.HOST_NO = M.NO AND S.STATUS_NO = 2) AS STAY_CNT,
+            (SELECT COUNT(*) FROM SPACE SP WHERE SP.HOST_NO = M.NO AND SP.STATUS_NO = 2) AS SPACE_CNT
+            FROM MEMBER M
+            WHERE M.HOST_PERMISSION = 'Y'
+            AND M.DEL_YN = 'N'
+            ORDER BY M.NO DESC
+            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
             """)
+//    @Select("""
+//            SELECT NO, HOSTNAME, EMAIL, PHONE, STAY_CNT, SPACE_CNT
+//            FROM (
+//                SELECT M.NO,
+//                       M.NAME AS HOSTNAME,
+//                       M.EMAIL,
+//                       M.PHONE,
+//                       (SELECT COUNT(*) FROM STAY S WHERE S.HOST_NO = M.NO AND S.STATUS_NO = 2) AS STAY_CNT,
+//                       (SELECT COUNT(*) FROM SPACE SP WHERE SP.HOST_NO = M.NO AND SP.STATUS_NO = 2) AS SPACE_CNT,
+//                       ROWNUM AS RNUM
+//                FROM (
+//                    SELECT M.NO,
+//                           M.NAME AS HOSTNAME,
+//                           M.EMAIL,
+//                           M.PHONE
+//                    FROM MEMBER M
+//                    WHERE M.HOST_PERMISSION = 'Y'
+//                    AND M.DEL_YN = 'N'
+//                    ORDER BY M.NO DESC
+//                ) T
+//                WHERE ROWNUM <= #{offset} + #{limit}
+//            )
+//            WHERE RNUM > #{offset}
+//            """)
     List<TableVo> getHostList(int offset, int limit);
 
     @Select("""
@@ -296,42 +296,42 @@ public interface AdminMapper {
     int companionStay(Long stayNo);
 
 
-//    @Select("""
-//            SELECT S.NO,M.NAME AS HOST_NAME,S.NAME,M.PHONE,TO_CHAR(ES.MODIFY_DATE, 'YYYY.MM.DD') AS MODIFY_DATE
-//            FROM EDIT_SPACE ES
-//            JOIN SPACE S ON (ES.SPACE_NO = S.NO)
-//            JOIN MEMBER M ON (S.HOST_NO = M.NO)
-//            WHERE ES.STATUS_NO = '1'
-//            AND M.DEL_YN = 'N'
-//            ORDER BY MODIFY_DATE
-//            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
-//            """)
     @Select("""
-            SELECT NO, HOST_NAME, NAME, PHONE, MODIFY_DATE
-            FROM (
-                SELECT S.NO,
-                       M.NAME AS HOST_NAME,
-                       S.NAME,
-                       M.PHONE,
-                       TO_CHAR(ES.MODIFY_DATE, 'YYYY.MM.DD') AS MODIFY_DATE,
-                       ROWNUM AS RNUM
-                FROM (
-                    SELECT S.NO,
-                           M.NAME AS HOST_NAME,
-                           S.NAME,
-                           M.PHONE,
-                           ES.MODIFY_DATE
-                    FROM EDIT_SPACE ES
-                    JOIN SPACE S ON ES.SPACE_NO = S.NO
-                    JOIN MEMBER M ON S.HOST_NO = M.NO
-                    WHERE ES.STATUS_NO = '1'
-                    AND M.DEL_YN = 'N'
-                    ORDER BY ES.MODIFY_DATE
-                ) T
-                WHERE ROWNUM <= #{offset} + #{limit}
-            )
-            WHERE RNUM > #{offset}
+            SELECT S.NO,M.NAME AS HOST_NAME,S.NAME,M.PHONE,TO_CHAR(ES.MODIFY_DATE, 'YYYY.MM.DD') AS MODIFY_DATE
+            FROM EDIT_SPACE ES
+            JOIN SPACE S ON (ES.SPACE_NO = S.NO)
+            JOIN MEMBER M ON (S.HOST_NO = M.NO)
+            WHERE ES.STATUS_NO = '1'
+            AND M.DEL_YN = 'N'
+            ORDER BY MODIFY_DATE
+            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
             """)
+//    @Select("""
+//            SELECT NO, HOST_NAME, NAME, PHONE, MODIFY_DATE
+//            FROM (
+//                SELECT S.NO,
+//                       M.NAME AS HOST_NAME,
+//                       S.NAME,
+//                       M.PHONE,
+//                       TO_CHAR(ES.MODIFY_DATE, 'YYYY.MM.DD') AS MODIFY_DATE,
+//                       ROWNUM AS RNUM
+//                FROM (
+//                    SELECT S.NO,
+//                           M.NAME AS HOST_NAME,
+//                           S.NAME,
+//                           M.PHONE,
+//                           ES.MODIFY_DATE
+//                    FROM EDIT_SPACE ES
+//                    JOIN SPACE S ON ES.SPACE_NO = S.NO
+//                    JOIN MEMBER M ON S.HOST_NO = M.NO
+//                    WHERE ES.STATUS_NO = '1'
+//                    AND M.DEL_YN = 'N'
+//                    ORDER BY ES.MODIFY_DATE
+//                ) T
+//                WHERE ROWNUM <= #{offset} + #{limit}
+//            )
+//            WHERE RNUM > #{offset}
+//            """)
     List<SpaceVo> getSpaceEditList(int limit, int offset);
 
     @Select("""
@@ -346,44 +346,44 @@ public interface AdminMapper {
             """)
     List<StayVo> getStayEditList(int limit, int offset);
 
-//    @Select("""
-//            SELECT R.NO,M.NAME AS HOST_NAME,R.NAME,M.PHONE,TO_CHAR(ER.MODIFY_DATE, 'YYYY.MM.DD') AS MODIFY_DATE
-//            FROM EDIT_ROOM ER
-//            JOIN ROOM R ON (ER.ROOM_NO = R.NO)
-//            JOIN STAY S ON (R.STAY_NO = S.NO)
-//            JOIN MEMBER M ON (S.HOST_NO = M.NO)
-//            WHERE ER.STATUS_NO = '1'
-//            AND M.DEL_YN = 'N'
-//            ORDER BY ER.MODIFY_DATE
-//            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
-//            """)
     @Select("""
-            SELECT NO, HOST_NAME, NAME, PHONE, MODIFY_DATE
-            FROM (
-                SELECT R.NO,
-                       M.NAME AS HOST_NAME,
-                       R.NAME,
-                       M.PHONE,
-                       TO_CHAR(ER.MODIFY_DATE, 'YYYY.MM.DD') AS MODIFY_DATE,
-                       ROWNUM AS RNUM
-                FROM (
-                    SELECT R.NO,
-                           M.NAME AS HOST_NAME,
-                           R.NAME,
-                           M.PHONE,
-                           ER.MODIFY_DATE
-                    FROM EDIT_ROOM ER
-                    JOIN ROOM R ON ER.ROOM_NO = R.NO
-                    JOIN STAY S ON R.STAY_NO = S.NO
-                    JOIN MEMBER M ON S.HOST_NO = M.NO
-                    WHERE ER.STATUS_NO = '1'
-                    AND M.DEL_YN = 'N'
-                    ORDER BY ER.MODIFY_DATE
-                ) T
-                WHERE ROWNUM <= #{offset} + #{limit}
-            )
-            WHERE RNUM > #{offset}            
+            SELECT R.NO,M.NAME AS HOST_NAME,R.NAME,M.PHONE,TO_CHAR(ER.MODIFY_DATE, 'YYYY.MM.DD') AS MODIFY_DATE
+            FROM EDIT_ROOM ER
+            JOIN ROOM R ON (ER.ROOM_NO = R.NO)
+            JOIN STAY S ON (R.STAY_NO = S.NO)
+            JOIN MEMBER M ON (S.HOST_NO = M.NO)
+            WHERE ER.STATUS_NO = '1'
+            AND M.DEL_YN = 'N'
+            ORDER BY ER.MODIFY_DATE
+            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
             """)
+//    @Select("""
+//            SELECT NO, HOST_NAME, NAME, PHONE, MODIFY_DATE
+//            FROM (
+//                SELECT R.NO,
+//                       M.NAME AS HOST_NAME,
+//                       R.NAME,
+//                       M.PHONE,
+//                       TO_CHAR(ER.MODIFY_DATE, 'YYYY.MM.DD') AS MODIFY_DATE,
+//                       ROWNUM AS RNUM
+//                FROM (
+//                    SELECT R.NO,
+//                           M.NAME AS HOST_NAME,
+//                           R.NAME,
+//                           M.PHONE,
+//                           ER.MODIFY_DATE
+//                    FROM EDIT_ROOM ER
+//                    JOIN ROOM R ON ER.ROOM_NO = R.NO
+//                    JOIN STAY S ON R.STAY_NO = S.NO
+//                    JOIN MEMBER M ON S.HOST_NO = M.NO
+//                    WHERE ER.STATUS_NO = '1'
+//                    AND M.DEL_YN = 'N'
+//                    ORDER BY ER.MODIFY_DATE
+//                ) T
+//                WHERE ROWNUM <= #{offset} + #{limit}
+//            )
+//            WHERE RNUM > #{offset}
+//            """)
     List<StayVo> getRoomEditList(int limit, int offset);
 
     @Select("""
@@ -544,68 +544,68 @@ public interface AdminMapper {
             """)
     int companionEditRoom(String roomNo);
 
-//    @Select("""
-//            SELECT M.NAME AS HOST_NAME,M.PHONE,S.NAME,TO_CHAR(S.MODIFY_DATE, 'YYYY.MM.DD') AS MODIFY_DATE
-//            FROM SPACE S
-//            JOIN MEMBER M ON (S.HOST_NO = M.NO)
-//            WHERE S.STATUS_NO = '7'
-//            ORDER BY MODIFY_DATE DESC
-//            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
-//            """)
     @Select("""
-            SELECT HOST_NAME, PHONE, NAME, MODIFY_DATE
-            FROM (
-                SELECT M.NAME AS HOST_NAME,
-                       M.PHONE,
-                       S.NAME,
-                       TO_CHAR(S.MODIFY_DATE, 'YYYY.MM.DD') AS MODIFY_DATE,
-                       ROWNUM AS RNUM
-                FROM (
-                    SELECT M.NAME AS HOST_NAME,
-                           M.PHONE,
-                           S.NAME,
-                           S.MODIFY_DATE
-                    FROM SPACE S
-                    JOIN MEMBER M ON S.HOST_NO = M.NO
-                    WHERE S.STATUS_NO = '7'
-                    ORDER BY S.MODIFY_DATE DESC
-                ) T
-                WHERE ROWNUM <= #{offset} + #{limit}
-            )
-            WHERE RNUM > #{offset}            
+            SELECT M.NAME AS HOST_NAME,M.PHONE,S.NAME,TO_CHAR(S.MODIFY_DATE, 'YYYY.MM.DD') AS MODIFY_DATE
+            FROM SPACE S
+            JOIN MEMBER M ON (S.HOST_NO = M.NO)
+            WHERE S.STATUS_NO = '7'
+            ORDER BY MODIFY_DATE DESC
+            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
             """)
+//    @Select("""
+//            SELECT HOST_NAME, PHONE, NAME, MODIFY_DATE
+//            FROM (
+//                SELECT M.NAME AS HOST_NAME,
+//                       M.PHONE,
+//                       S.NAME,
+//                       TO_CHAR(S.MODIFY_DATE, 'YYYY.MM.DD') AS MODIFY_DATE,
+//                       ROWNUM AS RNUM
+//                FROM (
+//                    SELECT M.NAME AS HOST_NAME,
+//                           M.PHONE,
+//                           S.NAME,
+//                           S.MODIFY_DATE
+//                    FROM SPACE S
+//                    JOIN MEMBER M ON S.HOST_NO = M.NO
+//                    WHERE S.STATUS_NO = '7'
+//                    ORDER BY S.MODIFY_DATE DESC
+//                ) T
+//                WHERE ROWNUM <= #{offset} + #{limit}
+//            )
+//            WHERE RNUM > #{offset}
+//            """)
     List<SpaceVo> getDeleteSpaceList(int limit, int offset);
 
-//    @Select("""
-//            SELECT M.NAME AS HOST_NAME,M.PHONE,S.NAME,TO_CHAR(S.MODIFY_DATE, 'YYYY.MM.DD') AS MODIFY_DATE
-//            FROM STAY S
-//            JOIN MEMBER M ON (S.HOST_NO = M.NO)
-//            WHERE S.STATUS_NO = '7'
-//            ORDER BY MODIFY_DATE DESC
-//            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
-//            """)
     @Select("""
-            SELECT HOST_NAME, PHONE, NAME, MODIFY_DATE
-            FROM (
-                SELECT M.NAME AS HOST_NAME,
-                       M.PHONE,
-                       S.NAME,
-                       TO_CHAR(S.MODIFY_DATE, 'YYYY.MM.DD') AS MODIFY_DATE,
-                       ROWNUM AS RNUM
-                FROM (
-                    SELECT M.NAME AS HOST_NAME,
-                           M.PHONE,
-                           S.NAME,
-                           S.MODIFY_DATE
-                    FROM STAY S
-                    JOIN MEMBER M ON S.HOST_NO = M.NO
-                    WHERE S.STATUS_NO = '7'
-                    ORDER BY S.MODIFY_DATE DESC
-                ) T
-                WHERE ROWNUM <= #{offset} + #{limit}
-            )
-            WHERE RNUM > #{offset}
+            SELECT M.NAME AS HOST_NAME,M.PHONE,S.NAME,TO_CHAR(S.MODIFY_DATE, 'YYYY.MM.DD') AS MODIFY_DATE
+            FROM STAY S
+            JOIN MEMBER M ON (S.HOST_NO = M.NO)
+            WHERE S.STATUS_NO = '7'
+            ORDER BY MODIFY_DATE DESC
+            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
             """)
+//    @Select("""
+//            SELECT HOST_NAME, PHONE, NAME, MODIFY_DATE
+//            FROM (
+//                SELECT M.NAME AS HOST_NAME,
+//                       M.PHONE,
+//                       S.NAME,
+//                       TO_CHAR(S.MODIFY_DATE, 'YYYY.MM.DD') AS MODIFY_DATE,
+//                       ROWNUM AS RNUM
+//                FROM (
+//                    SELECT M.NAME AS HOST_NAME,
+//                           M.PHONE,
+//                           S.NAME,
+//                           S.MODIFY_DATE
+//                    FROM STAY S
+//                    JOIN MEMBER M ON S.HOST_NO = M.NO
+//                    WHERE S.STATUS_NO = '7'
+//                    ORDER BY S.MODIFY_DATE DESC
+//                ) T
+//                WHERE ROWNUM <= #{offset} + #{limit}
+//            )
+//            WHERE RNUM > #{offset}
+//            """)
     List<StayVo> getDeleteStayList(int limit, int offset);
 
     @Select("""
@@ -878,25 +878,25 @@ public interface AdminMapper {
             """)
     int getFAQCount();
 
-//    @Select("""
-//            SELECT NO,TITLE,SHOW_YN
-//            FROM FAQ
-//            ORDER BY NO
-//            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
-//            """)
     @Select("""
-            SELECT NO, TITLE, SHOW_YN
-            FROM (
-                SELECT NO, TITLE, SHOW_YN, ROWNUM AS RNUM
-                FROM (
-                    SELECT NO, TITLE, SHOW_YN
-                    FROM FAQ
-                    ORDER BY NO
-                ) T
-                WHERE ROWNUM <= #{offset} + #{limit}
-            )
-            WHERE RNUM > #{offset}
+            SELECT NO,TITLE,SHOW_YN
+            FROM FAQ
+            ORDER BY NO
+            OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
             """)
+//    @Select("""
+//            SELECT NO, TITLE, SHOW_YN
+//            FROM (
+//                SELECT NO, TITLE, SHOW_YN, ROWNUM AS RNUM
+//                FROM (
+//                    SELECT NO, TITLE, SHOW_YN
+//                    FROM FAQ
+//                    ORDER BY NO
+//                ) T
+//                WHERE ROWNUM <= #{offset} + #{limit}
+//            )
+//            WHERE RNUM > #{offset}
+//            """)
     List<FaqVo> getFAQList(int limit, int offset);
 
     @Update("""
