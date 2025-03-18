@@ -100,16 +100,16 @@ const KakaoMsgStay = ({ vo }) => {
               fdData.useDay,
             image_url: fdData.filePath, // 이미지 URL
             link: {
-              web_url: `${BASE_URL2}/hostMenu/staydetail?reno=${vo.reservationNo}`, // 웹 링크
-              mobile_web_url: `${BASE_URL2}/hostMenu/staydetail?reno=${vo.reservationNo}`,
+              web_url: `http://d34nr975ohjmz8.cloudfront.net/hostMenu/staydetail?reno=${vo.reservationNo}`, // 웹 링크
+              mobile_web_url: `http://d34nr975ohjmz8.cloudfront.net/hostMenu/staydetail?reno=${vo.reservationNo}`,
             },
           },
           buttons: [
             {
               title: "결제내역 확인하기",
               link: {
-                web_url: `${BASE_URL2}/hostMenu/staydetail?reno=${vo.reservationNo}`,
-                mobile_web_url: `${BASE_URL2}/hostMenu/staydetail?reno=${vo.reservationNo}`,
+                web_url: `http://d34nr975ohjmz8.cloudfront.net/hostMenu/staydetail?reno=${vo.reservationNo}`,
+                mobile_web_url: `http://d34nr975ohjmz8.cloudfront.net/hostMenu/staydetail?reno=${vo.reservationNo}`,
               },
             },
           ],

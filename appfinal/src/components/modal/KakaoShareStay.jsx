@@ -35,7 +35,7 @@ const KakaoShareStay = ({ no }) => {
             description: content.tagline,
             imageUrl: content.filePath,
             link: {
-              webUrl: `${BASE_URL2}/findstay/detail/${no}`,
+              webUrl: `http://d34nr975ohjmz8.cloudfront.net/findstay/detail/${no}`,
             },
           },
           social: {
@@ -47,7 +47,7 @@ const KakaoShareStay = ({ no }) => {
             {
               title: "앱으로 보기",
               link: {
-                webUrl: `${BASE_URL2}/findstay/detail/${no}`,
+                webUrl: `http://d34nr975ohjmz8.cloudfront.net/findstay/detail/${no}`,
               },
             },
           ],

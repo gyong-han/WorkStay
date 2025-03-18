@@ -4,7 +4,6 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useDispatch } from "react-redux";
 import { setSlogVoList } from "../../../redux/slogSlice";
 import { getSlogReviewList } from "../../../components/service/stayService";
-import { BASE_URL2 } from "../../../components/service/config";
 import { useNavigate } from "react-router-dom";
 
 const OuterWrapper = styled.div`
