@@ -150,7 +150,6 @@ const MainLogin = () => {
 
   const submitCallBack = (formData) => {
     const url = `${BASE_URL}/api/guest/login`;
-    console.log("BASE_URL : ", url);
 
     const option = {
       method: "POST",

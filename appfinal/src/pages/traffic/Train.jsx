@@ -124,8 +124,6 @@ const Train = () => {
       runYmd: selectedDate,
     };
 
-    console.log(requestData);
-
     fetch(`${BASE_URL}/api/trainticket`, {
       method: "POST",
       headers: {

@@ -186,8 +186,6 @@ const Reservations = () => {
     RoomReservation();
   }, []);
 
-  console.log();
-
   const cleaned = memberInfo.phone ? memberInfo.phone.replace(/\D/g, "") : "";
   const formattedPhoneNumber = cleaned
     ? cleaned.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3")

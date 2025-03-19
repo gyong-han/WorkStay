@@ -65,7 +65,6 @@ const Chatbot = () => {
       reconnectDelay: 5000, // 자동 재연결
       onConnect: (frame) => {
         setConnected(true);
-        console.log("Connected: " + frame);
 
         stomp.subscribe("/topic/public", (message) => {
           setMessages((prev) => [
@@ -103,7 +102,6 @@ const Chatbot = () => {
         body: JSON.stringify({ message }),
       });
 
-      console.log(response); // 응답 확인용
       const data = await response.text();
       setMessages((prev) => [
         ...prev,

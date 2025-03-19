@@ -142,8 +142,6 @@ const SpaceDetail = () => {
       return;
     }
 
-    console.log("API 요청 실행:", { ...params });
-
     fetch(`${BASE_URL}/api/guest/spaceDetailReserv?reno=${params.reno}`, {
       method: "GET",
       headers: {

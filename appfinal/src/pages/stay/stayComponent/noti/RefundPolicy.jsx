@@ -61,8 +61,6 @@ const TableTag = styled.table`
 `;
 
 const RefundPolicy = (rooms) => {
-  console.log("rooms", rooms.rooms);
-
   return (
     <Layout>
       <TextWrapper>

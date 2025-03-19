@@ -150,7 +150,6 @@ const FindId = () => {
   );
 
   const onSubmit = (data) => {
-    console.log("아이디찾기 성공:", data);
     setFoundEmail(data.email); // ⬅ 이메일 값을 상태에 저장
     setIsAlertOpen(true);
   };

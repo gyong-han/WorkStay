@@ -137,8 +137,6 @@ const Bus = () => {
       4
     )}/${dateStr.slice(4, 6)}`;
 
-    console.log("formattedDate ::::: ", formattedDate);
-
     // const dateObj = new Date(formattedDate);
     const dateObj = formattedDate;
 
@@ -148,7 +146,6 @@ const Bus = () => {
     //   return;
     // }
     if (!dateObj) {
-      console.log("dateObj::::::::", dateObj);
       alert("유효한 날짜를 선택해주세요.");
       return;
     }
@@ -161,8 +158,6 @@ const Bus = () => {
       //   dateObj.getMonth() + 1
       // ).padStart(2, "0")}/${String(dateObj.getDate()).padStart(2, "0")}`,
     };
-
-    console.log("요청 데이터:", requestData);
 
     fetch(`${BASE_URL}/api/busticket`, {
       method: "POST",
@@ -209,7 +204,6 @@ const Bus = () => {
           <div className="main-text">
             <BusCalendar
               onSelectDate={(date) => {
-                console.log("선택한 날짜:", date);
                 setSelectedDate(date);
               }}
             />

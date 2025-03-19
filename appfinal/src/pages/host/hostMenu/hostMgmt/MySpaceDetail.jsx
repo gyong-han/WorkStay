@@ -262,8 +262,6 @@ const MySpaceDetail = () => {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        console.log(data.attachMap);
-
         setFormData(data.spaceVo);
         setFeaturesArr(data.featuresList);
         setFileData(data.attachMap);

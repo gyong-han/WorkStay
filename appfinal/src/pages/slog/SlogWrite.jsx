@@ -451,9 +451,6 @@ const SlogWrite = () => {
     setFormData((prev) => {
       return { ...prev, reno: reno, memberNo: memberNo };
     });
-
-    console.log("reno:", reno);
-    console.log("memberNo:", memberNo);
   }, []);
 
   const handleTitleFileChange = (e) => {
@@ -474,7 +471,6 @@ const SlogWrite = () => {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        console.log(data);
         setUrl((prevUrl) => [...prevUrl, ...data]);
         setOriginalNames((prevName) => [
           ...prevName,
@@ -499,8 +495,6 @@ const SlogWrite = () => {
     );
 
     const contentFileUrls = contentImages.map((img) => img.src);
-
-    console.log("######!!!", contentFileUrls);
 
     url.forEach((fileUrl) => {
       const isTitle = fileUrl.includes("TITLE");
@@ -530,7 +524,6 @@ const SlogWrite = () => {
     fd2.append("tagline", formData.tagline);
 
     contentFileUrls.forEach((fileUrl) => fd2.append("fileUrl", fileUrl));
-    console.log("url####", url);
     fd2.append("titleFileUrl", titleFileUrl);
     fd2.append("originalName", originalNames.join(","));
 
@@ -541,7 +534,6 @@ const SlogWrite = () => {
       })
         .then((resp) => resp.text())
         .then((data) => {
-          console.log("수정한 데이터 ::: ", data);
           navigate("/slog");
         });
     } else {
@@ -553,7 +545,6 @@ const SlogWrite = () => {
         .then((data) => {
           dispatch(addSlogVoList(data));
           navigate("/slog");
-          console.log("발행한 데이터 ::: ", data);
         });
     }
   };
@@ -573,11 +564,8 @@ const SlogWrite = () => {
 
   const handleRemoveImage = () => {
     if (selectedImage) {
-      console.log("########### : ", selectedImage);
-      console.log("########### : ", url);
       selectedImage.remove();
       setSelectedImage(null);
-      console.log("##셀렉티드", selectedImage.src);
 
       for (let i = 0; i < url.length; ++i) {
         if (url[i].includes(selectedImage)) {

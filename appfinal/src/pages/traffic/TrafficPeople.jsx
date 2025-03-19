@@ -190,7 +190,6 @@ const TrafficPeople = () => {
             <ActionButton
               primary
               onClick={() => {
-                console.log(`성인: ${adultCount}, 아동: ${childCount}`);
                 ModalClose();
               }}
             >

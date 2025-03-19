@@ -97,7 +97,6 @@ const NewPassword = () => {
     try {
       const decoded = jwtDecode(token);
       email = decoded.email;
-      console.log("디코딩 email : ", email);
     } catch (error) {
       console.error("토큰 디코딩 실패", error);
       navi("/error"); // 토큰이 잘못되었을 경우 에러 페이지로 이동
@@ -110,8 +109,6 @@ const NewPassword = () => {
       email: email,
       pwd: data.password,
     };
-
-    console.log("보내는 요청 데이터:", requestBody); // ✅ 확인용
 
     const option = {
       method: "POST",
