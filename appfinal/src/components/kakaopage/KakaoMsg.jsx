@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import Alert from '../Alert';
-import { BASE_URL2 } from '../service/config';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import Alert from "../Alert";
+import { BASE_URL2, BASE_URL3 } from "../service/config";
 
 const Backdrop = styled.div`
   position: fixed;
@@ -16,14 +16,13 @@ const Backdrop = styled.div`
 `;
 
 const KakaoButton = styled.button`
-  background-color: #FEE500;
+  background-color: #fee500;
   height: 30px;
   border: none;
   font-weight: 700;
 `;
 
-
-const KakaoMsg = ({vo}) => {
+const KakaoMsg = ({ vo }) => {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [isAlertOpen2, setIsAlertOpen2] = useState(false);
   const handleAlertClose = () => {
@@ -32,7 +31,7 @@ const KakaoMsg = ({vo}) => {
   const handleAlertClose2 = () => {
     setIsAlertOpen2(false);
   };
-  
+
   const fd1 = localStorage.getItem("fd");
   const fdData = JSON.parse(fd1);
   const KAKAO_JS_KEY = "fc5cec587b47d4825551ae8da5ed23b6"; // 본인의 JS 키로 변경
@@ -45,13 +44,13 @@ const KakaoMsg = ({vo}) => {
     if (!window.Kakao) {
       const script = document.createElement("script");
       script.src = "https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js";
-      script.integrity = "sha384-DKYJZ8NLiK8MN4/C5P2dtSmLQ4KwPaoqAfyA/DfmEc1VDxu4yyC7wy6K1Hs90nka";
+      script.integrity =
+        "sha384-DKYJZ8NLiK8MN4/C5P2dtSmLQ4KwPaoqAfyA/DfmEc1VDxu4yyC7wy6K1Hs90nka";
       script.crossOrigin = "anonymous";
       script.onload = () => {
         if (!window.Kakao.isInitialized()) {
           window.Kakao.init(KAKAO_JS_KEY);
           console.log("Kakao SDK initialized:", window.Kakao.isInitialized());
-          
         }
       };
       document.head.appendChild(script);
@@ -91,24 +90,27 @@ const KakaoMsg = ({vo}) => {
           object_type: "feed", // 기본 템플릿 (피드 형식)
           content: {
             title: fdData.name + "(결제 완료)", // 제목
-            description: "\n✅ 예약이 정상적으로 완료되었습니다!" + "사용일자 :" + fdData.useDay,
+            description:
+              "\n✅ 예약이 정상적으로 완료되었습니다!" +
+              "사용일자 :" +
+              fdData.useDay,
             image_url: fdData.filePath, // 이미지 URL
             link: {
-              web_url: `http://d34nr975ohjmz8.cloudfront.net/hostMenu/spaceReserv/spacedetail?reno=${vo.reservationNo}`, // 웹 링크
-              mobile_web_url: `http://d34nr975ohjmz8.cloudfront.net/hostMenu/spaceReserv/spacedetail?reno=${vo.reservationNo}`
-            }
+              web_url: `${BASE_URL3}/hostMenu/spaceReserv/spacedetail?reno=${vo.reservationNo}`, // 웹 링크
+              mobile_web_url: `${BASE_URL3}/hostMenu/spaceReserv/spacedetail?reno=${vo.reservationNo}`,
+            },
           },
           buttons: [
             {
               title: "결제내역 확인하기",
               link: {
-                web_url: `http://d34nr975ohjmz8.cloudfront.net/hostMenu/spaceReserv/spacedetail?reno=${vo.reservationNo}`,
-                mobile_web_url:  `http://d34nr975ohjmz8.cloudfront.net/hostMenu/spaceReserv/spacedetail?reno=${vo.reservationNo}`
-              }
-            }
-          ]
-        }
-      }
+                web_url: `${BASE_URL3}/hostMenu/spaceReserv/spacedetail?reno=${vo.reservationNo}`,
+                mobile_web_url: `${BASE_URL3}/hostMenu/spaceReserv/spacedetail?reno=${vo.reservationNo}`,
+              },
+            },
+          ],
+        },
+      },
     })
       .then((res) => setIsAlertOpen(true))
       .catch((err) => setIsAlertOpen(true));
@@ -127,31 +129,33 @@ const KakaoMsg = ({vo}) => {
 
   return (
     <div>
-       {isAlertOpen && (
-          <Backdrop>
-            <Alert
-              title="카카오톡"
-              titleColor="#049dd9"
-              message="카카오톡 전송완료."
-              buttonText="확인"
-              buttonColor="#049dd9"
-              onClose={handleAlertClose}
-            />
-          </Backdrop>
-        )}
-        {isAlertOpen2 && (
-          <Backdrop>
-            <Alert
-              title="카카오톡"
-              titleColor="#049dd9"
-              message="카카오톡 전송실패 (로그인 실패)."
-              buttonText="확인"
-              buttonColor="#049dd9"
-              onClose={handleAlertClose2}
-            />
-          </Backdrop>
-        )}
-      <KakaoButton onClick={handleKakaoAction}>카톡으로 결제내역 받기</KakaoButton>
+      {isAlertOpen && (
+        <Backdrop>
+          <Alert
+            title="카카오톡"
+            titleColor="#049dd9"
+            message="카카오톡 전송완료."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose}
+          />
+        </Backdrop>
+      )}
+      {isAlertOpen2 && (
+        <Backdrop>
+          <Alert
+            title="카카오톡"
+            titleColor="#049dd9"
+            message="카카오톡 전송실패 (로그인 실패)."
+            buttonText="확인"
+            buttonColor="#049dd9"
+            onClose={handleAlertClose2}
+          />
+        </Backdrop>
+      )}
+      <KakaoButton onClick={handleKakaoAction}>
+        카톡으로 결제내역 받기
+      </KakaoButton>
     </div>
   );
 };

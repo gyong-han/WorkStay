@@ -1,20 +1,17 @@
 import { useEffect, useState } from "react";
-import { BASE_URL, BASE_URL2 } from "../service/config";
+import { BASE_URL, BASE_URL2, BASE_URL3 } from "../service/config";
 
 const KakaoShareSpace = ({ no }) => {
-  const[content,setContent] = useState();
+  const [content, setContent] = useState();
   useEffect(() => {
     const shareKakao = async () => {
-      const response = await fetch(
-        `${BASE_URL}/space/detail`,
-        {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-          },
-          body:JSON.stringify(no),
-        }
-      );
+      const response = await fetch(`${BASE_URL}/space/detail`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(no),
+      });
       const data = await response.json();
       // console.log("가져온 데이터 ",data);
       setContent(data);
@@ -38,7 +35,7 @@ const KakaoShareSpace = ({ no }) => {
             description: content.tagline,
             imageUrl: content.filePath,
             link: {
-              webUrl: `http://d34nr975ohjmz8.cloudfront.net/findspace/detail/${no}`,
+              webUrl: `${BASE_URL3}/findspace/detail/${no}`,
             },
           },
           social: {
@@ -50,7 +47,7 @@ const KakaoShareSpace = ({ no }) => {
             {
               title: "앱으로 보기",
               link: {
-                webUrl: `http://d34nr975ohjmz8.cloudfront.net/findspace/detail/${no}`,
+                webUrl: `${BASE_URL3}/findspace/detail/${no}`,
               },
             },
           ],
@@ -65,20 +62,19 @@ const KakaoShareSpace = ({ no }) => {
 
   return (
     <button
-    id="kakaotalk-sharing-space-btn"
-    style={{
-      backgroundImage: `url("https://nimage.newsway.co.kr/photo/2024/07/18/20240718000073_0640.jpg")`, 
-      backgroundColor: "#FEE500", // 배경색과 함께 사용 가능
-      backgroundSize: "cover",  // 이미지 크기 조절
-      backgroundPosition: "center", // 이미지 중앙 정렬
-      width: "50px", // 버튼 크기 설정 (필요에 따라 조절)
-      height: "50px",
-      border: "none",
-      borderRadius: "5px",
-      cursor: "pointer",
-    }}
-  >
-  </button>
+      id="kakaotalk-sharing-space-btn"
+      style={{
+        backgroundImage: `url("https://nimage.newsway.co.kr/photo/2024/07/18/20240718000073_0640.jpg")`,
+        backgroundColor: "#FEE500", // 배경색과 함께 사용 가능
+        backgroundSize: "cover", // 이미지 크기 조절
+        backgroundPosition: "center", // 이미지 중앙 정렬
+        width: "50px", // 버튼 크기 설정 (필요에 따라 조절)
+        height: "50px",
+        border: "none",
+        borderRadius: "5px",
+        cursor: "pointer",
+      }}
+    ></button>
   );
 };
 
