@@ -20,7 +20,7 @@ public class TrainApi {
     @Autowired
     private TrainMapper trainMapper;
 
-        @Scheduled(fixedDelay = 1000 * 60)
+//        @Scheduled(fixedDelay = 1000 * 60)
     public void trainList() throws IOException {
 
         String[] stationArr = new String[]{"서울", "대전", "동대구", "부산", "전주"};
