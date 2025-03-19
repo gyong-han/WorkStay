@@ -7,13 +7,21 @@ import { IoCheckmarkCircleOutline } from "react-icons/io5";
 import { CiFilter } from "react-icons/ci";
 import { RiResetRightFill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
-import { setDateReset, setLoginMemberNo, setReset, setResetSearch, setTitleSearch } from "../../redux/spaceSlice";
-import { getAttachmentAll, getSpaceListAll } from "../../components/service/spaceServcie";
+import {
+  setDateReset,
+  setLoginMemberNo,
+  setReservationDateReset,
+  setReset,
+  setResetSearch,
+  setTitleSearch,
+} from "../../redux/spaceSlice";
+import {
+  getAttachmentAll,
+  getSpaceListAll,
+} from "../../components/service/spaceServcie";
 import SortDropdownSpace from "../../components/listcomponents/SortDropdownSpace";
-import { jwtDecode } from'jwt-decode'
+import { jwtDecode } from "jwt-decode";
 import { useLocation } from "react-router-dom";
-
-
 
 const Layout = styled.div`
   width: 100%;
@@ -21,7 +29,7 @@ const Layout = styled.div`
   display: grid;
   grid-template-rows: 100px 100px 80px 100px 1fr;
 
-  &>h1{
+  & > h1 {
     text-align: center;
   }
 `;
@@ -30,14 +38,14 @@ const InnerLayoutDiv = styled.div`
   width: 100%;
   height: 100%;
   display: grid;
-  grid-template-columns:40px 1fr 100px 1fr;
+  grid-template-columns: 40px 1fr 100px 1fr;
   justify-content: center;
   align-items: center;
 
-&>div{
-  margin: 50px;
-  margin-bottom: 80px;
-}
+  & > div {
+    margin: 50px;
+    margin-bottom: 80px;
+  }
 `;
 const SearchWrapper = styled.div`
   display: flex;
@@ -51,8 +59,6 @@ const FilterWrapper = styled.div`
   border-bottom: 2px solid #202020;
   margin-top: 70px;
 `;
-
-
 
 const SearchInput = styled.input`
   border: none;
@@ -82,57 +88,45 @@ const FilterTextMD = styled.span`
 `;
 
 const FindSpaceList = () => {
-
   const dispatch = useDispatch();
   const location = useLocation();
 
-
-  const spaceVo = useSelector((state)=>state.space);
+  const spaceVo = useSelector((state) => state.space);
 
   // console.log("위치는",location.pathname);
-  if(location.pathname=="/findspace"){
-    localStorage.removeItem("fd");
-  }
-  
-  
-  
+  useEffect(() => {
+    if (location.pathname === "/findspace") {
+      localStorage.removeItem("fd");
+    }
+    dispatch(setReservationDateReset());
+  }, [location.pathname]);
 
   const [formData, setFormData] = useState();
-  const [spaceVoList,setSpaceVoList] = useState([]);
-  const [imgPath,setImgPath]= useState([]);
- 
-
+  const [spaceVoList, setSpaceVoList] = useState([]);
+  const [imgPath, setImgPath] = useState([]);
 
   // console.log("쏘트 ~~~~~~~:::::",spaceVo.sort);
 
-  if(!spaceVo.reservationDate){
-    
+  if (!spaceVo.reservationDate) {
   }
   const queryParams = new URLSearchParams({
     datedata: spaceVo.reservationDate,
-    people: spaceVo.adult+spaceVo.child+spaceVo.baby,
-    area: spaceVo.area,  
+    people: spaceVo.adult + spaceVo.child + spaceVo.baby,
+    area: spaceVo.area,
     title: spaceVo.titleData,
-    sort:spaceVo.sort,
-}).toString();
-
-
-
-  
+    sort: spaceVo.sort,
+  }).toString();
 
   const handleChange = (e) => {
-    
     setFormData(e.target.value);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(setTitleSearch(formData));
-
-
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(setDateReset());
     // async 사용하여 데이터값 추출해보기
     // console.log("Redux space 상태 확인:", spaceVo);
@@ -149,32 +143,37 @@ const FindSpaceList = () => {
       }
     }
 
-  const AttachmentData = async ()=>{
-    const attachmentData = await getAttachmentAll();
-     const listData = await getSpaceListAll(queryParams);
-     setSpaceVoList(listData);
+    const AttachmentData = async () => {
+      const attachmentData = await getAttachmentAll();
+      const listData = await getSpaceListAll(queryParams);
+      setSpaceVoList(listData);
 
-     const arr = listData.map((vo)=>{
-      const matchingAttachments = attachmentData.filter((att) => att.spaceNo === vo.no);
-      const imgPaths =  matchingAttachments.length > 0 ? matchingAttachments.map((att) => att.filePath) : null;  
-      imgPaths.unshift(vo.filePath);
-      const dataObject = {
-        [vo.no] : imgPaths,
-      }
-      return dataObject;      
-      })
+      const arr = listData.map((vo) => {
+        const matchingAttachments = attachmentData.filter(
+          (att) => att.spaceNo === vo.no
+        );
+        const imgPaths =
+          matchingAttachments.length > 0
+            ? matchingAttachments.map((att) => att.filePath)
+            : null;
+        imgPaths.unshift(vo.filePath);
+        const dataObject = {
+          [vo.no]: imgPaths,
+        };
+        return dataObject;
+      });
       // 리턴값을 저장
       setImgPath(arr);
-  }
+    };
     AttachmentData();
-  },[queryParams])
+  }, [queryParams]);
 
-  
-  return(<> 
-<Layout>
-  <h1>FIND SPACE</h1>
-  <Display isTimeMode={true} reset={true}></Display>
-   <SearchWrapper>
+  return (
+    <>
+      <Layout>
+        <h1>FIND SPACE</h1>
+        <Display isTimeMode={true} reset={true}></Display>
+        <SearchWrapper>
           <form onSubmit={handleSubmit}>
             <SearchInput
               type="text"
@@ -185,57 +184,66 @@ const FindSpaceList = () => {
               <IoMdSearch size={30} />
             </Btn>
           </form>
-  </SearchWrapper>
-  <FilterWrapper>
-    <div>
-    <SortDropdownSpace/>
-    </div>
-    <div></div>
-    <div>
-    <Btn>
-            <CiFilter size={18} />
-            <FilterTextMD>필터</FilterTextMD>
-          </Btn>
-    </div>
-    <div>
-    <Btn>
-            <RiResetRightFill size={18} onClick={()=>{
-              dispatch(setReset());
-            }} />
-            <FilterText onClick={()=>{
-              dispatch(setReset());
-            }}>초기화</FilterText>
-          </Btn>
-    </div>
-        </FilterWrapper>
-        
-  <InnerLayoutDiv>
-    {spaceVoList.map((vo,idx)=>{
-      
-      const voImgPaths = imgPath[idx][vo.no];
-      // console.log("vo IMG :: ",voImgPaths);
-      
-      return(
-      <Fragment key={vo.no}>
-          <div></div>
-         <div>
-          <ListCard no={vo.no} morning={vo.daytimePrice} night={vo.nightPrice} 
-           url ={"findspace"}
-           imgPaths={voImgPaths}
-          //  clickHandler={clickHandler}
-           title={vo.name}
-           min={vo.standardGuest}
-           max={vo.maxGuest}
-           address={vo.address}
-           ></ListCard>
+        </SearchWrapper>
+        <FilterWrapper>
+          <div>
+            <SortDropdownSpace />
           </div>
-         </Fragment>
-         
-      )
-    })}
-  </InnerLayoutDiv>
-   </Layout>
-  </>);
+          <div></div>
+          <div>
+            <Btn>
+              <CiFilter size={18} />
+              <FilterTextMD>필터</FilterTextMD>
+            </Btn>
+          </div>
+          <div>
+            <Btn>
+              <RiResetRightFill
+                size={18}
+                onClick={() => {
+                  dispatch(setReset());
+                }}
+              />
+              <FilterText
+                onClick={() => {
+                  dispatch(setReset());
+                }}
+              >
+                초기화
+              </FilterText>
+            </Btn>
+          </div>
+        </FilterWrapper>
+
+        <InnerLayoutDiv>
+          {spaceVoList.map((vo, idx) => {
+            const voImgPaths = imgPath[idx][vo.no];
+            // console.log("vo IMG :: ",voImgPaths);
+
+            return (
+              <Fragment key={vo.no}>
+                <div></div>
+                <div>
+                  <ListCard
+                    no={vo.no}
+                    morning={vo.daytimePrice}
+                    night={vo.nightPrice}
+                    url={"findspace"}
+                    imgPaths={voImgPaths}
+                    //  clickHandler={clickHandler}
+                    title={vo.name}
+                    min={vo.standardGuest}
+                    max={vo.maxGuest}
+                    address={vo.address}
+                  ></ListCard>
+                </div>
+              </Fragment>
+            );
+          })}
+        </InnerLayoutDiv>
+      </Layout>
+    </>
+  );
 };
 
 export default FindSpaceList;
