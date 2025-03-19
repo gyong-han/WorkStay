@@ -34,7 +34,6 @@ const KakaoLoginButton = () => {
 
     window.Kakao.Auth.login({
       success: function (authObj) {
-        console.log("카카오 로그인 성공:", authObj);
         sendTokenToBackend(authObj.access_token);
         navi("/");
       },
@@ -61,7 +60,6 @@ const KakaoLoginButton = () => {
       const data = await response.json();
       const token = data.token;
       localStorage.setItem("token", token);
-      console.log("JWT:", token);
 
       const decoded = jwtDecode(token);
       dispatch(login(decoded)); // Redux 상태 업데이트

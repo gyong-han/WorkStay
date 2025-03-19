@@ -145,8 +145,6 @@ const Area = ({ isOpen, onClose }) => {
   useEffect(() => {}, [areaState]);
   if (!isOpen) return null;
   function ClickHandler(e) {
-    console.log(e.target.value);
-
     dispatch(setArea(e.target.value));
     dispatch(setAddress(e.target.value));
   }

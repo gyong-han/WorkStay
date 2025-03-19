@@ -50,7 +50,6 @@ const KakaoMsg = ({ vo }) => {
       script.onload = () => {
         if (!window.Kakao.isInitialized()) {
           window.Kakao.init(KAKAO_JS_KEY);
-          console.log("Kakao SDK initialized:", window.Kakao.isInitialized());
         }
       };
       document.head.appendChild(script);
@@ -66,7 +65,6 @@ const KakaoMsg = ({ vo }) => {
     window.Kakao.Auth.login({
       scope: SCOPE,
       success: function (authObj) {
-        console.log("로그인 성공:", authObj);
         setIsLoggedIn(true);
         sendToMe(); // 로그인 후 메시지 전송
       },

@@ -311,11 +311,9 @@ const SlogDetail = () => {
 
   useEffect(() => {
     if (stayNo) {
-      console.log("Stay No ::::", stayNo);
       fetch(`${BASE_URL}/api/slog/stay/${stayNo}`)
         .then((resp) => resp.json())
         .then((data) => {
-          console.log("stay data:::::", data);
           setStayData(data);
         })
         .catch((error) => console.error("Error fetching stay data:", error));
@@ -365,7 +363,6 @@ const SlogDetail = () => {
   };
 
   const handleEdit = () => {
-    console.log("titleFileUrl", slogVo.titleFileUrl);
     navigate(`/slog/edit/${no}`, {
       state: {
         title: slogVo.title,

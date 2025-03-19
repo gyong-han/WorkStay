@@ -153,9 +153,6 @@ const StayDetail = () => {
       console.log("필수 값이 누락됨:", { ...params });
       return;
     }
-
-    console.log("API 요청 실행:", { ...params });
-
     fetch(`${BASE_URL}/api/guest/stayDetailReserv?reno=${params.reno}`, {
       method: "GET",
       headers: {

@@ -51,7 +51,6 @@ const SlogList = () => {
   const navigate = useNavigate();
 
   const { voList, pno, isLoading } = useSelector((state) => state.slog);
-  console.log("########### voList ::: ", voList);
 
   useEffect(() => {
     dispatch(resetPno());
@@ -88,8 +87,6 @@ const SlogList = () => {
       fetch(`${BASE_URL}/api/slog/list?pno=${pno}`)
         .then((resp) => resp.json())
         .then((data) => {
-          console.log("!!!!!!!!!!!!!! data : ", data);
-
           dispatch(addSlogVoList(data));
           dispatch(setLoading(false));
         });
@@ -105,8 +102,6 @@ const SlogList = () => {
             <CardWrapper
               key={vo.no}
               onClick={() => {
-                console.log("############", vo);
-
                 showSlogDetail(vo.no);
               }}
             >

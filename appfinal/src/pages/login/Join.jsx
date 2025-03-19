@@ -237,7 +237,6 @@ const Join = () => {
   };
 
   const onSubmit = (data) => {
-    console.log("회원가입 성공:", data);
     setIsAlertOpen(true);
   };
 

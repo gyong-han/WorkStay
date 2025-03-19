@@ -12,8 +12,6 @@ const NaverLoginButton = () => {
       return;
     }
 
-    console.log("✅ Naver SDK 로드 완료");
-
     const naverLogin = new window.naver.LoginWithNaverId({
       clientId: "rQJFPY31YqMBONKGunG7", // ✅ 네이버 클라이언트 ID 입력
       callbackUrl: "http://localhost:3000", // ✅ Redirect URI 입력
@@ -21,7 +19,6 @@ const NaverLoginButton = () => {
       loginButton: { color: "green", type: 3, height: 60 },
     });
     naverLogin.init();
-    console.log("✅ 네이버 로그인 초기화 완료!");
   }, []);
 
   const handleNaverLogin = () => {
@@ -32,7 +29,6 @@ const NaverLoginButton = () => {
 
     window.naver.authorize({
       success: function (authObj) {
-        console.log("✅ 네이버 로그인 성공:", authObj);
         sendTokenToBackend(authObj.access_token);
       },
       fail: function (err) {
@@ -58,7 +54,6 @@ const NaverLoginButton = () => {
       const data = await response.json();
       const token = data.token;
       localStorage.setItem("token", token);
-      console.log("✅ JWT:", token);
 
       // ✅ JWT 디코딩 후 Redux 상태 업데이트
       const decoded = jwtDecode(token);

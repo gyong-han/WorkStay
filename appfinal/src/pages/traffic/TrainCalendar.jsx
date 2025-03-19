@@ -11,7 +11,6 @@ const TrainCalendar = ({ onSelectDate }) => {
   useEffect(() => {
     if (selectedDate !== null) {
       const formattedDate = format(selectedDate, "yyyyMMdd");
-      console.log("선택된 날짜:", formattedDate); // 날짜를 콘솔에 출력
       if (onSelectDate) {
         onSelectDate(formattedDate); // 부모 컴포넌트에 날짜 값을 전달
       }

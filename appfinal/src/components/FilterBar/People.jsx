@@ -170,10 +170,6 @@ const People = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
   if (!isOpen) return null;
   function ClickHandler() {
-    console.log("성인 : ", adult);
-    console.log("아동 : ", child);
-    console.log("영아 : ", baby);
-
     dispatch(setMemberCnt({ adult, child, baby }));
     dispatch(setMemberCount({ adult, child, baby }));
     dispatch(RESET());

@@ -37,7 +37,6 @@ const StayResrv = () => {
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
-        console.log("decodedToken: ", decodedToken);
         setEmail(decodedToken.email); // 상태 업데이트
       } catch (error) {
         console.error("토큰 디코딩 실패:", error);
