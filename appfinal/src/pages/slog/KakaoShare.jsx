@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { BASE_URL, BASE_URL2 } from "../../components/service/config";
+import {
+  BASE_URL,
+  BASE_URL2,
+  BASE_URL3,
+} from "../../components/service/config";
 
 const KakaoShare = ({ no }) => {
   const [content, setContent] = useState();
@@ -47,7 +51,7 @@ const KakaoShare = ({ no }) => {
             {
               title: "앱으로 보기",
               link: {
-                webUrl: `${BASE_URL2}/slog/detail/${no}`,
+                webUrl: `${BASE_URL3}/slog/detail/${no}`,
               },
             },
           ],
