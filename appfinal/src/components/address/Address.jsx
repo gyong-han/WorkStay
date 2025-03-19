@@ -75,8 +75,9 @@ const Address = ({ w1, w2, t1, t2, setFormData }) => {
   }
 
   useEffect(() => {
-    setFormData(() => {
+    setFormData((prev) => {
       return {
+        ...prev,
         address: address,
       };
     });
