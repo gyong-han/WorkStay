@@ -24,9 +24,9 @@ public class KakaoPayService {
         parameters.add("total_amount", vo.getPrice());  // 총 금액
         parameters.add("vat_amount", "1000");     // 부가세
         parameters.add("tax_free_amount", "0");   // 비과세 금액
-        parameters.add("approval_url", "http://www.workstay.store/findspace/successbooking/"+vo.getNo()); // 성공 URL
-        parameters.add("cancel_url", "http://13.125.254.54:8080/payment/cancel");   // 취소 URL
-        parameters.add("fail_url", "http://13.125.254.54:8080/payment/fail");      // 실패 URL
+        parameters.add("approval_url", "https://www.workstay.store/findspace/successbooking/"+vo.getNo()); // 성공 URL
+        parameters.add("cancel_url", "https://spring.workstay.store/payment/cancel");   // 취소 URL
+        parameters.add("fail_url", "https://spring.workstay.store/payment/fail");      // 실패 URL
 
         // HTTP 요청을 위한 HttpEntity 설정
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(parameters, getHeaders());
@@ -48,9 +48,9 @@ public class KakaoPayService {
         parameters.add("total_amount", vo.getPrice());  // 총 금액
         parameters.add("vat_amount", "1000");     // 부가세
         parameters.add("tax_free_amount", "0");   // 비과세 금액
-        parameters.add("approval_url", "http://www.workstay.store/findstay/successbooking/"+vo.getNo()); // 성공 URL
-        parameters.add("cancel_url", "http://13.125.254.54:8080/payment/cancel");   // 취소 URL
-        parameters.add("fail_url", "http://13.125.254.54:8080/payment/fail");      // 실패 URL
+        parameters.add("approval_url", "https://www.workstay.store/findstay/successbooking/"+vo.getNo()); // 성공 URL
+        parameters.add("cancel_url", "https://spring.workstay.store/payment/cancel");   // 취소 URL
+        parameters.add("fail_url", "https://spring.workstay.store/payment/fail");      // 실패 URL
 
         // HTTP 요청을 위한 HttpEntity 설정
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(parameters, getHeaders());
