@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Alert from "../Alert";
-import { BASE_URL2, BASE_URL3 } from "../service/config";
+import { BASE_URL2 } from "../service/config";
 
 const Backdrop = styled.div`
   position: fixed;
@@ -94,16 +94,16 @@ const KakaoMsg = ({ vo }) => {
               fdData.useDay,
             image_url: fdData.filePath, // 이미지 URL
             link: {
-              web_url: `${BASE_URL3}/hostMenu/spaceReserv/spacedetail?reno=${vo.reservationNo}`, // 웹 링크
-              mobile_web_url: `${BASE_URL3}/hostMenu/spaceReserv/spacedetail?reno=${vo.reservationNo}`,
+              web_url: `${BASE_URL2}/hostMenu/spaceReserv/spacedetail?reno=${vo.reservationNo}`, // 웹 링크
+              mobile_web_url: `${BASE_URL2}/hostMenu/spaceReserv/spacedetail?reno=${vo.reservationNo}`,
             },
           },
           buttons: [
             {
               title: "결제내역 확인하기",
               link: {
-                web_url: `${BASE_URL3}/hostMenu/spaceReserv/spacedetail?reno=${vo.reservationNo}`,
-                mobile_web_url: `${BASE_URL3}/hostMenu/spaceReserv/spacedetail?reno=${vo.reservationNo}`,
+                web_url: `${BASE_URL2}/hostMenu/spaceReserv/spacedetail?reno=${vo.reservationNo}`,
+                mobile_web_url: `${BASE_URL2}/hostMenu/spaceReserv/spacedetail?reno=${vo.reservationNo}`,
               },
             },
           ],

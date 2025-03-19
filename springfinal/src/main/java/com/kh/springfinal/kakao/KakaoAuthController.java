@@ -23,7 +23,7 @@ public class KakaoAuthController {
         // 카카오 API에서 사용자 정보 가져오기
         GuestVo vo = kakaoAuthService.getUserInfo(accessToken);
 
-        String role = vo.getPageNick();
+        String role = vo.getPageNick() != null ? vo.getPageNick() : "GUEST";
         // JWT 발급 (이메일만 저장)
         String jwtToken = jwtUtil.createJwtToken(vo.getNo(),vo.getEmail(),vo.getPageNick(),role);
 

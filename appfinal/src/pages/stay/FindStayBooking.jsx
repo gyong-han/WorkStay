@@ -125,6 +125,9 @@ const FindStayBooking = () => {
   const reservationDate = useSelector((state) => state.room.reservationDate);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
+  const kakaoToken = localStorage.getItem(
+    "kakao_a6735a34948b72ea00b68392d6281037"
+  );
 
   const StayBooking = async () => {
     const setRoomDetail = await getRoomDetail(x);
@@ -175,7 +178,10 @@ const FindStayBooking = () => {
 
   const handleReservation = () => {
     const token = localStorage.getItem("token");
-    if (!token) {
+    const kakaoToken = localStorage.getItem(
+      "kakao_a6735a34948b72ea00b68392d6281037"
+    );
+    if (!token && !kakaoToken) {
       setIsAlertOpen(true);
       return;
     }

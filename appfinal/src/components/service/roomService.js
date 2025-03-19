@@ -102,22 +102,6 @@ const getMemberNo = async (no) => {
   }
 };
 
-const isAvailable = async (x) => {
-  try {
-    const result = await fetch(`${BASE_URL}/room/isAvailable`, {
-      method: "POST",
-      body: x,
-    });
-    if (!result.ok) {
-      throw new Error(`HTTP error! Status: ${result.status}`);
-    }
-    const data = await result.json();
-    return data;
-  } catch (e) {
-    console.log("isAvailable ERROR", e);
-  }
-};
-
 export {
   getRoomAttachmentList,
   getRoomListAll,
@@ -125,5 +109,4 @@ export {
   roomReservation,
   getReservationInfo,
   getMemberNo,
-  isAvailable,
 };

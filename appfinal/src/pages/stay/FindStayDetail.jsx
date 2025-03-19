@@ -341,11 +341,14 @@ const FindStayDetail = () => {
     };
 
     const token = localStorage.getItem("token");
+    const kakaoToken = localStorage.getItem(
+      "kakao_a6735a34948b72ea00b68392d6281037"
+    );
 
-    if (!token) {
-      setIsAlertOpen3(true);
+    if (!token && !kakaoToken) {
+      setIsAlertOpen(true);
+      return;
     }
-
     if (bookMark == true) {
       setBookMark(false);
       delBookmark(dataObj);

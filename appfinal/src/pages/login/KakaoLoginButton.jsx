@@ -45,7 +45,7 @@ const KakaoLoginButton = () => {
 
   const sendTokenToBackend = async (accessToken) => {
     try {
-      const response = await fetch("http://spring.workstay.store/oauth/kakao", {
+      const response = await fetch(`${BASE_URL}/oauth/kakao`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
