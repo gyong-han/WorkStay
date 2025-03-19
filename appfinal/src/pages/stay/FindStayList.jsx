@@ -8,6 +8,7 @@ import StayListCard from "./stayComponent/StayListCard";
 import SortDropdown from "../../components/listcomponents/SortDropdown";
 import {
   getAttachment,
+  getBlockDate,
   getStayListAll,
 } from "../../components/service/stayService";
 import {
@@ -21,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setResetFilter, setStayReservationDate } from "../../redux/roomSlice";
 import { useLocation } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { setReservationDone } from "../../redux/spaceSlice";
 
 const Layout = styled.div`
   width: 100%;
@@ -148,6 +150,16 @@ const FindStayList = () => {
     // 리턴값을 저장
     setImgPath(arr);
   };
+
+  // 예약완료 불러오기
+  useEffect(() => {
+    const fetchReservationDone = async () => {
+      const data = await getBlockDate();
+      dispatch(setReservationDone(data));
+    };
+
+    fetchReservationDone();
+  }, []);
 
   // 검색
   const handleChange = (e) => {

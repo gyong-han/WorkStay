@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BASE_URL, BASE_URL2, BASE_URL3 } from "../service/config";
+import { BASE_URL, BASE_URL2 } from "../service/config";
 
 const KakaoShareSpace = ({ no }) => {
   const [content, setContent] = useState();
@@ -35,7 +35,7 @@ const KakaoShareSpace = ({ no }) => {
             description: content.tagline,
             imageUrl: content.filePath,
             link: {
-              webUrl: `${BASE_URL3}/findspace/detail/${no}`,
+              webUrl: `${BASE_URL2}/findspace/detail/${no}`,
             },
           },
           social: {
@@ -47,7 +47,7 @@ const KakaoShareSpace = ({ no }) => {
             {
               title: "앱으로 보기",
               link: {
-                webUrl: `${BASE_URL3}/findspace/detail/${no}`,
+                webUrl: `${BASE_URL2}/findspace/detail/${no}`,
               },
             },
           ],

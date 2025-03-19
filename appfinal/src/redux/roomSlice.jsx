@@ -82,12 +82,11 @@ const roomSlice = createSlice({
       state.memberNo = Number(action.payload);
     },
     setResetFilter: (state) => {
-      state.reservationDate = "";
+      state.reservationDate = [];
       state.adult = 0;
       state.child = 0;
       state.baby = 0;
       state.area = "";
-      state.reservationDone = "";
       state.title = "";
       state.sort = "";
       state.checkIn = "";
