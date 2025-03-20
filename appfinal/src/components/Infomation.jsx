@@ -93,7 +93,7 @@ const Infomation = (props) => {
               </tr>
               <tr>
                 <th>밤패키지</th>
-                <td>09 : 00 ~ 18 : 00</td>
+                <td>18 : 00 ~ 09 : 00</td>
                 <td>₩{nightPrice}</td>
               </tr>
               </tbody>
