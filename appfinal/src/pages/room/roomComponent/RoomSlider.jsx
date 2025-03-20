@@ -78,7 +78,11 @@ const RoomSlider = ({ rooms, roomBlocked, reservationDate }) => {
 
           let isAvailable = true;
 
-          if (checkIn && checkOut) {
+          if (!checkIn || !checkOut) {
+            // ✅ 날짜 선택 전엔 무조건 예약 가능
+            isAvailable = true;
+          } else {
+            // ✅ 날짜가 선택되었을 때만 검증 로직 실행
             const selectedRange = eachDayOfInterval({
               start: new Date(checkIn),
               end: subDays(new Date(checkOut), 1),

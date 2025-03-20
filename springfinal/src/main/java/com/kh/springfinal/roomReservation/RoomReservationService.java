@@ -32,6 +32,7 @@ public class RoomReservationService {
         DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         for (Map<String, String> data : dataList) {
+            if(!dataList.isEmpty()){
             LocalDate checkIn = LocalDate.parse(data.get("CHECK_IN"), formatter);
             LocalDate checkOut = LocalDate.parse(data.get("CHECK_OUT"), formatter);
 
@@ -39,6 +40,7 @@ public class RoomReservationService {
             while (!checkIn.isEqual(checkOut)) {
                 blockedDates.add(checkIn.format(outputFormatter));
                 checkIn = checkIn.plusDays(1);
+            }
             }
         }
 
