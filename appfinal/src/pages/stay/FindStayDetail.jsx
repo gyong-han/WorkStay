@@ -505,7 +505,7 @@ const FindStayDetail = () => {
           <DateDiv>
             <Calendar
               type="text"
-              reservationDone={reservationDone}
+              reservationDone={[]}
               setDateRange={handleDateChange}
             >
               <span>
