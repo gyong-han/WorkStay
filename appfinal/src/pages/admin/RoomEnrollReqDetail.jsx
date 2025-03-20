@@ -157,7 +157,7 @@ const RoomEnrollReqDetail = () => {
   const cancelEnroll = () => {
     const fd = new FormData();
     fd.append("stayNo", enrollReqNo);
-    fetch("${BASE_URL}/api/host/cancelEnrollStay", {
+    fetch(`${BASE_URL}/api/host/cancelEnrollStay`, {
       method: "POST",
       body: fd,
     })
