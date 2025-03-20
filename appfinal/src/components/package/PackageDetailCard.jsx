@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import PictureSlide from '../listcomponents/PictureSlide';
+import { useSelector } from 'react-redux';
 
 const Layout = styled.div`
   width: 100%;
@@ -38,6 +39,7 @@ const ContentDiv = styled.div`
 
 const PackageDetailCard = (props) => {
   
+  const spaceVo = useSelector((state)=>state.space);
 
   const priceWon = (props.price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   return (
@@ -52,7 +54,7 @@ const PackageDetailCard = (props) => {
           회의, 행사, 워크숍 등 다양한 용도로 최적화된 공간으로 고객님의 요구에 맞춰 제공합니다.
           편안하고 전문적인 환경에서 비즈니스와 이벤트를 성공적으로 개최해 보세요.
         </ContentDiv>
-        <div>체크인 09:00 / 체크아웃 18:00</div>
+        <div>{spaceVo.packageType === '낮 패키지'?"체크인 09:00 / 체크아웃 18:00":"체크인 18:00 / 체크아웃 09:00"}</div>
         <div>기준 인원 {props.min}명 (최대 {props.max} 명)</div>
         <div>공간면적 120㎡</div>
         <div>폰 부스 3개</div>
