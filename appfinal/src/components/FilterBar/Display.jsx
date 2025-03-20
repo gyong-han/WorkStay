@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Calendar from "./Calendal";
+// import Calendar from "./Calendal";
 import Area from "./Area";
 import People from "./People";
 import { CiLocationOn } from "react-icons/ci";
 import { FaRegUser } from "react-icons/fa";
+import { CiCalendar } from "react-icons/ci";
+import CalendarTime from "./CalendalTime";
+import Calendar from "./Calendal";
 
 const LayoutDiv = styled.div`
-
-
   width: 100%;
   height: 60px;
   display: grid;
@@ -21,7 +22,6 @@ const LayoutDiv = styled.div`
     width: 166px;
     height: 60px;
     border: none;
-    background-color: white;
   }
 `;
 const BtnDiv = styled.div`
@@ -35,8 +35,7 @@ const BtnDiv = styled.div`
   border: 1px solid #049dd9;
   border-radius: 10px;
   color: #202020;
-  background-color: white;
-
+  background-color: #f9f9f9;
 
   & > div {
     width: 100%;
@@ -48,11 +47,11 @@ const BtnDiv = styled.div`
   & > div > button {
     width: 85%;
     height: 100%;
-    background-color: white;
     border: none;
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #f9f9f9;
   }
   & > div:nth-child(2) {
     display: flex;
@@ -65,7 +64,7 @@ const BtnDiv = styled.div`
   }
 `;
 
-const Display = () => {
+const Display = ({ isTimeMode, reservationDone }) => {
   const [isModal1Open, setIsModal1Open] = useState(false);
   const [isModal2Open, setIsModal2Open] = useState(false);
 
@@ -77,7 +76,6 @@ const Display = () => {
 
   return (
     <>
-      
       <LayoutDiv>
         <div></div>
         <BtnDiv>
@@ -88,8 +86,20 @@ const Display = () => {
             </button>
             <Area isOpen={isModal1Open} onClose={closeModal1} />
           </div>
-          <div >
-            <Calendar></Calendar>
+          <div>
+            {isTimeMode ? (
+              <CalendarTime type="button" setSelectDate={() => {}}>
+                <CiCalendar size={20} /> 일정
+              </CalendarTime>
+            ) : (
+              <Calendar
+                w="170px"
+                type="button"
+                reservationDone={reservationDone}
+              >
+                <CiCalendar size={20} /> 일정
+              </Calendar>
+            )}
           </div>
 
           <div>

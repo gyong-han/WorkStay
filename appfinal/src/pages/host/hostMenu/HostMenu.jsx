@@ -2,16 +2,45 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import HostMainLayout from "../hostComponents/HostMainLayout";
 import HostMgmtMenu from "./hostMgmt/HostMgmtMenu";
+import StayResrv from "./StayResrv";
+import SpaceResrv from "./SpaceResrv";
+import GuestEdit from "../../guest/guestMenu/GuestEdit";
+import SlogMgmt from "../../guest/guestMenu/SlogMgmt";
+import Bookmark from "../../guest/guestMenu/Bookmark";
+import Message from "../../guest/guestMenu/Message";
+import StayCancle from "../../guest/guestMenu/StayCancle";
+import SpaceDetail from "../../guest/guestMenu/SpaceDetail";
+import StayDetail from "../../guest/guestMenu/StayDetail";
+import SpaceCancle from "../../guest/guestMenu/SpaceCancle";
+import SpaceCancleResrv from "./SpaceCancleResrv";
+import StayCancleResrv from "./StayCancleResrv";
+import Chatbot from "../../guest/guestMenu/Chatbot";
 
 const HostMenu = () => {
   return (
     <>
       <Routes>
         <Route
-          path=""
+          path="*"
           element={
             <HostMainLayout>
-              <h1>숙소 예약 정보 태그</h1>
+              <StayResrv />
+            </HostMainLayout>
+          }
+        />
+        <Route
+          path="stayCancleReserv"
+          element={
+            <HostMainLayout>
+              <StayCancleResrv />
+            </HostMainLayout>
+          }
+        />
+        <Route
+          path="spaceCancleReserv"
+          element={
+            <HostMainLayout>
+              <SpaceCancleResrv />
             </HostMainLayout>
           }
         />
@@ -19,7 +48,7 @@ const HostMenu = () => {
           path="/spaceReserv/*"
           element={
             <HostMainLayout>
-              <h1>공간 예약 정보 태그</h1>
+              <SpaceResrv />
             </HostMainLayout>
           }
         />
@@ -27,7 +56,7 @@ const HostMenu = () => {
           path="/editHost/*"
           element={
             <HostMainLayout>
-              <h1>회원 정보 수정 태그</h1>
+              <GuestEdit />
             </HostMainLayout>
           }
         />
@@ -35,7 +64,7 @@ const HostMenu = () => {
           path="/slogMgmt/*"
           element={
             <HostMainLayout>
-              <h1>slog관리 태그</h1>
+              <SlogMgmt />
             </HostMainLayout>
           }
         />
@@ -43,15 +72,48 @@ const HostMenu = () => {
           path="/bookmark/*"
           element={
             <HostMainLayout>
-              <h1>북마크 태그</h1>
+              <Bookmark />
+            </HostMainLayout>
+          }
+        />
+        {/* <Route
+          path="/message/*"
+          element={
+            <HostMainLayout> */}
+        {/* <Message /> */}
+        {/* <Chatbot />
+            </HostMainLayout>
+          }
+        /> */}
+        <Route
+          path="/spaceReserv/spacedetail/*"
+          element={
+            <HostMainLayout>
+              <SpaceDetail />
             </HostMainLayout>
           }
         />
         <Route
-          path="/message/*"
+          path="/spaceReserv/spacedetail/spacecancle"
           element={
             <HostMainLayout>
-              <h1>메세지 태그</h1>
+              <SpaceCancle />
+            </HostMainLayout>
+          }
+        />
+        <Route
+          path="staydetail/*"
+          element={
+            <HostMainLayout>
+              <StayDetail />
+            </HostMainLayout>
+          }
+        />
+        <Route
+          path="/staydetail/staycancle"
+          element={
+            <HostMainLayout>
+              <StayCancle />
             </HostMainLayout>
           }
         />

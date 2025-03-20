@@ -7,6 +7,11 @@ import StayApprovalMgmt from "./StayApprovalMgmt";
 import SpaceApprovalMgmt from "./SpaceApprovalMgmt";
 import MyStayMgmt from "./MyStayMgmt";
 import MySpaceMgmt from "./MySpaceMgmt";
+import StayResrvMgmtDetail from "./StayResrvMgmtDetail";
+import SpaceResrvMgmtDetail from "./SpaceReservMgmtDetail";
+import MySpaceDetail from "./MySpaceDetail";
+import MyStayDetail from "./MyStayDetail";
+import MyRoomDetail from "./MyRoomDetail";
 
 const HostMgmtMenu = () => {
   return (
@@ -59,6 +64,35 @@ const HostMgmtMenu = () => {
               <MySpaceMgmt />
             </HostLayout>
           }
+        />
+
+        <Route
+          path="stayReserv/detail/:stayReservNum"
+          element={
+            <HostLayout>
+              <StayResrvMgmtDetail />
+            </HostLayout>
+          }
+        />
+        <Route
+          path="spaceReserv/detail/:spaceReservNum"
+          element={
+            <HostLayout>
+              <SpaceResrvMgmtDetail />
+            </HostLayout>
+          }
+        />
+        <Route
+          path="mySpaceMgmt/mySpaceDetail/:spaceNum"
+          element={<MySpaceDetail />}
+        />
+        <Route
+          path="myStayMgmt/myStayDetail/:stayNum"
+          element={<MyStayDetail />}
+        />
+        <Route
+          path="myStayMgmt/myRoomDetail/:stayNum"
+          element={<MyRoomDetail />}
         />
       </Routes>
     </>

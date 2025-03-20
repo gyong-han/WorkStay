@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import { setArea } from "../../redux/spaceSlice";
+import { setAddress } from "../../redux/staySlice";
+import { RiResetRightFill } from "react-icons/ri";
 
 const Overlay = styled.div`
   position: fixed;
@@ -39,7 +43,7 @@ const Modal = styled.div`
     height: 80%;
     border-bottom: 1px solid #d9d9d9;
   }
-  & > div:nth-child(1)>button {
+  & > div:nth-child(1) > button {
     width: 40px;
     height: 40px;
     margin-left: auto;
@@ -85,12 +89,10 @@ const SelectDiv = styled.div`
     pointer-events: none;
   }
   & > div > label:has(input[type="radio"]:checked) {
-  background-color: #04b2d9; /* 선택된 라벨 스타일 */
-  color:white;
-}
-  
+    background-color: #04b2d9; /* 선택된 라벨 스타일 */
+    color: white;
+  }
 
- 
   & > div > label {
     border-radius: 50px;
     display: flex;
@@ -103,8 +105,6 @@ const SelectDiv = styled.div`
     color: white;
     background-color: #04b2d9;
   }
-
- 
 `;
 const FooterDiv = styled.div`
   width: 100%;
@@ -126,8 +126,7 @@ const FooterDiv = styled.div`
     width: 60px;
     height: 60px;
     border: none;
-    background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTk-eoAWRZdo8KMKu65ebE8CvWkCFmsx9HqeQ&s);
-    background-size: cover;
+    cursor: pointer;
   }
   & > div > button:nth-child(2) {
     width: 145px;
@@ -141,43 +140,49 @@ const FooterDiv = styled.div`
 
 const Area = ({ isOpen, onClose }) => {
   const [areaState, setAreaState] = useState();
- 
+  const dispatch = useDispatch();
+
   useEffect(() => {}, [areaState]);
   if (!isOpen) return null;
   function ClickHandler(e) {
-    setAreaState(e.target.value);
+    dispatch(setArea(e.target.value));
+    dispatch(setAddress(e.target.value));
   }
- 
 
   function uncheckAllRadios() {
-    document.querySelectorAll('input[type="radio"]').forEach(radio => {
-        radio.checked = false;
+    document.querySelectorAll('input[type="radio"]').forEach((radio) => {
+      radio.checked = false;
     });
-}
+  }
 
   const submitBtn = () => {
-    // 패치 보낼곳
-    console.log(areaState);
-    onClose()
+    onClose();
   };
   return (
     <Overlay>
       <Modal>
         <div>
-          <span>장소를 선택해주세요.</span> <button onClick={()=>{onClose();}}>X</button>
+          <span>장소를 선택해주세요.</span>{" "}
+          <button
+            onClick={() => {
+              onClose();
+            }}
+          >
+            X
+          </button>
         </div>
         <SelectDivOuter>
           <SelectDiv>
             <div>
-              <label>서울
+              <label>
+                서울
                 <input
                   type="radio"
                   name="area"
                   value={"서울"}
                   onClick={ClickHandler}
                 />
-                </label>
-              
+              </label>
             </div>
             <div>
               <label>
@@ -249,11 +254,11 @@ const Area = ({ isOpen, onClose }) => {
             </div>
             <div>
               <label>
-                춘천
+                충청
                 <input
                   type="radio"
                   name="area"
-                  value={"춘천"}
+                  value={"충청"}
                   onClick={ClickHandler}
                 />
               </label>
@@ -273,7 +278,7 @@ const Area = ({ isOpen, onClose }) => {
         </SelectDivOuter>
         <FooterDiv>
           <div>
-            <button onClick={uncheckAllRadios}></button>
+            <RiResetRightFill onClick={uncheckAllRadios} size={30} />
             <button onClick={submitBtn}>Search</button>
           </div>
         </FooterDiv>

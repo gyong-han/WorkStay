@@ -7,11 +7,19 @@ import FindStay from "./pages/stay/FindStay";
 import FindSpace from "./pages/space/FindSpace";
 import Traffic from "./pages/traffic/Traffic";
 import Slog from "./pages/slog/Slog";
-import Login from "./pages/guest/Login";
 import { Provider } from "react-redux";
 import Store from "./redux/store";
 import EnrollStay from "./pages/host/stayComponents/EnrollStay";
 import EnrollSpace from "./pages/host/spaceComponents/EnrollSpace";
+import HostMenu from "./pages/host/hostMenu/HostMenu";
+import Login from "./pages/login/Login";
+import MainLogin from "./pages/login/MainLogin";
+import Join from "./pages/login/Join";
+import FindId from "./pages/login/FindId";
+import FindPassword from "./pages/login/FindPassword";
+import NewPassword from "./pages/login/NewPassword";
+import AdminMenu from "./pages/admin/adminMenu/AdminMenu";
+import FAQ from "./pages/faq/FAQ";
 
 function App() {
   return (
@@ -28,7 +36,7 @@ function App() {
           />
 
           <Route
-            path="/findstay"
+            path="/findstay/*"
             element={
               <Layout>
                 <FindStay />
@@ -52,7 +60,7 @@ function App() {
             }
           />
           <Route
-            path="/slog"
+            path="/slog/*"
             element={
               <Layout>
                 <Slog />
@@ -60,10 +68,17 @@ function App() {
             }
           />
           <Route
-            path="/login"
+            path="/login/*"
             element={
               <Layout>
-                <Login />
+                <Routes>
+                  <Route path="/" element={<Login />} />
+                  <Route path="email" element={<MainLogin />} />
+                  <Route path="join" element={<Join />} />
+                  <Route path="findid" element={<FindId />} />
+                  <Route path="findpwd" element={<FindPassword />} />
+                  <Route path="newpwd" element={<NewPassword />} />
+                </Routes>
               </Layout>
             }
           />
@@ -84,6 +99,30 @@ function App() {
             element={
               <Layout>
                 <EnrollSpace />
+              </Layout>
+            }
+          />
+          <Route
+            path="/hostMenu/*"
+            element={
+              <Layout>
+                <HostMenu />
+              </Layout>
+            }
+          />
+          <Route
+            path="/adminMenu/*"
+            element={
+              <Layout>
+                <AdminMenu />
+              </Layout>
+            }
+          />
+          <Route
+            path="/faq/*"
+            element={
+              <Layout>
+                <FAQ />
               </Layout>
             }
           />

@@ -110,6 +110,7 @@ const FirstEnrollSpace = () => {
 
   function changePath() {
     navigate("/enroll/space/second");
+    window.scrollTo(0, 0);
   }
 
   return (
@@ -233,10 +234,13 @@ const FirstEnrollSpace = () => {
       </FooterFoot>
       <BtnArea>
         <HostBtn
+          border="none"
           width="400px"
           height="50px"
           backColor="#2B8C44"
+          font="25px"
           str="가입하기"
+          color="white"
           f={changePath}
         />
       </BtnArea>

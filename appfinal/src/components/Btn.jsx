@@ -25,9 +25,9 @@ const Button = styled.button`
   border-radius: 5px;
 `;
 
-const Btn = ({ children, w, bg, h, b, c, size }) => {
+const Btn = ({ children, w, bg, h, b, c, size,f }) => {
   return (
-    <Button bg={bg} w={w} h={h} b={b} c={c} size={size}>
+    <Button  onClick={f} bg={bg} w={w} h={h} b={b} c={c} size={size}>
       {children}
     </Button>
   );

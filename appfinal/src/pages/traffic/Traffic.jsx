@@ -3,6 +3,8 @@ import { NavLink, Routes, Route } from "react-router-dom";
 import styled from "styled-components";
 import TrainPage from "../traffic/Train";
 import BusPage from "./Bus";
+import BusDetail from "./BusDetail";
+import TrainDetail from "./TrainDetail";
 
 const Container = styled.div`
   text-align: center;
@@ -32,7 +34,8 @@ const Traffic = () => {
       <h1>Traffic</h1>
       <NavBar>
         <NavLink
-          to="/traffic/train"
+          to="/traffic"
+          end
           className={({ isActive }) => (isActive ? "active" : "")}
         >
           Train
@@ -45,8 +48,10 @@ const Traffic = () => {
         </NavLink>
       </NavBar>
       <Routes>
-        <Route path="train" element={<TrainPage />} />
+        <Route path="/" element={<TrainPage />} />
         <Route path="bus" element={<BusPage />} />
+        <Route path="bus/detail" element={<BusDetail />} />
+        <Route path="train/detail" element={<TrainDetail />} />
       </Routes>
     </Container>
   );

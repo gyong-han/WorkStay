@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { FaFacebookF } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
-import { SiNaver } from "react-icons/si";
+import { RiKakaoTalkFill } from "react-icons/ri";
 import { FaYoutube } from "react-icons/fa";
 
 const FooterWrapper = styled.footer`
@@ -11,6 +11,7 @@ const FooterWrapper = styled.footer`
   box-sizing: border-box;
   padding: 50px 30px;
   width: 100%;
+  margin-top: 100px;
 `;
 
 const FooterContent = styled.div`
@@ -46,13 +47,25 @@ const LText = styled.span`
 
 const DetailText = styled.span`
   font-family: "Pretendard-Light";
-  font-size: 0.7rem;
+  font-size: 0.8rem;
 `;
 
 const Logos = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, auto);
+  grid-template-columns: repeat(4, auto);
   gap: 10px;
+`;
+
+const LogoLink = styled.a`
+  color: inherit;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    color: #2b8c44;
+  }
 `;
 
 const EnrollSpan = styled.span`
@@ -69,10 +82,17 @@ const Footer = () => {
 
   function enrollStay() {
     navigate("/enroll/stay");
+    window.scrollTo(0, 0);
   }
 
   function enrollSpace() {
     navigate("/enroll/space");
+    window.scrollTo(0, 0);
+  }
+
+  function moveFAQ() {
+    navigate("/faq");
+    window.scrollTo(0, 0);
   }
 
   return (
@@ -89,6 +109,8 @@ const Footer = () => {
               <EnrollSpan onClick={enrollStay}>숙소입점 </EnrollSpan>
               <EnrollSpan> | </EnrollSpan>
               <EnrollSpan onClick={enrollSpace}> 공간입점</EnrollSpan>
+              <EnrollSpan> | </EnrollSpan>
+              <EnrollSpan onClick={moveFAQ}> FaQ</EnrollSpan>
             </div>
             <br />
             <DetailText>
@@ -109,10 +131,34 @@ const Footer = () => {
             <DetailText>CopyrightⓒWORKSTAY</DetailText>
           </FooterInfoContainer>
           <Logos>
-            <FaFacebookF size={15} />
-            <FaInstagram />
-            <SiNaver />
-            <FaYoutube />
+            <LogoLink
+              href="https://www.facebook.com/share/1P19m9fUj3/?mibextid=wwXIfr"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaFacebookF size={20} />
+            </LogoLink>
+            <LogoLink
+              href="https://www.instagram.com/workstay_?igsh=bDJveWszdm10enVh&utm_source=qr"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaInstagram size={25} />
+            </LogoLink>
+            <LogoLink
+              href="http://pf.kakao.com/_kNenn"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <RiKakaoTalkFill size={25} />
+            </LogoLink>
+            <LogoLink
+              href="https://youtu.be/cps5VQK-2dw?si=WCwAhoPcDE-buxV_"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaYoutube size={22} />
+            </LogoLink>
           </Logos>
         </FooterMainContainer>
       </FooterContent>

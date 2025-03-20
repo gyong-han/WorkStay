@@ -72,23 +72,7 @@ const OpenButton = styled.button`
   cursor: pointer;
 `;
 
-const stations = [
-  "서울",
-  "용산",
-  "영등포",
-  "광명",
-  "수원",
-  "천안아산",
-  "오송",
-  "대전",
-  "서대전",
-  "김천구미",
-  "동대구",
-  "경주",
-  "포항",
-  "부산",
-  "울산",
-];
+const stations = ["서울", "대전", "동대구", "부산", "전주"];
 
 const StartStationList = () => {
   const [showModal, setShowModal] = useState(false);

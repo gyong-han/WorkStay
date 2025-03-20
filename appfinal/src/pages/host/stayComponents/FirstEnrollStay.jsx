@@ -110,6 +110,7 @@ const FirstEnrollStay = () => {
 
   function changePath() {
     navigate("/enroll/stay/second");
+    window.scrollTo(0, 0);
   }
 
   return (
@@ -233,9 +234,12 @@ const FirstEnrollStay = () => {
       </FooterFoot>
       <BtnArea>
         <HostBtn
+          border="none"
           width="400px"
           height="50px"
           backColor="#2B8C44"
+          font="25px"
+          color="white"
           str="가입하기"
           f={changePath}
         />

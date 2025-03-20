@@ -1,22 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import HomeSlide from "./home/HomeSlide";
+import { BASE_URL } from "./service/config";
 
 const MiddleContainer = styled.section`
   display: grid;
   justify-items: center;
   align-items: center;
-  background-color: lightgray;
-  height: 20vh;
-`;
-
-const Text = styled.h2`
-  font-size: 24px;
+  width: 100%;
+  height: 100%;
 `;
 
 const Middle = () => {
+  const [homeSlide, setHomeSlide] = useState([]);
+  useEffect(() => {
+    fetch(`${BASE_URL}/home/besthit`)
+      .then((resp) => resp.json())
+      .then((data) => {
+        const fileArr = data.map((vo) => vo.filePath);
+        if (fileArr.length <= 1) {
+          setHomeSlide(data[0].filePath);
+        } else {
+          setHomeSlide(fileArr);
+        }
+      });
+  }, []);
+
   return (
     <MiddleContainer>
-      <Text>저널 인기순위 슬라이드 5개</Text>
+      <HomeSlide w={1905} h={400} imgPaths={homeSlide} main={true}></HomeSlide>
     </MiddleContainer>
   );
 };

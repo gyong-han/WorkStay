@@ -12,6 +12,8 @@ import {
   RESET,
 } from "../../redux/counterSlice";
 import { RiResetRightFill } from "react-icons/ri";
+import { setMemberCnt } from "../../redux/spaceSlice";
+import { setMemberCount } from "../../redux/roomSlice";
 
 const Overlay = styled.div`
   position: fixed;
@@ -39,8 +41,9 @@ const Modal = styled.div`
   z-index: 2;
   & > div > span {
     color: #049dd9;
-    font-size: 30px;
+    font-size: 25px;
     font-weight: 700;
+    letter-spacing: 1px;
   }
 
   & > div:nth-child(1) {
@@ -150,9 +153,16 @@ const FooterDiv = styled.div`
     height: 45px;
     border: none;
     background-color: #049dd9;
-    color: white;
+    color: #fafafa;
+    font-size: 20px;
     border-radius: 5px;
   }
+`;
+
+const PeopleSpan = styled.p`
+  font-size: 25px;
+  font-weight: 700;
+  color: #202020;
 `;
 
 const People = ({ isOpen, onClose }) => {
@@ -160,9 +170,9 @@ const People = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
   if (!isOpen) return null;
   function ClickHandler() {
-    console.log("성인 : ", adult);
-    console.log("아동 : ", child);
-    console.log("영아 : ", baby);
+    dispatch(setMemberCnt({ adult, child, baby }));
+    dispatch(setMemberCount({ adult, child, baby }));
+    dispatch(RESET());
     onClose();
   }
 
@@ -191,19 +201,20 @@ const People = ({ isOpen, onClose }) => {
           </TitleDiv>
           <TitleDiv>
             <div>
-              <h1>성인</h1>
+              <PeopleSpan>성인</PeopleSpan>
             </div>
             <div>
-              <h1>아동</h1>
+              <PeopleSpan>아동</PeopleSpan>
             </div>
             <div>
-              <h1>영아</h1>
+              <PeopleSpan>영아</PeopleSpan>
             </div>
           </TitleDiv>
           <TitleDiv>
             <CounterDiv>
               <div class="minusBtn">
                 <ModalBtn
+                  disabled={adult <= 0 ? true : false}
                   str="-"
                   f={() => {
                     dispatch(DECREMENT_ADULT());
@@ -213,6 +224,7 @@ const People = ({ isOpen, onClose }) => {
               <div class="Counter">{adult}</div>
               <div>
                 <ModalBtn
+                  disabled={adult >= 40 ? true : false}
                   str="+"
                   f={() => {
                     dispatch(INCREMENT_ADULT());
@@ -223,6 +235,7 @@ const People = ({ isOpen, onClose }) => {
             <CounterDiv>
               <div class="minusBtn">
                 <ModalBtn
+                  disabled={child <= 0 ? true : false}
                   str="-"
                   f={() => {
                     dispatch(DECREMENT_CHILD());
@@ -232,6 +245,7 @@ const People = ({ isOpen, onClose }) => {
               <div class="Counter">{child}</div>
               <div>
                 <ModalBtn
+                  disabled={child >= 10 ? true : false}
                   str="+"
                   f={() => {
                     dispatch(INCREMENT_CHILD());
@@ -242,6 +256,7 @@ const People = ({ isOpen, onClose }) => {
             <CounterDiv>
               <div class="minusBtn">
                 <ModalBtn
+                  disabled={baby <= 0 ? true : false}
                   str="-"
                   f={() => {
                     dispatch(DECREMENT_BABY());
@@ -251,6 +266,7 @@ const People = ({ isOpen, onClose }) => {
               <div class="Counter">{baby}</div>
               <div>
                 <ModalBtn
+                  disabled={baby >= 5 ? true : false}
                   str="+"
                   f={() => {
                     dispatch(INCREMENT_BABY());

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Layout = styled.div`
@@ -7,6 +8,10 @@ height: 100%;
 display: grid;
 grid-template-columns: 1fr;
 grid-template-rows: 300px 150px;
+
+&>a{
+  text-decoration: none;
+}
 `;
 
 const BackImgDiv = styled.div`
@@ -69,21 +74,27 @@ const PackageContentDiv = styled.div`
     text-decoration: underline solid #FAFAFA;
   }
 `;
-const PackageDisplay = ({img,title,standard,max,price,navigatorHandler}) => {
-  
+const PackageDisplay = ({img,title,standard,max,price,titleHandler,url}) => {
+
+  const token = localStorage.getItem("token");
   const priceWon = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  
+  const callback = ()=>{
+    alert("로그인 후 이용해주세요.")
+  }
+  const moveUrl = token?url:"/login";
+
   return (
     <BackImgDiv img={img}>
       <Layout>
         <div></div>
-        <PackageContentDiv>
+        <Link to={moveUrl}><PackageContentDiv onClick={()=>{token?titleHandler():callback();
+        }}>
           <div>{title}</div>
           <div>기준 {standard}명/최대{max}명</div>
           <div>₩{priceWon}</div>
-          <div><span onClick={navigatorHandler}>예약하기</span></div>
-
+          <div><span>예약하기</span></div>
         </PackageContentDiv>
+        </Link>
       </Layout>
     </BackImgDiv>
     

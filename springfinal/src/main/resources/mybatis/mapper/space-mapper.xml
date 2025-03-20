@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kh.springfinal.space.SpaceMapper">
+    <select id="spaceGetListAll">
+    SELECT S.NO,S.NAME,NIGHT_PRICE,DAYTIME_PRICE,MAX_GUEST,STANDARD_GUEST,ADDRESS,SA.FILE_PATH
+    FROM SPACE S
+    JOIN SPACE_ATTACHMENT SA ON (S.NO = SA.SPACE_NO)
+    WHERE STATUS_NO = '2'
+    AND SA.THUMBNAIL = 'Y'
+        <if test="area != null and area !='' ">
+            AND S.ADDRESS LIKE CONCAT(#{area}, '%')
+        </if>
+        <if test="people != null and people !='' ">
+            AND S.MAX_GUEST > #{people}
+        </if>
+        <if test="date != null and date !='' ">
+            AND S.NO NOT IN(
+            SELECT SPACE_NO
+            FROM SPACE_RESERVATION
+            WHERE USE_DAY =  #{date}
+            AND STATUS_NO =5
+            AND STATUS_NO !=6
+            AND PACKAGE_NO IN (1, 2)
+            GROUP BY SPACE_NO
+            HAVING COUNT(DISTINCT PACKAGE_NO) = 2)
+        </if>
+        <if test="title != null and title !='' ">
+            AND S.NAME LIKE '%'||#{title}||'%'
+        </if>
+        <if test="sort != null and sort !='' ">
+            <if test="sort == 'latest'">
+                ORDER BY S.NO DESC
+            </if>
+            <if test="sort == 'highPrice' ">
+                ORDER BY S.NIGHT_PRICE DESC
+            </if>
+            <if test="sort == 'lowPrice' ">
+                ORDER BY S.DAYTIME_PRICE
+            </if>
+        </if>
+    </select>
+    <select id="spaceGetListPopular">
+        SELECT S.NO,
+        S.NAME,
+        S.NIGHT_PRICE,
+        S.DAYTIME_PRICE,
+        S.MAX_GUEST,
+        S.STANDARD_GUEST,
+        S.ADDRESS,
+        SA.FILE_PATH,
+        SR.RESERVATION_COUNT
+        FROM SPACE S
+        JOIN SPACE_ATTACHMENT SA ON S.NO = SA.SPACE_NO
+        LEFT OUTER JOIN (
+        SELECT SPACE_NO, COUNT(SPACE_NO) AS RESERVATION_COUNT
+        FROM SPACE_RESERVATION
+        GROUP BY SPACE_NO
+        ) SR ON S.NO = SR.SPACE_NO
+        WHERE S.STATUS_NO = '2' AND SA.THUMBNAIL = 'Y'
+        <if test="area != null and area !='' ">
+            AND S.ADDRESS LIKE CONCAT(#{area}, '%')
+        </if>
+        <if test="people != null and people !='' ">
+            AND S.MAX_GUEST > #{people}
+        </if>
+        <if test="date != null and date !='' ">
+            AND S.NO NOT IN(
+            SELECT SPACE_NO
+            FROM SPACE_RESERVATION
+            WHERE USE_DAY =  #{date}
+            AND PACKAGE_NO IN (1, 2)
+            GROUP BY SPACE_NO
+            HAVING COUNT(DISTINCT PACKAGE_NO) = 2)
+        </if>
+        ORDER BY
+        CASE WHEN SR.RESERVATION_COUNT IS NULL THEN 1 ELSE 0 END,
+        SR.RESERVATION_COUNT DESC
+    </select>
+
+</mapper>

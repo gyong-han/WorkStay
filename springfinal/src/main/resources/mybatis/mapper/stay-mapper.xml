@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kh.springfinal.stay.StayMapper">
+    <select id="findAllByOrderByCreatedAtDesc">
+        SELECT
+        S.NO,
+        S.NAME,
+        S.ADDRESS,
+        S.SEASON,
+        R.PRICE,
+        R.MAX_GUEST,
+        R.STANDARD_GUEST,
+        RA.FILE_PATH
+        FROM STAY S
+        JOIN (
+        SELECT
+        STAY_NO,
+        MIN(NO) AS NO,
+        MIN(PRICE) AS PRICE,
+        MAX(MAX_GUEST) AS MAX_GUEST,
+        MIN(STANDARD_GUEST) AS STANDARD_GUEST
+        FROM ROOM
+        GROUP BY STAY_NO
+        ) R ON S.NO = R.STAY_NO
+        JOIN ROOM_ATTACHMENT RA
+        ON R.NO = RA.ROOM_NO
+        AND RA.THUMBNAIL = 'Y'
+        WHERE S.STATUS_NO = '2'
+        AND S.DEL_YN = 'N'
+
+        <!-- 지역 필터 -->
+        <if test="area != null and area != '' ">
+            AND S.ADDRESS LIKE CONCAT(#{area}, '%')
+        </if>
+
+        <!-- 인원 수 필터 -->
+        <if test="people != null and people != '' ">
+            AND R.MAX_GUEST >= #{people}
+        </if>
+
+        <!-- 체크인 & 체크아웃 날짜가 있을 경우 -->
+        <if test="checkIn != null and checkOut != null and checkIn != '' and checkOut != '' ">
+            AND S.NO NOT IN (
+            SELECT R.STAY_NO
+            FROM ROOM R
+            WHERE R.STAY_NO = S.NO
+            GROUP BY R.STAY_NO
+            HAVING COUNT(*) = SUM(
+            CASE
+            WHEN R.NO IN (
+            SELECT ROOM_NO
+            FROM ROOM_RESERVATION RR
+            WHERE RR.STATUS_NO = 5
+            AND RR.CHECK_IN &lt; #{checkOut}
+            AND RR.CHECK_OUT &gt; #{checkIn}
+            )
+            THEN 1
+            ELSE 0
+            END
+            )
+            )
+        </if>
+
+        <!-- 검색어(숙소명) 필터 -->
+        <if test="title != null and title != '' ">
+            AND S.NAME LIKE '%' || #{title} || '%'
+        </if>
+
+        ORDER BY S.NO DESC
+    </select>
+
+    <select id="findAllByOrderByPriceAsc">
+        SELECT
+        S.NO,
+        S.NAME,
+        S.ADDRESS,
+        S.SEASON,
+        R.PRICE,
+        R.MAX_GUEST,
+        R.STANDARD_GUEST,
+        RA.FILE_PATH
+        FROM STAY S
+        JOIN (
+        SELECT
+        STAY_NO,
+        MIN(NO) AS NO,
+        MIN(PRICE) AS PRICE,
+        MAX(MAX_GUEST) AS MAX_GUEST,
+        MIN(STANDARD_GUEST) AS STANDARD_GUEST
+        FROM ROOM
+        GROUP BY STAY_NO
+        ) R ON S.NO = R.STAY_NO
+        JOIN ROOM_ATTACHMENT RA
+        ON R.NO = RA.ROOM_NO
+        AND RA.THUMBNAIL = 'Y'
+        WHERE S.STATUS_NO = '2'
+        AND S.DEL_YN = 'N'
+        <if test="area != null and area != '' ">
+            AND S.ADDRESS LIKE CONCAT(#{area}, '%')
+        </if>
+        <if test="people != null and people != '' ">
+            AND R.MAX_GUEST >= #{people}
+        </if>
+        <if test="checkIn != null and checkOut != null and checkIn != '' and checkOut != '' ">
+            AND S.NO NOT IN (
+            SELECT R.STAY_NO
+            FROM ROOM R
+            WHERE R.STAY_NO = S.NO
+            GROUP BY R.STAY_NO
+            HAVING COUNT(*) = SUM(
+            CASE
+            WHEN R.NO IN (
+            SELECT ROOM_NO
+            FROM ROOM_RESERVATION RR
+            WHERE RR.STATUS_NO = 5
+            AND RR.CHECK_IN &lt; #{checkOut}
+            AND RR.CHECK_OUT &gt; #{checkIn}
+            )
+            THEN 1
+            ELSE 0
+            END
+            )
+            )
+        </if>
+        <if test="title != null and title != '' ">
+            AND S.NAME LIKE '%' || #{title} || '%'
+        </if>
+        ORDER BY R.PRICE ASC, S.NO DESC
+    </select>
+
+    <select id="findAllByOrderByPriceDesc">
+        SELECT
+        S.NO,
+        S.NAME,
+        S.ADDRESS,
+        S.SEASON,
+        R.PRICE,
+        R.MAX_GUEST,
+        R.STANDARD_GUEST,
+        RA.FILE_PATH
+        FROM STAY S
+        JOIN (
+        SELECT
+        STAY_NO,
+        MIN(NO) AS NO,
+        MIN(PRICE) AS PRICE,
+        MAX(MAX_GUEST) AS MAX_GUEST,
+        MIN(STANDARD_GUEST) AS STANDARD_GUEST
+        FROM ROOM
+        GROUP BY STAY_NO
+        ) R ON S.NO = R.STAY_NO
+        JOIN ROOM_ATTACHMENT RA
+        ON R.NO = RA.ROOM_NO
+        AND RA.THUMBNAIL = 'Y'
+        WHERE S.STATUS_NO = '2'
+        AND S.DEL_YN = 'N'
+        <if test="area != null and area != '' ">
+            AND S.ADDRESS LIKE CONCAT(#{area}, '%')
+        </if>
+        <if test="people != null and people != '' ">
+            AND R.MAX_GUEST >= #{people}
+        </if>
+        <if test="checkIn != null and checkOut != null and checkIn != '' and checkOut != '' ">
+            AND S.NO NOT IN (
+            SELECT R.STAY_NO
+            FROM ROOM R
+            WHERE R.STAY_NO = S.NO
+            GROUP BY R.STAY_NO
+            HAVING COUNT(*) = SUM(
+            CASE
+            WHEN R.NO IN (
+            SELECT ROOM_NO
+            FROM ROOM_RESERVATION RR
+            WHERE RR.STATUS_NO = 5
+            AND RR.CHECK_IN &lt; #{checkOut}
+            AND RR.CHECK_OUT &gt; #{checkIn}
+            )
+            THEN 1
+            ELSE 0
+            END
+            )
+            )
+        </if>
+        <if test="title != null and title != '' ">
+            AND S.NAME LIKE '%' || #{title} || '%'
+        </if>
+        ORDER BY R.PRICE DESC, S.NO DESC
+    </select>
+
+    <select id="findAllByOrderByBookmarksDesc">
+        SELECT
+        S.NO,
+        S.NAME,
+        S.ADDRESS,
+        S.SEASON,
+        R.PRICE,
+        R.MAX_GUEST,
+        R.STANDARD_GUEST,
+        RA.FILE_PATH,
+        NVL(SB.BOOKMARK_COUNT, 0) AS BOOKMARK_COUNT
+        FROM STAY S
+        JOIN (
+        SELECT
+        STAY_NO,
+        MIN(NO) AS NO,
+        MIN(PRICE) AS PRICE,
+        MAX(MAX_GUEST) AS MAX_GUEST,
+        MIN(STANDARD_GUEST) AS STANDARD_GUEST
+        FROM ROOM
+        GROUP BY STAY_NO
+        ) R ON S.NO = R.STAY_NO
+        JOIN ROOM_ATTACHMENT RA ON R.NO = RA.ROOM_NO AND RA.THUMBNAIL = 'Y'
+        LEFT OUTER JOIN (
+        SELECT STAY_NO, COUNT(*) AS BOOKMARK_COUNT
+        FROM STAY_BOOKMARK
+        GROUP BY STAY_NO
+        ) SB ON S.NO = SB.STAY_NO
+
+        WHERE S.STATUS_NO = '2'
+        AND S.DEL_YN = 'N'
+
+        <if test="area != null and area != '' ">
+            AND S.ADDRESS LIKE CONCAT(#{area}, '%')
+        </if>
+
+        <if test="people != null and people != '' ">
+            AND R.MAX_GUEST >= #{people}
+        </if>
+
+        <if test="checkIn != null and checkOut != null and checkIn != '' and checkOut != '' ">
+            AND S.NO NOT IN (
+            SELECT R.STAY_NO
+            FROM ROOM R
+            WHERE R.STAY_NO = S.NO
+            GROUP BY R.STAY_NO
+            HAVING COUNT(*) = SUM(
+            CASE
+            WHEN R.NO IN (
+            SELECT ROOM_NO
+            FROM ROOM_RESERVATION RR
+            WHERE RR.STATUS_NO = 5
+            AND RR.CHECK_IN &lt; #{checkOut}
+            AND RR.CHECK_OUT &gt; #{checkIn}
+            )
+            THEN 1
+            ELSE 0
+            END
+            )
+            )
+        </if>
+
+        <if test="title != null and title != '' ">
+            AND S.NAME LIKE '%' || #{title} || '%'
+        </if>
+
+        ORDER BY
+        CASE WHEN SB.BOOKMARK_COUNT IS NULL THEN 1 ELSE 0 END,
+        SB.BOOKMARK_COUNT DESC,
+        S.NO DESC
+    </select>
+
+</mapper>

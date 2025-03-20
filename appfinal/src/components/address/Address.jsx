@@ -32,6 +32,7 @@ const StyledBtn = styled.button`
   margin-left: 15px;
   background-color: #6bbf5e;
   margin-top: 40px;
+  cursor: pointer;
 `;
 
 const Address = ({ w1, w2, t1, t2, setFormData }) => {
@@ -56,6 +57,8 @@ const Address = ({ w1, w2, t1, t2, setFormData }) => {
 
         if (roadAddr) {
           document.querySelector("#roadAddress").value = roadAddr;
+          setAddress(roadAddr);
+          document.querySelector("#detailAddress").value = "";
         } else if (jibunAddr) {
           document.querySelector("#roadAddress").value = jibunAddr;
         }
@@ -65,18 +68,20 @@ const Address = ({ w1, w2, t1, t2, setFormData }) => {
 
   function combineAddress(value) {
     const roadAddress = document.querySelector("#roadAddress").value;
-    // const detailAddress = document.querySelector('#detailAddress').value;
 
     let combinAddressValue = roadAddress + ", " + value;
 
     setAddress(combinAddressValue);
+  }
+
+  useEffect(() => {
     setFormData((prev) => {
       return {
         ...prev,
         address: address,
       };
     });
-  }
+  }, [address]);
 
   return (
     <div>
@@ -102,7 +107,6 @@ const Address = ({ w1, w2, t1, t2, setFormData }) => {
           return combineAddress(e.target.value);
         }}
       />
-      {/* <StyledInput type="hidden" id="address" name="address" value={address} /> */}
     </div>
   );
 };
