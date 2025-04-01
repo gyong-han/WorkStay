@@ -412,7 +412,6 @@ const SlogWrite = () => {
             const videoContainer = document.createElement("div");
             videoContainer.style.position = "relative";
             videoContainer.style.width = "600px";
-            // videoContainer.style.cursor = "pointer";
             videoContainer.style.margin = "10px 0";
 
             const videoElement = document.createElement("video");
